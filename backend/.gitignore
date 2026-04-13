@@ -1,0 +1,42 @@
+# Maven
+target/
+!.mvn/wrapper/maven-wrapper.jar
+
+# Logs
+*.log
+
+# Package files
+*.jar
+*.war
+*.ear
+
+# JVM crash logs
+hs_err_pid*
+
+# IDE - IntelliJ
+.idea/
+*.iml
+*.iws
+
+# IDE - Eclipse
+.project
+.classpath
+.settings/
+
+# IDE - VSCode
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Environment variables
+.env
+.env.*
+
+# Temporary files
+tmp/
+temp/
+
+# Docker
+docker-compose.override.yml

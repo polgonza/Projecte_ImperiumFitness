@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hello RBAC Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 40px;
+        }
+        button {
+            padding: 12px 20px;
+            margin-right: 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        pre {
+            margin-top: 20px;
+            background: #f4f4f4;
+            padding: 15px;
+        }
+    </style>
+</head>
+<body>
+
+<h2>JWT + RBAC Test</h2>
+
+<button onclick="callUser()">Hello User</button>
+<button onclick="callAdmin()">Hello Admin</button>
+
+<pre id="output">Response will appear here...</pre>
+
+<script>
+    const API_BASE = "/api/hello";
+
+    function getToken() {
+        return localStorage.getItem("jwt");
+    }
+
+    async function callUser() {
+        callEndpoint(API_BASE + "/user");
+    }
+
+    async function callAdmin() {
+        callEndpoint(API_BASE + "/admin");
+    }
+
+    async function callEndpoint(url) {
+        const token = getToken();
+
+        if (!token) {
+            output("No JWT found in localStorage (key: jwt)");
+            return;
+        }
+
+        try {
+            const res = await fetch(url, {
+                headers: {
+                    "Authorization": "Bearer " + token
+                }
+            });
+
+            const text = await res.text();
+            output(res.status + " → " + text);
+        } catch (e) {
+            output("Error: " + e);
+        }
+    }
+
+    function output(msg) {
+        document.getElementById("output").textContent = msg;
+    }
+</script>
+
+</body>
+</html>

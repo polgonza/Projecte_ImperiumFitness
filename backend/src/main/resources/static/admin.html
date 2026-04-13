@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <h1>Administrador!!!!</h1>
+        <p>Pàgina protegida</p>
+        <button id="logoutBtn">Logout</button>
+        <script>
+    document.getElementById("logoutBtn").addEventListener("click", async () => {
+        try {
+            await fetch("/api/auth/logout", {
+                method: "POST",
+                credentials: "same-origin"   // envía cookies
+            });
+
+            // si sigues usando token para la API, límpialo también
+            localStorage.removeItem("jwt");
+
+            window.location.href = "/login.html";
+        } catch (e) {
+            alert("Logout failed: " + e);
+        }
+    });
+</script>
+    </body>
+</html>
