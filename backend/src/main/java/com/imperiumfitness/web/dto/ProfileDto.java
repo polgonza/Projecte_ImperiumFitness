@@ -1,4 +1,4 @@
-package com.example.secureapi.web.dto;
+package com.imperiumfitness.web.dto;
 
 import java.util.List;
 

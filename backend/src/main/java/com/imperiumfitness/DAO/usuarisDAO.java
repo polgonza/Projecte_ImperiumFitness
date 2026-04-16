@@ -1,8 +1,8 @@
-package com.example.secureapi.DAO;
+package com.imperiumfitness.DAO;
 
 import javax.sql.DataSource;
 
-import com.example.secureapi.domain.Usuari;
+import com.imperiumfitness.domain.Usuari;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

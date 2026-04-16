@@ -1,4 +1,4 @@
-package com.example.secureapi.domain;
+package com.imperiumfitness.domain;
 
 import java.util.Set;
 

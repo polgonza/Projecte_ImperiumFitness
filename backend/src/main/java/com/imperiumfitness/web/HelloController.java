@@ -1,4 +1,4 @@
-package com.example.secureapi.web;
+package com.imperiumfitness.web;
 
 import java.util.List;
 
@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.secureapi.DAO.usuarisDAO;
-import com.example.secureapi.domain.Usuari;
+import com.imperiumfitness.DAO.usuarisDAO;
+import com.imperiumfitness.domain.Usuari;
 
 @RestController
 @RequestMapping("/api/hello")

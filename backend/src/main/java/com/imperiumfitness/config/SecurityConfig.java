@@ -1,7 +1,7 @@
-package com.example.secureapi.config;
+package com.imperiumfitness.config;
 
-import com.example.secureapi.security.JwtAuthFilter;
-import com.example.secureapi.security.JwtService;
+import com.imperiumfitness.security.JwtAuthFilter;
+import com.imperiumfitness.security.JwtService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;

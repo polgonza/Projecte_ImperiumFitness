@@ -1,8 +1,8 @@
-package com.example.secureapi.service;
+package com.imperiumfitness.service;
 
-import com.example.secureapi.domain.UserAccount;
-import com.example.secureapi.repo.InMemoryUserRepo;
-import com.example.secureapi.web.dto.ProfileDto;
+import com.imperiumfitness.domain.UserAccount;
+import com.imperiumfitness.repository.InMemoryUserRepo;
+import com.imperiumfitness.web.dto.ProfileDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;

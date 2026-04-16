@@ -1,8 +1,8 @@
-package com.example.secureapi.service;
+package com.imperiumfitness.service;
 
-import com.example.secureapi.DAO.usuarisDAO;
-import com.example.secureapi.domain.Usuari;
-import com.example.secureapi.security.JwtService;
+import com.imperiumfitness.DAO.usuarisDAO;
+import com.imperiumfitness.domain.Usuari;
+import com.imperiumfitness.security.JwtService;
 import java.util.List;
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;

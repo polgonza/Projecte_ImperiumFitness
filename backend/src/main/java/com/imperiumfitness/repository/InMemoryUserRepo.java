@@ -1,6 +1,6 @@
-package com.example.secureapi.repo;
+package com.imperiumfitness.repository;
 
-import com.example.secureapi.domain.UserAccount;
+import com.imperiumfitness.domain.UserAccount;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;

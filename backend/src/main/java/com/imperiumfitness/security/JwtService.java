@@ -1,4 +1,4 @@
-package com.example.secureapi.security;
+package com.imperiumfitness.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

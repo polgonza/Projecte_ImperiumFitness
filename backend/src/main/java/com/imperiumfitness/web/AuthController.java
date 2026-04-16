@@ -1,9 +1,9 @@
-package com.example.secureapi.web;
+package com.imperiumfitness.web;
 
-import com.example.secureapi.DAO.usuarisDAO;
-import com.example.secureapi.service.AuthService;
-import com.example.secureapi.web.dto.LoginRequest;
-import com.example.secureapi.web.dto.LoginResponse;
+import com.imperiumfitness.DAO.usuarisDAO;
+import com.imperiumfitness.service.AuthService;
+import com.imperiumfitness.web.dto.LoginRequest;
+import com.imperiumfitness.web.dto.LoginResponse;
 import java.time.Duration;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;

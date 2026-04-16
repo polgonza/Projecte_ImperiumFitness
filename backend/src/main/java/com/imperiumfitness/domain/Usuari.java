@@ -1,4 +1,4 @@
-package com.example.secureapi.domain;
+package com.imperiumfitness.domain;
 
 //import jakarta.persistence.Entity;
 //import jakarta.persistence.GeneratedValue;
