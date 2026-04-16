@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ocupación en Tiempo Real - Imperium Fitness</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <nav class="navbar scrolled" id="navbar">
+    <div class="container">
+      <a href="index.html" class="navbar-brand">
+        <img src="assets/logo.png" alt="Imperium">
+        <span class="text-gold">IMPERIUM</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="instalaciones.html">Instalaciones</a></li>
+        <li><a href="actividades.html">Clases</a></li>
+        <li><a href="tarifas.html">Tarifas</a></li>
+        <li><a href="tienda.html">Tienda</a></li>
+        <li><a href="blog.html">Novedades</a></li>
+        <li><a href="contacto.html">Contacto</a></li>
+      </ul>
+      <div class="nav-actions" id="nav-user-area"></div>
+      <button class="nav-toggle" id="nav-toggle"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+  <div class="nav-mobile" id="nav-mobile">
+    <a href="instalaciones.html">Instalaciones</a>
+    <a href="actividades.html">Clases</a>
+    <a href="tarifas.html">Tarifas</a>
+    <a href="tienda.html">Tienda</a>
+    <a href="blog.html">Novedades</a>
+    <a href="contacto.html">Contacto</a>
+    <div class="nav-divider"></div>
+    <div id="nav-mobile-user"></div>
+  </div>
+
+  <section class="page-section">
+    <div class="container">
+
+      <div class="section-header">
+        <div class="live-badge" style="justify-content:center;margin-bottom:0.5rem">
+          <div class="live-dot"></div> En vivo
+        </div>
+        <h2>Ocupación en <span class="text-gold">Tiempo Real</span></h2>
+        <p>Consulta cuánta gente hay ahora mismo en cada centro y elige el mejor momento para entrenar</p>
+      </div>
+
+      <!-- Leyenda de colores -->
+      <div style="display:flex;gap:1.5rem;justify-content:center;margin-bottom:2rem;flex-wrap:wrap;font-size:0.85rem;color:var(--text-muted)">
+        <span style="display:flex;align-items:center;gap:0.5rem">
+          <span style="width:12px;height:12px;border-radius:50%;background:var(--success);display:inline-block"></span>
+          Poca afluencia (&lt;40%)
+        </span>
+        <span style="display:flex;align-items:center;gap:0.5rem">
+          <span style="width:12px;height:12px;border-radius:50%;background:var(--warning);display:inline-block"></span>
+          Afluencia media (40–70%)
+        </span>
+        <span style="display:flex;align-items:center;gap:0.5rem">
+          <span style="width:12px;height:12px;border-radius:50%;background:var(--danger);display:inline-block"></span>
+          Mucha afluencia (&gt;70%)
+        </span>
+      </div>
+
+      <!-- Tarjetas de gimnasios - generadas por JS -->
+      <div class="gym-cards-grid" id="gyms-grid"></div>
+
+      <!-- Consejo -->
+      <div style="margin-top:2.5rem;text-align:center">
+        <p style="font-size:0.85rem;color:var(--text-muted)">
+          💡 Los datos se actualizan cada 5 minutos. Para una experiencia en tiempo real descarga la app.
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="footer-bottom">
+        <div class="footer-legal">
+          <a href="#">Política de Privacidad</a>
+          <a href="#">Términos y Condiciones</a>
+        </div>
+        <span class="footer-copy">© 2026 Imperium Fitness. Todos los derechos reservados.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/app.js"></script>
+  <!-- PANEL CARRITO -->
+  <div class="cart-backdrop" id="cart-backdrop"></div>
+  <div class="cart-drawer" id="cart-drawer">
+    <div class="cart-header">
+      <h3>Mi Carrito</h3>
+      <button class="cart-close-btn" id="cart-close-btn" title="Cerrar">&#x2715;</button>
+    </div>
+    <div class="cart-items" id="cart-items"></div>
+    <div class="cart-footer">
+      <div class="cart-total-row">
+        <span class="cart-total-label">Total</span>
+        <span class="cart-total-amount" id="cart-total">0.00 &euro;</span>
+      </div>
+      <button class="btn btn-primary" style="width:100%;justify-content:center" id="cart-checkout-btn">Finalizar Compra</button>
+    </div>
+  </div>
+
+  <script src="js/carrito.js"></script>
+</body>
+</html>

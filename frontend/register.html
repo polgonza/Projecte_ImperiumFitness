@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crear Cuenta - Imperium Fitness</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <div class="auth-page">
+    <div class="auth-card">
+
+      <!-- Logo -->
+      <div class="auth-logo">
+        <img src="assets/logo.png" alt="Imperium">
+        <span class="text-gold">IMPERIUM</span>
+      </div>
+
+      <h2>Únete a Imperium</h2>
+      <p class="subtitle">Crea tu cuenta y empieza hoy</p>
+
+      <!-- Mensaje de error/éxito -->
+      <div id="reg-alert" class="alert"></div>
+
+      <!-- Formulario de registro -->
+      <form id="register-form">
+
+        <div class="field-group">
+          <label for="reg-name">Nombre completo</label>
+          <input type="text" id="reg-name" class="input-field" placeholder="Tu nombre" required>
+        </div>
+
+        <div class="field-group">
+          <label for="reg-email">Email</label>
+          <input type="email" id="reg-email" class="input-field" placeholder="tu@email.com" required>
+        </div>
+
+        <div class="field-group">
+          <label for="reg-password">Contraseña</label>
+          <div class="password-wrapper">
+            <input type="password" id="reg-password" class="input-field" placeholder="Mínimo 6 caracteres" required>
+            <button type="button" class="toggle-password" data-target="reg-password">👁</button>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label for="reg-confirm">Confirmar contraseña</label>
+          <div class="password-wrapper">
+            <input type="password" id="reg-confirm" class="input-field" placeholder="Repite la contraseña" required>
+            <button type="button" class="toggle-password" data-target="reg-confirm">👁</button>
+          </div>
+        </div>
+
+        <!-- Checkbox de términos -->
+        <label style="display:flex;align-items:flex-start;gap:0.75rem;font-size:0.82rem;color:var(--text-muted);cursor:pointer;margin-bottom:1.25rem">
+          <input type="checkbox" id="reg-terms" required style="margin-top:3px;accent-color:var(--primary)">
+          Acepto los <a href="#" style="color:var(--primary)">Términos y Condiciones</a> y la
+          <a href="#" style="color:var(--primary)">Política de Privacidad</a>
+        </label>
+
+        <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;padding:0.85rem">
+          Crear Cuenta
+        </button>
+      </form>
+
+      <!-- Links -->
+      <div class="auth-links">
+        ¿Ya tienes cuenta? <a href="login.html">Inicia sesión</a>
+      </div>
+      <div class="auth-links">
+        <a href="index.html">← Volver al inicio</a>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="js/app.js"></script>
+  <script src="js/carrito.js"></script>
+</body>
+</html>

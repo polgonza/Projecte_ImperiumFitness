@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tarifas - Imperium Fitness</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <nav class="navbar" id="navbar">
+    <div class="container">
+      <a href="index.html" class="navbar-brand">
+        <img src="assets/logo.png" alt="Imperium">
+        <span class="text-gold">IMPERIUM</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="instalaciones.html">Instalaciones</a></li>
+        <li><a href="actividades.html">Clases</a></li>
+        <li><a href="tarifas.html">Tarifas</a></li>
+        <li><a href="tienda.html">Tienda</a></li>
+        <li><a href="blog.html">Novedades</a></li>
+        <li><a href="contacto.html">Contacto</a></li>
+      </ul>
+      <div class="nav-actions" id="nav-user-area"></div>
+      <button class="nav-toggle" id="nav-toggle"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+  <div class="nav-mobile" id="nav-mobile">
+    <a href="instalaciones.html">Instalaciones</a>
+    <a href="actividades.html">Clases</a>
+    <a href="tarifas.html">Tarifas</a>
+    <a href="tienda.html">Tienda</a>
+    <a href="blog.html">Novedades</a>
+    <a href="contacto.html">Contacto</a>
+    <div class="nav-divider"></div>
+    <div id="nav-mobile-user"></div>
+  </div>
+
+  <!-- CONTENIDO -->
+  <section class="page-section">
+    <div class="container">
+
+      <div class="section-header">
+        <h2>Tarifas</h2>
+        <p>Encuentra el plan perfecto para tu estilo de entrenamiento</p>
+      </div>
+
+      <!-- Los planes se generan dinámicamente en JS -->
+      <div class="plans-grid" id="plans-grid"></div>
+
+      <!-- Garantía -->
+      <div style="text-align:center;margin-top:2.5rem">
+        <p style="color:var(--text-muted);font-size:0.9rem">
+          ✨ Primera semana gratis &nbsp;·&nbsp; Sin permanencia &nbsp;·&nbsp; Cancela cuando quieras
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="logo-row">
+            <img src="assets/logo.png" alt="Logo">
+            <span class="text-gold">IMPERIUM FITNESS</span>
+          </div>
+          <p>La cadena de gimnasios premium con tecnología de ocupación en tiempo real.</p>
+          <div class="social-links">
+            <a href="#" class="social-btn">📷</a>
+            <a href="#" class="social-btn">👍</a>
+            <a href="#" class="social-btn">🐦</a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>Explorar</h4>
+          <ul>
+            <li><a href="instalaciones.html">Instalaciones</a></li>
+            <li><a href="actividades.html">Clases</a></li>
+            <li><a href="tarifas.html">Tarifas</a></li>
+            <li><a href="tienda.html">Tienda</a></li>
+            <li><a href="contacto.html">Contacto</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Legal</h4>
+          <ul>
+            <li><a href="#">Política de Privacidad</a></li>
+            <li><a href="#">Términos y Condiciones</a></li>
+            <li><a href="#">Política de Cookies</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Newsletter</h4>
+          <p style="font-size:0.85rem;color:var(--text-muted);margin-bottom:0.75rem">Ofertas exclusivas.</p>
+          <div class="newsletter-row">
+            <input type="email" id="newsletter-input" placeholder="tu@email.com">
+            <button class="newsletter-btn" data-input="newsletter-input">📩</button>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span class="footer-copy">© 2026 Imperium Fitness. Todos los derechos reservados.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/app.js"></script>
+  <!-- PANEL CARRITO -->
+  <div class="cart-backdrop" id="cart-backdrop"></div>
+  <div class="cart-drawer" id="cart-drawer">
+    <div class="cart-header">
+      <h3>Mi Carrito</h3>
+      <button class="cart-close-btn" id="cart-close-btn" title="Cerrar">&#x2715;</button>
+    </div>
+    <div class="cart-items" id="cart-items"></div>
+    <div class="cart-footer">
+      <div class="cart-total-row">
+        <span class="cart-total-label">Total</span>
+        <span class="cart-total-amount" id="cart-total">0.00 &euro;</span>
+      </div>
+      <button class="btn btn-primary" style="width:100%;justify-content:center" id="cart-checkout-btn">Finalizar Compra</button>
+    </div>
+  </div>
+
+  <script src="js/carrito.js"></script>
+</body>
+</html>

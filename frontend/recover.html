@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recuperar Contraseña - Imperium Fitness</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <div class="auth-page">
+    <div class="auth-card">
+
+      <!-- Logo -->
+      <div class="auth-logo">
+        <img src="assets/logo.png" alt="Imperium">
+        <span class="text-gold">IMPERIUM</span>
+      </div>
+
+      <h2>Recuperar Contraseña</h2>
+      <p class="subtitle">Te enviaremos un enlace de recuperación a tu email</p>
+
+      <!-- Mensaje de éxito/error -->
+      <div id="recover-alert" class="alert"></div>
+
+      <!-- Formulario de recuperación -->
+      <form id="recover-form">
+        <div class="field-group">
+          <label for="recover-email">Tu email</label>
+          <input type="email" id="recover-email" class="input-field" placeholder="tu@email.com" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;padding:0.85rem">
+          Enviar Enlace
+        </button>
+      </form>
+
+      <!-- Links -->
+      <div class="auth-links">
+        <a href="login.html">← Volver al inicio de sesión</a>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="js/app.js"></script>
+  <script src="js/carrito.js"></script>
+</body>
+</html>

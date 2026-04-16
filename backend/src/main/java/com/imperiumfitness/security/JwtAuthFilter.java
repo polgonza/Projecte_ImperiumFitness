@@ -44,7 +44,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                     Claims claims = jwtService.parse(token);
 
                     String username = claims.getSubject(); // en tu diseño: subject = username
-                    List<String> roles = claims.get("roles", List.class);
+                    @SuppressWarnings("unchecked")
+                    List<String> roles = (List<String>) claims.get("roles");
                     if (roles == null) roles = List.of();
 
                     var authorities = roles.stream()

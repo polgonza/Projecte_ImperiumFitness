@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Finalizar Compra - Imperium Fitness</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar scrolled" id="navbar">
+    <div class="container">
+      <a href="index.html" class="navbar-brand">
+        <img src="assets/logo.png" alt="Imperium">
+        <span class="text-gold">IMPERIUM</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="instalaciones.html">Instalaciones</a></li>
+        <li><a href="actividades.html">Clases</a></li>
+        <li><a href="tarifas.html">Tarifas</a></li>
+        <li><a href="tienda.html">Tienda</a></li>
+        <li><a href="blog.html">Novedades</a></li>
+        <li><a href="contacto.html">Contacto</a></li>
+      </ul>
+      <div class="nav-actions" id="nav-user-area"></div>
+      <button class="nav-toggle" id="nav-toggle"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+  <div class="nav-mobile" id="nav-mobile">
+    <a href="instalaciones.html">Instalaciones</a>
+    <a href="actividades.html">Clases</a>
+    <a href="tarifas.html">Tarifas</a>
+    <a href="tienda.html">Tienda</a>
+    <a href="blog.html">Novedades</a>
+    <a href="contacto.html">Contacto</a>
+    <div class="nav-divider"></div>
+    <div id="nav-mobile-user"></div>
+  </div>
+
+  <!-- CONTENIDO -->
+  <section class="page-section">
+    <div class="container">
+
+      <div class="section-header">
+        <h2>Finalizar Compra</h2>
+        <p>Revisa tu pedido e introduce tus datos de pago</p>
+      </div>
+
+      <!--
+        #checkout-form-section  → el formulario normal
+        #checkout-success       → la pantalla de confirmación (oculta al inicio)
+        Ambos se controlan desde checkout.js
+      -->
+
+      <!-- ===== FORMULARIO DE PAGO ===== -->
+      <div id="checkout-form-section">
+
+        <!--
+          Aviso para usuarios no logueados.
+          Si el usuario SÍ está logueado, checkout.js lo oculta.
+        -->
+        <div class="login-required-box" id="login-required-box" style="display:none">
+          <p>
+            <strong>Debes iniciar sesión</strong> para completar tu compra.
+            Tu carrito se guardará hasta que vuelvas.
+          </p>
+          <a href="login.html" class="btn btn-primary" style="display:inline-flex">
+            Iniciar Sesión
+          </a>
+        </div>
+
+        <div class="checkout-layout" id="checkout-layout">
+
+          <!-- Columna izquierda: formulario -->
+          <div>
+
+            <!-- SECCIÓN: Datos de envío -->
+            <div class="checkout-card">
+              <h3>Datos de envío</h3>
+              <div class="checkout-form-grid">
+
+                <div class="form-field full-width">
+                  <label for="ch-nombre">Nombre completo</label>
+                  <input type="text" id="ch-nombre" placeholder="Carlos García López">
+                  <span class="field-err">Este campo es obligatorio</span>
+                </div>
+
+                <div class="form-field full-width">
+                  <label for="ch-direccion">Dirección</label>
+                  <input type="text" id="ch-direccion" placeholder="Calle Mayor 12, 3ºB">
+                  <span class="field-err">Este campo es obligatorio</span>
+                </div>
+
+                <div class="form-field">
+                  <label for="ch-ciudad">Ciudad</label>
+                  <input type="text" id="ch-ciudad" placeholder="Madrid">
+                  <span class="field-err">Este campo es obligatorio</span>
+                </div>
+
+                <div class="form-field">
+                  <label for="ch-cp">Código postal</label>
+                  <input type="text" id="ch-cp" placeholder="28001" maxlength="5">
+                  <span class="field-err">Código postal inválido</span>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- SECCIÓN: Datos de pago (simulado) -->
+            <div class="checkout-card">
+              <h3>Datos de pago</h3>
+
+              <!--
+                Tarjeta decorativa — se actualiza en tiempo real con lo que
+                escribe el usuario (desde checkout.js)
+              -->
+              <div class="credit-card-preview" id="cc-preview">
+                <div class="cc-chip"></div>
+                <div class="cc-number" id="cc-number-display">**** **** **** ****</div>
+                <div class="cc-bottom">
+                  <div>
+                    <div class="cc-label">Titular</div>
+                    <div class="cc-value" id="cc-name-display">NOMBRE TITULAR</div>
+                  </div>
+                  <div>
+                    <div class="cc-label">Caducidad</div>
+                    <div class="cc-value" id="cc-exp-display">MM/AA</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="checkout-form-grid">
+
+                <div class="form-field full-width">
+                  <label for="ch-titular">Nombre del titular</label>
+                  <input type="text" id="ch-titular" placeholder="CARLOS GARCIA"
+                         oninput="updateCardPreview()">
+                  <span class="field-err">Este campo es obligatorio</span>
+                </div>
+
+                <div class="form-field full-width">
+                  <label for="ch-tarjeta">Número de tarjeta</label>
+                  <input type="text" id="ch-tarjeta" placeholder="1234 5678 9012 3456"
+                         maxlength="19" oninput="formatCardNumber(this); updateCardPreview()">
+                  <span class="field-err">Introduce 16 dígitos</span>
+                </div>
+
+                <div class="form-field">
+                  <label for="ch-expira">Fecha de caducidad</label>
+                  <input type="text" id="ch-expira" placeholder="MM/AA"
+                         maxlength="5" oninput="formatExpiry(this); updateCardPreview()">
+                  <span class="field-err">Formato MM/AA</span>
+                </div>
+
+                <div class="form-field">
+                  <label for="ch-cvv">CVV</label>
+                  <input type="text" id="ch-cvv" placeholder="123" maxlength="3">
+                  <span class="field-err">3 dígitos</span>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- Botón de pago -->
+            <button class="btn btn-primary" id="pay-btn"
+                    style="width:100%;justify-content:center;padding:1rem;font-size:0.9rem">
+              Pagar ahora
+            </button>
+
+          </div>
+
+          <!-- Columna derecha: resumen del pedido -->
+          <div class="order-summary">
+            <h3>Tu Pedido</h3>
+            <!-- Líneas de productos (generadas por checkout.js) -->
+            <div id="summary-items"></div>
+            <!-- Totales -->
+            <div class="summary-totals">
+              <div class="summary-row">
+                <span>Subtotal</span>
+                <span id="summary-subtotal">0.00 €</span>
+              </div>
+              <!-- Fila de descuento: visible solo si el usuario está logueado -->
+              <div class="summary-row" id="summary-discount-row" style="color:var(--success)">
+                <span>Descuento socio (5%)</span>
+                <span id="summary-discount">− 0.00 €</span>
+              </div>
+              <div class="summary-row">
+                <span>Envío</span>
+                <span style="color:var(--success)">Gratis</span>
+              </div>
+              <div class="summary-row total">
+                <span>Total</span>
+                <span id="summary-total">0.00 €</span>
+              </div>
+            </div>
+            <a href="tienda.html"
+               style="display:block;text-align:center;margin-top:1rem;font-size:0.82rem;color:var(--text-muted)">
+              ← Volver a la tienda
+            </a>
+          </div>
+
+        </div><!-- /checkout-layout -->
+      </div><!-- /checkout-form-section -->
+
+      <!-- ===== PANTALLA DE ÉXITO (oculta hasta confirmar pago) ===== -->
+      <div id="checkout-success" style="display:none">
+        <div class="checkout-success">
+          <div class="success-icon">&#10003;</div>
+          <h2>Pago realizado</h2>
+          <p>
+            Tu pedido ha sido confirmado y está en preparación.
+            Recibirás un correo con el seguimiento.
+          </p>
+          <div class="order-number" id="success-order-id">Pedido #000000</div>
+          <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
+            <a href="tienda.html" class="btn btn-outline">Seguir comprando</a>
+            <a href="perfil.html" class="btn btn-primary">Ver mis pedidos</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="footer-bottom">
+        <span class="footer-copy">© 2026 Imperium Fitness. Todos los derechos reservados.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/app.js"></script>
+  <script src="js/carrito.js"></script>
+  <script src="js/checkout.js"></script>
+</body>
+</html>

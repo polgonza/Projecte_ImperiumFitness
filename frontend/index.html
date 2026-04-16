@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Imperium Fitness - La cadena de gimnasios premium</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- ========== NAVBAR ========== -->
+  <nav class="navbar" id="navbar">
+    <div class="container">
+      <a href="index.html" class="navbar-brand">
+        <img src="assets/logo.png" alt="Imperium Fitness">
+        <span class="text-gold">IMPERIUM</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="instalaciones.html">Instalaciones</a></li>
+        <li><a href="actividades.html">Clases</a></li>
+        <li><a href="tarifas.html">Tarifas</a></li>
+        <li><a href="tienda.html">Tienda</a></li>
+        <li><a href="blog.html">Novedades</a></li>
+        <li><a href="contacto.html">Contacto</a></li>
+      </ul>
+      <div class="nav-actions" id="nav-user-area"></div>
+      <button class="nav-toggle" id="nav-toggle" aria-label="Menú">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+  <div class="nav-mobile" id="nav-mobile">
+    <a href="instalaciones.html">Instalaciones</a>
+    <a href="actividades.html">Clases</a>
+    <a href="tarifas.html">Tarifas</a>
+    <a href="tienda.html">Tienda</a>
+    <a href="blog.html">Novedades</a>
+    <a href="contacto.html">Contacto</a>
+    <div class="nav-divider"></div>
+    <div id="nav-mobile-user"></div>
+  </div>
+
+  <!-- ========== HERO ========== -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <span class="hero-badge">La cadena de gimnasios premium</span>
+      <h1>Forja tu <span class="text-gold">mejor versión</span></h1>
+      <p>Tecnología de ocupación en tiempo real, instalaciones de élite y una comunidad que te impulsa. Entrena mejor, entrena inteligente.</p>
+      <div class="hero-btns">
+        <a href="tarifas.html" class="btn btn-primary">Únete Ahora →</a>
+        <a href="actividades.html" class="btn btn-outline">Reserva tu Clase</a>
+      </div>
+    </div>
+    <div class="scroll-indicator">
+      <div class="mouse"></div>
+    </div>
+  </section>
+
+  <!-- ========== OCUPACIÓN (banner) ========== -->
+  <section>
+    <div class="container">
+      <div class="occupancy-banner">
+        <div class="live-badge">
+          <div class="live-dot"></div>
+          En vivo
+        </div>
+        <h2>¿Quieres saber cuánta gente hay <span class="text-gold">ahora mismo</span>?</h2>
+        <p>Consulta la ocupación de cada centro en tiempo real y evita las horas punta.</p>
+        <a href="ocupacion.html" class="btn btn-primary" style="margin-top:1rem">
+          📊 Ver ocupación en tiempo real →
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== SERVICIOS ========== -->
+  <section>
+    <div class="container">
+      <div class="section-header">
+        <h2>Servicios</h2>
+        <p>Todo lo que necesitas bajo un mismo techo</p>
+      </div>
+      <div class="services-grid">
+
+        <!-- Cada tarjeta: fondo imagen + overlay + texto encima -->
+
+        <div class="service-card">
+          <div class="service-card-bg"
+               style="background-image: url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=600&h=400&fit=crop')">
+          </div>
+          <div class="service-card-overlay"></div>
+          <div class="service-card-text">
+            <h3>Entrenamiento</h3>
+            <p>Equipamiento de última generación y entrenadores certificados.</p>
+          </div>
+        </div>
+
+        <div class="service-card">
+          <div class="service-card-bg"
+               style="background-image: url('https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=600&h=400&fit=crop')">
+          </div>
+          <div class="service-card-overlay"></div>
+          <div class="service-card-text">
+            <h3>Nutrición</h3>
+            <p>Planes nutricionales personalizados por profesionales.</p>
+          </div>
+        </div>
+
+        <div class="service-card">
+          <div class="service-card-bg"
+               style="background-image: url('https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=600&h=400&fit=crop')">
+          </div>
+          <div class="service-card-overlay"></div>
+          <div class="service-card-text">
+            <h3>Recuperación</h3>
+            <p>Sauna, crioterapia y zona wellness premium.</p>
+          </div>
+        </div>
+
+        <div class="service-card">
+          <div class="service-card-bg"
+               style="background-image: url('https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=600&h=400&fit=crop')">
+          </div>
+          <div class="service-card-overlay"></div>
+          <div class="service-card-text">
+            <h3>Clases Dirigidas</h3>
+            <p>CrossFit, Yoga, Spinning, HIIT, Pilates y más.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== PRODUCTOS DESTACADOS ========== -->
+  <section class="bg-alt">
+    <div class="container">
+      <div class="section-header">
+        <h2>Productos Destacados</h2>
+        <p>Ropa exclusiva y suplementos de alto rendimiento</p>
+      </div>
+      <!-- Rellenado dinámicamente por JS -->
+      <div class="products-grid" id="featured-products"></div>
+      <div style="text-align:center;margin-top:2rem">
+        <a href="tienda.html" class="btn btn-outline">Ver toda la tienda →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== FORMULARIO RÁPIDO ========== -->
+  <section>
+    <div class="container">
+      <div class="section-header">
+        <h2>¿Tienes dudas?</h2>
+        <p>Escríbenos y te respondemos en menos de 24h</p>
+      </div>
+      <div style="max-width:600px;margin:0 auto">
+        <form class="contact-form-box" id="home-contact-form">
+          <div class="form-row">
+            <input type="text"  class="input-field" placeholder="Nombre"  required>
+            <input type="email" class="input-field" placeholder="Email"   required>
+          </div>
+          <textarea class="textarea-field" rows="4" placeholder="Tu mensaje..." required></textarea>
+          <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center">
+            Enviar Mensaje
+          </button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== APP DOWNLOAD ========== -->
+  <section class="bg-alt">
+    <div class="container">
+      <div class="app-section">
+        <div class="app-text">
+          <span class="tag">Descarga la App</span>
+          <h2>Tu gimnasio en el <span class="text-gold">bolsillo</span></h2>
+          <p>Consulta la ocupación, reserva clases, gestiona tu plan y compra en la tienda. Todo desde una sola app.</p>
+          <div class="app-btns">
+            <button class="app-btn" onclick="showToast('App Store próximamente disponible 🍎', 'success')">
+              <span class="icon">🍎</span>
+              <div class="store-text">
+                <small>Disponible en</small>
+                <strong>App Store</strong>
+              </div>
+            </button>
+            <button class="app-btn" onclick="showToast('Google Play próximamente disponible ▶️', 'success')">
+              <span class="icon">▶️</span>
+              <div class="store-text">
+                <small>Disponible en</small>
+                <strong>Google Play</strong>
+              </div>
+            </button>
+          </div>
+        </div>
+        <div class="phone-mockup">
+          <div class="phone-screen">
+            <span style="font-size:2.5rem">📱</span>
+            <span class="phone-logo text-gold">IMPERIUM</span>
+            <span class="phone-label">Ocupación · Reservas · Tienda · Plan</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== CTA FINAL ========== -->
+  <section>
+    <div class="container">
+      <div class="cta-gold">
+        <h2>¿Listo para el cambio?</h2>
+        <p>Únete a la comunidad Imperium y transforma tu vida. Tu primera semana es gratis.</p>
+        <a href="tarifas.html" class="btn">Empieza Hoy →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== FOOTER ========== -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="logo-row">
+            <img src="assets/logo.png" alt="Logo">
+            <span class="text-gold">IMPERIUM FITNESS</span>
+          </div>
+          <p>La cadena de gimnasios premium con tecnología de ocupación en tiempo real. Transforma tu vida.</p>
+          <div class="social-links">
+            <a href="#" class="social-btn">📷</a>
+            <a href="#" class="social-btn">👍</a>
+            <a href="#" class="social-btn">🐦</a>
+            <a href="#" class="social-btn">▶️</a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>Explorar</h4>
+          <ul>
+            <li><a href="instalaciones.html">Instalaciones</a></li>
+            <li><a href="actividades.html">Clases</a></li>
+            <li><a href="tarifas.html">Tarifas</a></li>
+            <li><a href="tienda.html">Tienda</a></li>
+            <li><a href="blog.html">Novedades</a></li>
+            <li><a href="contacto.html">Contacto</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Más</h4>
+          <ul>
+            <li><a href="#">FAQ</a></li>
+            <li><a href="contacto.html">Ubicación Gimnasios</a></li>
+            <li><a href="#">Invitar Amigo</a></li>
+            <li><a href="#">Equipo</a></li>
+            <li><a href="#">Descargar App</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Newsletter</h4>
+          <p style="font-size:0.85rem;color:var(--text-muted);margin-bottom:0.75rem">Ofertas exclusivas y novedades.</p>
+          <div class="newsletter-row">
+            <input type="email" id="newsletter-input" placeholder="tu@email.com">
+            <button class="newsletter-btn" data-input="newsletter-input">📩</button>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div class="footer-legal">
+          <a href="#">Política de Privacidad</a>
+          <a href="#">Política de Cookies</a>
+          <a href="#">Términos y Condiciones</a>
+        </div>
+        <span class="footer-copy">© 2026 Imperium Fitness. Todos los derechos reservados.</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ========== CARRITO (panel lateral) ========== -->
+  <!-- El fondo oscuro detrás del panel -->
+  <div class="cart-backdrop" id="cart-backdrop"></div>
+
+  <!-- El panel del carrito -->
+  <div class="cart-drawer" id="cart-drawer">
+    <div class="cart-header">
+      <h3>Mi Carrito</h3>
+      <button class="cart-close-btn" id="cart-close-btn" title="Cerrar">&#x2715;</button>
+    </div>
+    <!-- Lista de productos (la rellena JS) -->
+    <div class="cart-items" id="cart-items"></div>
+    <!-- Pie con total y botón checkout -->
+    <div class="cart-footer">
+      <div class="cart-total-row">
+        <span class="cart-total-label">Total</span>
+        <span class="cart-total-amount" id="cart-total">0.00 €</span>
+      </div>
+      <button class="btn btn-primary" style="width:100%;justify-content:center"
+              id="cart-checkout-btn">
+        Finalizar Compra
+      </button>
+    </div>
+  </div>
+
+  <script src="js/app.js"></script>
+  <script src="js/carrito.js"></script>
+</body>
+</html>

@@ -1,47 +1,49 @@
 package com.imperiumfitness.service;
 
-import com.imperiumfitness.DAO.usuarisDAO;
-import com.imperiumfitness.domain.Usuari;
+import com.imperiumfitness.model.entity.Usuari;
+import com.imperiumfitness.repository.UsuariRepository;
 import com.imperiumfitness.security.JwtService;
-import java.util.List;
-import javax.sql.DataSource;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
+
 @Service
 public class AuthService {
 
+    // ── Dependències injectades per Spring ───────────────────────────────────
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
-
-    @Autowired
-    private DataSource dataSource;
+    private final UsuariRepository usuariRepository; // substitueix l'antic DAO
 
     public AuthService(PasswordEncoder passwordEncoder,
-                       JwtService jwtService) {
+                       JwtService jwtService,
+                       UsuariRepository usuariRepository) {
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
+        this.usuariRepository = usuariRepository;
     }
 
-    public String login(String username, String rawPassword) {
-        // OJO:
-        // de momento "username" realmente va a ser el email,
-        // porque LoginRequest todavía se llama username.
-        Usuari usuari = usuarisDAO.findByEmail(dataSource, username);
+    // ── Login: retorna un token JWT si les credencials son correctes ─────────
+    public String login(String email, String rawPassword) {
 
-        if (usuari == null) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Usuario no encontrado");
+        // Busquem l'usuari per email a la BD via JPA
+        Usuari usuari = usuariRepository.findByEmail(email)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.UNAUTHORIZED, "Usuari no trobat"));
+
+        // Comprovem la contrasenya contra el hash BCrypt emmagatzemat
+        if (!passwordEncoder.matches(rawPassword, usuari.getContrasenya())) {
+            throw new ResponseStatusException(
+                    HttpStatus.UNAUTHORIZED, "Contrasenya incorrecta");
         }
 
-        if (!passwordMatches(rawPassword, usuari.getContrasenya())) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Contraseña incorrecta");
-        }
+        // Normalitzem el rol per Spring Security (ha de tenir prefix ROLE_)
+        String role = normalitzaRol(usuari.getRol());
 
-        String role = normalizeRole(usuari.getRol());
-
+        // Generem i retornem el token JWT
         return jwtService.issueToken(
                 String.valueOf(usuari.getId()),
                 usuari.getEmail(),
@@ -49,31 +51,10 @@ public class AuthService {
         );
     }
 
-    private String normalizeRole(String roleFromDb) {
-        if (roleFromDb == null || roleFromDb.isBlank()) {
-            return "ROLE_USER";
-        }
-
-        String role = roleFromDb.trim().toUpperCase();
-
-        if (!role.startsWith("ROLE_")) {
-            role = "ROLE_" + role;
-        }
-
-        return role;
-    }
-
-    private boolean passwordMatches(String rawPassword, String storedPassword) {
-        if (storedPassword == null) {
-            return false;
-        }
-
-        // Si la contraseña está cifrada con Spring ({bcrypt}, {noop}, etc.)
-        if (storedPassword.startsWith("{")) {
-            return passwordEncoder.matches(rawPassword, storedPassword);
-        }
-
-        // Compatibilidad temporal si en tu BD hay contraseñas en texto plano
-        return rawPassword.equals(storedPassword);
+    // ── Normalitza el rol: "USER" → "ROLE_USER", "ADMIN" → "ROLE_ADMIN" ─────
+    private String normalitzaRol(String rolDeBD) {
+        if (rolDeBD == null || rolDeBD.isBlank()) return "ROLE_USER";
+        String rol = rolDeBD.trim().toUpperCase();
+        return rol.startsWith("ROLE_") ? rol : "ROLE_" + rol;
     }
 }

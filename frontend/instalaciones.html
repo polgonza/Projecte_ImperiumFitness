@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Instalaciones - Imperium Fitness</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <nav class="navbar scrolled" id="navbar">
+    <div class="container">
+      <a href="index.html" class="navbar-brand">
+        <img src="assets/logo.png" alt="Imperium">
+        <span class="text-gold">IMPERIUM</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="instalaciones.html">Instalaciones</a></li>
+        <li><a href="actividades.html">Clases</a></li>
+        <li><a href="tarifas.html">Tarifas</a></li>
+        <li><a href="tienda.html">Tienda</a></li>
+        <li><a href="blog.html">Novedades</a></li>
+        <li><a href="contacto.html">Contacto</a></li>
+      </ul>
+      <div class="nav-actions" id="nav-user-area"></div>
+      <button class="nav-toggle" id="nav-toggle"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+  <div class="nav-mobile" id="nav-mobile">
+    <a href="instalaciones.html">Instalaciones</a>
+    <a href="actividades.html">Clases</a>
+    <a href="tarifas.html">Tarifas</a>
+    <a href="tienda.html">Tienda</a>
+    <a href="blog.html">Novedades</a>
+    <a href="contacto.html">Contacto</a>
+    <div class="nav-divider"></div>
+    <div id="nav-mobile-user"></div>
+  </div>
+
+  <section class="page-section">
+    <div class="container">
+
+      <div class="section-header">
+        <h2>Instalaciones</h2>
+        <p>Espacios de élite diseñados para llevar tu entrenamiento al máximo nivel</p>
+      </div>
+
+      <!-- Grid de instalaciones - generado por JS -->
+      <div class="facilities-grid" id="facilities-grid"></div>
+
+      <!-- CTA final -->
+      <div style="text-align:center;margin-top:3rem">
+        <p style="color:var(--text-muted);margin-bottom:1.5rem">¿Quieres conocer nuestros centros en persona?</p>
+        <a href="contacto.html" class="btn btn-primary">Solicitar Visita Gratuita</a>
+      </div>
+
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="footer-bottom">
+        <div class="footer-legal">
+          <a href="#">Política de Privacidad</a>
+          <a href="#">Términos y Condiciones</a>
+        </div>
+        <span class="footer-copy">© 2026 Imperium Fitness. Todos los derechos reservados.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/app.js"></script>
+  <!-- PANEL CARRITO -->
+  <div class="cart-backdrop" id="cart-backdrop"></div>
+  <div class="cart-drawer" id="cart-drawer">
+    <div class="cart-header">
+      <h3>Mi Carrito</h3>
+      <button class="cart-close-btn" id="cart-close-btn" title="Cerrar">&#x2715;</button>
+    </div>
+    <div class="cart-items" id="cart-items"></div>
+    <div class="cart-footer">
+      <div class="cart-total-row">
+        <span class="cart-total-label">Total</span>
+        <span class="cart-total-amount" id="cart-total">0.00 &euro;</span>
+      </div>
+      <button class="btn btn-primary" style="width:100%;justify-content:center" id="cart-checkout-btn">Finalizar Compra</button>
+    </div>
+  </div>
+
+  <script src="js/carrito.js"></script>
+</body>
+</html>

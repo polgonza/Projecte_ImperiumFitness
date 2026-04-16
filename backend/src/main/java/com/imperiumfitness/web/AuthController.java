@@ -1,6 +1,5 @@
 package com.imperiumfitness.web;
 
-import com.imperiumfitness.DAO.usuarisDAO;
 import com.imperiumfitness.service.AuthService;
 import com.imperiumfitness.web.dto.LoginRequest;
 import com.imperiumfitness.web.dto.LoginResponse;
