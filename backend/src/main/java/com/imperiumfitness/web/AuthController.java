@@ -3,32 +3,32 @@ package com.imperiumfitness.web;
 import com.imperiumfitness.service.AuthService;
 import com.imperiumfitness.web.dto.LoginRequest;
 import com.imperiumfitness.web.dto.LoginResponse;
-import java.time.Duration;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import java.time.Duration;
 
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
 
     private final AuthService authService;
+    private final PasswordEncoder passwordEncoder; // afegim això
 
-    public AuthController(AuthService authService) {
+    public AuthController(AuthService authService, PasswordEncoder passwordEncoder) {
         this.authService = authService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest req) {
-
-        String token = authService.login(req.username(),req.password());
-        
-
+        String token = authService.login(req.username(), req.password());
         ResponseCookie adminCookie = ResponseCookie.from("ADMIN_AUTH", token)
                 .httpOnly(true)
-                .secure(false) // true en HTTPS
-                .path("/") // o "/admin.html" si quieres limitar más (ver nota abajo)
+                .secure(false)
+                .path("/")
                 .sameSite("Lax")
                 .maxAge(Duration.ofSeconds(1800))
                 .build();
@@ -46,9 +46,14 @@ public class AuthController {
                 .path("/")
                 .maxAge(0)
                 .build();
-
         return ResponseEntity.noContent()
                 .header(HttpHeaders.SET_COOKIE, cookie.toString())
                 .build();
+    }
+
+    // ── TEMPORAL: genera hash BCrypt — ELIMINA DESPRÉS DE LES PROVES ────────
+    @GetMapping("/hash")
+    public String generaHash(@RequestParam String password) {
+        return passwordEncoder.encode(password);
     }
 }

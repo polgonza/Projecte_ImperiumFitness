@@ -5,6 +5,7 @@ import com.imperiumfitness.security.JwtAuthFilter;
 import com.imperiumfitness.security.JwtService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -62,34 +63,37 @@ public class SecurityConfig {
     }
 
     @Bean
-    SecurityFilterChain filterChain(HttpSecurity http, JwtService jwtService) throws Exception {
-        return http
-                .csrf(csrf -> csrf.disable())
-                .sessionManagement(sm ->
-                        sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth -> auth
-                        // Recursos estàtics
-                      /*   .requestMatchers(
-                                "/", "/index.html", "/login.html",
-                                // "/favicon.ico",
-                                "/*.css", "/*.js",
-                                "/css/**", "/js/**", "/images/**"
-                        ).permitAll()
-                        // Endpoints públics
-                        .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("GET", "/api/noticies/**").permitAll()
-                        .requestMatchers("POST", "/api/contactes").permitAll()
-                        // Endpoints protegits
-                        .requestMatchers("/api/usuaris/**").hasRole("ADMIN")
-                        .requestMatchers("/api/estadistiques/**").hasRole("ADMIN")
-                        // Resta: autenticats
-                        .anyRequest().authenticated()
-                        */
-                        .anyRequest().permitAll()
-                )
-                .addFilterBefore(
-                        new JwtAuthFilter(jwtService),
-                        UsernamePasswordAuthenticationFilter.class)
-                .build();
-    }
+SecurityFilterChain filterChain(HttpSecurity http, JwtService jwtService) throws Exception {
+    return http
+            .csrf(csrf -> csrf.disable())
+            .sessionManagement(sm ->
+                    sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .authorizeHttpRequests(auth -> auth
+        // Recursos estàtics
+        .requestMatchers(
+                "/", "/index.html", "/login.html",
+                "/*.css", "/*.js",
+                "/css/**", "/js/**", "/images/**"
+        ).permitAll()
+
+        // Endpoints públics
+        .requestMatchers("/api/auth/**").permitAll()
+        .requestMatchers(HttpMethod.GET, "/api/noticies/**").permitAll()
+        .requestMatchers(HttpMethod.POST, "/api/contactes").permitAll()
+
+        // Endpoints només ADMIN
+        .requestMatchers("/api/usuaris/**").hasRole("ADMIN")
+        .requestMatchers("/api/estadistiques/**").hasRole("ADMIN")
+
+        // TOTS els altres endpoints /api/** requereixen autenticació
+        .requestMatchers("/api/**").authenticated()
+
+        // Resta
+        .anyRequest().authenticated()
+)
+            .addFilterBefore(
+                    new JwtAuthFilter(jwtService),
+                    UsernamePasswordAuthenticationFilter.class)
+            .build();
+}
 }
