@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Canal Ético - Imperium Fitness</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <nav class="navbar scrolled" id="navbar">
+    <div class="container">
+      <a href="index.html" class="navbar-brand">
+        <img src="assets/logo.png" alt="Imperium">
+        <span class="text-gold">IMPERIUM</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="instalaciones.html">Instalaciones</a></li>
+        <li><a href="actividades.html">Clases</a></li>
+        <li><a href="tarifas.html">Tarifas</a></li>
+        <li><a href="tienda.html">Tienda</a></li>
+        <li><a href="blog.html">Novedades</a></li>
+        <li><a href="contacto.html">Contacto</a></li>
+      </ul>
+      <div class="nav-actions" id="nav-user-area"></div>
+      <button class="nav-toggle" id="nav-toggle"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+  <div class="nav-mobile" id="nav-mobile">
+    <a href="instalaciones.html">Instalaciones</a>
+    <a href="actividades.html">Clases</a>
+    <a href="tarifas.html">Tarifas</a>
+    <a href="tienda.html">Tienda</a>
+    <a href="blog.html">Novedades</a>
+    <a href="contacto.html">Contacto</a>
+    <div class="nav-divider"></div>
+    <div id="nav-mobile-user"></div>
+  </div>
+
+  <section class="page-section">
+    <div class="container">
+      <div class="section-header">
+        <h2>Canal Ético</h2>
+        <p>Un espacio seguro y confidencial para comunicar irregularidades</p>
+      </div>
+
+      <div class="legal-content">
+
+        <div class="legal-block">
+          <h3>¿Qué es el Canal Ético?</h3>
+          <p>El Canal Ético de Imperium Fitness es un mecanismo confidencial que permite a socios, empleados y colaboradores comunicar posibles irregularidades, conductas contrarias a la ética o incumplimientos de nuestra normativa interna.</p>
+        </div>
+
+        <div class="legal-block">
+          <h3>¿Qué puedes comunicar?</h3>
+          <ul>
+            <li>Conductas discriminatorias o de acoso (por razón de género, origen, religión u otras).</li>
+            <li>Comportamientos que vulneren la dignidad de socios o empleados.</li>
+            <li>Irregularidades en la gestión de datos personales.</li>
+            <li>Incumplimientos de la normativa de seguridad en las instalaciones.</li>
+            <li>Cualquier otra conducta contraria a los valores de Imperium Fitness.</li>
+          </ul>
+        </div>
+
+        <div class="legal-block">
+          <h3>Garantías</h3>
+          <ul>
+            <li><strong>Confidencialidad:</strong> tu identidad está protegida. Puedes comunicar de forma anónima.</li>
+            <li><strong>No represalias:</strong> queda expresamente prohibido cualquier tipo de represalia contra quienes comuniquen de buena fe.</li>
+            <li><strong>Investigación imparcial:</strong> todas las comunicaciones son investigadas de forma objetiva e independiente.</li>
+          </ul>
+        </div>
+
+        <div class="legal-block">
+          <h3>Cómo comunicar</h3>
+          <p>Puedes enviarnos tu comunicación a través de los siguientes canales:</p>
+          <ul>
+            <li>📧 Email: <strong>canal.etico@imperiumfitness.es</strong></li>
+            <li>📮 Correo postal: Imperium Fitness S.L. — Att. Canal Ético, Calle Gran Vía 45, 28013 Madrid</li>
+          </ul>
+          <p style="margin-top:1rem">O mediante el formulario a continuación (demo):</p>
+        </div>
+
+        <!-- Formulario demo -->
+        <div class="legal-block">
+          <div style="background:var(--bg-secondary);border:1px solid var(--border);border-radius:12px;padding:1.5rem;max-width:560px">
+            <h4 style="margin-bottom:1rem;font-size:0.95rem">Formulario de comunicación</h4>
+            <div class="field-group" style="margin-bottom:1rem">
+              <label style="display:block;font-size:0.82rem;color:var(--text-muted);margin-bottom:0.4rem">Asunto</label>
+              <input type="text" class="input-field" placeholder="Describe brevemente el asunto" style="width:100%">
+            </div>
+            <div class="field-group" style="margin-bottom:1rem">
+              <label style="display:block;font-size:0.82rem;color:var(--text-muted);margin-bottom:0.4rem">Descripción detallada</label>
+              <textarea class="input-field" rows="5" placeholder="Describe los hechos con el mayor detalle posible..." style="width:100%;resize:vertical"></textarea>
+            </div>
+            <div class="field-group" style="margin-bottom:1.25rem">
+              <label style="display:block;font-size:0.82rem;color:var(--text-muted);margin-bottom:0.4rem">Email de contacto (opcional)</label>
+              <input type="email" class="input-field" placeholder="Solo si deseas recibir respuesta" style="width:100%">
+            </div>
+            <button class="btn btn-primary" style="width:100%;justify-content:center"
+              onclick="showToast('Comunicación enviada. Gracias por contribuir a un entorno ético. 🙏','success')">
+              Enviar comunicación
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="footer-bottom">
+        <div class="footer-legal">
+          <a href="politica-privacidad.html">Política de Privacidad</a>
+          <a href="politica-cookies.html">Política de Cookies</a>
+          <a href="terminos-condiciones.html">Términos y Condiciones</a>
+          <a href="normativa-clubes.html">Normativa de Clubes</a>
+          <a href="canal-etico.html">Canal Ético</a>
+        </div>
+        <span class="footer-copy">© 2026 Imperium Fitness. Todos los derechos reservados.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/app.js"></script>
+  <script src="js/carrito.js"></script>
+</body>
+</html>

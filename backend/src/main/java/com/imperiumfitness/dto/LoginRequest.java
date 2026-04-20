@@ -1,3 +1,3 @@
-package com.imperiumfitness.web.dto;
+package com.imperiumfitness.dto;
 
 public record LoginRequest(String username, String password) {}

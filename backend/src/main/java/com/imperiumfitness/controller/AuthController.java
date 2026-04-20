@@ -1,8 +1,10 @@
-package com.imperiumfitness.web;
+package com.imperiumfitness.controller;
 
+import com.imperiumfitness.dto.LoginRequest;
+import com.imperiumfitness.dto.LoginResponse;
+import com.imperiumfitness.dto.RegistreRequest;
 import com.imperiumfitness.service.AuthService;
-import com.imperiumfitness.web.dto.LoginRequest;
-import com.imperiumfitness.web.dto.LoginResponse;
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
@@ -50,7 +52,19 @@ public class AuthController {
                 .header(HttpHeaders.SET_COOKIE, cookie.toString())
                 .build();
     }
+    @PostMapping("/registre")
+public ResponseEntity<LoginResponse> registre(@RequestBody RegistreRequest req) {
 
+    // Cridem el service que valida, hasheja i guarda
+    String token = authService.registre(
+            req.nom(),
+            req.email(),
+            req.password()
+    );
+
+    // Retornem el token igual que al login
+    return ResponseEntity.status(201).body(new LoginResponse(token));
+}
     // ── TEMPORAL: genera hash BCrypt — ELIMINA DESPRÉS DE LES PROVES ────────
     @GetMapping("/hash")
     public String generaHash(@RequestParam String password) {

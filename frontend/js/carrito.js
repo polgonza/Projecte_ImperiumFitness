@@ -19,13 +19,14 @@
    ===================================================== */
 
 const PRODUCTS_IMG = [
+  /* ── ROPA ── */
   {
     id: 1,
     name: "Camiseta Imperium Pro",
     price: 34.99,
     originalPrice: 44.99,
     category: "ropa",
-    badge: "Nuevo",
+    badge: "Oferta",
     img: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=300&fit=crop"
   },
   {
@@ -38,24 +39,6 @@ const PRODUCTS_IMG = [
     img: "https://images.unsplash.com/photo-1506629082955-511b1aa562c8?w=400&h=300&fit=crop"
   },
   {
-    id: 3,
-    name: "Whey Protein Gold",
-    price: 39.99,
-    originalPrice: null,
-    category: "suplementos",
-    badge: "Top Ventas",
-    img: "https://images.unsplash.com/photo-1593095948071-474c5cc2989d?w=400&h=300&fit=crop"
-  },
-  {
-    id: 4,
-    name: "Creatina Monohidrato",
-    price: 24.99,
-    originalPrice: null,
-    category: "suplementos",
-    badge: null,
-    img: "https://images.unsplash.com/photo-1609099344658-4e96fa517eb3?w=400&h=300&fit=crop"
-  },
-  {
     id: 5,
     name: "Sudadera Imperium Elite",
     price: 59.99,
@@ -63,15 +46,6 @@ const PRODUCTS_IMG = [
     category: "ropa",
     badge: null,
     img: "https://images.unsplash.com/photo-1556821840-3a63f15732ce?w=400&h=300&fit=crop"
-  },
-  {
-    id: 6,
-    name: "Pre-Workout Ignite",
-    price: 29.99,
-    originalPrice: null,
-    category: "suplementos",
-    badge: "Nuevo",
-    img: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop"
   },
   {
     id: 7,
@@ -83,6 +57,107 @@ const PRODUCTS_IMG = [
     img: "https://images.unsplash.com/photo-1586363104862-3a5e2ab60d99?w=400&h=300&fit=crop"
   },
   {
+    id: 9,
+    name: "Camiseta Dry-Fit Training",
+    price: 29.99,
+    originalPrice: null,
+    category: "ropa",
+    badge: "Nuevo",
+    img: "https://images.unsplash.com/photo-1562157873-818bc0726f68?w=400&h=300&fit=crop"
+  },
+  {
+    id: 10,
+    name: "Sudadera con Capucha Performance",
+    price: 64.99,
+    originalPrice: 79.99,
+    category: "ropa",
+    badge: "Oferta",
+    img: "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=400&h=300&fit=crop"
+  },
+  {
+    id: 11,
+    name: "Pantalón Jogger Elite",
+    price: 44.99,
+    originalPrice: null,
+    category: "ropa",
+    badge: null,
+    img: "https://images.unsplash.com/photo-1473966968600-fa801b869a1a?w=400&h=300&fit=crop"
+  },
+  {
+    id: 12,
+    name: "Pantalón Corto Training",
+    price: 32.99,
+    originalPrice: null,
+    category: "ropa",
+    badge: "Nuevo",
+    img: "https://images.unsplash.com/photo-1591195853828-11db59a44f43?w=400&h=300&fit=crop"
+  },
+  {
+    id: 13,
+    name: "Gorra Imperium",
+    price: 19.99,
+    originalPrice: null,
+    category: "accesorios",
+    badge: null,
+    img: "https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=400&h=300&fit=crop"
+  },
+  {
+    id: 14,
+    name: "Mochila Gym Pro",
+    price: 49.99,
+    originalPrice: 65.00,
+    category: "accesorios",
+    badge: "Oferta",
+    img: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&h=300&fit=crop"
+  },
+  {
+    id: 15,
+    name: "Guantes de Entrenamiento",
+    price: 22.99,
+    originalPrice: null,
+    category: "accesorios",
+    badge: null,
+    img: "https://images.unsplash.com/photo-1517344368193-41552b6ad3f5?w=400&h=300&fit=crop"
+  },
+  {
+    id: 16,
+    name: "Botella Acero Inoxidable 750ml",
+    price: 24.99,
+    originalPrice: null,
+    category: "accesorios",
+    badge: "Nuevo",
+    img: "https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=400&h=300&fit=crop"
+  },
+
+  /* ── SUPLEMENTOS ── */
+  {
+    id: 3,
+    name: "Whey Protein Gold 2kg",
+    price: 39.99,
+    originalPrice: null,
+    category: "suplementos",
+    badge: "Top Ventas",
+    img: "https://images.unsplash.com/photo-1593095948071-474c5cc2989d?w=400&h=300&fit=crop"
+  },
+  {
+    id: 4,
+    name: "Creatina Monohidrato 500g",
+    price: 24.99,
+    originalPrice: null,
+    category: "suplementos",
+    badge: null,
+    img: "https://images.unsplash.com/photo-1609099344658-4e96fa517eb3?w=400&h=300&fit=crop"
+  },
+  {
+    id: 6,
+    name: "Pre-Workout Ignite",
+    price: 29.99,
+    originalPrice: null,
+    category: "suplementos",
+    badge: "Nuevo",
+    img: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop"
+  },
+  {
     id: 8,
     name: "BCAA Recovery Plus",
     price: 22.99,
@@ -90,6 +165,60 @@ const PRODUCTS_IMG = [
     category: "suplementos",
     badge: null,
     img: "https://images.unsplash.com/photo-1622021142947-da7dedc7c39a?w=400&h=300&fit=crop"
+  },
+  {
+    id: 17,
+    name: "Whey Isolate Premium 1kg",
+    price: 54.99,
+    originalPrice: 64.99,
+    category: "suplementos",
+    badge: "Oferta",
+    img: "https://images.unsplash.com/photo-1579722821273-0f6c7d44362f?w=400&h=300&fit=crop"
+  },
+  {
+    id: 18,
+    name: "Vitamina D3 + K2",
+    price: 14.99,
+    originalPrice: null,
+    category: "suplementos",
+    badge: null,
+    img: "https://images.unsplash.com/photo-1550572017-4fcdbb59cc32?w=400&h=300&fit=crop"
+  },
+  {
+    id: 19,
+    name: "Complejo Vitamínico Sport",
+    price: 18.99,
+    originalPrice: null,
+    category: "suplementos",
+    badge: "Nuevo",
+    img: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=400&h=300&fit=crop"
+  },
+  {
+    id: 20,
+    name: "Omega-3 Fish Oil 120 cáps",
+    price: 16.99,
+    originalPrice: null,
+    category: "suplementos",
+    badge: null,
+    img: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=400&h=300&fit=crop"
+  },
+  {
+    id: 21,
+    name: "Glutamina Recovery 400g",
+    price: 21.99,
+    originalPrice: null,
+    category: "suplementos",
+    badge: null,
+    img: "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=400&h=300&fit=crop"
+  },
+  {
+    id: 22,
+    name: "Pre-Workout Extreme Night",
+    price: 34.99,
+    originalPrice: null,
+    category: "suplementos",
+    badge: "Nuevo",
+    img: "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=400&h=300&fit=crop"
   }
 ];
 

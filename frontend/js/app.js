@@ -91,85 +91,79 @@ const FACILITIES = [
 
 
 // =====================================================
-// 2. AUTENTICACIÓN CON LOCALSTORAGE
-//    Simula login / registro / logout sin backend real
+// 2. AUTENTICACIÓ REAL AMB JWT + BACKEND
+//    Substitueix el sistema mock de localStorage
 // =====================================================
 
 const Auth = {
-  // Obtiene el usuario guardado en localStorage (o null si no hay sesión)
+
+  /* Retorna les dades de l'usuari guardat (o null) */
   getUser() {
     const data = localStorage.getItem("imperium_user");
     return data ? JSON.parse(data) : null;
   },
 
-  // Guarda el usuario en localStorage
+  /* Guarda les dades de l'usuari en local */
   setUser(user) {
     localStorage.setItem("imperium_user", JSON.stringify(user));
   },
 
-  // Elimina la sesión
+  /* Comprova si hi ha sessió activa (token present) */
+  isLoggedIn() {
+    return !!localStorage.getItem("imperium_token");
+  },
+
+  /* ── LOGIN REAL ──────────────────────────────────────
+     Crida POST /api/auth/login al backend.
+     Si té èxit, guarda el token i les dades bàsiques. */
+  async login(email, password) {
+    const result = await ApiAuth.login(email, password);
+
+    if (result.ok) {
+      // Descodifiquem el token JWT per obtenir les dades de l'usuari
+      // El token és: header.payload.signature (base64)
+      const payload = JSON.parse(atob(result.token.split(".")[1]));
+
+      // Guardem les dades bàsiques de l'usuari al localStorage
+      this.setUser({
+        id:    payload.userId,
+        name:  payload.sub,   // sub = email (el subject del JWT)
+        email: payload.sub,
+        roles: payload.roles
+      });
+    }
+
+    return result;
+  },
+
+  /* ── REGISTRE REAL ───────────────────────────────────
+     Crida POST /api/auth/registre al backend. */
+  async register(nom, email, password) {
+    const result = await ApiAuth.register(nom, email, password);
+
+    if (result.ok) {
+      // Igual que el login: descodifiquem el JWT i guardem l'usuari
+      const payload = JSON.parse(atob(result.token.split(".")[1]));
+      this.setUser({
+        id:    payload.userId,
+        name:  nom,           // el nom el tenim del formulari
+        email: payload.sub,
+        roles: payload.roles
+      });
+    }
+
+    return result;
+  },
+
+  /* ── LOGOUT ──────────────────────────────────────────
+     Neteja token i dades locals, redirigeix a l'inici. */
   logout() {
+    localStorage.removeItem("imperium_token");
     localStorage.removeItem("imperium_user");
+    localStorage.removeItem("imperium_carrito");
     window.location.href = "index.html";
-  },
-
-  // Busca usuarios registrados
-  getUsers() {
-    const data = localStorage.getItem("imperium_users");
-    return data ? JSON.parse(data) : [];
-  },
-
-  // Guarda lista de usuarios
-  saveUsers(users) {
-    localStorage.setItem("imperium_users", JSON.stringify(users));
-  },
-
-  // Registra un nuevo usuario
-  register(name, email, password) {
-    const users = this.getUsers();
-    // Comprueba si el email ya existe
-    if (users.find(u => u.email === email)) {
-      return { ok: false, msg: "Este email ya está registrado." };
-    }
-    const newUser = {
-      id: "usr_" + Date.now(),
-      name,
-      email,
-      password, // En un proyecto real NUNCA guardar contraseñas en texto plano
-      plan: null,           // Sin tarifa al registrarse
-      memberSince: new Date().toLocaleDateString("es-ES"),
-      reservations: [],
-      purchases: []
-    };
-    users.push(newUser);
-    this.saveUsers(users);
-    this.setUser(newUser);
-    return { ok: true };
-  },
-
-  // Actualiza los datos del usuario en sesión y en la lista de usuarios
-  updateUser(updatedUser) {
-    this.setUser(updatedUser);
-    const users = this.getUsers();
-    const idx = users.findIndex(u => u.email === updatedUser.email);
-    if (idx !== -1) {
-      users[idx] = updatedUser;
-      this.saveUsers(users);
-    }
-  },
-
-  // Verifica login
-  login(email, password) {
-    const users = this.getUsers();
-    const user = users.find(u => u.email === email && u.password === password);
-    if (!user) {
-      return { ok: false, msg: "Email o contraseña incorrectos." };
-    }
-    this.setUser(user);
-    return { ok: true };
   }
 };
-
 
 // =====================================================
 // 3. NOTIFICACIONES TOAST
@@ -244,20 +238,27 @@ function initNavbar() {
 }
 
 function updateNavbarUser() {
-  const user = Auth.getUser();
-  const navUserArea = document.getElementById("nav-user-area");
+  const user       = Auth.getUser();
+  const loggedIn   = Auth.isLoggedIn();
+  const navUserArea  = document.getElementById("nav-user-area");
   const navMobileUser = document.getElementById("nav-mobile-user");
 
   if (!navUserArea) return;
 
-  if (user) {
-    // Muestra el nombre y botón de logout
+  if (loggedIn && user) {
+    // Mostrem el nom i botó de logout
+    const inicial = user.name ? user.name.charAt(0).toUpperCase() : "?";
+    const prenom  = user.name ? user.name.split(" ")[0] : "Usuario";
+
     navUserArea.innerHTML = `
       <a href="perfil.html" class="btn-user">
-        <div class="avatar">${user.name.charAt(0).toUpperCase()}</div>
-        ${user.name.split(" ")[0]}
+        <div class="avatar">${inicial}</div>
+        ${prenom}
       </a>
-      <button onclick="Auth.logout()" class="btn btn-secondary" style="padding:0.4rem 0.9rem;font-size:0.75rem">Salir</button>
+      <button onclick="Auth.logout()" class="btn btn-secondary"
+              style="padding:0.4rem 0.9rem;font-size:0.75rem">
+        Salir
+      </button>
     `;
     if (navMobileUser) {
       navMobileUser.innerHTML = `
@@ -268,7 +269,8 @@ function updateNavbarUser() {
   } else {
     navUserArea.innerHTML = `
       <a href="login.html" class="btn-user">👤 Iniciar sesión</a>
-      <a href="tarifas.html" class="btn btn-primary" style="padding:0.45rem 1.25rem;font-size:0.75rem">Únete</a>
+      <a href="tarifas.html" class="btn btn-primary"
+         style="padding:0.45rem 1.25rem;font-size:0.75rem">Únete</a>
     `;
     if (navMobileUser) {
       navMobileUser.innerHTML = `
@@ -646,34 +648,39 @@ function initProfileTabs() {
 
 
 // =====================================================
-// 7. FORMULARIOS DE AUTENTICACIÓN
+// 7. FORMULARIS D'AUTENTICACIÓ CONNECTATS AL BACKEND
 // =====================================================
 
 function initLoginForm() {
   const form = document.getElementById("login-form");
   if (!form) return;
 
-  form.addEventListener("submit", function(e) {
+  form.addEventListener("submit", async function(e) {
     e.preventDefault();
 
     const email    = document.getElementById("login-email").value.trim();
     const password = document.getElementById("login-password").value;
-    const alert    = document.getElementById("login-alert");
+    const alertEl  = document.getElementById("login-alert");
+    const btn      = form.querySelector("button[type=submit]");
 
-    // Validación simple
     if (!email || !password) {
-      showAlert(alert, "Rellena todos los campos.", "error");
+      showAlert(alertEl, "Rellena todos los campos.", "error");
       return;
     }
 
-    // Intenta el login
-    const result = Auth.login(email, password);
+    // Deshabilitem el botó mentre esperem la resposta
+    btn.disabled = true;
+    btn.textContent = "Entrando...";
+
+    const result = await Auth.login(email, password);
 
     if (result.ok) {
-      showAlert(alert, "¡Bienvenido de nuevo! Redirigiendo...", "success");
+      showAlert(alertEl, "¡Bienvenido! Redirigiendo...", "success");
       setTimeout(() => window.location.href = "index.html", 1200);
     } else {
-      showAlert(alert, result.msg, "error");
+      showAlert(alertEl, result.error, "error");
+      btn.disabled = false;
+      btn.textContent = "Entrar";
     }
   });
 }
@@ -682,39 +689,42 @@ function initRegisterForm() {
   const form = document.getElementById("register-form");
   if (!form) return;
 
-  form.addEventListener("submit", function(e) {
+  form.addEventListener("submit", async function(e) {
     e.preventDefault();
 
-    const name     = document.getElementById("reg-name").value.trim();
+    const nom      = document.getElementById("reg-name").value.trim();
     const email    = document.getElementById("reg-email").value.trim();
     const password = document.getElementById("reg-password").value;
     const confirm  = document.getElementById("reg-confirm").value;
-    const alert    = document.getElementById("reg-alert");
+    const alertEl  = document.getElementById("reg-alert");
+    const btn      = form.querySelector("button[type=submit]");
 
-    // Validaciones
-    if (!name || !email || !password || !confirm) {
-      showAlert(alert, "Rellena todos los campos.", "error");
+    // Validacions del client
+    if (!nom || !email || !password || !confirm) {
+      showAlert(alertEl, "Rellena todos los campos.", "error");
       return;
     }
-
     if (password.length < 6) {
-      showAlert(alert, "La contraseña debe tener al menos 6 caracteres.", "error");
+      showAlert(alertEl, "La contraseña debe tener al menos 6 caracteres.", "error");
       return;
     }
-
     if (password !== confirm) {
-      showAlert(alert, "Las contraseñas no coinciden.", "error");
+      showAlert(alertEl, "Las contraseñas no coinciden.", "error");
       return;
     }
 
-    // Registra al usuario
-    const result = Auth.register(name, email, password);
+    btn.disabled = true;
+    btn.textContent = "Creando cuenta...";
+
+    const result = await Auth.register(nom, email, password);
 
     if (result.ok) {
-      showAlert(alert, "¡Cuenta creada con éxito! Redirigiendo...", "success");
+      showAlert(alertEl, "¡Cuenta creada! Redirigiendo...", "success");
       setTimeout(() => window.location.href = "index.html", 1200);
     } else {
-      showAlert(alert, result.msg, "error");
+      showAlert(alertEl, result.error, "error");
+      btn.disabled = false;
+      btn.textContent = "Crear Cuenta";
     }
   });
 }
