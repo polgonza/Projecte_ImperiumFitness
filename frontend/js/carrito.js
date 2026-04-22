@@ -12,215 +12,36 @@
    ===================================================== */
 
 
-/* =====================================================
-   1. DATOS DE PRODUCTOS CON IMÁGENES
-   Sustituye los emojis del app.js original por imágenes
-   de Unsplash (públicas, sin API key)
-   ===================================================== */
+// =====================================================
+// 1. IMATGES PER CATEGORIA (fallback quan no hi ha imatge al backend)
+// =====================================================
 
-const PRODUCTS_IMG = [
-  /* ── ROPA ── */
-  {
-    id: 1,
-    name: "Camiseta Imperium Pro",
-    price: 34.99,
-    originalPrice: 44.99,
-    category: "ropa",
-    badge: "Oferta",
-    img: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=300&fit=crop"
-  },
-  {
-    id: 2,
-    name: "Leggins Power Fit",
-    price: 49.99,
-    originalPrice: null,
-    category: "ropa",
-    badge: null,
-    img: "https://images.unsplash.com/photo-1506629082955-511b1aa562c8?w=400&h=300&fit=crop"
-  },
-  {
-    id: 5,
-    name: "Sudadera Imperium Elite",
-    price: 59.99,
-    originalPrice: null,
-    category: "ropa",
-    badge: null,
-    img: "https://images.unsplash.com/photo-1556821840-3a63f15732ce?w=400&h=300&fit=crop"
-  },
-  {
-    id: 7,
-    name: "Tank Top Competition",
-    price: 27.99,
-    originalPrice: null,
-    category: "ropa",
-    badge: null,
-    img: "https://images.unsplash.com/photo-1586363104862-3a5e2ab60d99?w=400&h=300&fit=crop"
-  },
-  {
-    id: 9,
-    name: "Camiseta Dry-Fit Training",
-    price: 29.99,
-    originalPrice: null,
-    category: "ropa",
-    badge: "Nuevo",
-    img: "https://images.unsplash.com/photo-1562157873-818bc0726f68?w=400&h=300&fit=crop"
-  },
-  {
-    id: 10,
-    name: "Sudadera con Capucha Performance",
-    price: 64.99,
-    originalPrice: 79.99,
-    category: "ropa",
-    badge: "Oferta",
-    img: "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=400&h=300&fit=crop"
-  },
-  {
-    id: 11,
-    name: "Pantalón Jogger Elite",
-    price: 44.99,
-    originalPrice: null,
-    category: "ropa",
-    badge: null,
-    img: "https://images.unsplash.com/photo-1473966968600-fa801b869a1a?w=400&h=300&fit=crop"
-  },
-  {
-    id: 12,
-    name: "Pantalón Corto Training",
-    price: 32.99,
-    originalPrice: null,
-    category: "ropa",
-    badge: "Nuevo",
-    img: "https://images.unsplash.com/photo-1591195853828-11db59a44f43?w=400&h=300&fit=crop"
-  },
-  {
-    id: 13,
-    name: "Gorra Imperium",
-    price: 19.99,
-    originalPrice: null,
-    category: "accesorios",
-    badge: null,
-    img: "https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=400&h=300&fit=crop"
-  },
-  {
-    id: 14,
-    name: "Mochila Gym Pro",
-    price: 49.99,
-    originalPrice: 65.00,
-    category: "accesorios",
-    badge: "Oferta",
-    img: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&h=300&fit=crop"
-  },
-  {
-    id: 15,
-    name: "Guantes de Entrenamiento",
-    price: 22.99,
-    originalPrice: null,
-    category: "accesorios",
-    badge: null,
-    img: "https://images.unsplash.com/photo-1517344368193-41552b6ad3f5?w=400&h=300&fit=crop"
-  },
-  {
-    id: 16,
-    name: "Botella Acero Inoxidable 750ml",
-    price: 24.99,
-    originalPrice: null,
-    category: "accesorios",
-    badge: "Nuevo",
-    img: "https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=400&h=300&fit=crop"
-  },
+const CATEGORY_IMGS = {
+  "Roba":       "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=300&fit=crop",
+  "Suplement":  "https://images.unsplash.com/photo-1593095948071-474c5cc2989d?w=400&h=300&fit=crop",
+  "Accesoris":  "https://images.unsplash.com/photo-1517344368193-41552b6ad3f5?w=400&h=300&fit=crop",
+  "ropa":       "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=300&fit=crop",
+  "suplementos":"https://images.unsplash.com/photo-1593095948071-474c5cc2989d?w=400&h=300&fit=crop",
+  "accesorios": "https://images.unsplash.com/photo-1517344368193-41552b6ad3f5?w=400&h=300&fit=crop",
+  "default":    "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=400&h=300&fit=crop"
+};
 
-  /* ── SUPLEMENTOS ── */
-  {
-    id: 3,
-    name: "Whey Protein Gold 2kg",
-    price: 39.99,
+// Array que s'omplirà amb les dades reals del backend
+let PRODUCTS_IMG = [];
+
+/* Converteix un producte del backend al format que usa el carrito */
+function producteBackendToLocal(p) {
+  return {
+    id:            p.id,
+    name:          p.nom,
+    price:         parseFloat(p.preu),
     originalPrice: null,
-    category: "suplementos",
-    badge: "Top Ventas",
-    img: "https://images.unsplash.com/photo-1593095948071-474c5cc2989d?w=400&h=300&fit=crop"
-  },
-  {
-    id: 4,
-    name: "Creatina Monohidrato 500g",
-    price: 24.99,
-    originalPrice: null,
-    category: "suplementos",
-    badge: null,
-    img: "https://images.unsplash.com/photo-1609099344658-4e96fa517eb3?w=400&h=300&fit=crop"
-  },
-  {
-    id: 6,
-    name: "Pre-Workout Ignite",
-    price: 29.99,
-    originalPrice: null,
-    category: "suplementos",
-    badge: "Nuevo",
-    img: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop"
-  },
-  {
-    id: 8,
-    name: "BCAA Recovery Plus",
-    price: 22.99,
-    originalPrice: null,
-    category: "suplementos",
-    badge: null,
-    img: "https://images.unsplash.com/photo-1622021142947-da7dedc7c39a?w=400&h=300&fit=crop"
-  },
-  {
-    id: 17,
-    name: "Whey Isolate Premium 1kg",
-    price: 54.99,
-    originalPrice: 64.99,
-    category: "suplementos",
-    badge: "Oferta",
-    img: "https://images.unsplash.com/photo-1579722821273-0f6c7d44362f?w=400&h=300&fit=crop"
-  },
-  {
-    id: 18,
-    name: "Vitamina D3 + K2",
-    price: 14.99,
-    originalPrice: null,
-    category: "suplementos",
-    badge: null,
-    img: "https://images.unsplash.com/photo-1550572017-4fcdbb59cc32?w=400&h=300&fit=crop"
-  },
-  {
-    id: 19,
-    name: "Complejo Vitamínico Sport",
-    price: 18.99,
-    originalPrice: null,
-    category: "suplementos",
-    badge: "Nuevo",
-    img: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=400&h=300&fit=crop"
-  },
-  {
-    id: 20,
-    name: "Omega-3 Fish Oil 120 cáps",
-    price: 16.99,
-    originalPrice: null,
-    category: "suplementos",
-    badge: null,
-    img: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=400&h=300&fit=crop"
-  },
-  {
-    id: 21,
-    name: "Glutamina Recovery 400g",
-    price: 21.99,
-    originalPrice: null,
-    category: "suplementos",
-    badge: null,
-    img: "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=400&h=300&fit=crop"
-  },
-  {
-    id: 22,
-    name: "Pre-Workout Extreme Night",
-    price: 34.99,
-    originalPrice: null,
-    category: "suplementos",
-    badge: "Nuevo",
-    img: "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=400&h=300&fit=crop"
-  }
-];
+    category:      p.categoria || "default",
+    badge:         p.estoc <= 5 ? "Últimas unidades" : null,
+    estoc:         p.estoc,
+    img:           CATEGORY_IMGS[p.categoria] || CATEGORY_IMGS["default"]
+  };
+}
 
 
 /* =====================================================
@@ -528,18 +349,23 @@ function renderFeaturedProductsConImagenes(containerId) {
 
 
 /* =====================================================
-   5. ARRANQUE
-   Se ejecuta cuando carga la página
+   5. ARRANQUE — càrrega asíncrona de productes
    ===================================================== */
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", async function() {
 
-  /* --- Inyecta el icono del carrito en el navbar ---
-     Busca el área de acciones del navbar y añade el botón del carrito
-     antes de los botones de usuario que ya pone app.js          */
+  /* --- Carrega els productes del backend --- */
+  try {
+    const productes = await ApiProductes.getAll();
+    PRODUCTS_IMG = productes.map(producteBackendToLocal);
+  } catch (e) {
+    console.error("Error carregant productes:", e);
+    PRODUCTS_IMG = []; // fallback buit
+  }
+
+  /* --- Inyecta el icono del carrito en el navbar --- */
   const navUserArea = document.getElementById("nav-user-area");
   if (navUserArea) {
-    // Crea el botón del carrito y lo inserta al inicio del área
     const cartBtn = document.createElement("a");
     cartBtn.href      = "#";
     cartBtn.className = "cart-icon-btn";
@@ -554,52 +380,44 @@ document.addEventListener("DOMContentLoaded", function() {
       renderCarritoPanel();
       openCart();
     });
-    // Inserta al principio del área de acciones
     navUserArea.insertBefore(cartBtn, navUserArea.firstChild);
   }
 
-  /* --- Botón cerrar panel --- */
+  /* --- Botó tancar panel --- */
   const closeBtn = document.getElementById("cart-close-btn");
   if (closeBtn) closeBtn.addEventListener("click", closeCart);
 
-  /* --- Clic en el fondo oscuro cierra el panel --- */
+  /* --- Clic al fons fosc tanca el panel --- */
   const backdrop = document.getElementById("cart-backdrop");
   if (backdrop) backdrop.addEventListener("click", closeCart);
 
-  /* --- Botón "Finalizar Compra" dentro del panel --- */
+  /* --- Botó "Finalizar Compra" --- */
   const checkoutBtn = document.getElementById("cart-checkout-btn");
   if (checkoutBtn) {
     checkoutBtn.addEventListener("click", function() {
-      // Cierra el panel
       closeCart();
-      // Si el carrito está vacío, avisa
       if (getCarritoCount() === 0) {
         showToast("Tu carrito está vacío.", "error");
         return;
       }
-      // Redirige a la página de checkout
       window.location.href = "checkout.html";
     });
   }
 
-  /* --- Actualiza el badge al cargar --- */
+  /* --- Actualitza el badge --- */
   updateCartBadge();
   renderCarritoPanel();
 
-  /* --- Renderiza productos en la página correcta ---
-     Detecta en qué página estamos y llama a la función correcta */
+  /* --- Renderitza productes segons la pàgina --- */
   const page = window.location.pathname.split("/").pop() || "index.html";
 
   if (page === "index.html" || page === "") {
-    // Sobreescribe los productos de la home con imágenes reales
     renderFeaturedProductsConImagenes("featured-products");
   }
 
   if (page === "tienda.html") {
-    // Renderiza todos los productos con imágenes
     renderProductosConImagenes("products-grid", "all");
 
-    // Conecta los filtros de la tienda
     document.querySelectorAll(".filter-tab").forEach(function(btn) {
       btn.addEventListener("click", function() {
         document.querySelectorAll(".filter-tab")
@@ -609,5 +427,4 @@ document.addEventListener("DOMContentLoaded", function() {
       });
     });
   }
-
 });

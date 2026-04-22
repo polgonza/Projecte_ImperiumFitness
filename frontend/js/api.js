@@ -27,12 +27,12 @@ async function apiFetch(url, options = {}) {
     headers: authHeaders()
   });
 
-  // Token expirat o no autenticat → redirigir al login
+  // Token expirat → logout amb missatge elegant
   if (res.status === 401) {
-    localStorage.removeItem("imperium_token");
-    localStorage.removeItem("imperium_user");
-    window.location.href = "login.html";
-    return;
+    SessionManager.logoutWithMessage(
+      "Tu sesión ha expirado. Por favor, inicia sesión de nuevo."
+    );
+    return null;
   }
 
   return res;
@@ -124,20 +124,21 @@ const ApiClasses = {
 
   /* Reservar una classe */
   async reservar(usuariId, classeId) {
-    try {
-      const res = await apiFetch("/api/reserves", {
-        method: "POST",
-        body: JSON.stringify({ usuariId, classeId })
-      });
+  try {
+    const res = await apiFetch("/api/reserves", {
+      method: "POST",
+      body: JSON.stringify({ usuariId, classeId })
+    });
 
-      if (res && res.status === 201) return { ok: true };
-      if (res && res.status === 409) return { ok: false, error: "Ya tienes una reserva para esta clase." };
-      return { ok: false, error: "No se pudo completar la reserva." };
 
-    } catch (e) {
-      return { ok: false, error: "Error de conexión." };
-    }
-  },
+    if (res && res.status === 201) return { ok: true };
+    if (res && res.status === 409) return { ok: false, error: "Ya tienes una reserva para esta clase." };
+    return { ok: false, error: "No se pudo completar la reserva." };
+
+  } catch (e) {
+    return { ok: false, error: "Error de conexión." };
+  }
+},
 
   /* Obtenir les reserves d'un usuari */
   async getReservesUsuari(usuariId) {
@@ -197,5 +198,156 @@ const ApiContacte = {
       });
       return res && res.status === 201;
     } catch (e) { return false; }
+  }
+};
+/* ══════════════════════════════════════════════════════
+   USUARI — perfil
+   ══════════════════════════════════════════════════════ */
+
+const ApiUsuari = {
+
+  async getPerfil(usuariId) {
+    try {
+      // Usem el nou endpoint específic de perfil
+      const res = await apiFetch(`/api/usuaris/perfil/${usuariId}`);
+      if (res && res.ok) return await res.json();
+      return null;
+    } catch (e) { return null; }
+  },
+
+  async getReserves(usuariId) {
+    try {
+      const res = await apiFetch(`/api/reserves/usuari/${usuariId}`);
+      if (res && res.ok) return await res.json();
+      return [];
+    } catch (e) { return []; }
+  },
+
+  async getVendes(usuariId) {
+    try {
+      const res = await apiFetch(`/api/vendes/usuari/${usuariId}`);
+      if (res && res.ok) return await res.json();
+      return [];
+    } catch (e) { return []; }
+  }
+};
+/* ══════════════════════════════════════════════════════
+   GESTIÓ DE SESSIÓ — expiració del token JWT
+   ══════════════════════════════════════════════════════ */
+
+const SessionManager = {
+
+  /* Comprova si el token expirarà aviat o ja ha expirat */
+  checkToken() {
+    const token = localStorage.getItem("imperium_token");
+    if (!token) return "no_token";
+
+    try {
+      // Descodifiquem el payload del JWT (part central)
+      const payload = JSON.parse(atob(token.split(".")[1]));
+      const ara     = Math.floor(Date.now() / 1000); // temps actual en segons
+      const expira  = payload.exp;
+      const restant = expira - ara;                   // segons que queden
+
+      if (restant <= 0)   return "expired";           // ja ha expirat
+      if (restant <= 300) return "expiring_soon";     // expira en < 5 minuts
+      return "valid";
+
+    } catch (e) {
+      return "invalid";
+    }
+  },
+
+  /* Tanca la sessió mostrant un missatge al login */
+  logoutWithMessage(msg) {
+    localStorage.removeItem("imperium_token");
+    localStorage.removeItem("imperium_user");
+    // Guardem el missatge per mostrar-lo a la pàgina de login
+    sessionStorage.setItem("session_msg", msg);
+    window.location.href = "login.html";
+  },
+
+  /* Comprova la sessió en carregar qualsevol pàgina protegida */
+  init(requiresAuth = false) {
+    const status = this.checkToken();
+    const page   = window.location.pathname.split("/").pop();
+
+    // Pàgines que no requereixen auth
+    const publicPages = ["login.html", "register.html", "index.html",
+                         "recover.html", ""];
+
+    if (status === "expired" || status === "invalid" || status === "no_token") {
+      if (requiresAuth || !publicPages.includes(page)) {
+        this.logoutWithMessage(
+          "Tu sesión ha expirado. Por favor, inicia sesión de nuevo."
+        );
+        return false;
+      }
+    }
+
+    if (status === "expiring_soon") {
+      // Avisem l'usuari que la sessió expira aviat
+      this.showExpirationWarning();
+    }
+
+    return true;
+  },
+
+  /* Mostra un banner d'avís quan queden menys de 5 minuts */
+  showExpirationWarning() {
+    // Evitem mostrar-lo dues vegades
+    if (document.getElementById("session-warning")) return;
+
+    const banner = document.createElement("div");
+    banner.id = "session-warning";
+    banner.style.cssText = `
+      position: fixed;
+      top: 70px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--bg-card);
+      border: 1px solid var(--primary);
+      border-radius: 12px;
+      padding: 1rem 1.5rem;
+      max-width: 420px;
+      width: 90%;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+      z-index: 9999;
+      text-align: center;
+      font-size: 0.875rem;
+    `;
+    banner.innerHTML = `
+      <p style="margin:0 0 0.75rem;color:var(--text-primary)">
+        ⚠️ Tu sesión expirará en menos de 5 minutos.
+      </p>
+      <div style="display:flex;gap:0.75rem;justify-content:center">
+        <button
+          onclick="SessionManager.renovarSessio()"
+          class="btn btn-primary"
+          style="padding:0.4rem 1rem;font-size:0.8rem">
+          Renovar sesión
+        </button>
+        <button
+          onclick="document.getElementById('session-warning').remove()"
+          class="btn btn-secondary"
+          style="padding:0.4rem 1rem;font-size:0.8rem">
+          Ignorar
+        </button>
+      </div>
+    `;
+    document.body.appendChild(banner);
+
+    // S'elimina sol als 30 segons
+    setTimeout(() => banner?.remove(), 30000);
+  },
+
+  /* Renova la sessió fent login automàtic si tenim les dades */
+  async renovarSessio() {
+    document.getElementById("session-warning")?.remove();
+
+    // Redirigim al login amb un missatge per renovar
+    sessionStorage.setItem("session_msg",
+      "Por favor, inicia sesión de nuevo para renovar tu sesión.");
+    window.location.href = "login.html";
   }
 };

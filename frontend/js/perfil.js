@@ -1,47 +1,62 @@
 /* =====================================================
    IMPERIUM FITNESS — perfil.js
-   Página de Perfil del Usuario
-   -------------------------------------------------------
-   Este archivo se carga en perfil.html después de app.js y carrito.js.
-   Gestiona:
-     1. Mostrar datos del usuario
-     2. Tabs (Reservas / Mis Pedidos / Historial)
-     3. Renderizar el historial de pedidos desde localStorage
+   Connectat al backend real via api.js
    ===================================================== */
 
 
 /* =====================================================
-   1. CARGA DE DATOS DEL USUARIO
+   1. INICIALITZACIÓ — càrrega de dades reals
    ===================================================== */
 
-function initPerfil() {
-  const user = Auth.getUser();
+async function initPerfil() {
+  // Si no hi ha sessió, redirigim al login
+  if (!Auth.isLoggedIn()) {
+    window.location.href = "login.html";
+    return;
+  }
 
+  const user = Auth.getUser();
   if (!user) {
     window.location.href = "login.html";
     return;
   }
 
+  // Mostrem dades bàsiques del localStorage mentre carreguen les del backend
   const inicial = user.name ? user.name.charAt(0).toUpperCase() : "?";
+  setTextById("profile-initial", inicial);
+  setTextById("profile-name",    user.name || "—");
+  setTextById("profile-email",   user.email || "—");
+  setTextById("profile-plan",    "Sin plan activo");
+  setTextById("profile-plan-stat", "Sin plan activo");
+  setTextById("profile-since",   "—");
 
-  setTextById("profile-initial",  inicial);
-  setTextById("profile-name",     user.name || "—");
-  setTextById("profile-email",    user.email || "—");
-  setTextById("profile-since",    user.memberSince || "—");
+  // Carreguem dades reals del backend
+  const perfil = await ApiUsuari.getPerfil(user.id);
 
-  // Plan activo: si no tiene, mensaje informativo
-  const planText = user.plan || "Sin plan activo";
-  setTextById("profile-plan",      planText);
-  setTextById("profile-plan-stat", planText);
+  if (perfil) {
+    const dataRegistre = perfil.dataRegistre
+      ? new Date(perfil.dataRegistre).toLocaleDateString("es-ES")
+      : "—";
 
-  // Si no tiene plan, destaca el botón de tarifas con un mensaje
-  if (!user.plan) {
-    const noPlanMsg = document.getElementById("no-plan-msg");
-    if (noPlanMsg) noPlanMsg.style.display = "block";
+    setTextById("profile-initial", perfil.nom.charAt(0).toUpperCase());
+    setTextById("profile-name",    perfil.nom);
+    setTextById("profile-email",   perfil.email);
+    setTextById("profile-since",   dataRegistre);
+
+    // Actualitzem també el localStorage amb el nom real
+    Auth.setUser({
+      ...user,
+      name:  perfil.nom,
+      email: perfil.email
+    });
   }
+
+  // Mostrem missatge si no té pla actiu
+  const noPlanMsg = document.getElementById("no-plan-msg");
+  if (noPlanMsg) noPlanMsg.style.display = "block";
 }
 
-/* Pequeña utilidad: pone texto en un elemento si existe */
+/* Utilitat: posa text en un element si existeix */
 function setTextById(id, text) {
   const el = document.getElementById(id);
   if (el) el.textContent = text;
@@ -49,134 +64,142 @@ function setTextById(id, text) {
 
 
 /* =====================================================
-   2. HISTORIAL DE PEDIDOS
-   Lee "imperium_pedidos" de localStorage y pinta las tarjetas
+   2. TAB RESERVES — dades reals del backend
    ===================================================== */
 
-function renderOrderHistory() {
-  const container = document.getElementById("orders-list");
-  if (!container) return;
-
-  const user = Auth.getUser();
-  if (!user) return;
-
-  // Carga todos los pedidos y filtra los del usuario actual
-  const allOrders  = localStorage.getItem("imperium_pedidos");
-  const pedidos    = allOrders ? JSON.parse(allOrders) : [];
-  const misPedidos = pedidos.filter(function(p) {
-    return p.userEmail === user.email;
-  });
-
-  if (misPedidos.length === 0) {
-    container.innerHTML = `
-      <div class="no-orders">
-        Todavía no has realizado ningún pedido.
-        <br>
-        <a href="tienda.html">Ir a la tienda</a>
-      </div>`;
-    return;
-  }
-
-  // Ordena del más reciente al más antiguo (por ID que contiene timestamp)
-  misPedidos.sort(function(a, b) {
-    return b.pedidoId.localeCompare(a.pedidoId);
-  });
-
-  // Construye el HTML de cada tarjeta de pedido
-  container.innerHTML = misPedidos.map(function(pedido) {
-
-    // Lista de productos del pedido
-    const productosHTML = pedido.productos.map(function(p) {
-      return `
-        <li>
-          <span class="p-name">${p.name} x${p.quantity}</span>
-          <span class="p-price">${(p.price * p.quantity).toFixed(2)} €</span>
-        </li>
-      `;
-    }).join("");
-
-    return `
-      <div class="order-card">
-
-        <!-- Cabecera: ID + fecha + estado -->
-        <div class="order-card-header">
-          <div>
-            <div class="order-id">${pedido.pedidoId}</div>
-            <div class="order-date">${pedido.fecha}</div>
-          </div>
-          <span class="order-status">Completado</span>
-        </div>
-
-        <!-- Lista de productos -->
-        <ul class="order-products">
-          ${productosHTML}
-        </ul>
-
-        <!-- Total -->
-        <div class="order-card-footer">
-          <span class="order-total-label">Total:</span>
-          <span class="order-total-amount">${pedido.total.toFixed(2)} €</span>
-        </div>
-
-      </div>
-    `;
-  }).join("");
-}
-
-
-/* =====================================================
-   3. RESERVAS DE CLASES (lee de actividades.js)
-   ===================================================== */
-
-function renderReservationsInProfile() {
+async function renderReservationsInProfile() {
   const lista = document.getElementById("reservations-list");
   if (!lista) return;
 
+  lista.innerHTML = `
+    <p style="color:var(--text-muted);text-align:center;padding:2rem">
+      ⏳ Cargando reservas...
+    </p>`;
+
   const user = Auth.getUser();
   if (!user) return;
 
-  // Las reservas las guarda actividades.js con la clave "imperium_reservas"
-  const data       = localStorage.getItem("imperium_reservas");
-  const todas      = data ? JSON.parse(data) : [];
-  const misReservas = todas.filter(function(r) {
-    return r.userEmail === user.email;
-  });
+  // Obtenim les reserves del backend
+  const reserves = await ApiUsuari.getReserves(user.id);
 
-  if (misReservas.length === 0) {
+  if (reserves.length === 0) {
     lista.innerHTML = `
       <p style="color:var(--text-muted);text-align:center;padding:2rem">
-        No tienes reservas de clases.
-        <br>
-        <a href="actividades.html">Ver clases disponibles</a>
+        No tienes reservas de clases.<br>
+        <a href="actividades.html" style="color:var(--primary)">
+          Ver clases disponibles
+        </a>
       </p>`;
     return;
   }
 
-  // Ordena por fecha
-  misReservas.sort(function(a, b) {
-    return a.dateKey.localeCompare(b.dateKey);
-  });
+  // Per cada reserva, obtenim el nom de la classe
+  // Les reserves retornen classeId, necessitem el nom
+  const classesCache = {};
 
-  lista.innerHTML = misReservas.map(function(r) {
-    // Convierte dateKey "2026-04-14" a "14/04/2026"
-    const parts = r.dateKey.split("-");
-    const fecha = parts[2] + "/" + parts[1] + "/" + parts[0];
+  lista.innerHTML = await Promise.all(reserves.map(async r => {
+    // Obtenim el nom de la classe si no el tenim en caché
+    let nomClasse = `Clase #${r.classeId}`;
+    try {
+      if (!classesCache[r.classeId]) {
+        const res = await apiFetch(`/api/classes/${r.classeId}`);
+        if (res && res.ok) {
+          const classe = await res.json();
+          classesCache[r.classeId] = classe.nom;
+        }
+      }
+      nomClasse = classesCache[r.classeId] || nomClasse;
+    } catch (e) {}
+
+    const dataReserva = r.dataReserva
+      ? new Date(r.dataReserva).toLocaleDateString("es-ES")
+      : "—";
 
     return `
       <div class="reservation-item">
         <div>
-          <h4>${r.className}</h4>
-          <p>${fecha} · ${r.time} · ${r.instructor || ""}</p>
+          <h4>${nomClasse}</h4>
+          <p>${dataReserva}</p>
         </div>
         <span class="status-badge confirmed">Confirmada</span>
       </div>
     `;
-  }).join("");
+  })).then(items => items.join(""));
 }
 
 
 /* =====================================================
-   4. HISTORIAL DE COMPRAS ANTIGUAS (datos mock de app.js)
+   3. TAB PEDIDOS — vendes reals del backend
+   ===================================================== */
+
+async function renderOrderHistory() {
+  const container = document.getElementById("orders-list");
+  if (!container) return;
+
+  container.innerHTML = `
+    <p style="color:var(--text-muted);text-align:center;padding:2rem">
+      ⏳ Cargando pedidos...
+    </p>`;
+
+  const user = Auth.getUser();
+  if (!user) return;
+
+  const vendes = await ApiUsuari.getVendes(user.id);
+
+  if (vendes.length === 0) {
+    container.innerHTML = `
+      <div style="color:var(--text-muted);text-align:center;padding:2rem">
+        No has realizado ningún pedido aún.<br>
+        <a href="tienda.html" style="color:var(--primary)">
+          Ir a la tienda
+        </a>
+      </div>`;
+    return;
+  }
+
+  // Per cada venda obtenim el nom del producte
+  const productesCache = {};
+
+  container.innerHTML = await Promise.all(vendes.map(async v => {
+    let nomProducte = `Producto #${v.producteId}`;
+    try {
+      if (!productesCache[v.producteId]) {
+        const res = await apiFetch(`/api/productes/${v.producteId}`);
+        if (res && res.ok) {
+          const p = await res.json();
+          productesCache[v.producteId] = p;
+        }
+      }
+      const prod = productesCache[v.producteId];
+      if (prod) nomProducte = prod.nom;
+    } catch (e) {}
+
+    const dataVenda = v.dataVenda
+      ? new Date(v.dataVenda).toLocaleDateString("es-ES")
+      : "—";
+
+    return `
+      <div class="order-card">
+        <div class="order-card-header">
+          <div>
+            <div class="order-id">Pedido #${v.id}</div>
+            <div class="order-date">${dataVenda}</div>
+          </div>
+          <span class="order-status">Completado</span>
+        </div>
+        <ul class="order-products">
+          <li>
+            <span class="p-name">${nomProducte} x${v.quantitat}</span>
+          </li>
+        </ul>
+      </div>
+    `;
+  })).then(items => items.join(""));
+}
+
+
+/* =====================================================
+   4. TAB HISTORIAL — localStorage (pedidos del carrito)
    ===================================================== */
 
 function renderOldPurchases() {
@@ -186,28 +209,45 @@ function renderOldPurchases() {
   const user = Auth.getUser();
   if (!user) return;
 
-  // Los datos mockeados que vienen del objeto usuario original
-  if (user.purchases && user.purchases.length > 0) {
-    lista.innerHTML = user.purchases.map(function(p) {
-      return `
-        <div class="purchase-item">
-          <div>
-            <h4>${p.product}</h4>
-            <p>${p.date}</p>
-          </div>
-          <div style="text-align:right">
-            <div style="font-weight:700">${p.amount.toFixed(2)} €</div>
-            <span class="status-badge delivered">${p.status}</span>
-          </div>
-        </div>
-      `;
-    }).join("");
-  } else {
+  const allOrders = localStorage.getItem("imperium_pedidos");
+  const pedidos   = allOrders ? JSON.parse(allOrders) : [];
+  const misPedidos = pedidos.filter(p => p.userEmail === user.email);
+
+  if (misPedidos.length === 0) {
     lista.innerHTML = `
       <p style="color:var(--text-muted);text-align:center;padding:2rem">
         No tienes compras en el historial.
       </p>`;
+    return;
   }
+
+  misPedidos.sort((a, b) => b.pedidoId.localeCompare(a.pedidoId));
+
+  lista.innerHTML = misPedidos.map(pedido => {
+    const productesHTML = pedido.productos.map(p => `
+      <li>
+        <span class="p-name">${p.name} x${p.quantity}</span>
+        <span class="p-price">${(p.price * p.quantity).toFixed(2)} €</span>
+      </li>
+    `).join("");
+
+    return `
+      <div class="order-card">
+        <div class="order-card-header">
+          <div>
+            <div class="order-id">${pedido.pedidoId}</div>
+            <div class="order-date">${pedido.fecha}</div>
+          </div>
+          <span class="order-status">Completado</span>
+        </div>
+        <ul class="order-products">${productesHTML}</ul>
+        <div class="order-card-footer">
+          <span class="order-total-label">Total:</span>
+          <span class="order-total-amount">${pedido.total.toFixed(2)} €</span>
+        </div>
+      </div>
+    `;
+  }).join("");
 }
 
 
@@ -219,13 +259,10 @@ function initProfileTabs() {
   const tabs     = document.querySelectorAll(".profile-tab");
   const contents = document.querySelectorAll(".tab-content");
 
-  tabs.forEach(function(tab) {
+  tabs.forEach(tab => {
     tab.addEventListener("click", function() {
-      // Quita el estado activo de todos
-      tabs.forEach(function(t)     { t.classList.remove("active"); });
-      contents.forEach(function(c) { c.classList.remove("active"); });
-
-      // Activa el tab clicado y su contenido
+      tabs.forEach(t     => t.classList.remove("active"));
+      contents.forEach(c => c.classList.remove("active"));
       tab.classList.add("active");
       const target = document.getElementById(tab.dataset.tab);
       if (target) target.classList.add("active");
@@ -238,15 +275,18 @@ function initProfileTabs() {
    6. ARRANQUE
    ===================================================== */
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", async function() {
 
-  // Solo ejecutamos si estamos en perfil.html
+  // Només executem si estem a perfil.html
   if (!document.getElementById("profile-initial")) return;
 
-  initPerfil();
-  renderReservationsInProfile();
-  renderOrderHistory();
+  // Carreguem tot en paral·lel per ser més ràpids
+  await Promise.all([
+    initPerfil(),
+    renderReservationsInProfile(),
+    renderOrderHistory()
+  ]);
+
   renderOldPurchases();
   initProfileTabs();
-
 });

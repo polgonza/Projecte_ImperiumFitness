@@ -62,7 +62,19 @@
 <script src="js/app.js"></script>
 <script src="js/carrito.js"></script>
 
-  <script src="js/app.js"></script>
-  <script src="js/carrito.js"></script>
+<script>
+  // Mostra el missatge de sessió expirada si existeix
+  document.addEventListener("DOMContentLoaded", function() {
+    const msg = sessionStorage.getItem("session_msg");
+    if (msg) {
+      const alertEl = document.getElementById("login-alert");
+      if (alertEl) {
+        alertEl.textContent = msg;
+        alertEl.className = "alert error show";
+      }
+      sessionStorage.removeItem("session_msg");
+    }
+  });
+</script>
 </body>
 </html>
