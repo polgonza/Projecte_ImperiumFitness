@@ -69,7 +69,6 @@ SecurityFilterChain filterChain(HttpSecurity http, JwtService jwtService) throws
             .sessionManagement(sm ->
                     sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
-        // Recursos estàtics
         .requestMatchers(
                 "/", "/index.html", "/login.html",
                 "/*.css", "/*.js",
@@ -79,16 +78,24 @@ SecurityFilterChain filterChain(HttpSecurity http, JwtService jwtService) throws
         // Endpoints públics
         .requestMatchers("/api/auth/**").permitAll()
         .requestMatchers(HttpMethod.GET, "/api/noticies/**").permitAll()
+        .requestMatchers(HttpMethod.GET, "/api/classes/**").permitAll()
+        .requestMatchers(HttpMethod.GET, "/api/productes/**").permitAll()
+        .requestMatchers(HttpMethod.GET, "/api/tarifes/**").permitAll()
         .requestMatchers(HttpMethod.POST, "/api/contactes").permitAll()
 
-        // Endpoints només ADMIN
+        // Endpoints de perfil — accessibles per USER i ADMIN
+        .requestMatchers(HttpMethod.GET, "/api/usuaris/perfil/**").authenticated()
+        .requestMatchers(HttpMethod.GET, "/api/reserves/usuari/**").authenticated()
+        .requestMatchers(HttpMethod.GET, "/api/vendes/usuari/**").authenticated()
+        .requestMatchers(HttpMethod.POST, "/api/reserves").authenticated()
+        .requestMatchers(HttpMethod.POST, "/api/vendes").authenticated()
+        .requestMatchers(HttpMethod.DELETE, "/api/reserves/**").authenticated()
+
+        // Endpoints ADMIN
         .requestMatchers("/api/usuaris/**").hasRole("ADMIN")
         .requestMatchers("/api/estadistiques/**").hasRole("ADMIN")
 
-        // TOTS els altres endpoints /api/** requereixen autenticació
         .requestMatchers("/api/**").authenticated()
-
-        // Resta
         .anyRequest().authenticated()
 )
             .addFilterBefore(

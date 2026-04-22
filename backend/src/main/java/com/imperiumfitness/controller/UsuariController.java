@@ -42,4 +42,10 @@ public class UsuariController {
         service.delete(id);
         return ResponseEntity.noContent().build();
     }
+
+    // Endpoint específic per al perfil — accessible per USER i ADMIN
+    @GetMapping("/perfil/{id}")
+    public ResponseEntity<UsuariDTO> getPerfil(@PathVariable Long id) {
+        return ResponseEntity.ok(service.getById(id));
+    }
 }
