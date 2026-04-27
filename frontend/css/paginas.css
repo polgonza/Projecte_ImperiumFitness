@@ -1,0 +1,144 @@
+/* =====================================================
+   paginas.css — Estilos exclusivos de páginas internas
+   auth (login, register, recover), page-section
+   Se carga en: login, register, recover y legales.
+   ===================================================== */
+
+/* --- PÁGINAS INTERNAS: padding superior (navbar fijo) --- */
+/* --- PÁGINAS INTERNAS --- */
+.page-section {
+  padding-top: 6rem; /* deja espacio al navbar */
+  min-height: 100vh;
+}
+
+
+/* --- Login / Registro / Recuperar pages --- */
+/* --- Login / Registro / Recuperar pages --- */
+.auth-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background-color: var(--bg);
+}
+
+.auth-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 2.5rem;
+  width: 100%;
+  max-width: 440px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Línea dorada superior */
+.auth-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+}
+
+.auth-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.auth-logo img { width: 40px; height: 40px; object-fit: contain; }
+
+.auth-logo span {
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.auth-card h2 {
+  text-align: center;
+  font-size: 1.4rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.4rem;
+}
+
+.auth-card .subtitle {
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 1.75rem;
+}
+
+/* Botones de login social */
+.social-btns {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.btn-social {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.75rem;
+  color: var(--text);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: border-color 0.3s;
+  font-family: inherit;
+  width: 100%;
+}
+.btn-social:hover { border-color: var(--primary); }
+.btn-social img { width: 20px; height: 20px; }
+
+/* Separador "o con email" */
+.or-divider {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 1.25rem 0;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+}
+.or-divider::before, .or-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+/* Campo de contraseña con toggle */
+.password-wrapper {
+  position: relative;
+}
+.password-wrapper .input-field {
+  padding-right: 3rem;
+  margin-bottom: 0;
+}
+.toggle-password {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 1rem;
+  transition: color 0.3s;
+}
+.toggle-password:hover { color: var(--text); }
