@@ -11,39 +11,132 @@
   <div class="auth-page">
     <div class="auth-card">
 
-      <!-- Logo -->
       <div class="auth-logo">
         <img src="assets/logo.png" alt="Imperium">
         <span class="text-gold">IMPERIUM</span>
       </div>
 
-      <h2>Recuperar Contraseña</h2>
-      <p class="subtitle">Te enviaremos un enlace de recuperación a tu email</p>
+      <!-- Pas 1: formulari d'email -->
+      <div id="step-form">
+        <h2>Recuperar Contraseña</h2>
+        <p class="subtitle">
+          Introduce tu email y te enviaremos instrucciones para restablecer tu contraseña
+        </p>
 
-      <!-- Mensaje de éxito/error -->
-      <div id="recover-alert" class="alert"></div>
+        <div id="recover-alert" class="alert"></div>
 
-      <!-- Formulario de recuperación -->
-      <form id="recover-form">
-        <div class="field-group">
-          <label for="recover-email">Tu email</label>
-          <input type="email" id="recover-email" class="input-field" placeholder="tu@email.com" required>
+        <form id="recover-form">
+          <div class="field-group">
+            <label for="recover-email">Email</label>
+            <input
+              type="email"
+              id="recover-email"
+              class="input-field"
+              placeholder="tu@email.com"
+              required
+            >
+          </div>
+
+          <button
+            type="submit"
+            class="btn btn-primary"
+            style="width:100%;justify-content:center;padding:0.85rem;margin-top:0.5rem"
+            id="recover-btn"
+          >
+            Enviar Instrucciones
+          </button>
+        </form>
+
+        <div class="auth-links" style="margin-top:1rem">
+          <a href="login.html">← Volver al login</a>
         </div>
+      </div>
 
-        <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;padding:0.85rem">
-          Enviar Enlace
-        </button>
-      </form>
+      <!-- Pas 2: missatge d'èxit (ocult inicialment) -->
+      <div id="step-success" style="display:none;text-align:center">
 
-      <!-- Links -->
-      <div class="auth-links">
-        <a href="login.html">← Volver al inicio de sesión</a>
+        <div style="
+          width: 70px;
+          height: 70px;
+          background: rgba(34,197,94,0.12);
+          border: 2px solid rgba(34,197,94,0.4);
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 1.8rem;
+          margin: 0 auto 1.5rem;
+        ">✅</div>
+
+        <h2 style="margin-bottom:0.75rem">¡Email Enviado!</h2>
+
+        <p style="color:var(--text-muted);font-size:0.88rem;line-height:1.6;margin-bottom:1.5rem">
+          Si existe una cuenta asociada a
+          <strong id="success-email" style="color:var(--primary)"></strong>,
+          recibirás un email con instrucciones para restablecer tu contraseña.
+        </p>
+
+        <p style="color:var(--text-muted);font-size:0.8rem;margin-bottom:2rem">
+          ¿No has recibido nada? Revisa tu carpeta de spam o
+          <button
+            onclick="showForm()"
+            style="background:none;border:none;color:var(--primary);cursor:pointer;font-size:0.8rem;padding:0;font-family:inherit"
+          >
+            inténtalo de nuevo
+          </button>
+        </p>
+
+        <a href="login.html" class="btn btn-primary" style="justify-content:center">
+          Volver al Login
+        </a>
+
       </div>
 
     </div>
   </div>
 
+  <script src="js/api.js"></script>
   <script src="js/app.js"></script>
-  <script src="js/carrito.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      SessionManager.init(false);
+
+      const form    = document.getElementById("recover-form");
+      const alertEl = document.getElementById("recover-alert");
+      const btn     = document.getElementById("recover-btn");
+
+      form.addEventListener("submit", async function(e) {
+        e.preventDefault();
+
+        const email = document.getElementById("recover-email").value.trim();
+
+        if (!email) {
+          showAlert(alertEl, "Introduce tu email.", "error");
+          return;
+        }
+
+        btn.disabled = true;
+        btn.textContent = "Enviando...";
+
+        // Cridem el backend (sempre retorna 200)
+        await ApiAuth.recover(email);
+
+        // Mostrem la pantalla d'èxit independentment del resultat
+        // (per seguretat no revelem si l'email existeix)
+        document.getElementById("success-email").textContent = email;
+        document.getElementById("step-form").style.display = "none";
+        document.getElementById("step-success").style.display = "block";
+      });
+    });
+
+    // Torna a mostrar el formulari si l'usuari vol tornar a intentar-ho
+    function showForm() {
+      document.getElementById("step-form").style.display = "block";
+      document.getElementById("step-success").style.display = "none";
+      document.getElementById("recover-btn").disabled = false;
+      document.getElementById("recover-btn").textContent = "Enviar Instrucciones";
+      document.getElementById("recover-email").value = "";
+    }
+  </script>
 </body>
 </html>

@@ -67,7 +67,19 @@ const ApiAuth = {
       return { ok: false, error: "No se puede conectar con el servidor." };
     }
   },
-
+  // Dins de ApiAuth, afegeix aquest mètode:
+async recover(email) {
+  try {
+    const res = await fetch(API_BASE + "/api/auth/recover", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email })
+    });
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, error: "No se puede conectar con el servidor." };
+  }
+},
   /* Registre: retorna { ok, token, error } */
   async register(nom, email, password) {
     try {
