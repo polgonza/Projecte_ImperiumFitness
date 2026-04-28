@@ -37,6 +37,11 @@ services:
     volumes:
       - ./ngnix/conf.d:/etc/nginx/conf.d
     networks:
-      - network     
+      - network
+      
 volumes:
   db_data:
+
+networks:
+  network:
+    driver:bridge
