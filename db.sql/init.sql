@@ -19,7 +19,7 @@
 --
 -- Table structure for table `classe`
 --
-Create if not exists database imperium_fitness;
+use database imperium_fitness;
 
 DROP TABLE IF EXISTS `classe`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
