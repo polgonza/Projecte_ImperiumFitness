@@ -64,17 +64,19 @@
 
 <script>
   // Mostra el missatge de sessió expirada si existeix
-  document.addEventListener("DOMContentLoaded", function() {
+ document.addEventListener("DOMContentLoaded", function() {
+    SessionManager.init(false);
+    
     const msg = sessionStorage.getItem("session_msg");
     if (msg) {
-      const alertEl = document.getElementById("login-alert");
-      if (alertEl) {
-        alertEl.textContent = msg;
-        alertEl.className = "alert error show";
-      }
-      sessionStorage.removeItem("session_msg");
+        const alertEl = document.getElementById("login-alert");
+        if (alertEl) {
+            alertEl.textContent = msg;
+            alertEl.className = "alert alert-error show";
+        }
+        sessionStorage.removeItem("session_msg");
     }
-  });
+});
 </script>
 </body>
 </html>

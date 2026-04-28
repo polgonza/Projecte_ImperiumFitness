@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  db:
+    image: mariadb:11
+    container_name: imperium-mariadb
+    restart: always
+    environment:
+      MARIADB_DATABASE: imperium_fitness
+      MARIADB_USER: mplf
+      MARIADB_PASSWORD: 12345678
+      MARIADB_ROOT_PASSWORD: rootpass
+    ports:
+      - "3309:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./db.sql:/docker-entrypoint-initdb.d/init.sql
+
+  backend:
+    build: ./backend
+    container_name: imperium-backend
+    restart: always
+    ports:
+      - "8084:8086"
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mariadb://db:3306/imperium_fitness
+      SPRING_DATASOURCE_USERNAME: mplf
+      SPRING_DATASOURCE_PASSWORD: 12345678
+
+  nginx:
+    image: nginx:alpine
+    container_name: imperium-ngnix
+    ports:
+     - "8081:445"
+    volumes:
+      - ./ngnix/conf.d:/etc/nginx/conf.d
+    networks:
+      - network     
+volumes:
+  db_data:
