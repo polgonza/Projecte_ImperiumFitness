@@ -29,19 +29,6 @@ services:
       SPRING_DATASOURCE_USERNAME: mplf
       SPRING_DATASOURCE_PASSWORD: 12345678
 
-  nginx:
-    image: nginx:alpine
-    container_name: imperium-ngnix
-    ports:
-     - "8081:445"
-    volumes:
-      - ./ngnix/conf.d:/etc/nginx/conf.d
-    networks:
-      - network
       
 volumes:
   db_data:
-
-networks:
-  network:
-    driver:bridge
