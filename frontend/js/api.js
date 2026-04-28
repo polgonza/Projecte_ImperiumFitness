@@ -4,7 +4,7 @@
    BASE_URL apunta al backend local (canvia en producció)
    ===================================================== */
 
-const API_BASE = "http://localhost:8084";
+const API_BASE = "http://172.21.90.3:8086";
 
 /* ── Utilitat: capçaleres amb JWT ───────────────────────
    Totes les peticions autenticades necessiten enviar
