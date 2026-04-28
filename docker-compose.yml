@@ -8,8 +8,6 @@ services:
     restart: always
     ports:
       - "8084:8086"
-    depends_on:
-      - db
     environment:
       SPRING_DATASOURCE_URL: jdbc:mariadb://db:3306/imperium_fitness
       SPRING_DATASOURCE_USERNAME: mplf
