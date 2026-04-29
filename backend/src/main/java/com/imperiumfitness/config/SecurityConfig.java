@@ -69,6 +69,7 @@ SecurityFilterChain filterChain(HttpSecurity http, JwtService jwtService) throws
             .sessionManagement(sm ->
                     sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
+        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()        
         .requestMatchers(
                 "/", "/index.html", "/login.html",
                 "/*.css", "/*.js",
