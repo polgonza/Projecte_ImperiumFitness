@@ -21,7 +21,7 @@ services:
     container_name: imperium-backend
     restart: always
     ports:
-      - "8084:8086"
+      - "8086:8084"
     depends_on:
       - db
     environment:
