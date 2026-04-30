@@ -23,12 +23,13 @@ async function initPerfil() {
 
   // Mostrem dades bàsiques del localStorage mentre carreguen les del backend
   const inicial = user.name ? user.name.charAt(0).toUpperCase() : "?";
-  setTextById("profile-initial", inicial);
-  setTextById("profile-name",    user.name || "—");
-  setTextById("profile-email",   user.email || "—");
-  setTextById("profile-plan",    "Sin plan activo");
-  setTextById("profile-plan-stat", "Sin plan activo");
-  setTextById("profile-since",   "—");
+  renderDatosUsuario(
+    inicial,
+    user.name  || "—",
+    user.email || "—",
+    "Sin plan activo",
+    "—"
+  );
 
   // Carreguem dades reals del backend
   const perfil = await ApiUsuari.getPerfil(user.id);
@@ -38,10 +39,14 @@ async function initPerfil() {
       ? new Date(perfil.dataRegistre).toLocaleDateString("es-ES")
       : "—";
 
-    setTextById("profile-initial", perfil.nom.charAt(0).toUpperCase());
-    setTextById("profile-name",    perfil.nom);
-    setTextById("profile-email",   perfil.email);
-    setTextById("profile-since",   dataRegistre);
+    // Actualiza los datos en pantalla — HTML en render.js
+    renderDatosUsuario(
+      perfil.nom.charAt(0).toUpperCase(),
+      perfil.nom,
+      perfil.email,
+      "Sin plan activo",
+      dataRegistre
+    );
 
     // Actualitzem també el localStorage amb el nom real
     Auth.setUser({
@@ -79,7 +84,7 @@ async function renderReservationsInProfile() {
   const user = Auth.getUser();
   if (!user) return;
 
-  // Obtenim les reserves del backend
+  // Obtenim les reserves del backend (lògica sense canvis)
   const reserves = await ApiUsuari.getReserves(user.id);
 
   if (reserves.length === 0) {
@@ -94,11 +99,8 @@ async function renderReservationsInProfile() {
   }
 
   // Per cada reserva, obtenim el nom de la classe
-  // Les reserves retornen classeId, necessitem el nom
   const classesCache = {};
-
-  lista.innerHTML = await Promise.all(reserves.map(async r => {
-    // Obtenim el nom de la classe si no el tenim en caché
+  const reservesAmbNom = await Promise.all(reserves.map(async r => {
     let nomClasse = `Clase #${r.classeId}`;
     try {
       if (!classesCache[r.classeId]) {
@@ -111,20 +113,16 @@ async function renderReservationsInProfile() {
       nomClasse = classesCache[r.classeId] || nomClasse;
     } catch (e) {}
 
-    const dataReserva = r.dataReserva
-      ? new Date(r.dataReserva).toLocaleDateString("es-ES")
-      : "—";
+    return {
+      nomClasse,
+      dataReserva: r.dataReserva
+        ? new Date(r.dataReserva).toLocaleDateString("es-ES")
+        : "—"
+    };
+  }));
 
-    return `
-      <div class="reservation-item">
-        <div>
-          <h4>${nomClasse}</h4>
-          <p>${dataReserva}</p>
-        </div>
-        <span class="status-badge confirmed">Confirmada</span>
-      </div>
-    `;
-  })).then(items => items.join(""));
+  // HTML generado en render.js
+  renderReservasPerfil(reservesAmbNom);
 }
 
 
@@ -157,10 +155,9 @@ async function renderOrderHistory() {
     return;
   }
 
-  // Per cada venda obtenim el nom del producte
+  // Per cada venda obtenim el nom del producte (lògica sense canvis)
   const productesCache = {};
-
-  container.innerHTML = await Promise.all(vendes.map(async v => {
+  const vendesAmbNom = await Promise.all(vendes.map(async v => {
     let nomProducte = `Producto #${v.producteId}`;
     try {
       if (!productesCache[v.producteId]) {
@@ -174,27 +171,17 @@ async function renderOrderHistory() {
       if (prod) nomProducte = prod.nom;
     } catch (e) {}
 
-    const dataVenda = v.dataVenda
-      ? new Date(v.dataVenda).toLocaleDateString("es-ES")
-      : "—";
+    return {
+      ...v,
+      nomProducte,
+      dataVenda: v.dataVenda
+        ? new Date(v.dataVenda).toLocaleDateString("es-ES")
+        : "—"
+    };
+  }));
 
-    return `
-      <div class="order-card">
-        <div class="order-card-header">
-          <div>
-            <div class="order-id">Pedido #${v.id}</div>
-            <div class="order-date">${dataVenda}</div>
-          </div>
-          <span class="order-status">Completado</span>
-        </div>
-        <ul class="order-products">
-          <li>
-            <span class="p-name">${nomProducte} x${v.quantitat}</span>
-          </li>
-        </ul>
-      </div>
-    `;
-  })).then(items => items.join(""));
+  // HTML generado en render.js
+  renderPedidosPerfil(vendesAmbNom);
 }
 
 
@@ -209,45 +196,14 @@ function renderOldPurchases() {
   const user = Auth.getUser();
   if (!user) return;
 
-  const allOrders = localStorage.getItem("imperium_pedidos");
-  const pedidos   = allOrders ? JSON.parse(allOrders) : [];
+  const allOrders  = localStorage.getItem("imperium_pedidos");
+  const pedidos    = allOrders ? JSON.parse(allOrders) : [];
   const misPedidos = pedidos.filter(p => p.userEmail === user.email);
-
-  if (misPedidos.length === 0) {
-    lista.innerHTML = `
-      <p style="color:var(--text-muted);text-align:center;padding:2rem">
-        No tienes compras en el historial.
-      </p>`;
-    return;
-  }
 
   misPedidos.sort((a, b) => b.pedidoId.localeCompare(a.pedidoId));
 
-  lista.innerHTML = misPedidos.map(pedido => {
-    const productesHTML = pedido.productos.map(p => `
-      <li>
-        <span class="p-name">${p.name} x${p.quantity}</span>
-        <span class="p-price">${(p.price * p.quantity).toFixed(2)} €</span>
-      </li>
-    `).join("");
-
-    return `
-      <div class="order-card">
-        <div class="order-card-header">
-          <div>
-            <div class="order-id">${pedido.pedidoId}</div>
-            <div class="order-date">${pedido.fecha}</div>
-          </div>
-          <span class="order-status">Completado</span>
-        </div>
-        <ul class="order-products">${productesHTML}</ul>
-        <div class="order-card-footer">
-          <span class="order-total-label">Total:</span>
-          <span class="order-total-amount">${pedido.total.toFixed(2)} €</span>
-        </div>
-      </div>
-    `;
-  }).join("");
+  // HTML generado en render.js
+  renderHistorialLocal(misPedidos);
 }
 
 

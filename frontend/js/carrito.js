@@ -169,70 +169,9 @@ function vaciarCarrito() {
    3. RENDERIZADO DEL PANEL DEL CARRITO
    ===================================================== */
 
-/* Dibuja los productos dentro del panel lateral */
+/* Dibuja los productos dentro del panel lateral — HTML generado en render.js */
 function renderCarritoPanel() {
-  const itemsEl  = document.getElementById("cart-items");
-  const totalEl  = document.getElementById("cart-total");
-  if (!itemsEl) return;   // Si no existe el panel en esta página, salimos
-
-  const carrito = getCarrito();
-
-  if (carrito.length === 0) {
-    // Carrito vacío
-    itemsEl.innerHTML = `
-      <div class="cart-empty">
-        <span class="cart-empty-icon">&#128722;</span>
-        <p>Tu carrito está vacío.<br>Añade productos desde la tienda.</p>
-      </div>`;
-  } else {
-    // Dibuja cada producto
-    itemsEl.innerHTML = carrito.map(function(item) {
-      return `
-        <div class="cart-item">
-          <!-- Imagen del producto -->
-          <img class="cart-item-img" src="${item.img}" alt="${item.name}"
-               onerror="this.style.background='var(--bg-secondary)';this.src=''">
-
-          <div class="cart-item-info">
-            <div class="cart-item-name">${item.name}</div>
-            <div class="cart-item-price">${(item.price * item.quantity).toFixed(2)} €</div>
-          </div>
-
-          <!-- Controles de cantidad -->
-          <div class="cart-item-controls">
-            <button class="qty-btn" onclick="changeQuantity(${item.id}, -1)">−</button>
-            <span class="qty-value">${item.quantity}</span>
-            <button class="qty-btn" onclick="changeQuantity(${item.id}, +1)">+</button>
-          </div>
-
-          <!-- Botón eliminar -->
-          <button class="cart-item-remove" onclick="removeFromCarrito(${item.id})"
-                  title="Eliminar">&#x2715;</button>
-        </div>
-      `;
-    }).join("");
-  }
-
-  // Actualiza el total (con descuento si está logueado)
-  if (totalEl) {
-    const subtotal   = getCarritoTotal();
-    const descuento  = getCarritoDescuento();
-    const totalFinal = getCarritoTotalFinal();
-
-    if (descuento > 0 && carrito.length > 0) {
-      totalEl.innerHTML = `
-        <div style="font-size:0.78rem;color:var(--text-muted);text-decoration:line-through;text-align:right">
-          ${subtotal.toFixed(2)} €
-        </div>
-        <div style="font-size:0.78rem;color:var(--success);text-align:right">
-          − ${descuento.toFixed(2)} € (5% socio)
-        </div>
-        <div>${totalFinal.toFixed(2)} €</div>
-      `;
-    } else {
-      totalEl.textContent = subtotal.toFixed(2) + " €";
-    }
-  }
+  renderCarrito();
 }
 
 /* Actualiza el número sobre el icono del carrito en el navbar */
