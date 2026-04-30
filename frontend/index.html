@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Imperium Fitness - La cadena de gimnasios premium</title>
   <link rel="stylesheet" href="css/styles.css">
 </head>
+
 <body>
 
   <!-- ========== NAVBAR ========== -->
@@ -47,7 +49,8 @@
     <div class="hero-content">
       <span class="hero-badge">La cadena de gimnasios premium</span>
       <h1>Forja tu <span class="text-gold">mejor versión</span></h1>
-      <p>Tecnología de ocupación en tiempo real, instalaciones de élite y una comunidad que te impulsa. Entrena mejor, entrena inteligente.</p>
+      <p>Tecnología de ocupación en tiempo real, instalaciones de élite y una comunidad que te impulsa. Entrena mejor,
+        entrena inteligente.</p>
       <div class="hero-btns">
         <a href="tarifas.html" class="btn btn-primary">Únete Ahora →</a>
         <a href="actividades.html" class="btn btn-outline">Reserva tu Clase</a>
@@ -88,7 +91,7 @@
 
         <div class="service-card">
           <div class="service-card-bg"
-               style="background-image: url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=600&h=400&fit=crop')">
+            style="background-image: url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=600&h=400&fit=crop')">
           </div>
           <div class="service-card-overlay"></div>
           <div class="service-card-text">
@@ -99,7 +102,7 @@
 
         <div class="service-card">
           <div class="service-card-bg"
-               style="background-image: url('https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=600&h=400&fit=crop')">
+            style="background-image: url('https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=600&h=400&fit=crop')">
           </div>
           <div class="service-card-overlay"></div>
           <div class="service-card-text">
@@ -110,7 +113,7 @@
 
         <div class="service-card">
           <div class="service-card-bg"
-               style="background-image: url('https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=600&h=400&fit=crop')">
+            style="background-image: url('https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=600&h=400&fit=crop')">
           </div>
           <div class="service-card-overlay"></div>
           <div class="service-card-text">
@@ -121,7 +124,7 @@
 
         <div class="service-card">
           <div class="service-card-bg"
-               style="background-image: url('https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=600&h=400&fit=crop')">
+            style="background-image: url('https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=600&h=400&fit=crop')">
           </div>
           <div class="service-card-overlay"></div>
           <div class="service-card-text">
@@ -159,8 +162,8 @@
       <div style="max-width:600px;margin:0 auto">
         <form class="contact-form-box" id="home-contact-form">
           <div class="form-row">
-            <input type="text"  class="input-field" placeholder="Nombre"  required>
-            <input type="email" class="input-field" placeholder="Email"   required>
+            <input type="text" class="input-field" placeholder="Nombre" required>
+            <input type="email" class="input-field" placeholder="Email" required>
           </div>
           <textarea class="textarea-field" rows="4" placeholder="Tu mensaje..." required></textarea>
           <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center">
@@ -296,24 +299,24 @@
         <span class="cart-total-label">Total</span>
         <span class="cart-total-amount" id="cart-total">0.00 €</span>
       </div>
-      <button class="btn btn-primary" style="width:100%;justify-content:center"
-              id="cart-checkout-btn">
+      <button class="btn btn-primary" style="width:100%;justify-content:center" id="cart-checkout-btn">
         Finalizar Compra
       </button>
     </div>
   </div>
 
   <!-- ORDRE IMPORTANT: api.js sempre PRIMER -->
-<script src="js/api.js"></script>
-
+  <script src="js/api.js"></script>
+  <script src="js/render.js"></script>
   <script src="js/app.js"></script>
   <script src="js/carrito.js"></script>
 
   <script>
-    document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", function () {
       SessionManager.init(false);
     });
   </script>
 
 </body>
+
 </html>

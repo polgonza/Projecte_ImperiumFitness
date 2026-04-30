@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Instalaciones - Imperium Fitness</title>
   <link rel="stylesheet" href="css/styles.css">
 </head>
+
 <body>
 
   <nav class="navbar scrolled" id="navbar">
@@ -72,6 +74,7 @@
     </div>
   </footer>
 
+  <script src="js/render.js"></script>
   <script src="js/app.js"></script>
   <!-- PANEL CARRITO -->
   <div class="cart-backdrop" id="cart-backdrop"></div>
@@ -86,17 +89,19 @@
         <span class="cart-total-label">Total</span>
         <span class="cart-total-amount" id="cart-total">0.00 &euro;</span>
       </div>
-      <button class="btn btn-primary" style="width:100%;justify-content:center" id="cart-checkout-btn">Finalizar Compra</button>
+      <button class="btn btn-primary" style="width:100%;justify-content:center" id="cart-checkout-btn">Finalizar
+        Compra</button>
     </div>
   </div>
 
   <script src="js/carrito.js"></script>
 
   <script>
-    document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", function () {
       SessionManager.init(false);
     });
   </script>
 
 </body>
+
 </html>
