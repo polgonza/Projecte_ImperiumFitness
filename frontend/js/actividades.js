@@ -6,7 +6,7 @@
    puede usar Auth, showToast y las utilidades globales.
 
    ESTRUCTURA:
-     1. Datos — horario semanal fijo + imágenes por categoría
+     1. Datos — horario semanal + imágenes por categoría
      2. Estado — variables que guardan lo que el usuario ha elegido
      3. Calendario — dibuja el mes, gestiona navegación y selección
      4. Clases — filtra y pinta las tarjetas del día seleccionado
@@ -17,54 +17,29 @@
 
 
 /* =====================================================
-   1. DATOS
-   ===================================================== */
-
-/*
-  HORARIO_SEMANAL es un objeto cuyas claves son los días
-  de la semana en español (como los devuelve Date).
-  Cada día tiene un array de clases.
-
-  Cada clase tiene:
-    id          → identificador único (para guardar en localStorage)
-    name        → nombre de la clase
-    category    → usada para filtrar y para el color de la banda
-    instructor  → nombre del instructor
-    time        → hora de inicio  "HH:MM"
-    duration    → duración en minutos (string)
-    spots       → plazas totales
-*/
-/* =====================================================
    1. DADES — carregades des del backend
-   HORARIO_SEMANAL ja no és estàtic: es construeix
-   dinàmicament amb les classes que retorna l'API.
    ===================================================== */
 
-/* Mapeja el backend al format que espera el calendari:
-   { "Lunes": [{ id, name, category, instructor... }] }
-   El backend retorna: { id, nom, descripcio, horari, capacitat, gimnasId } */
 function classeBackendToLocal(c) {
   const data   = new Date(c.horari);
-  const dayIdx = data.getDay(); // 0=Diumenge … 6=Dissabte
+  const dayIdx = data.getDay();
   const dayName = NOMBRE_DIA[dayIdx];
   const hh = String(data.getHours()).padStart(2, "0");
   const mm = String(data.getMinutes()).padStart(2, "0");
 
   return {
-    id:         String(c.id),
-    name:       c.nom,
-    // Intentem deduir la categoria del nom si no ve del backend
-    category:   detectaCategoria(c.nom),
-    instructor: "—",           // el backend no té instructor per ara
-    time:       `${hh}:${mm}`,
-    duration:   "60 min",
-    spots:      c.capacitat,
+    id:            String(c.id),
+    name:          c.nom,
+    category:      detectaCategoria(c.nom),
+    instructor:    "—",
+    time:          `${hh}:${mm}`,
+    duration:      "60 min",
+    spots:         c.capacitat,
     dayName,
-    horariComplet: c.horari    // guardem la data completa per filtrar
+    horariComplet: c.horari
   };
 }
 
-/* Dedueix la categoria a partir del nom de la classe */
 function detectaCategoria(nom) {
   const n = nom.toLowerCase();
   if (n.includes("spinning") || n.includes("cicl")) return "spinning";
@@ -78,7 +53,6 @@ function detectaCategoria(nom) {
   return "funcional";
 }
 
-/* Construeix el HORARIO_SEMANAL a partir de les classes del backend */
 function construeixHorari(classes) {
   const horari = {};
   classes.forEach(c => {
@@ -89,14 +63,8 @@ function construeixHorari(classes) {
   return horari;
 }
 
-/* Variable global que s'omplirà quan carregui la pàgina */
 let HORARIO_SEMANAL = {};
 
-/*
-  Imágenes de Unsplash para cada categoría.
-  Son URLs públicas, no requieren API key.
-  En producción se usarían imágenes propias.
-*/
 const CATEGORY_IMAGES = {
   crossfit:  "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=120&h=120&fit=crop",
   yoga:      "https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=120&h=120&fit=crop",
@@ -107,11 +75,8 @@ const CATEGORY_IMAGES = {
   boxeo:     "https://images.unsplash.com/photo-1555597673-b21d5c935865?w=120&h=120&fit=crop"
 };
 
-/* Nombres de los días según el índice de Date.getDay()
-   0 = Domingo, 1 = Lunes … 6 = Sábado */
 const NOMBRE_DIA = ["Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado"];
 
-/* Nombres de los meses en español */
 const NOMBRE_MES = [
   "Enero","Febrero","Marzo","Abril","Mayo","Junio",
   "Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"
@@ -120,100 +85,80 @@ const NOMBRE_MES = [
 
 /* =====================================================
    2. ESTADO DE LA PÁGINA
-   Variables que guardan qué tiene seleccionado el usuario
    ===================================================== */
 
-// Fecha "mostrada" en el calendario (puede ser distinta a la de hoy)
 let calYear  = new Date().getFullYear();
-let calMonth = new Date().getMonth();      // 0–11
-
-// Fecha seleccionada por el usuario (empieza con hoy)
+let calMonth = new Date().getMonth();
 let selectedDate = new Date();
-
-// Filtro de categoría activo
 let activeFilter = "all";
-
-// Clase que está a punto de reservarse (pendiente de confirmar en el modal)
-let pendingClass  = null;   // objeto de HORARIO_SEMANAL
-let pendingDateKey = null;  // "YYYY-MM-DD" para identificar el día
+let pendingClass  = null;
+let pendingDateKey = null;
 
 
 /* =====================================================
    3. CALENDARIO
-   Dibuja el mes, gestiona la navegación y los clics
    ===================================================== */
 
-/* Genera la cadena "YYYY-MM-DD" de una fecha */
 function toDateKey(year, month, day) {
   const mm = String(month + 1).padStart(2, "0");
   const dd = String(day).padStart(2, "0");
   return `${year}-${mm}-${dd}`;
 }
 
-/*
-  renderCalendar() — pinta el mes actual en el DOM.
-  Lógica paso a paso:
-    1. Calcula el primer y último día del mes
-    2. Determina en qué columna (L–D) empieza el mes
-    3. Añade celdas vacías al principio
-    4. Por cada día decide si es: hoy / pasado / domingo / normal / seleccionado
-    5. Los días con clases llevan un punto dorado
-*/
+/* Calcula la data màxima permesa (2 mesos des d'avui) */
+function getMaxDateKey() {
+  const today  = new Date();
+  const maxDate = new Date(today.getFullYear(), today.getMonth() + 2, today.getDate());
+  return toDateKey(maxDate.getFullYear(), maxDate.getMonth(), maxDate.getDate());
+}
+
 function renderCalendar() {
   const grid      = document.getElementById("calendar-grid");
   const label     = document.getElementById("cal-month-label");
   const today     = new Date();
   const todayKey  = toDateKey(today.getFullYear(), today.getMonth(), today.getDate());
   const selKey    = toDateKey(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate());
+  const maxKey    = getMaxDateKey(); // ← límit de 2 mesos
 
-  // Actualiza el título: "Abril 2026"
   label.textContent = `${NOMBRE_MES[calMonth]} ${calYear}`;
 
-  // Día de la semana del 1 del mes (0=Dom, 1=Lun…)
   const firstDayRaw = new Date(calYear, calMonth, 1).getDay();
-  // Ajustamos para que Lunes sea 0 (nuestra cuadrícula empieza en Lunes)
   const firstDayLun = (firstDayRaw + 6) % 7;
-
-  // Cuántos días tiene el mes
   const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
 
   let html = "";
 
-  // Celdas vacías antes del día 1
+  // Celdas vacías
   for (let i = 0; i < firstDayLun; i++) {
     html += `<div class="cal-day empty"></div>`;
   }
 
-  // Días del mes
+  // Dies del mes
   for (let d = 1; d <= daysInMonth; d++) {
     const dateKey  = toDateKey(calYear, calMonth, d);
     const dateObj  = new Date(calYear, calMonth, d);
-    const dayIndex = dateObj.getDay();       // 0=Dom…6=Sab
+    const dayIndex = dateObj.getDay();
     const dayName  = NOMBRE_DIA[dayIndex];
 
-    // Determinar clases CSS del día
-    let classes = "cal-day";
-
-    const isPast    = dateKey < todayKey;
-    const isSunday  = dayIndex === 0;
-    const isToday   = dateKey === todayKey;
+    const isPast   = dateKey < todayKey;
+    const isSunday = dayIndex === 0;
+    const isTooFar = dateKey > maxKey;  // ← bloqueja dies fora del rang
+    const isToday  = dateKey === todayKey;
     const isSelected = dateKey === selKey;
 
+    let classes = "cal-day";
     if (isToday)    classes += " today";
     if (isSelected) classes += " selected";
-    // Bloqueado: pasado o domingo
-    if (isPast || isSunday) classes += " disabled";
+    if (isPast || isSunday || isTooFar) classes += " disabled";
 
-    // Tiene clases ese día (para mostrar el punto)?
-    const hasClasses = !isSunday && HORARIO_SEMANAL[dayName] !== undefined;
-
-    // Punto indicador (solo en días no bloqueados y no seleccionados)
-    const dot = hasClasses && !isPast && !isSunday
+    // Punt indicador — només dies disponibles amb classes
+    const hasClasses = !isSunday && !isTooFar && HORARIO_SEMANAL[dayName] !== undefined;
+    const dot = hasClasses && !isPast
       ? `<span class="dot"></span>`
       : "";
 
-    // Atributo onclick solo si el día no está bloqueado
-    const click = (!isPast && !isSunday)
+    // Click — només dies no bloquejats
+    const click = (!isPast && !isSunday && !isTooFar)
       ? `onclick="selectDay(${calYear}, ${calMonth}, ${d})"`
       : "";
 
@@ -223,22 +168,13 @@ function renderCalendar() {
   grid.innerHTML = html;
 }
 
-/* selectDay — se llama al clicar un día del calendario */
 function selectDay(year, month, day) {
-  // Guarda la fecha seleccionada
   selectedDate = new Date(year, month, day);
-
-  // Actualiza el estado y re-pinta el calendario para reflejar la selección
   renderCalendar();
-
-  // Actualiza el texto informativo debajo del calendario
   updateSelectedDayInfo();
-
-  // Muestra las clases del día en la columna derecha
   renderClasesDelDia();
 }
 
-/* Actualiza el bloque de información del día seleccionado */
 function updateSelectedDayInfo() {
   const info     = document.getElementById("selected-day-info");
   const dayIndex = selectedDate.getDay();
@@ -248,7 +184,6 @@ function updateSelectedDayInfo() {
   const yyyy     = selectedDate.getFullYear();
 
   if (dayIndex === 0) {
-    // Domingo: sin clases
     info.innerHTML = `<strong>${dayName} ${dd} de ${mm}</strong>Sin actividades este día`;
   } else {
     const clases = HORARIO_SEMANAL[dayName] || [];
@@ -264,11 +199,6 @@ function updateSelectedDayInfo() {
    4. CLASES — pintado de tarjetas
    ===================================================== */
 
-/*
-  renderClasesDelDia() — lee el día seleccionado, obtiene
-  las clases del horario, aplica el filtro activo y pinta
-  las tarjetas en #act-classes-list.
-*/
 function renderClasesDelDia() {
   const container  = document.getElementById("act-classes-list");
   const titleEl    = document.getElementById("col-day-title");
@@ -279,10 +209,8 @@ function renderClasesDelDia() {
   const dd         = selectedDate.getDate();
   const mm         = NOMBRE_MES[selectedDate.getMonth()];
 
-  // Actualiza el título de la columna derecha
   titleEl.textContent = `${dayName} ${dd} de ${mm}`;
 
-  // Domingo: sin actividades
   if (dayIndex === 0) {
     container.innerHTML = `
       <div class="no-classes-msg">
@@ -293,15 +221,12 @@ function renderClasesDelDia() {
     return;
   }
 
-  // Obtiene las clases del día (puede ser undefined si el día no tiene)
   let clases = HORARIO_SEMANAL[dayName] || [];
 
-  // Aplica el filtro de categoría
   if (activeFilter !== "all") {
     clases = clases.filter(c => c.category === activeFilter);
   }
 
-  // Si no hay clases con ese filtro
   if (clases.length === 0) {
     container.innerHTML = `
       <div class="no-classes-msg">
@@ -312,37 +237,26 @@ function renderClasesDelDia() {
     return;
   }
 
-  // Ordena por hora (ascendente)
   clases = clases.slice().sort((a, b) => a.time.localeCompare(b.time));
-
   countEl.textContent = `${clases.length} clase${clases.length !== 1 ? "s" : ""}`;
-
-  // Genera el HTML de cada tarjeta
   container.innerHTML = clases.map(c => buildClassCard(c)).join("");
 }
 
-/*
-  buildClassCard(clase) — devuelve el HTML de una tarjeta.
-  Determina si el usuario ya tiene reservada esta clase en este día.
-*/
 function buildClassCard(clase) {
-  const dateKey    = toDateKey(
+  const dateKey   = toDateKey(
     selectedDate.getFullYear(),
     selectedDate.getMonth(),
     selectedDate.getDate()
   );
-  const reservaId  = `${dateKey}_${clase.id}`;
+  const reservaId = `${dateKey}_${clase.id}`;
 
   const reservasHoy    = getReservasDelDia(dateKey, clase.id);
-  const plazasOcupadas = reservasHoy;
-  const disponibles    = clase.spots - plazasOcupadas;
-  const pct            = Math.round((plazasOcupadas / clase.spots) * 100);
+  const disponibles    = clase.spots - reservasHoy;
+  const pct            = Math.round((reservasHoy / clase.spots) * 100);
   const estaLlena      = disponibles <= 0;
   const yaReservada    = userHasReservation(reservaId);
+  const imgSrc         = CATEGORY_IMAGES[clase.category] || "";
 
-  const imgSrc = CATEGORY_IMAGES[clase.category] || "";
-
-  // Botó amb dataset en lloc d'onclick inline per evitar problemes amb cometes
   let btnHtml;
   if (yaReservada) {
     btnHtml = `<button class="btn-reservar reservada" disabled>Reservada</button>`;
@@ -404,8 +318,6 @@ function buildClassCard(clase) {
    ===================================================== */
 
 function openReservationModal(classId, dateKey) {
-  const user = Auth.getUser();
-
   if (!Auth.isLoggedIn()) {
     showToast("Debes iniciar sesión para reservar clases.", "error");
     setTimeout(() => { window.location.href = "login.html"; }, 1500);
@@ -416,11 +328,6 @@ function openReservationModal(classId, dateKey) {
   const dayName  = NOMBRE_DIA[dayIndex];
   const clases   = HORARIO_SEMANAL[dayName] || [];
   const clase    = clases.find(c => String(c.id) === String(classId));
-
-  // LOG TEMPORAL: comprova que troba la classe
-  console.log("classId rebut:", classId);
-  console.log("clases del dia:", clases);
-  console.log("classe trobada:", clase);
 
   if (!clase) {
     showToast("No se encontró la clase.", "error");
@@ -441,14 +348,13 @@ function openReservationModal(classId, dateKey) {
 
   document.getElementById("reservation-modal").classList.add("open");
 }
-/* Cierra el modal y limpia el estado pendiente */
+
 function closeModal() {
   document.getElementById("reservation-modal").classList.remove("open");
   pendingClass   = null;
   pendingDateKey = null;
 }
 
-/* Convierte "2026-04-14" a "14/04/2026" para mostrar en el modal */
 function formatDateKey(dateKey) {
   const [y, m, d] = dateKey.split("-");
   return `${d}/${m}/${y}`;
@@ -475,7 +381,6 @@ async function confirmReservation() {
     btnConfirm.textContent = "Reservando...";
   }
 
-  // Guardem referències locals abans de netejar l'estat
   const claseAReservar = pendingClass;
   const dateKeyReserva = pendingDateKey;
 
@@ -485,11 +390,9 @@ async function confirmReservation() {
       parseInt(claseAReservar.id)
     );
 
-    // Tanquem el modal SEMPRE abans de mostrar el toast
     closeModal();
 
     if (result.ok) {
-      // Guardem localment per refresc immediat de la UI
       addReservacioLocal(claseAReservar, dateKeyReserva);
       renderClasesDelDia();
       renderMisReservas();
@@ -510,7 +413,7 @@ async function confirmReservation() {
   }
 }
 
-/* ── localStorage: guardem localment per refresc immediat ── */
+/* ── localStorage ── */
 
 function loadAllReservas() {
   const user = Auth.getUser();
@@ -526,7 +429,7 @@ function saveAllReservas(reservas) {
 }
 
 function addReservacioLocal(clase, dateKey) {
-  const user    = Auth.getUser();
+  const user      = Auth.getUser();
   const reservaId = `${dateKey}_${clase.id}`;
   const nova = {
     reservaId,
@@ -539,7 +442,6 @@ function addReservacioLocal(clase, dateKey) {
     userEmail:  user.email
   };
   const totes = loadAllReservas();
-  // Evitem duplicats
   if (!totes.find(r => r.reservaId === reservaId)) {
     totes.push(nova);
     saveAllReservas(totes);
@@ -548,7 +450,7 @@ function addReservacioLocal(clase, dateKey) {
 
 function getReservasDelDia(dateKey, classId) {
   const totes = loadAllReservas();
-  return totes.filter(r => r.dateKey === dateKey && r.classId === classId).length;
+  return totes.filter(r => r.dateKey === dateKey && String(r.classId) === String(classId)).length;
 }
 
 function userHasReservation(reservaId) {
@@ -557,7 +459,6 @@ function userHasReservation(reservaId) {
 }
 
 async function cancelReservation(reservaId) {
-  // Per ara cancel·lem localment (pots afegir l'endpoint DELETE al backend)
   let totes = loadAllReservas();
   totes = totes.filter(r => r.reservaId !== reservaId);
   saveAllReservas(totes);
@@ -565,6 +466,7 @@ async function cancelReservation(reservaId) {
   renderMisReservas();
   showToast("Reserva cancelada correctamente.", "success");
 }
+
 /* =====================================================
    RENDER — Llista "Mis Reservas"
    ===================================================== */
@@ -574,7 +476,6 @@ function renderMisReservas() {
   if (!lista) return;
 
   const user = Auth.getUser();
-
   if (!Auth.isLoggedIn() || !user) {
     lista.innerHTML = `
       <p class="no-reservations">
@@ -583,16 +484,28 @@ function renderMisReservas() {
     return;
   }
 
-  const totes      = loadAllReservas();
-  const misReservas = totes.filter(r => r.userEmail === user.email);
+  const totes = loadAllReservas();
+  const avui  = toDateKey(
+    new Date().getFullYear(),
+    new Date().getMonth(),
+    new Date().getDate()
+  );
+
+  // ── Filtrem reserves passades i les eliminem del localStorage ──
+  const vigents = totes.filter(r => r.dateKey >= avui);
+
+  // Si hi ha reserves passades les eliminem del localStorage
+  if (vigents.length !== totes.length) {
+    saveAllReservas(vigents);
+  }
+
+  const misReservas = vigents.filter(r => r.userEmail === user.email);
 
   if (misReservas.length === 0) {
-    lista.innerHTML = `
-      <p class="no-reservations">No tienes ninguna reserva aún.</p>`;
+    lista.innerHTML = `<p class="no-reservations">No tienes ninguna reserva próxima.</p>`;
     return;
   }
 
-  // Ordena per data i hora
   misReservas.sort((a, b) => {
     if (a.dateKey !== b.dateKey) return a.dateKey.localeCompare(b.dateKey);
     return a.time.localeCompare(b.time);
@@ -621,7 +534,6 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   if (!document.getElementById("calendar-grid")) return;
 
-  // Mostrem un indicador de càrrega mentre esperem el backend
   const container = document.getElementById("act-classes-list");
   if (container) {
     container.innerHTML = `
@@ -630,27 +542,24 @@ document.addEventListener("DOMContentLoaded", async function () {
       </div>`;
   }
 
-  // Carreguem les classes des del backend
+  // Carreguem les classes del backend
   const classes = await ApiClasses.getAll();
   HORARIO_SEMANAL = construeixHorari(classes);
 
-  // Dibuixem el calendari i les classes del dia actual
+  // Renderitzem
   renderCalendar();
   updateSelectedDayInfo();
   renderClasesDelDia();
   renderMisReservas();
 
   // Delegació d'esdeveniments pels botons de reserva
-// Millor que onclick inline: funciona amb contingut generat dinàmicament
-document.getElementById("act-classes-list").addEventListener("click", function(e) {
-  const btn = e.target.closest(".btn-reservar.disponible");
-  if (!btn) return;
-  const classId = btn.dataset.classId;
-  const dateKey = btn.dataset.dateKey;
-  openReservationModal(classId, dateKey);
-});
+  document.getElementById("act-classes-list").addEventListener("click", function(e) {
+    const btn = e.target.closest(".btn-reservar.disponible");
+    if (!btn) return;
+    openReservationModal(btn.dataset.classId, btn.dataset.dateKey);
+  });
 
-  // Navegació del calendari
+  // Navegació del calendari — amb límit de 2 mesos
   document.getElementById("cal-prev").addEventListener("click", function () {
     calMonth--;
     if (calMonth < 0) { calMonth = 11; calYear--; }
@@ -658,6 +567,19 @@ document.getElementById("act-classes-list").addEventListener("click", function(e
   });
 
   document.getElementById("cal-next").addEventListener("click", function () {
+    // Calculem el mes màxim permès (2 mesos des d'avui)
+    const today    = new Date();
+    const maxYear  = today.getMonth() >= 10
+      ? today.getFullYear() + 1
+      : today.getFullYear();
+    const maxMonth = (today.getMonth() + 2) % 12;
+
+    // Bloquejem si ja estem al mes màxim
+    if (calYear === maxYear && calMonth === maxMonth) {
+      showToast("No puedes ver clases más allá de 2 meses.", "error");
+      return;
+    }
+
     calMonth++;
     if (calMonth > 11) { calMonth = 0; calYear++; }
     renderCalendar();
@@ -676,7 +598,9 @@ document.getElementById("act-classes-list").addEventListener("click", function(e
 
   // Modal
   document.getElementById("modal-cancel-btn").addEventListener("click", closeModal);
-  document.getElementById("modal-confirm-btn").addEventListener("click", confirmReservation);
+  document.getElementById("modal-confirm-btn").addEventListener("click", async function() {
+    await confirmReservation();
+  });
   document.getElementById("reservation-modal").addEventListener("click", function (e) {
     if (e.target === this) closeModal();
   });

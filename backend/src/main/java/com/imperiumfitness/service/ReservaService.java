@@ -45,15 +45,30 @@ public class ReservaService {
     }
 
     public ReservaDTO save(ReservaDTO dto) {
-        // Regla de negoci: un usuari no pot reservar dues vegades la mateixa classe
-        if (repo.existsByUsuariIdAndClasseId(dto.getUsuariId(), dto.getClasseId())) {
-            throw new ResponseStatusException(
-                    HttpStatus.CONFLICT, "L'usuari ja té una reserva per aquesta classe");
-        }
-        Reserva r = toEntity(dto);
-        r.setDataReserva(LocalDateTime.now()); // assignem la data automàticament
-        return toDTO(repo.save(r));
+
+    // Regla 1: límit de 5 reserves actives per usuari
+    long reservesActives = repo.countReservesFuturesByUsuari(
+            dto.getUsuariId(),
+            LocalDateTime.now()
+    );
+    if (reservesActives >= 5) {
+        throw new ResponseStatusException(
+                HttpStatus.CONFLICT,
+                "Has arribat al límit de 5 reserves actives simultànies");
     }
+
+    // Regla 2: duplicat (ja existent)
+    if (repo.existsByUsuariIdAndClasseId(
+            dto.getUsuariId(), dto.getClasseId())) {
+        throw new ResponseStatusException(
+                HttpStatus.CONFLICT,
+                "L'usuari ja té una reserva per aquesta classe");
+    }
+
+    Reserva r = toEntity(dto);
+    r.setDataReserva(LocalDateTime.now());
+    return toDTO(repo.save(r));
+}
 
     public void delete(Long id) {
         if (!repo.existsById(id))

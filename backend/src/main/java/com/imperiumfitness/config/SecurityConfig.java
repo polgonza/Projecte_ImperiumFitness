@@ -73,7 +73,10 @@ SecurityFilterChain filterChain(HttpSecurity http, JwtService jwtService) throws
         .requestMatchers(
                 "/", "/index.html", "/login.html",
                 "/*.css", "/*.js",
-                "/css/**", "/js/**", "/images/**"
+                "/css/**", "/js/**", "/images/**",
+                "/swagger-ui/**",
+                "/swagger-ui.html",
+                "/v3/api-docs/**"
         ).permitAll()
 
         // Endpoints públics
