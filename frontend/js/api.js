@@ -4,8 +4,12 @@
    BASE_URL apunta al backend local (canvia en producció)
    ===================================================== */
 
-const API_BASE = (window.location.hostname === "localhost" && 
-                  document.title.includes("local"))  
+/* ── Configuració de l'entorn ───────────────────────────
+   IS_LOCAL_BACKEND = true  → backend al teu ordinador (mvn spring-boot:run)
+   IS_LOCAL_BACKEND = false → backend al servidor (ZeroTier)                */
+const IS_LOCAL_BACKEND = true; // ← canvia segons on treballs
+
+const API_BASE = IS_LOCAL_BACKEND
   ? "http://localhost:8084"
   : "http://10.147.17.250:8086";
 
@@ -137,7 +141,6 @@ const ApiClasses = {
     } catch (e) { return []; }
   },
 
-  /* Reservar una classe */
   async reservar(usuariId, classeId) {
   try {
     const res = await apiFetch("/api/reserves", {
@@ -145,9 +148,17 @@ const ApiClasses = {
       body: JSON.stringify({ usuariId, classeId })
     });
 
-
     if (res && res.status === 201) return { ok: true };
-    if (res && res.status === 409) return { ok: false, error: "Ya tienes una reserva para esta clase." };
+    if (res && res.status === 409) {
+      // Llegim el missatge d'error del backend
+      const data = await res.json().catch(() => ({}));
+      const msg  = data.detail || data.message || "No se pudo completar la reserva.";
+      // Traduïm els missatges del backend
+      if (msg.includes("límit") || msg.includes("limit")) {
+        return { ok: false, error: "Has alcanzado el límite de 5 reservas activas." };
+      }
+      return { ok: false, error: "Ya tienes una reserva para esta clase." };
+    }
     return { ok: false, error: "No se pudo completar la reserva." };
 
   } catch (e) {
