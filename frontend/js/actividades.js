@@ -356,11 +356,20 @@ function closeModal() {
 }
 
 function formatDateKey(dateKey) {
-  const [y, m, d] = dateKey.split("-");
+  if (!dateKey) return "—";
+
+  // Format amb guions: "2026-04-21" → "21/04/2026"
+  if (dateKey.includes("-")) {
+    const [y, m, d] = dateKey.split("-");
+    return `${d}/${m}/${y}`;
+  }
+
+  // Format sense guions: "20260421" → "21/04/2026"
+  const y = dateKey.substring(0, 4);
+  const m = dateKey.substring(4, 6);
+  const d = dateKey.substring(6, 8);
   return `${d}/${m}/${y}`;
 }
-
-
 /* =====================================================
    6. SISTEMA DE RESERVES — connectat al backend real
    ===================================================== */
@@ -525,6 +534,74 @@ function renderMisReservas() {
     </div>
   `).join("");
 }
+async function sincronitzaReserves() {
+  const user = Auth.getUser();
+  if (!user || !Auth.isLoggedIn()) return;
+
+  try {
+    const reserves = await ApiUsuari.getReserves(user.id);
+    if (!reserves || reserves.length === 0) return;
+
+    const totes = loadAllReservas();
+
+    reserves.forEach(r => {
+      // ✅ Format correcte: "2026-04-21" (amb guions, com toDateKey())
+      let dateKey;
+      if (r.dataReserva) {
+        dateKey = r.dataReserva.substring(0, 10); // "2026-04-21"
+      } else {
+        const ara = new Date();
+        dateKey = toDateKey(ara.getFullYear(), ara.getMonth(), ara.getDate());
+      }
+
+      const reservaId = `${dateKey}_${r.classeId}`;
+
+      if (!totes.find(x => x.reservaId === reservaId)) {
+        totes.push({
+          reservaId,
+          classId:    String(r.classeId),
+          dateKey,
+          className:  `Clase #${r.classeId}`,
+          category:   "funcional",
+          time:       "—",
+          instructor: "—",
+          userEmail:  user.email
+        });
+      }
+    });
+
+    saveAllReservas(totes);
+    milloraNomsReserves();
+
+  } catch (e) {
+    console.error("Error sincronitzant reserves:", e);
+  }
+}
+
+function milloraNomsReserves() {
+  const user = Auth.getUser();
+  if (!user) return;
+
+  const totes = loadAllReservas();
+  let modificat = false;
+
+  totes.forEach(r => {
+    if (r.className && r.className.startsWith("Clase #")) {
+      Object.values(HORARIO_SEMANAL).forEach(classes => {
+        const classe = classes.find(c => String(c.id) === String(r.classId));
+        if (classe) {
+          r.className  = classe.name;
+          r.category   = classe.category;
+          r.time       = classe.time;
+          r.instructor = classe.instructor;
+          modificat    = true;
+        }
+      });
+    }
+  });
+
+  if (modificat) saveAllReservas(totes);
+}
 
 /* =====================================================
    7. ARRANQUE — càrrega asíncrona des del backend
@@ -545,6 +622,10 @@ document.addEventListener("DOMContentLoaded", async function () {
   // Carreguem les classes del backend
   const classes = await ApiClasses.getAll();
   HORARIO_SEMANAL = construeixHorari(classes);
+
+  // Sincronitzem les reserves de la BD amb el localStorage
+  // Això evita que el botó mostri "Reservar" quan ja tens la classe reservada
+  await sincronitzaReserves();
 
   // Renderitzem
   renderCalendar();
