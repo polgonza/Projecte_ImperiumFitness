@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import java.time.Duration;
+import com.imperiumfitness.repository.UsuariRepository;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -18,11 +20,15 @@ public class AuthController {
 
     private final AuthService authService;
     private final PasswordEncoder passwordEncoder; // afegim això
+    private final UsuariRepository usuariRepository;
 
-    public AuthController(AuthService authService, PasswordEncoder passwordEncoder) {
-        this.authService = authService;
-        this.passwordEncoder = passwordEncoder;
-    }
+public AuthController(AuthService authService, 
+                      PasswordEncoder passwordEncoder,
+                      UsuariRepository usuariRepository) {
+    this.authService = authService;
+    this.passwordEncoder = passwordEncoder;
+    this.usuariRepository = usuariRepository;
+}
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest req) {
@@ -70,4 +76,16 @@ public ResponseEntity<LoginResponse> registre(@RequestBody RegistreRequest req) 
     public String generaHash(@RequestParam String password) {
         return passwordEncoder.encode(password);
     }
+
+// Simulació de reset de contrasenya
+// Comprova que l'email existeix però no envia res
+@PostMapping("/recover")
+public ResponseEntity<Void> recover(@RequestBody Map<String, String> body) {
+    String email = body.get("email");
+    
+    // Sempre retornem 200 per seguretat
+    // (no revelem si l'email existeix o no)
+    usuariRepository.findByEmail(email); // comprovem però no fem res
+    return ResponseEntity.ok().build();
+}
 }

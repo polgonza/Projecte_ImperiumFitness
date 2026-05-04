@@ -1,0 +1,1162 @@
+/* =====================================================
+   componentes.css — Tarjetas y componentes reutilizables
+   service-card, products, plans, blog, perfil, etc.
+   Se carga en: index, tarifas, tienda, actividades,
+                instalaciones, blog, perfil, ocupacion.
+   ===================================================== */
+
+/* --- Cards de servicios (index) --- */
+/* --- Cards de servicios (con imagen de fondo + overlay) --- */
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.5rem;
+}
+
+/*
+  La tarjeta es un bloque con imagen de fondo.
+  La imagen se pone con style="background-image:url(...)" en el HTML.
+  Encima va un overlay oscuro con rgba para que el texto sea legible.
+*/
+.service-card {
+  position: relative;
+  border-radius: 14px;
+  overflow: hidden;           /* La imagen no se sale del borde */
+  height: 260px;              /* Altura fija para todas las tarjetas */
+  display: flex;
+  align-items: flex-end;      /* El texto queda en la parte inferior */
+  transition: transform 0.35s, box-shadow 0.35s;
+  cursor: default;
+}
+
+.service-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.5);
+}
+
+/* Imagen de fondo: ocupa toda la tarjeta */
+.service-card-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.5s;   /* Zoom suave al hacer hover */
+}
+.service-card:hover .service-card-bg {
+  transform: scale(1.07);
+}
+
+/* Overlay oscuro con gradiente de abajo hacia arriba:
+   - Arriba: semitransparente
+   - Abajo: casi negro (para leer el texto) */
+.service-card-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.85) 0%,
+    rgba(0, 0, 0, 0.35) 55%,
+    rgba(0, 0, 0, 0.10) 100%
+  );
+  transition: background 0.35s;
+}
+.service-card:hover .service-card-overlay {
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.90) 0%,
+    rgba(0, 0, 0, 0.50) 60%,
+    rgba(0, 0, 0, 0.15) 100%
+  );
+}
+
+/* Texto sobre el overlay */
+.service-card-text {
+  position: relative;   /* z-index > overlay */
+  z-index: 1;
+  padding: 1.5rem;
+  width: 100%;
+}
+
+/* Línea dorada pequeña encima del título */
+.service-card-text::before {
+  content: '';
+  display: block;
+  width: 32px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary), var(--primary-light));
+  border-radius: 2px;
+  margin-bottom: 0.6rem;
+}
+
+.service-card h3 {
+  font-size: 1.05rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #fff;
+  margin-bottom: 0.4rem;
+}
+
+.service-card p {
+  font-size: 0.82rem;
+  color: rgba(255,255,255,0.75);
+  line-height: 1.5;
+}
+
+
+/* --- Ocupación CTA banner (index) --- */
+/* --- Ocupación CTA banner --- */
+.occupancy-banner {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 3rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.occupancy-banner::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+}
+
+.live-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--success);
+  margin-bottom: 1rem;
+}
+
+.live-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--success);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(0.9); }
+}
+
+.occupancy-banner h2 {
+  font-size: clamp(1.5rem, 3vw, 2.5rem);
+  font-weight: 800;
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+}
+
+.occupancy-banner p {
+  color: var(--text-muted);
+  margin-bottom: 2rem;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+
+/* --- Productos grid --- */
+/* --- Productos grid --- */
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1.5rem;
+}
+
+.product-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+  transition: transform 0.35s, border-color 0.35s, box-shadow 0.35s;
+  display: flex;
+  flex-direction: column;
+}
+
+.product-card:hover {
+  transform: translateY(-6px);
+  border-color: var(--primary);
+  box-shadow: 0 12px 32px rgba(201, 162, 39, 0.12);
+}
+
+/* Contenedor de imagen: proporción 4/3 */
+.product-img {
+  aspect-ratio: 3 / 4;
+  height: auto;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Imagen real: ocupa todo el contenedor sin deformarse */
+.product-img img {
+  position: absolute;
+  inset: 0;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain;
+  display: block;
+  transition: transform 0.45s ease;
+}
+
+.product-card:hover .product-img img {
+  transform: scale(1.06);
+}
+
+.product-badge {
+  position: absolute;
+  top: 0.75rem;
+  left: 0.75rem;
+  background: var(--primary);
+  color: #000;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 0.25rem 0.6rem;
+  border-radius: 3px;
+}
+
+.product-info {
+  padding: 1.1rem 1.1rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;                /* ocupa el espacio restante de la card */
+}
+
+.product-category {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--primary);
+}
+
+.product-name {
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin: 0.25rem 0 0.5rem;
+}
+
+.product-price {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.price-current {
+  font-size: 1.1rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.price-old {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  text-decoration: line-through;
+}
+
+
+/* --- Formulario de contacto --- */
+/* --- Formulario de contacto rápido --- */
+.contact-form-box {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 2rem;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.input-field, .textarea-field {
+  width: 100%;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.85rem 1rem;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 0.3s;
+  margin-bottom: 1rem;
+}
+
+.input-field:focus, .textarea-field:focus {
+  border-color: var(--primary);
+}
+
+.input-field::placeholder, .textarea-field::placeholder {
+  color: var(--text-muted);
+}
+
+.textarea-field { resize: none; }
+
+/* Grupo de input con label */
+.field-group {
+  margin-bottom: 1rem;
+}
+.field-group label {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: 0.4rem;
+}
+.field-group .input-field,
+.field-group .textarea-field {
+  margin-bottom: 0;
+}
+
+/* Mensaje de error en formularios */
+.field-error {
+  font-size: 0.75rem;
+  color: var(--danger);
+  margin-top: 0.3rem;
+  display: none;
+}
+.field-group.error .field-error { display: block; }
+.field-group.error .input-field,
+.field-group.error .textarea-field {
+  border-color: var(--danger);
+}
+
+
+/* --- Sección App Download (index) --- */
+/* --- Sección App Download --- */
+.app-section {
+  display: flex;
+  align-items: center;
+  gap: 4rem;
+  flex-wrap: wrap;
+}
+
+.app-text { flex: 1; min-width: 280px; }
+.app-text .tag {
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--primary);
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.app-text h2 {
+  font-size: clamp(1.8rem, 3vw, 2.8rem);
+  font-weight: 800;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+.app-text p { color: var(--text-muted); margin-bottom: 2rem; }
+
+.app-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+.app-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.75rem 1.25rem;
+  cursor: pointer;
+  transition: border-color 0.3s;
+}
+.app-btn:hover { border-color: var(--primary); }
+
+.app-btn .icon { font-size: 1.5rem; }
+
+.app-btn .store-text {
+  text-align: left;
+  line-height: 1.2;
+}
+.app-btn .store-text small {
+  display: block;
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+.app-btn .store-text strong {
+  font-size: 0.9rem;
+  color: var(--text);
+}
+
+/* Mockup de teléfono */
+.phone-mockup {
+  width: 220px;
+  height: 420px;
+  background: var(--bg-secondary);
+  border-radius: 40px;
+  border: 3px solid var(--border);
+  padding: 10px;
+  flex-shrink: 0;
+}
+
+.phone-screen {
+  width: 100%;
+  height: 100%;
+  background: var(--bg-card);
+  border-radius: 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  font-size: 2.5rem;
+}
+
+.phone-screen .phone-logo {
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+
+.phone-screen .phone-label {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+
+/* --- CTA dorado final (index) --- */
+/* --- CTA dorado final --- */
+.cta-gold {
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  border-radius: 16px;
+  padding: 4rem 2rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-gold h2 {
+  font-size: clamp(1.8rem, 4vw, 3.5rem);
+  font-weight: 900;
+  text-transform: uppercase;
+  color: #000;
+  margin-bottom: 1rem;
+}
+
+.cta-gold p {
+  color: rgba(0,0,0,0.7);
+  max-width: 500px;
+  margin: 0 auto 2rem;
+  font-size: 1rem;
+}
+
+.cta-gold .btn {
+  background: #000;
+  color: var(--text);
+}
+.cta-gold .btn:hover {
+  background: var(--bg-secondary);
+  color: var(--text);
+}
+
+
+/* --- Tarifas / Planes --- */
+/* --- Tarifas --- */
+.plans-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.plan-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: visible;       /* permite que el badge sobresalga */
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s;
+  position: relative;
+  margin-top: 1.2rem;      /* espacio para el badge superior */
+}
+
+.plan-card:hover { transform: translateY(-4px); }
+
+.plan-card.popular {
+  border: 2px solid var(--primary);
+  box-shadow: 0 0 30px rgba(201,162,39,0.15);
+  transform: scale(1.02);
+}
+.plan-card.popular:hover { transform: scale(1.02) translateY(-4px); }
+
+.popular-badge {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  color: #000;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0.28rem 0.9rem;
+  border-radius: 50px;
+  white-space: nowrap;
+  z-index: 2;
+  max-width: calc(100% - 2rem);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.plan-header {
+  padding: 2rem;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+}
+
+.plan-name {
+  font-size: 1.2rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 1rem;
+}
+
+.plan-price {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.25rem;
+}
+
+.plan-price .amount {
+  font-size: 3rem;
+  font-weight: 900;
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.plan-price .period { color: var(--text-muted); font-size: 0.9rem; }
+
+.plan-features {
+  padding: 1.5rem 2rem;
+  flex: 1;
+  list-style: none;
+}
+
+.plan-features li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  font-size: 0.85rem;
+  margin-bottom: 0.75rem;
+  line-height: 1.4;
+}
+
+.plan-features li .check {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: rgba(34,197,94,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  flex-shrink: 0;
+  margin-top: 1px;
+  color: var(--success);
+}
+
+.plan-features li.excluded {
+  color: var(--text-muted);
+  opacity: 0.5;
+}
+.plan-features li.excluded .check {
+  background: var(--bg-secondary);
+  color: var(--text-muted);
+}
+
+.plan-footer {
+  padding: 1rem 2rem 2rem;
+}
+
+
+/* --- Contacto página --- */
+/* --- Contacto página --- */
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2.5rem;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.contact-info-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.contact-info-card h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 1rem;
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 0.75rem;
+}
+
+.contact-item .icon {
+  font-size: 1rem;
+  color: var(--primary);
+  flex-shrink: 0;
+}
+
+.gym-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.gym-item .icon { color: var(--primary); flex-shrink: 0; margin-top: 2px; }
+
+.gym-item .gym-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  display: block;
+}
+.gym-item .gym-address {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+
+/* --- Ocupación (página) --- */
+/* --- Ocupación (página) --- */
+.gym-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.gym-occupancy-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.gym-occupancy-card h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: 0.25rem;
+}
+
+.gym-address {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+}
+
+.occupancy-bar-wrap {
+  position: relative;
+  height: 8px;
+  background: var(--bg-secondary);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+}
+
+.occupancy-bar {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 1s ease;
+}
+
+.occupancy-bar.low    { background: var(--success); }
+.occupancy-bar.medium { background: var(--warning); }
+.occupancy-bar.high   { background: var(--danger); }
+
+.occupancy-stats {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.occupancy-stats .pct {
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+.pct.low    { color: var(--success); }
+.pct.medium { color: var(--warning); }
+.pct.high   { color: var(--danger); }
+
+
+/* --- Actividades: filtros y cards de clase --- */
+/* --- Actividades (página) --- */
+.filter-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+.filter-tab {
+  padding: 0.5rem 1.25rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 50px;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-family: inherit;
+}
+.filter-tab:hover,
+.filter-tab.active {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: rgba(201,162,39,0.1);
+}
+
+.classes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.25rem;
+}
+
+.class-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  transition: transform 0.3s, border-color 0.3s;
+}
+
+.class-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--primary);
+}
+
+.class-meta {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.class-tag {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 0.2rem 0.6rem;
+  border-radius: 50px;
+  background: rgba(201,162,39,0.1);
+  color: var(--primary);
+}
+
+.class-card h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+.class-trainer {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: 0.75rem;
+}
+
+.class-details {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+}
+
+.class-spots {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  margin-bottom: 1rem;
+}
+
+.spots-bar-wrap {
+  flex: 1;
+  height: 4px;
+  background: var(--bg-secondary);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.spots-bar {
+  height: 100%;
+  background: var(--primary);
+  border-radius: 2px;
+}
+
+
+/* --- Instalaciones --- */
+/* --- Instalaciones --- */
+.facilities-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+/* --- Instalaciones --- */
+
+/*
+  Cada facility-card tiene imagen de fondo.
+  La imagen se asigna por JS o por clase CSS (ver abajo).
+  Overlay oscuro garantiza legibilidad del texto.
+*/
+.facility-card {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  min-height: 280px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;  /* texto en la parte baja */
+  border: 1px solid var(--border);
+  transition: transform 0.35s, box-shadow 0.35s;
+  cursor: default;
+}
+
+.facility-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.55);
+}
+
+/* Imagen de fondo: zoom suave en hover */
+.facility-card-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.5s ease;
+  z-index: 0;
+}
+
+.facility-card:hover .facility-card-bg {
+  transform: scale(1.07);
+}
+
+/* Overlay: degradado de abajo hacia arriba para leer el texto */
+.facility-card-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.88) 0%,
+    rgba(0, 0, 0, 0.45) 50%,
+    rgba(0, 0, 0, 0.12) 100%
+  );
+  z-index: 1;
+  transition: background 0.35s;
+}
+
+.facility-card:hover .facility-card-overlay {
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.92) 0%,
+    rgba(0, 0, 0, 0.55) 60%,
+    rgba(0, 0, 0, 0.18) 100%
+  );
+}
+
+/* Texto encima del overlay */
+.facility-card-text {
+  position: relative;
+  z-index: 2;
+  padding: 1.5rem;
+}
+
+/* Línea dorada decorativa encima del título */
+.facility-card-text::before {
+  content: '';
+  display: block;
+  width: 30px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary), var(--primary-light));
+  border-radius: 2px;
+  margin-bottom: 0.6rem;
+}
+
+.facility-card h3 {
+  font-size: 1.1rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #fff;
+  margin-bottom: 0.4rem;
+}
+
+.facility-card p {
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.78);
+  line-height: 1.55;
+}
+
+/* Oculta el emoji antiguo (.facility-icon) — JS lo sigue generando
+   pero lo escondemos con CSS sin tocar el JS */
+.facility-icon {
+  display: none;
+}
+
+
+/* --- Blog --- */
+/* --- Blog --- */
+.blog-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.blog-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform 0.3s, border-color 0.3s;
+}
+.blog-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--primary);
+}
+
+.blog-img {
+  height: 140px;
+  background: var(--bg-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+}
+
+.blog-body { padding: 1.5rem; }
+
+.blog-category {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--primary);
+  margin-bottom: 0.5rem;
+}
+
+.blog-card h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  line-height: 1.4;
+}
+
+.blog-card p {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+  line-height: 1.5;
+}
+
+.blog-meta {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+
+/* --- Tienda --- */
+/* --- Tienda --- */
+.shop-filter {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+
+
+/* --- Perfil de usuario --- */
+/* --- Perfil de usuario --- */
+.profile-grid {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+.profile-sidebar {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 2rem;
+  text-align: center;
+}
+
+.profile-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #000;
+  margin: 0 auto 1rem;
+}
+
+.profile-name {
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: 0.25rem;
+}
+
+.profile-plan {
+  font-size: 0.8rem;
+  color: var(--primary);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 1.5rem;
+}
+
+.profile-stat {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.6rem 0;
+  border-top: 1px solid var(--border);
+  font-size: 0.82rem;
+}
+
+.profile-stat span:first-child { color: var(--text-muted); }
+.profile-stat span:last-child { font-weight: 600; }
+
+.profile-tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.profile-tab {
+  padding: 0.5rem 1.25rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-family: inherit;
+}
+.profile-tab:hover,
+.profile-tab.active {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: rgba(201,162,39,0.1);
+}
+
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+.reservations-list, .purchases-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.reservation-item, .purchase-item {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.reservation-item h4, .purchase-item h4 {
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 0.2rem;
+}
+
+.reservation-item p, .purchase-item p {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.status-badge {
+  padding: 0.25rem 0.7rem;
+  border-radius: 50px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.status-badge.confirmed {
+  background: rgba(34,197,94,0.1);
+  color: var(--success);
+}
+.status-badge.completed {
+  background: var(--bg-card);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+}
+.status-badge.delivered {
+  background: rgba(34,197,94,0.1);
+  color: var(--success);
+}
+
+/* Sección bg-secondary alterna */
+.bg-alt { background: rgba(17,17,17,0.5); }
+

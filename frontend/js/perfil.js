@@ -76,6 +76,9 @@ async function renderReservationsInProfile() {
   const lista = document.getElementById("reservations-list");
   if (!lista) return;
 
+  const user = Auth.getUser();
+  if (!user) return;
+
   lista.innerHTML = `
     <p style="color:var(--text-muted);text-align:center;padding:2rem">
       ⏳ Cargando reservas...
@@ -101,6 +104,36 @@ async function renderReservationsInProfile() {
   // Per cada reserva, obtenim el nom de la classe
   const classesCache = {};
   const reservesAmbNom = await Promise.all(reserves.map(async r => {
+  // ── Filtrem reserves futures o d'avui ───────────────
+  const ara = new Date();
+  ara.setHours(0, 0, 0, 0); // Comencem des de l'inici d'avui
+
+  const reservesFutures = reserves.filter(r => {
+    if (!r.dataReserva) return true;
+    const dataReserva = new Date(r.dataReserva);
+    dataReserva.setHours(0, 0, 0, 0);
+    return dataReserva >= ara; // Mostrem avui i futures
+  });
+
+  if (reservesFutures.length === 0) {
+    lista.innerHTML = `
+      <p style="color:var(--text-muted);text-align:center;padding:2rem">
+        No tienes reservas próximas.<br>
+        <a href="actividades.html" style="color:var(--primary)">
+          Reservar una clase
+        </a>
+      </p>`;
+    return;
+  }
+
+  // Ordenem de més pròxima a més llunyana
+  reservesFutures.sort((a, b) =>
+    new Date(a.dataReserva) - new Date(b.dataReserva)
+  );
+
+  const classesCache = {};
+
+  lista.innerHTML = await Promise.all(reservesFutures.map(async r => {
     let nomClasse = `Clase #${r.classeId}`;
     try {
       if (!classesCache[r.classeId]) {
@@ -124,8 +157,6 @@ async function renderReservationsInProfile() {
   // HTML generado en render.js
   renderReservasPerfil(reservesAmbNom);
 }
-
-
 /* =====================================================
    3. TAB PEDIDOS — vendes reals del backend
    ===================================================== */

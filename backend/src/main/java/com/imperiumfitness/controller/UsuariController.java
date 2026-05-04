@@ -19,8 +19,12 @@ import com.imperiumfitness.service.UsuariService;
 @RequestMapping("/api/usuaris")
 public class UsuariController {
 
-    @Autowired
-    private UsuariService service;
+    private final UsuariService service;
+
+    // ✅ Injecció per constructor (millor pràctica)
+    public UsuariController(UsuariService service) {
+        this.service = service;
+    }
 
     @GetMapping
     public ResponseEntity<List<UsuariDTO>> getAll() {
@@ -43,7 +47,7 @@ public class UsuariController {
         return ResponseEntity.noContent().build();
     }
 
-    // Endpoint específic per al perfil — accessible per USER i ADMIN
+    // Endpoint de perfil accessible per USER i ADMIN
     @GetMapping("/perfil/{id}")
     public ResponseEntity<UsuariDTO> getPerfil(@PathVariable Long id) {
         return ResponseEntity.ok(service.getById(id));
