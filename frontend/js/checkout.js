@@ -19,55 +19,10 @@
 /*
   renderOrderSummary() — lee el carrito y pinta las líneas
   de productos en la columna derecha del checkout.
+  HTML generado en render.js → renderResumenPedido()
 */
 function renderOrderSummary() {
-  const summaryItems    = document.getElementById("summary-items");
-  const summarySubtotal = document.getElementById("summary-subtotal");
-  const summaryDiscount = document.getElementById("summary-discount");
-  const summaryDiscountRow = document.getElementById("summary-discount-row");
-  const summaryTotal    = document.getElementById("summary-total");
-
-  if (!summaryItems) return;
-
-  const carrito = getCarrito();
-
-  if (carrito.length === 0) {
-    showToast("Tu carrito está vacío. Añade productos primero.", "error");
-    setTimeout(function() { window.location.href = "tienda.html"; }, 1500);
-    return;
-  }
-
-  // Dibuja cada línea
-  summaryItems.innerHTML = carrito.map(function(item) {
-    return `
-      <div class="summary-item">
-        <div>
-          <div class="s-name">${item.name}</div>
-          <div class="s-qty">x${item.quantity}</div>
-        </div>
-        <div class="s-price">${(item.price * item.quantity).toFixed(2)} €</div>
-      </div>
-    `;
-  }).join("");
-
-  // Totales con descuento
-  const subtotal   = getCarritoTotal();
-  const descuento  = getCarritoDescuento();
-  const totalFinal = getCarritoTotalFinal();
-
-  summarySubtotal.textContent = subtotal.toFixed(2) + " €";
-
-  // Muestra la fila de descuento solo si hay descuento
-  if (summaryDiscountRow) {
-    if (descuento > 0) {
-      summaryDiscountRow.style.display = "";
-      if (summaryDiscount) summaryDiscount.textContent = "− " + descuento.toFixed(2) + " €";
-    } else {
-      summaryDiscountRow.style.display = "none";
-    }
-  }
-
-  summaryTotal.textContent = totalFinal.toFixed(2) + " €";
+  renderResumenPedido();
 }
 
 

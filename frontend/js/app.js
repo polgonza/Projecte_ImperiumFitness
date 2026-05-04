@@ -238,47 +238,9 @@ function initNavbar() {
 }
 
 function updateNavbarUser() {
-  const user       = Auth.getUser();
-  const loggedIn   = Auth.isLoggedIn();
-  const navUserArea  = document.getElementById("nav-user-area");
-  const navMobileUser = document.getElementById("nav-mobile-user");
-
-  if (!navUserArea) return;
-
-  if (loggedIn && user) {
-    // Mostrem el nom i botó de logout
-    const inicial = user.name ? user.name.charAt(0).toUpperCase() : "?";
-    const prenom  = user.name ? user.name.split(" ")[0] : "Usuario";
-
-    navUserArea.innerHTML = `
-      <a href="perfil.html" class="btn-user">
-        <div class="avatar">${inicial}</div>
-        ${prenom}
-      </a>
-      <button onclick="Auth.logout()" class="btn btn-secondary"
-              style="padding:0.4rem 0.9rem;font-size:0.75rem">
-        Salir
-      </button>
-    `;
-    if (navMobileUser) {
-      navMobileUser.innerHTML = `
-        <a href="perfil.html">Mi Perfil</a>
-        <button onclick="Auth.logout()">Cerrar Sesión</button>
-      `;
-    }
-  } else {
-    navUserArea.innerHTML = `
-      <a href="login.html" class="btn-user">👤 Iniciar sesión</a>
-      <a href="tarifas.html" class="btn btn-primary"
-         style="padding:0.45rem 1.25rem;font-size:0.75rem">Únete</a>
-    `;
-    if (navMobileUser) {
-      navMobileUser.innerHTML = `
-        <a href="login.html">Iniciar Sesión</a>
-        <a href="register.html">Registrarse</a>
-      `;
-    }
-  }
+  // La lógica de render está en render.js
+  // Esta función se mantiene para compatibilidad con llamadas existentes
+  renderNavbarUser();
 }
 
 
@@ -287,50 +249,9 @@ function updateNavbarUser() {
 //    Genera HTML dinámico desde los datos
 // =====================================================
 
-// Renderiza los planes de tarifas
+// Renderiza los planes de tarifas — HTML generado en render.js
 function renderPlans(containerId) {
-  const container = document.getElementById(containerId);
-  if (!container) return;
-
-  const user = Auth.getUser();
-  const userPlan = user ? user.plan : null;
-
-  container.innerHTML = PLANS.map(plan => {
-    const isCurrent = userPlan && userPlan === plan.name;
-
-    return `
-    <div class="plan-card ${plan.popular ? "popular" : ""}">
-      ${plan.popular ? '<div class="popular-badge">⭐ Más Popular</div>' : ""}
-      ${isCurrent ? '<div class="popular-badge" style="background:var(--success)">✓ Plan Actual</div>' : ""}
-      <div class="plan-header">
-        <div class="plan-name">${plan.name}</div>
-        <div class="plan-price">
-          <span class="amount">${plan.price}€</span>
-          <span class="period">/${plan.period}</span>
-        </div>
-      </div>
-      <ul class="plan-features">
-        ${plan.features.map(f => `
-          <li>
-            <span class="check">✓</span>
-            <span>${f}</span>
-          </li>
-        `).join("")}
-        ${plan.notIncluded.map(f => `
-          <li class="excluded">
-            <span class="check">✗</span>
-            <span>${f}</span>
-          </li>
-        `).join("")}
-      </ul>
-      <div class="plan-footer">
-        <button class="btn btn-${plan.popular ? "primary" : "secondary"}" style="width:100%;justify-content:center"
-          onclick="buyPlan('${plan.name}', ${plan.price})">
-          ${isCurrent ? "Plan Actual" : plan.cta}
-        </button>
-      </div>
-    </div>
-  `}).join("");
+  renderPlanes(containerId);
 }
 
 // Añade el plan elegido al carrito como producto especial y va al checkout
@@ -355,73 +276,14 @@ function buyPlan(planName, planPrice) {
   window.location.href = "checkout.html";
 }
 
-// Renderiza los gimnasios con su ocupación
+// Renderiza los gimnasios con su ocupación — HTML generado en render.js
 function renderGymOccupancy(containerId) {
-  const container = document.getElementById(containerId);
-  if (!container) return;
-
-  container.innerHTML = GYMS.map(gym => {
-    const pct = Math.round((gym.current / gym.capacity) * 100);
-    const level = pct < 40 ? "low" : pct < 70 ? "medium" : "high";
-    const label = pct < 40 ? "Poca afluencia" : pct < 70 ? "Afluencia media" : "Mucha afluencia";
-
-    return `
-      <div class="gym-occupancy-card">
-        <h3>${gym.name}</h3>
-        <p class="gym-address">📍 ${gym.location}</p>
-        <div class="occupancy-bar-wrap">
-          <div class="occupancy-bar ${level}" style="width:${pct}%"></div>
-        </div>
-        <div class="occupancy-stats">
-          <span>${gym.current} / ${gym.capacity} personas · ${label}</span>
-          <span class="pct ${level}">${pct}%</span>
-        </div>
-      </div>
-    `;
-  }).join("");
+  renderOcupacion(containerId);
 }
 
-// Renderiza las clases con filtro de categoría
+// Renderiza las clases con filtro de categoría — HTML generado en render.js
 function renderClasses(containerId, filter = "all") {
-  const container = document.getElementById(containerId);
-  if (!container) return;
-
-  const filtered = filter === "all"
-    ? CLASSES
-    : CLASSES.filter(c => c.category === filter);
-
-  container.innerHTML = filtered.map(cls => {
-    const pct = Math.round((cls.booked / cls.spots) * 100);
-    const available = cls.spots - cls.booked;
-    return `
-      <div class="class-card">
-        <div class="class-meta">
-          <span class="class-tag">${cls.category}</span>
-          <span class="class-tag" style="background:rgba(255,255,255,0.05);color:var(--text-muted)">${cls.day}</span>
-        </div>
-        <h3>${cls.name}</h3>
-        <p class="class-trainer">👤 ${cls.trainer}</p>
-        <div class="class-details">
-          <span>🕐 ${cls.time}</span>
-          <span>⏱ ${cls.duration}</span>
-        </div>
-        <div class="class-spots">
-          <div class="spots-bar-wrap">
-            <div class="spots-bar" style="width:${pct}%"></div>
-          </div>
-          <span style="font-size:0.8rem;color:var(--text-muted);white-space:nowrap">${available} plazas</span>
-        </div>
-        <button class="btn btn-${available > 0 ? "outline" : "secondary"}" style="width:100%;justify-content:center;padding:0.6rem"
-          onclick="${available > 0 ? `reserveClass('${cls.name}')` : "void(0)"}">
-          ${available > 0 ? "Reservar" : "Completo"}
-        </button>
-      </div>
-    `;
-  }).join("");
-
-  if (filtered.length === 0) {
-    container.innerHTML = `<p style="color:var(--text-muted);text-align:center;grid-column:1/-1;padding:3rem">No hay clases disponibles para este filtro.</p>`;
-  }
+  renderClases(containerId, filter);
 }
 
 function reserveClass(name) {
@@ -440,130 +302,33 @@ function reserveClass(name) {
   showToast(`¡Reserva de "${name}" confirmada! 🎉`, "success");
 }
 
-// Muestra un mensaje de aviso cuando no hay tarifa activa
+// Muestra un mensaje de aviso cuando no hay tarifa activa — HTML en render.js
 function showNoPlantAlert() {
-  // Busca si ya existe el aviso (evita duplicados)
-  if (document.getElementById("no-plan-alert")) return;
-
-  const alert = document.createElement("div");
-  alert.id = "no-plan-alert";
-  alert.style.cssText = `
-    position:fixed; bottom:5rem; left:50%; transform:translateX(-50%);
-    background:var(--bg-card); border:1px solid var(--primary);
-    border-radius:12px; padding:1.25rem 1.5rem; max-width:360px; width:90%;
-    box-shadow:0 8px 32px rgba(0,0,0,0.4); z-index:9999; text-align:center;
-  `;
-  alert.innerHTML = `
-    <p style="margin:0 0 1rem;color:var(--text-primary);font-size:0.9rem">
-      ⚠️ <strong>Necesitas tener una tarifa activa</strong> para reservar clases.
-    </p>
-    <div style="display:flex;gap:0.75rem;justify-content:center">
-      <a href="tarifas.html" class="btn btn-primary" style="padding:0.5rem 1.25rem;font-size:0.8rem">
-        Ver Tarifas
-      </a>
-      <button onclick="document.getElementById('no-plan-alert').remove()"
-              class="btn btn-secondary" style="padding:0.5rem 1rem;font-size:0.8rem">
-        Cerrar
-      </button>
-    </div>
-  `;
-  document.body.appendChild(alert);
-  // Se elimina automáticamente a los 6 segundos
-  setTimeout(() => alert.remove(), 6000);
+  renderAlertaSinPlan();
 }
 
-// Renderiza los productos
+// Renderiza los productos — HTML generado en render.js
 function renderProducts(containerId, filter = "all") {
-  const container = document.getElementById(containerId);
-  if (!container) return;
-
-  const filtered = filter === "all"
-    ? PRODUCTS
-    : PRODUCTS.filter(p => p.category === filter);
-
-  container.innerHTML = filtered.map(p => `
-    <div class="product-card">
-      <div class="product-img">
-        ${p.badge ? `<span class="product-badge">${p.badge}</span>` : ""}
-        ${p.icon}
-      </div>
-      <div class="product-info">
-        <div class="product-category">${p.category}</div>
-        <div class="product-name">${p.name}</div>
-        <div class="product-price">
-          <span class="price-current">${p.price.toFixed(2)}€</span>
-          ${p.originalPrice ? `<span class="price-old">${p.originalPrice.toFixed(2)}€</span>` : ""}
-        </div>
-        <button class="btn btn-outline" style="width:100%;justify-content:center;padding:0.5rem;margin-top:0.75rem;font-size:0.75rem"
-          onclick="addToCart('${p.name}')">
-          Añadir al carrito
-        </button>
-      </div>
-    </div>
-  `).join("");
+  renderProductos(containerId, filter);
 }
 
 function addToCart(name) {
   showToast(`"${name}" añadido al carrito 🛒`, "success");
 }
 
-// Renderiza el blog
-function renderBlog(containerId) {
-  const container = document.getElementById(containerId);
-  if (!container) return;
+// Renderiza el blog — HTML generado en render.js
+// NOTA: en app.js no redefinimos renderBlog porque render.js
+// ya define la función con el mismo nombre. La llamada en
+// DOMContentLoaded llama directamente a la de render.js.
 
-  container.innerHTML = BLOG_POSTS.map(post => `
-    <div class="blog-card">
-      <div class="blog-img">${post.icon}</div>
-      <div class="blog-body">
-        <div class="blog-category">${post.category}</div>
-        <h3>${post.title}</h3>
-        <p>${post.excerpt}</p>
-        <div class="blog-meta">
-          <span>📅 ${post.date}</span>
-          <span>⏱ ${post.readTime} lectura</span>
-        </div>
-      </div>
-    </div>
-  `).join("");
-}
-
-// Renderiza las instalaciones
+// Renderiza las instalaciones — HTML generado en render.js
 function renderFacilities(containerId) {
-  const container = document.getElementById(containerId);
-  if (!container) return;
-
-  container.innerHTML = FACILITIES.map(f => `
-    <div class="facility-card">
-      <div class="facility-icon">${f.icon}</div>
-      <h3>${f.name}</h3>
-      <p>${f.desc}</p>
-    </div>
-  `).join("");
+  renderInstalaciones(containerId);
 }
 
-// Renderiza los 4 primeros productos en la home
+// Renderiza los 4 primeros productos en la home — HTML generado en render.js
 function renderFeaturedProducts(containerId) {
-  const container = document.getElementById(containerId);
-  if (!container) return;
-
-  const featured = PRODUCTS.slice(0, 4);
-  container.innerHTML = featured.map(p => `
-    <div class="product-card">
-      <div class="product-img">
-        ${p.badge ? `<span class="product-badge">${p.badge}</span>` : ""}
-        ${p.icon}
-      </div>
-      <div class="product-info">
-        <div class="product-category">${p.category}</div>
-        <div class="product-name">${p.name}</div>
-        <div class="product-price">
-          <span class="price-current">${p.price.toFixed(2)}€</span>
-          ${p.originalPrice ? `<span class="price-old">${p.originalPrice.toFixed(2)}€</span>` : ""}
-        </div>
-      </div>
-    </div>
-  `).join("");
+  renderProductosDestacados(containerId);
 }
 
 
