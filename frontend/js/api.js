@@ -7,7 +7,7 @@
 /* ── Configuració de l'entorn ───────────────────────────
    IS_LOCAL_BACKEND = true  → backend al teu ordinador (mvn spring-boot:run)
    IS_LOCAL_BACKEND = false → backend al servidor (ZeroTier)                */
-const IS_LOCAL_BACKEND = true; // ← canvia segons on treballs
+const IS_LOCAL_BACKEND = false; // ← canvia segons on treballs
 
 const API_BASE = IS_LOCAL_BACKEND
   ? "http://localhost:8084"
