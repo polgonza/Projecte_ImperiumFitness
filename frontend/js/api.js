@@ -269,6 +269,28 @@ const ApiUsuari = {
   }
 };
 /* ══════════════════════════════════════════════════════
+   ESTADÍSTIQUES — només ADMIN
+   ══════════════════════════════════════════════════════ */
+
+const ApiStats = {
+
+  async getResum() {
+    try {
+      const res = await apiFetch("/api/stats/resum");
+      if (res && res.ok) return await res.json();
+      return null;
+    } catch (e) { return null; }
+  },
+
+  async getProductes() {
+    try {
+      const res = await apiFetch("/api/stats/productes");
+      if (res && res.ok) return await res.json();
+      return null;
+    } catch (e) { return null; }
+  }
+};
+/* ══════════════════════════════════════════════════════
    GESTIÓ DE SESSIÓ — expiració del token JWT
    ══════════════════════════════════════════════════════ */
 
