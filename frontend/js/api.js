@@ -306,29 +306,26 @@ const SessionManager = {
 
   /* Comprova la sessió en carregar qualsevol pàgina protegida */
   init(requiresAuth = false) {
-    const status = this.checkToken();
-    const page   = window.location.pathname.split("/").pop();
+  const status = this.checkToken();
+  const page   = window.location.pathname.split("/").pop();
+  const publicPages = ["login.html", "register.html", "index.html", "recover.html", ""];
 
-    // Pàgines que no requereixen auth
-    const publicPages = ["login.html", "register.html", "index.html",
-                         "recover.html", ""];
-
-    if (status === "expired" || status === "invalid" || status === "no_token") {
-      if (requiresAuth || !publicPages.includes(page)) {
-        this.logoutWithMessage(
-          "Tu sesión ha expirado. Por favor, inicia sesión de nuevo."
-        );
-        return false;
-      }
+  if (status === "expired" || status === "invalid" || status === "no_token") {
+    if (requiresAuth || !publicPages.includes(page)) {
+      this.logoutWithMessage("Tu sesión ha expirado. Por favor, inicia sesión de nuevo.");
+      return false;
     }
+  }
 
-    if (status === "expiring_soon") {
-      // Avisem l'usuari que la sessió expira aviat
-      this.showExpirationWarning();
-    }
+  if (status === "expiring_soon") {
+    this.showExpirationWarning();
+  }
 
-    return true;
-  },
+  // ← AFEGEIX AQUESTA LÍNIA
+  this.startTokenCheck();
+
+  return true;
+},
 
   /* Mostra un banner d'avís quan queden menys de 5 minuts */
   showExpirationWarning() {
@@ -386,5 +383,18 @@ const SessionManager = {
     sessionStorage.setItem("session_msg",
       "Por favor, inicia sesión de nuevo para renovar tu sesión.");
     window.location.href = "login.html";
-  }
+  },
+  /* Comprova el token cada minut i avisa si expira aviat */
+startTokenCheck() {
+  setInterval(() => {
+    const status = this.checkToken();
+    if (status === "expired" || status === "invalid") {
+      this.logoutWithMessage(
+        "Tu sesión ha expirado. Por favor, inicia sesión de nuevo."
+      );
+    } else if (status === "expiring_soon") {
+      this.showExpirationWarning();
+    }
+  }, 60000); // cada 60 segons
+}
 };
