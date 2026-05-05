@@ -9,7 +9,6 @@
    ===================================================== */
 
 async function initPerfil() {
-  // Si no hi ha sessió, redirigim al login
   if (!Auth.isLoggedIn()) {
     window.location.href = "login.html";
     return;
@@ -21,15 +20,9 @@ async function initPerfil() {
     return;
   }
 
-  // Mostrem dades bàsiques del localStorage mentre carreguen les del backend
+  // Mostrem dades bàsiques mentre carreguen les del backend
   const inicial = user.name ? user.name.charAt(0).toUpperCase() : "?";
-  renderDatosUsuario(
-    inicial,
-    user.name  || "—",
-    user.email || "—",
-    "Sin plan activo",
-    "—"
-  );
+  renderDatosUsuario(inicial, user.name || "—", user.email || "—", "Sin plan activo", "—");
 
   // Carreguem dades reals del backend
   const perfil = await ApiUsuari.getPerfil(user.id);
@@ -39,7 +32,6 @@ async function initPerfil() {
       ? new Date(perfil.dataRegistre).toLocaleDateString("es-ES")
       : "—";
 
-    // Actualiza los datos en pantalla — HTML en render.js
     renderDatosUsuario(
       perfil.nom.charAt(0).toUpperCase(),
       perfil.nom,
@@ -48,20 +40,13 @@ async function initPerfil() {
       dataRegistre
     );
 
-    // Actualitzem també el localStorage amb el nom real
-    Auth.setUser({
-      ...user,
-      name:  perfil.nom,
-      email: perfil.email
-    });
+    Auth.setUser({ ...user, name: perfil.nom, email: perfil.email });
   }
 
-  // Mostrem missatge si no té pla actiu
   const noPlanMsg = document.getElementById("no-plan-msg");
   if (noPlanMsg) noPlanMsg.style.display = "block";
 }
 
-/* Utilitat: posa text en un element si existeix */
 function setTextById(id, text) {
   const el = document.getElementById(id);
   if (el) el.textContent = text;
@@ -84,13 +69,9 @@ async function renderReservationsInProfile() {
       ⏳ Cargando reservas...
     </p>`;
 
-  const user = Auth.getUser();
-  if (!user) return;
-
-  // Obtenim les reserves del backend (lògica sense canvis)
   const reserves = await ApiUsuari.getReserves(user.id);
 
-  if (reserves.length === 0) {
+  if (!reserves || reserves.length === 0) {
     lista.innerHTML = `
       <p style="color:var(--text-muted);text-align:center;padding:2rem">
         No tienes reservas de clases.<br>
@@ -101,18 +82,15 @@ async function renderReservationsInProfile() {
     return;
   }
 
-  // Per cada reserva, obtenim el nom de la classe
-  const classesCache = {};
-  const reservesAmbNom = await Promise.all(reserves.map(async r => {
-  // ── Filtrem reserves futures o d'avui ───────────────
+  // Filtrem reserves futures o d'avui
   const ara = new Date();
-  ara.setHours(0, 0, 0, 0); // Comencem des de l'inici d'avui
+  ara.setHours(0, 0, 0, 0);
 
   const reservesFutures = reserves.filter(r => {
     if (!r.dataReserva) return true;
     const dataReserva = new Date(r.dataReserva);
     dataReserva.setHours(0, 0, 0, 0);
-    return dataReserva >= ara; // Mostrem avui i futures
+    return dataReserva >= ara;
   });
 
   if (reservesFutures.length === 0) {
@@ -127,13 +105,11 @@ async function renderReservationsInProfile() {
   }
 
   // Ordenem de més pròxima a més llunyana
-  reservesFutures.sort((a, b) =>
-    new Date(a.dataReserva) - new Date(b.dataReserva)
-  );
+  reservesFutures.sort((a, b) => new Date(a.dataReserva) - new Date(b.dataReserva));
 
+  // Obtenim el nom de cada classe
   const classesCache = {};
-
-  lista.innerHTML = await Promise.all(reservesFutures.map(async r => {
+  const reservesAmbNom = await Promise.all(reservesFutures.map(async r => {
     let nomClasse = `Clase #${r.classeId}`;
     try {
       if (!classesCache[r.classeId]) {
@@ -154,9 +130,10 @@ async function renderReservationsInProfile() {
     };
   }));
 
-  // HTML generado en render.js
   renderReservasPerfil(reservesAmbNom);
 }
+
+
 /* =====================================================
    3. TAB PEDIDOS — vendes reals del backend
    ===================================================== */
@@ -175,7 +152,7 @@ async function renderOrderHistory() {
 
   const vendes = await ApiUsuari.getVendes(user.id);
 
-  if (vendes.length === 0) {
+  if (!vendes || vendes.length === 0) {
     container.innerHTML = `
       <div style="color:var(--text-muted);text-align:center;padding:2rem">
         No has realizado ningún pedido aún.<br>
@@ -186,7 +163,6 @@ async function renderOrderHistory() {
     return;
   }
 
-  // Per cada venda obtenim el nom del producte (lògica sense canvis)
   const productesCache = {};
   const vendesAmbNom = await Promise.all(vendes.map(async v => {
     let nomProducte = `Producto #${v.producteId}`;
@@ -211,7 +187,6 @@ async function renderOrderHistory() {
     };
   }));
 
-  // HTML generado en render.js
   renderPedidosPerfil(vendesAmbNom);
 }
 
@@ -233,7 +208,6 @@ function renderOldPurchases() {
 
   misPedidos.sort((a, b) => b.pedidoId.localeCompare(a.pedidoId));
 
-  // HTML generado en render.js
   renderHistorialLocal(misPedidos);
 }
 
@@ -264,10 +238,8 @@ function initProfileTabs() {
 
 document.addEventListener("DOMContentLoaded", async function() {
 
-  // Només executem si estem a perfil.html
   if (!document.getElementById("profile-initial")) return;
 
-  // Carreguem tot en paral·lel per ser més ràpids
   await Promise.all([
     initPerfil(),
     renderReservationsInProfile(),
