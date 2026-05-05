@@ -1,9 +1,9 @@
 /*M!999999\- enable the sandbox mode */ 
 -- MariaDB dump 10.19-11.7.2-MariaDB, for Win64 (AMD64)
 --
--- Host: 10.147.17.250    Database: imperium_fitness
+-- Host: localhost    Database: imperium_fitness
 -- ------------------------------------------------------
--- Server version	11.8.6-MariaDB-ubu2404
+-- Server version	12.2.2-MariaDB
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -33,7 +33,7 @@ CREATE TABLE `classe` (
   PRIMARY KEY (`id`),
   KEY `fk_classe_gimnas` (`gimnas_id`),
   CONSTRAINT `fk_classe_gimnas` FOREIGN KEY (`gimnas_id`) REFERENCES `gimnas` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -52,8 +52,7 @@ INSERT INTO `classe` VALUES
 (7,'Body Pump','Entrenament muscular amb barra','2026-04-26 08:00:00',15,1),
 (8,'Pilates Core','Exercicis de core i flexibilitat','2026-04-28 08:00:00',12,1),
 (9,'CrossFit','Entrenament funcional alta intensitat','2026-04-29 06:00:00',20,1),
-(10,'Yoga Restauratiu','Classe de ioga relaxant','2026-04-30 15:00:00',15,1),
-(11,'Pilates','Exercicis de core i flexibilitat','2026-04-22 10:00:00',12,1);
+(10,'Yoga Restauratiu','Classe de ioga relaxant','2026-04-30 15:00:00',15,1);
 /*!40000 ALTER TABLE `classe` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -71,7 +70,7 @@ CREATE TABLE `contacte` (
   `missatge` varchar(1000) NOT NULL,
   `data_enviament` timestamp NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -81,8 +80,7 @@ CREATE TABLE `contacte` (
 LOCK TABLES `contacte` WRITE;
 /*!40000 ALTER TABLE `contacte` DISABLE KEYS */;
 INSERT INTO `contacte` VALUES
-(1,'Pere Martí','pere@gmail.com','Voldria informació sobre les tarifes','2026-04-16 23:21:13'),
-(2,'Pere Martí','pere@gmail.com','Voldria informació sobre les tarifes','2026-04-29 16:05:49');
+(1,'Pere Martí','pere@gmail.com','Voldria informació sobre les tarifes','2026-04-16 23:21:13');
 /*!40000 ALTER TABLE `contacte` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -276,7 +274,7 @@ CREATE TABLE `reserva` (
   KEY `fk_reserva_classe` (`classe_id`),
   CONSTRAINT `fk_reserva_classe` FOREIGN KEY (`classe_id`) REFERENCES `classe` (`id`),
   CONSTRAINT `fk_reserva_usuari` FOREIGN KEY (`usuari_id`) REFERENCES `usuari` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -295,9 +293,12 @@ INSERT INTO `reserva` VALUES
 (7,1,9,'2026-04-22 16:30:31'),
 (8,1,1,'2026-04-27 17:01:10'),
 (9,4,3,'2026-04-28 13:26:05'),
-(10,5,9,'2026-04-29 16:56:35'),
-(11,1,10,'2026-04-29 17:31:06'),
-(12,1,4,'2026-04-29 17:50:19');
+(10,1,5,'2026-05-01 17:48:03'),
+(11,1,6,'2026-05-01 17:48:05'),
+(12,1,2,'2026-05-01 17:48:13'),
+(13,1,10,'2026-05-01 18:04:57'),
+(14,1,4,'2026-05-01 20:06:15'),
+(15,1,8,'2026-05-01 20:06:52');
 /*!40000 ALTER TABLE `reserva` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -345,7 +346,7 @@ CREATE TABLE `usuari` (
   `rol` varchar(50) DEFAULT 'USER',
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -358,11 +359,7 @@ INSERT INTO `usuari` VALUES
 (1,'Admin','admin@imperium.com','$2a$10$ru5ykaDgdlEaK26H/xAknuW3V/92RRszOFkof0aL8GcdInQk/uNa6','2026-04-16 18:24:35','ADMIN'),
 (2,'Joan Garcia','joan@gmail.com','$2a$10$CpPuIpBsxRDkhyyKyAfcg.VMsNqH4yPBUTWYoGBUOGWyHvE8vklpW','2026-04-16 18:24:35','USER'),
 (3,'Maria López','maria@gmail.com','$2a$10$ommhLP6snGAotlvt5L3Li.1vfKo5MQUhcPe/8Xv5BO3u8edSTDsvm','2026-04-20 13:10:06','USER'),
-(4,'paco paquito','paco@gmail.com','$2a$10$aA5R/KsWBkwzrNNd/B5IVOt7ItQD7cjgBsby7l2byLj.8YXTqbPcq','2026-04-28 13:22:49','USER'),
-(5,'iker','iker@gmail.com','$2a$10$amMzsAG2U9TfMxBfIHkcwOijkOvZTSG3zDKGgKcJNrldRjchVwhg2','2026-04-29 16:56:13','USER'),
-(6,'Joan Garcia','joan@test.com','$2a$10$JSyniY17/W7.ocT9isujIufksdjuIwIH3XP8jCGULauXyJ1t9ZAiC','2026-04-29 17:28:10','USER'),
-(7,'Joan Garcio','joan2@test.com','$2a$10$5d4pgMjD4qoO6wjRMTolOuJf0KFGzsfXK4QPSXgxO.IWjlyUhQUnK','2026-05-04 13:31:15','USER'),
-(8,'les tinoco','les@test.com','$2a$10$G5YQotK3SvalTOHIXVhal.cyE2yb9sg1tfjW1zbDzPH.puiDiRBkC','2026-05-04 13:44:25','USER');
+(4,'paco paquito','paco@gmail.com','$2a$10$aA5R/KsWBkwzrNNd/B5IVOt7ItQD7cjgBsby7l2byLj.8YXTqbPcq','2026-04-28 13:22:49','USER');
 /*!40000 ALTER TABLE `usuari` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -409,4 +406,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
 
--- Dump completed on 2026-05-05 13:11:45
+-- Dump completed on 2026-05-05 13:30:34
