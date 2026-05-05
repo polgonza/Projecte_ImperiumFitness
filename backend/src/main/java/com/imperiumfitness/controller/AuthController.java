@@ -71,12 +71,6 @@ public ResponseEntity<LoginResponse> registre(@RequestBody RegistreRequest req) 
     // Retornem el token igual que al login
     return ResponseEntity.status(201).body(new LoginResponse(token));
 }
-    // ── TEMPORAL: genera hash BCrypt — ELIMINA DESPRÉS DE LES PROVES ────────
-    @GetMapping("/hash")
-    public String generaHash(@RequestParam String password) {
-        return passwordEncoder.encode(password);
-    }
-
 // Simulació de reset de contrasenya
 // Comprova que l'email existeix però no envia res
 @PostMapping("/recover")

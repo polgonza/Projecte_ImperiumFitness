@@ -9,17 +9,28 @@ import java.util.List;
 
 @Repository
 public interface ReservaRepository extends JpaRepository<Reserva, Long> {
-    // Totes les reserves d'un usuari
+
     List<Reserva> findByUsuariId(Long usuariId);
-    // Totes les reserves d'una classe
     List<Reserva> findByClasseId(Long classeId);
-    // Comprovar si un usuari ja té reserva a una classe
+
+    // Comprova duplicat independentment de la data (conservem per compatibilitat)
     boolean existsByUsuariIdAndClasseId(Long usuariId, Long classeId);
-    // Compta les reserves futures d'un usuari
-@Query("SELECT COUNT(r) FROM Reserva r WHERE r.usuari.id = :usuariId " +
-       "AND r.dataReserva >= :ara")
-long countReservesFuturesByUsuari(
-    @Param("usuariId") Long usuariId,
-    @Param("ara") java.time.LocalDateTime ara
- );
+
+    // Compta reserves futures
+    @Query("SELECT COUNT(r) FROM Reserva r WHERE r.usuari.id = :usuariId " +
+           "AND r.dataReserva >= :ara")
+    long countReservesFuturesByUsuari(
+        @Param("usuariId") Long usuariId,
+        @Param("ara") java.time.LocalDateTime ara
+    );
+
+    // ✅ Comprova duplicat NOMÉS per reserves futures
+    @Query("SELECT COUNT(r) > 0 FROM Reserva r WHERE r.usuari.id = :usuariId " +
+           "AND r.classe.id = :classeId " +
+           "AND r.dataReserva >= :ara")
+    boolean existsByUsuariIdAndClasseIdAndFutura(
+        @Param("usuariId") Long usuariId,
+        @Param("classeId") Long classeId,
+        @Param("ara") java.time.LocalDateTime ara
+    );
 }
