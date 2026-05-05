@@ -5,6 +5,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -33,4 +35,12 @@ public interface ReservaRepository extends JpaRepository<Reserva, Long> {
         @Param("classeId") Long classeId,
         @Param("ara") java.time.LocalDateTime ara
     );
+    // Total reserves futures de tots els usuaris
+@Query("SELECT COUNT(r) FROM Reserva r WHERE r.dataReserva >= :ara")
+long countAllFuturesReserves(@Param("ara") LocalDateTime ara);
+
+// Classe més reservada
+@Query("SELECT c.nom, COUNT(r) as total FROM Reserva r " +
+       "JOIN r.classe c GROUP BY c.nom ORDER BY total DESC")
+List<Object[]> findTopClasses();
 }

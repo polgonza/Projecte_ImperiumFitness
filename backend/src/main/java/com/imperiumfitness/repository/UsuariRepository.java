@@ -1,5 +1,6 @@
 package com.imperiumfitness.repository;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,4 +12,5 @@ import com.imperiumfitness.model.entity.Usuari;
 public interface UsuariRepository extends JpaRepository<Usuari, Long> {
     Optional<Usuari> findByEmail(String email);
     boolean existsByEmail(String email);
+    long countByDataRegistreAfter(LocalDateTime data);
 }

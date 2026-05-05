@@ -98,7 +98,7 @@ SecurityFilterChain filterChain(HttpSecurity http, JwtService jwtService) throws
         // Endpoints ADMIN
         .requestMatchers("/api/usuaris/**").hasRole("ADMIN")
         .requestMatchers("/api/estadistiques/**").hasRole("ADMIN")
-
+        .requestMatchers("/api/stats/**").hasRole("ADMIN")
         .requestMatchers("/api/**").authenticated()
         .anyRequest().authenticated()
 )
