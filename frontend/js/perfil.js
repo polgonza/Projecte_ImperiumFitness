@@ -123,12 +123,13 @@ async function renderReservationsInProfile() {
     } catch (e) {}
 
     return {
+      classeId:    r.classeId,    // ← AFEGEIX AIXÒ
       nomClasse,
       dataReserva: r.dataReserva
         ? new Date(r.dataReserva).toLocaleDateString("es-ES")
         : "—"
     };
-  }));
+}));
 
   renderReservasPerfil(reservesAmbNom);
 }
