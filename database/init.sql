@@ -1,7 +1,7 @@
 /*M!999999\- enable the sandbox mode */ 
--- MariaDB dump 10.19-11.8.6-MariaDB, for debian-linux-gnu (x86_64)
+-- MariaDB dump 10.19-11.7.2-MariaDB, for Win64 (AMD64)
 --
--- Host: localhost    Database: imperium_fitness
+-- Host: 10.147.17.250    Database: imperium_fitness
 -- ------------------------------------------------------
 -- Server version	11.8.6-MariaDB-ubu2404
 
@@ -33,14 +33,13 @@ CREATE TABLE `classe` (
   PRIMARY KEY (`id`),
   KEY `fk_classe_gimnas` (`gimnas_id`),
   CONSTRAINT `fk_classe_gimnas` FOREIGN KEY (`gimnas_id`) REFERENCES `gimnas` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=116 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `classe`
 --
 
-SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
 LOCK TABLES `classe` WRITE;
 /*!40000 ALTER TABLE `classe` DISABLE KEYS */;
 INSERT INTO `classe` VALUES
@@ -54,115 +53,9 @@ INSERT INTO `classe` VALUES
 (8,'Pilates Core','Exercicis de core i flexibilitat','2026-04-28 08:00:00',12,1),
 (9,'CrossFit','Entrenament funcional alta intensitat','2026-04-29 06:00:00',20,1),
 (10,'Yoga Restauratiu','Classe de ioga relaxant','2026-04-30 15:00:00',15,1),
-(11,'HIIT','HIIT - sessió setmanal','2026-05-01 07:30:00',20,1),
-(12,'Pilates','Pilates - sessió setmanal','2026-05-01 10:00:00',12,1),
-(13,'Spinning','Spinning - sessió setmanal','2026-05-01 18:00:00',20,1),
-(14,'CrossFit','CrossFit - sessió setmanal','2026-05-02 09:00:00',20,1),
-(15,'Yoga Restauratiu','Yoga Restauratiu - sessió setmanal','2026-05-02 10:30:00',15,1),
-(16,'Zumba','Zumba - sessió setmanal','2026-05-02 12:00:00',25,1),
-(17,'Spinning','Spinning - sessió setmanal','2026-05-04 09:00:00',20,1),
-(18,'Zumba','Zumba - sessió setmanal','2026-05-04 11:00:00',25,1),
-(19,'Body Pump','Body Pump - sessió setmanal','2026-05-05 10:00:00',15,1),
-(20,'CrossFit','CrossFit - sessió setmanal','2026-05-06 08:00:00',20,1),
-(21,'Pilates','Pilates - sessió setmanal','2026-05-06 10:00:00',12,1),
-(22,'Yoga Restauratiu','Yoga Restauratiu - sessió setmanal','2026-05-07 17:00:00',15,1),
-(23,'HIIT','HIIT - sessió setmanal','2026-05-08 07:30:00',20,1),
-(24,'Pilates','Pilates - sessió setmanal','2026-05-08 10:00:00',12,1),
-(25,'Spinning','Spinning - sessió setmanal','2026-05-08 18:00:00',20,1),
-(26,'CrossFit','CrossFit - sessió setmanal','2026-05-09 09:00:00',20,1),
-(27,'Yoga Restauratiu','Yoga Restauratiu - sessió setmanal','2026-05-09 10:30:00',15,1),
-(28,'Zumba','Zumba - sessió setmanal','2026-05-09 12:00:00',25,1),
-(29,'Spinning','Spinning - sessió setmanal','2026-05-11 09:00:00',20,1),
-(30,'Zumba','Zumba - sessió setmanal','2026-05-11 11:00:00',25,1),
-(31,'Body Pump','Body Pump - sessió setmanal','2026-05-12 10:00:00',15,1),
-(32,'CrossFit','CrossFit - sessió setmanal','2026-05-13 08:00:00',20,1),
-(33,'Pilates','Pilates - sessió setmanal','2026-05-13 10:00:00',12,1),
-(34,'Yoga Restauratiu','Yoga Restauratiu - sessió setmanal','2026-05-14 17:00:00',15,1),
-(35,'HIIT','HIIT - sessió setmanal','2026-05-15 07:30:00',20,1),
-(36,'Pilates','Pilates - sessió setmanal','2026-05-15 10:00:00',12,1),
-(37,'Spinning','Spinning - sessió setmanal','2026-05-15 18:00:00',20,1),
-(38,'CrossFit','CrossFit - sessió setmanal','2026-05-16 09:00:00',20,1),
-(39,'Yoga Restauratiu','Yoga Restauratiu - sessió setmanal','2026-05-16 10:30:00',15,1),
-(40,'Zumba','Zumba - sessió setmanal','2026-05-16 12:00:00',25,1),
-(41,'Spinning','Spinning - sessió setmanal','2026-05-18 09:00:00',20,1),
-(42,'Zumba','Zumba - sessió setmanal','2026-05-18 11:00:00',25,1),
-(43,'Body Pump','Body Pump - sessió setmanal','2026-05-19 10:00:00',15,1),
-(44,'CrossFit','CrossFit - sessió setmanal','2026-05-20 08:00:00',20,1),
-(45,'Pilates','Pilates - sessió setmanal','2026-05-20 10:00:00',12,1),
-(46,'Yoga Restauratiu','Yoga Restauratiu - sessió setmanal','2026-05-21 17:00:00',15,1),
-(47,'HIIT','HIIT - sessió setmanal','2026-05-22 07:30:00',20,1),
-(48,'Pilates','Pilates - sessió setmanal','2026-05-22 10:00:00',12,1),
-(49,'Spinning','Spinning - sessió setmanal','2026-05-22 18:00:00',20,1),
-(50,'CrossFit','CrossFit - sessió setmanal','2026-05-23 09:00:00',20,1),
-(51,'Yoga Restauratiu','Yoga Restauratiu - sessió setmanal','2026-05-23 10:30:00',15,1),
-(52,'Zumba','Zumba - sessió setmanal','2026-05-23 12:00:00',25,1),
-(53,'Spinning','Spinning - sessió setmanal','2026-05-25 09:00:00',20,1),
-(54,'Zumba','Zumba - sessió setmanal','2026-05-25 11:00:00',25,1),
-(55,'Body Pump','Body Pump - sessió setmanal','2026-05-26 10:00:00',15,1),
-(56,'CrossFit','CrossFit - sessió setmanal','2026-05-27 08:00:00',20,1),
-(57,'Pilates','Pilates - sessió setmanal','2026-05-27 10:00:00',12,1),
-(58,'Yoga Restauratiu','Yoga Restauratiu - sessió setmanal','2026-05-28 17:00:00',15,1),
-(59,'HIIT','HIIT - sessió setmanal','2026-05-29 07:30:00',20,1),
-(60,'Pilates','Pilates - sessió setmanal','2026-05-29 10:00:00',12,1),
-(61,'Spinning','Spinning - sessió setmanal','2026-05-29 18:00:00',20,1),
-(62,'CrossFit','CrossFit - sessió setmanal','2026-05-30 09:00:00',20,1),
-(63,'Yoga Restauratiu','Yoga Restauratiu - sessió setmanal','2026-05-30 10:30:00',15,1),
-(64,'Zumba','Zumba - sessió setmanal','2026-05-30 12:00:00',25,1),
-(65,'Spinning','Spinning - sessió setmanal','2026-06-01 09:00:00',20,1),
-(66,'Zumba','Zumba - sessió setmanal','2026-06-01 11:00:00',25,1),
-(67,'Body Pump','Body Pump - sessió setmanal','2026-06-02 10:00:00',15,1),
-(68,'CrossFit','CrossFit - sessió setmanal','2026-06-03 08:00:00',20,1),
-(69,'Pilates','Pilates - sessió setmanal','2026-06-03 10:00:00',12,1),
-(70,'Yoga Restauratiu','Yoga Restauratiu - sessió setmanal','2026-06-04 17:00:00',15,1),
-(71,'HIIT','HIIT - sessió setmanal','2026-06-05 07:30:00',20,1),
-(72,'Pilates','Pilates - sessió setmanal','2026-06-05 10:00:00',12,1),
-(73,'Spinning','Spinning - sessió setmanal','2026-06-05 18:00:00',20,1),
-(74,'CrossFit','CrossFit - sessió setmanal','2026-06-06 09:00:00',20,1),
-(75,'Yoga Restauratiu','Yoga Restauratiu - sessió setmanal','2026-06-06 10:30:00',15,1),
-(76,'Zumba','Zumba - sessió setmanal','2026-06-06 12:00:00',25,1),
-(77,'Spinning','Spinning - sessió setmanal','2026-06-08 09:00:00',20,1),
-(78,'Zumba','Zumba - sessió setmanal','2026-06-08 11:00:00',25,1),
-(79,'Body Pump','Body Pump - sessió setmanal','2026-06-09 10:00:00',15,1),
-(80,'CrossFit','CrossFit - sessió setmanal','2026-06-10 08:00:00',20,1),
-(81,'Pilates','Pilates - sessió setmanal','2026-06-10 10:00:00',12,1),
-(82,'Yoga Restauratiu','Yoga Restauratiu - sessió setmanal','2026-06-11 17:00:00',15,1),
-(83,'HIIT','HIIT - sessió setmanal','2026-06-12 07:30:00',20,1),
-(84,'Pilates','Pilates - sessió setmanal','2026-06-12 10:00:00',12,1),
-(85,'Spinning','Spinning - sessió setmanal','2026-06-12 18:00:00',20,1),
-(86,'CrossFit','CrossFit - sessió setmanal','2026-06-13 09:00:00',20,1),
-(87,'Yoga Restauratiu','Yoga Restauratiu - sessió setmanal','2026-06-13 10:30:00',15,1),
-(88,'Zumba','Zumba - sessió setmanal','2026-06-13 12:00:00',25,1),
-(89,'Spinning','Spinning - sessió setmanal','2026-06-15 09:00:00',20,1),
-(90,'Zumba','Zumba - sessió setmanal','2026-06-15 11:00:00',25,1),
-(91,'Body Pump','Body Pump - sessió setmanal','2026-06-16 10:00:00',15,1),
-(92,'CrossFit','CrossFit - sessió setmanal','2026-06-17 08:00:00',20,1),
-(93,'Pilates','Pilates - sessió setmanal','2026-06-17 10:00:00',12,1),
-(94,'Yoga Restauratiu','Yoga Restauratiu - sessió setmanal','2026-06-18 17:00:00',15,1),
-(95,'HIIT','HIIT - sessió setmanal','2026-06-19 07:30:00',20,1),
-(96,'Pilates','Pilates - sessió setmanal','2026-06-19 10:00:00',12,1),
-(97,'Spinning','Spinning - sessió setmanal','2026-06-19 18:00:00',20,1),
-(98,'CrossFit','CrossFit - sessió setmanal','2026-06-20 09:00:00',20,1),
-(99,'Yoga Restauratiu','Yoga Restauratiu - sessió setmanal','2026-06-20 10:30:00',15,1),
-(100,'Zumba','Zumba - sessió setmanal','2026-06-20 12:00:00',25,1),
-(101,'Spinning','Spinning - sessió setmanal','2026-06-22 09:00:00',20,1),
-(102,'Zumba','Zumba - sessió setmanal','2026-06-22 11:00:00',25,1),
-(103,'Body Pump','Body Pump - sessió setmanal','2026-06-23 10:00:00',15,1),
-(104,'CrossFit','CrossFit - sessió setmanal','2026-06-24 08:00:00',20,1),
-(105,'Pilates','Pilates - sessió setmanal','2026-06-24 10:00:00',12,1),
-(106,'Yoga Restauratiu','Yoga Restauratiu - sessió setmanal','2026-06-25 17:00:00',15,1),
-(107,'HIIT','HIIT - sessió setmanal','2026-06-26 07:30:00',20,1),
-(108,'Pilates','Pilates - sessió setmanal','2026-06-26 10:00:00',12,1),
-(109,'Spinning','Spinning - sessió setmanal','2026-06-26 18:00:00',20,1),
-(110,'CrossFit','CrossFit - sessió setmanal','2026-06-27 09:00:00',20,1),
-(111,'Yoga Restauratiu','Yoga Restauratiu - sessió setmanal','2026-06-27 10:30:00',15,1),
-(112,'Zumba','Zumba - sessió setmanal','2026-06-27 12:00:00',25,1),
-(113,'Spinning','Spinning - sessió setmanal','2026-06-29 09:00:00',20,1),
-(114,'Zumba','Zumba - sessió setmanal','2026-06-29 11:00:00',25,1),
-(115,'Body Pump','Body Pump - sessió setmanal','2026-06-30 10:00:00',15,1);
+(11,'Pilates','Exercicis de core i flexibilitat','2026-04-22 10:00:00',12,1);
 /*!40000 ALTER TABLE `classe` ENABLE KEYS */;
 UNLOCK TABLES;
-COMMIT;
-SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
 
 --
 -- Table structure for table `contacte`
@@ -178,22 +71,20 @@ CREATE TABLE `contacte` (
   `missatge` varchar(1000) NOT NULL,
   `data_enviament` timestamp NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `contacte`
 --
 
-SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
 LOCK TABLES `contacte` WRITE;
 /*!40000 ALTER TABLE `contacte` DISABLE KEYS */;
 INSERT INTO `contacte` VALUES
-(1,'Pere Martí','pere@gmail.com','Voldria informació sobre les tarifes','2026-04-16 23:21:13');
+(1,'Pere Martí','pere@gmail.com','Voldria informació sobre les tarifes','2026-04-16 23:21:13'),
+(2,'Pere Martí','pere@gmail.com','Voldria informació sobre les tarifes','2026-04-29 16:05:49');
 /*!40000 ALTER TABLE `contacte` ENABLE KEYS */;
 UNLOCK TABLES;
-COMMIT;
-SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
 
 --
 -- Table structure for table `estadistica`
@@ -218,13 +109,10 @@ CREATE TABLE `estadistica` (
 -- Dumping data for table `estadistica`
 --
 
-SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
 LOCK TABLES `estadistica` WRITE;
 /*!40000 ALTER TABLE `estadistica` DISABLE KEYS */;
 /*!40000 ALTER TABLE `estadistica` ENABLE KEYS */;
 UNLOCK TABLES;
-COMMIT;
-SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
 
 --
 -- Table structure for table `gimnas`
@@ -246,7 +134,6 @@ CREATE TABLE `gimnas` (
 -- Dumping data for table `gimnas`
 --
 
-SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
 LOCK TABLES `gimnas` WRITE;
 /*!40000 ALTER TABLE `gimnas` DISABLE KEYS */;
 INSERT INTO `gimnas` VALUES
@@ -255,8 +142,6 @@ INSERT INTO `gimnas` VALUES
 (3,'Imperium Fitness Nord','Avinguda Diagonal 456, Barcelona','932005678');
 /*!40000 ALTER TABLE `gimnas` ENABLE KEYS */;
 UNLOCK TABLES;
-COMMIT;
-SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
 
 --
 -- Table structure for table `instalacio`
@@ -281,13 +166,10 @@ CREATE TABLE `instalacio` (
 -- Dumping data for table `instalacio`
 --
 
-SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
 LOCK TABLES `instalacio` WRITE;
 /*!40000 ALTER TABLE `instalacio` DISABLE KEYS */;
 /*!40000 ALTER TABLE `instalacio` ENABLE KEYS */;
 UNLOCK TABLES;
-COMMIT;
-SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
 
 --
 -- Table structure for table `noticia`
@@ -312,15 +194,12 @@ CREATE TABLE `noticia` (
 -- Dumping data for table `noticia`
 --
 
-SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
 LOCK TABLES `noticia` WRITE;
 /*!40000 ALTER TABLE `noticia` DISABLE KEYS */;
 INSERT INTO `noticia` VALUES
 (1,'Benvinguts a Imperium Fitness!','Estem contents d\'obrir les portes del nostre gimnàs. Vine a conèixer-nos!','2026-04-16 18:24:35',1);
 /*!40000 ALTER TABLE `noticia` ENABLE KEYS */;
 UNLOCK TABLES;
-COMMIT;
-SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
 
 --
 -- Table structure for table `pagament`
@@ -345,13 +224,10 @@ CREATE TABLE `pagament` (
 -- Dumping data for table `pagament`
 --
 
-SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
 LOCK TABLES `pagament` WRITE;
 /*!40000 ALTER TABLE `pagament` DISABLE KEYS */;
 /*!40000 ALTER TABLE `pagament` ENABLE KEYS */;
 UNLOCK TABLES;
-COMMIT;
-SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
 
 --
 -- Table structure for table `producte`
@@ -375,7 +251,6 @@ CREATE TABLE `producte` (
 -- Dumping data for table `producte`
 --
 
-SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
 LOCK TABLES `producte` WRITE;
 /*!40000 ALTER TABLE `producte` DISABLE KEYS */;
 INSERT INTO `producte` VALUES
@@ -383,8 +258,6 @@ INSERT INTO `producte` VALUES
 (2,'Samarreta Imperium','Samarreta tècnica oficial del gimnàs',19.99,'Roba',30);
 /*!40000 ALTER TABLE `producte` ENABLE KEYS */;
 UNLOCK TABLES;
-COMMIT;
-SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
 
 --
 -- Table structure for table `reserva`
@@ -403,14 +276,13 @@ CREATE TABLE `reserva` (
   KEY `fk_reserva_classe` (`classe_id`),
   CONSTRAINT `fk_reserva_classe` FOREIGN KEY (`classe_id`) REFERENCES `classe` (`id`),
   CONSTRAINT `fk_reserva_usuari` FOREIGN KEY (`usuari_id`) REFERENCES `usuari` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `reserva`
 --
 
-SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
 LOCK TABLES `reserva` WRITE;
 /*!40000 ALTER TABLE `reserva` DISABLE KEYS */;
 INSERT INTO `reserva` VALUES
@@ -423,14 +295,11 @@ INSERT INTO `reserva` VALUES
 (7,1,9,'2026-04-22 16:30:31'),
 (8,1,1,'2026-04-27 17:01:10'),
 (9,4,3,'2026-04-28 13:26:05'),
-(10,1,5,'2026-05-01 17:48:03'),
-(11,1,6,'2026-05-01 17:48:05'),
-(12,1,2,'2026-05-01 17:48:13'),
-(13,1,10,'2026-05-01 18:04:57');
+(10,5,9,'2026-04-29 16:56:35'),
+(11,1,10,'2026-04-29 17:31:06'),
+(12,1,4,'2026-04-29 17:50:19');
 /*!40000 ALTER TABLE `reserva` ENABLE KEYS */;
 UNLOCK TABLES;
-COMMIT;
-SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
 
 --
 -- Table structure for table `tarifa`
@@ -455,13 +324,10 @@ CREATE TABLE `tarifa` (
 -- Dumping data for table `tarifa`
 --
 
-SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
 LOCK TABLES `tarifa` WRITE;
 /*!40000 ALTER TABLE `tarifa` DISABLE KEYS */;
 /*!40000 ALTER TABLE `tarifa` ENABLE KEYS */;
 UNLOCK TABLES;
-COMMIT;
-SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
 
 --
 -- Table structure for table `usuari`
@@ -479,25 +345,26 @@ CREATE TABLE `usuari` (
   `rol` varchar(50) DEFAULT 'USER',
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `usuari`
 --
 
-SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
 LOCK TABLES `usuari` WRITE;
 /*!40000 ALTER TABLE `usuari` DISABLE KEYS */;
 INSERT INTO `usuari` VALUES
 (1,'Admin','admin@imperium.com','$2a$10$ru5ykaDgdlEaK26H/xAknuW3V/92RRszOFkof0aL8GcdInQk/uNa6','2026-04-16 18:24:35','ADMIN'),
 (2,'Joan Garcia','joan@gmail.com','$2a$10$CpPuIpBsxRDkhyyKyAfcg.VMsNqH4yPBUTWYoGBUOGWyHvE8vklpW','2026-04-16 18:24:35','USER'),
 (3,'Maria López','maria@gmail.com','$2a$10$ommhLP6snGAotlvt5L3Li.1vfKo5MQUhcPe/8Xv5BO3u8edSTDsvm','2026-04-20 13:10:06','USER'),
-(4,'paco paquito','paco@gmail.com','$2a$10$aA5R/KsWBkwzrNNd/B5IVOt7ItQD7cjgBsby7l2byLj.8YXTqbPcq','2026-04-28 13:22:49','USER');
+(4,'paco paquito','paco@gmail.com','$2a$10$aA5R/KsWBkwzrNNd/B5IVOt7ItQD7cjgBsby7l2byLj.8YXTqbPcq','2026-04-28 13:22:49','USER'),
+(5,'iker','iker@gmail.com','$2a$10$amMzsAG2U9TfMxBfIHkcwOijkOvZTSG3zDKGgKcJNrldRjchVwhg2','2026-04-29 16:56:13','USER'),
+(6,'Joan Garcia','joan@test.com','$2a$10$JSyniY17/W7.ocT9isujIufksdjuIwIH3XP8jCGULauXyJ1t9ZAiC','2026-04-29 17:28:10','USER'),
+(7,'Joan Garcio','joan2@test.com','$2a$10$5d4pgMjD4qoO6wjRMTolOuJf0KFGzsfXK4QPSXgxO.IWjlyUhQUnK','2026-05-04 13:31:15','USER'),
+(8,'les tinoco','les@test.com','$2a$10$G5YQotK3SvalTOHIXVhal.cyE2yb9sg1tfjW1zbDzPH.puiDiRBkC','2026-05-04 13:44:25','USER');
 /*!40000 ALTER TABLE `usuari` ENABLE KEYS */;
 UNLOCK TABLES;
-COMMIT;
-SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
 
 --
 -- Table structure for table `venda`
@@ -524,13 +391,14 @@ CREATE TABLE `venda` (
 -- Dumping data for table `venda`
 --
 
-SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
 LOCK TABLES `venda` WRITE;
 /*!40000 ALTER TABLE `venda` DISABLE KEYS */;
 /*!40000 ALTER TABLE `venda` ENABLE KEYS */;
 UNLOCK TABLES;
-COMMIT;
-SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
+
+--
+-- Dumping routines for database 'imperium_fitness'
+--
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -541,4 +409,4 @@ SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
 
--- Dump completed on 2026-05-01 19:38:33
+-- Dump completed on 2026-05-05 13:11:45

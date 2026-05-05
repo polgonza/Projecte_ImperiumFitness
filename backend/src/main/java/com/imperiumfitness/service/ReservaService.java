@@ -57,12 +57,14 @@ public class ReservaService {
                 "Has arribat al límit de 5 reserves actives simultànies");
     }
 
-    // Regla 2: duplicat (ja existent)
-    if (repo.existsByUsuariIdAndClasseId(
-            dto.getUsuariId(), dto.getClasseId())) {
+  // Regla 2: duplicat NOMÉS per reserves futures
+    if (repo.existsByUsuariIdAndClasseIdAndFutura(
+        dto.getUsuariId(),
+        dto.getClasseId(),
+        LocalDateTime.now())) {
         throw new ResponseStatusException(
-                HttpStatus.CONFLICT,
-                "L'usuari ja té una reserva per aquesta classe");
+            HttpStatus.CONFLICT,
+            "L'usuari ja té una reserva per aquesta classe");
     }
 
     Reserva r = toEntity(dto);
