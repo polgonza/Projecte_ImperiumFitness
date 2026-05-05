@@ -39,9 +39,11 @@ public class ReservaController {
         return ResponseEntity.status(201).body(service.save(dto));
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        service.delete(id);
+    @DeleteMapping("/usuari/{usuariId}/classe/{classeId}")
+    public ResponseEntity<Void> cancelar(
+        @PathVariable Long usuariId,
+        @PathVariable Long classeId) {
+        service.cancelarReserva(usuariId, classeId);
         return ResponseEntity.noContent().build();
-    }
+}
 }

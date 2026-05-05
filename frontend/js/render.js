@@ -513,12 +513,33 @@ function renderReservasPerfil(reserves) {
   }
 
   lista.innerHTML = reserves.map(r => `
-    <div class="reservation-item">
+    <div class="reservation-item" style="display:flex;align-items:center;justify-content:space-between;gap:1rem">
       <div>
         <h4>${r.nomClasse || r.className || "—"}</h4>
         <p>${r.dataReserva || r.date || "—"}</p>
       </div>
-      <span class="status-badge confirmed">Confirmada</span>
+      <div style="display:flex;align-items:center;gap:0.75rem">
+        <span class="status-badge confirmed">Confirmada</span>
+        <button
+          onclick="cancelarReservaPerfil(${r.classeId}, '${r.nomClasse}')"
+          style="
+            background:rgba(239,68,68,0.1);
+            border:1px solid rgba(239,68,68,0.3);
+            border-radius:8px;
+            color:var(--danger);
+            cursor:pointer;
+            font-size:0.75rem;
+            font-weight:700;
+            padding:0.3rem 0.75rem;
+            font-family:inherit;
+            transition:background 0.2s;
+          "
+          onmouseover="this.style.background='rgba(239,68,68,0.25)'"
+          onmouseout="this.style.background='rgba(239,68,68,0.1)'"
+        >
+          Cancelar
+        </button>
+      </div>
     </div>
   `).join("");
 }
