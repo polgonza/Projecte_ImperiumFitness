@@ -266,14 +266,106 @@ async function cancelarReservaPerfil(classeId, nomClasse) {
     showToast("No se pudo cancelar la reserva.", "error");
   }
 }
-document.addEventListener("DOMContentLoaded", async function() {
+async function renderStats() {
+  const container = document.getElementById("stats-container");
+  if (!container) return;
 
+  const user = Auth.getUser();
+  // Només mostrem la pestanya si és ADMIN
+  const tabBtn = document.getElementById("tab-stats-btn");
+  if (!user || !user.roles || !user.roles.includes("ROLE_ADMIN")) {
+    if (tabBtn) tabBtn.style.display = "none";
+    return;
+  }
+  if (tabBtn) tabBtn.style.display = "block";
+
+  // Carreguem les dues seccions en paral·lel
+  const [resum, productes] = await Promise.all([
+    ApiStats.getResum(),
+    ApiStats.getProductes()
+  ]);
+
+  if (!resum && !productes) {
+    container.innerHTML = `
+      <p style="color:var(--text-muted);text-align:center;padding:2rem">
+        No se pudieron cargar las estadísticas.
+      </p>`;
+    return;
+  }
+
+  container.innerHTML = `
+    <!-- Bloc 1: Resum general -->
+    <div style="margin-bottom:2rem">
+      <h3 style="font-size:0.85rem;font-weight:700;text-transform:uppercase;
+                 letter-spacing:0.1em;color:var(--primary);margin-bottom:1rem">
+        Resumen General
+      </h3>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1rem">
+        ${statCard("👥", "Usuarios totales", resum?.totalUsuaris ?? "—")}
+        ${statCard("🆕", "Nuevos este mes", resum?.usuarisNousMes ?? "—")}
+        ${statCard("📅", "Reservas activas", resum?.totalReservesActives ?? "—")}
+        ${statCard("🏆", "Clase más reservada",
+          resum?.classeMesReservada
+            ? `${resum.classeMesReservada} (${resum.classeMesReservadaCount})`
+            : "—"
+        )}
+      </div>
+    </div>
+
+    <!-- Bloc 2: Productes -->
+    <div>
+      <h3 style="font-size:0.85rem;font-weight:700;text-transform:uppercase;
+                 letter-spacing:0.1em;color:var(--primary);margin-bottom:1rem">
+        Tienda
+      </h3>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1rem">
+        ${statCard("📦", "Top producto del mes",
+          productes?.topProducteMes
+            ? `${productes.topProducteMes} (${productes.topProducteMesUnitats} uds)`
+            : "Sin ventas"
+        )}
+        ${statCard("📆", "Top producto del año",
+          productes?.topProducteAny
+            ? `${productes.topProducteAny} (${productes.topProducteAnyUnitats} uds)`
+            : "Sin ventas"
+        )}
+        ${statCard("⚠️", "Menos stock", 
+          productes?.menysEstocNom
+            ? `${productes.menysEstocNom} (${productes.menysEstocUnitats} uds)`
+            : "—"
+        )}
+        ${statCard("🛒", "Ventas este mes", productes?.totalVendesMes ?? "—")}
+      </div>
+    </div>
+  `;
+}
+
+/* Genera una card d'estadística */
+function statCard(icon, label, value) {
+  return `
+    <div style="
+      background:var(--bg-secondary);
+      border:1px solid var(--border);
+      border-radius:12px;
+      padding:1.25rem;
+      text-align:center;
+    ">
+      <div style="font-size:1.8rem;margin-bottom:0.5rem">${icon}</div>
+      <div style="font-size:0.75rem;color:var(--text-muted);
+                  text-transform:uppercase;letter-spacing:0.08em;
+                  margin-bottom:0.5rem">${label}</div>
+      <div style="font-size:1rem;font-weight:700;color:var(--text)">${value}</div>
+    </div>
+  `;
+}
+document.addEventListener("DOMContentLoaded", async function() {
   if (!document.getElementById("profile-initial")) return;
 
   await Promise.all([
     initPerfil(),
     renderReservationsInProfile(),
-    renderOrderHistory()
+    renderOrderHistory(),
+    renderStats()              // ← AFEGEIX
   ]);
 
   renderOldPurchases();

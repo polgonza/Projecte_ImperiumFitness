@@ -1,9 +1,9 @@
 /*M!999999\- enable the sandbox mode */ 
 -- MariaDB dump 10.19-11.7.2-MariaDB, for Win64 (AMD64)
 --
--- Host: localhost    Database: imperium_fitness
+-- Host: 10.147.17.250    Database: imperium_fitness
 -- ------------------------------------------------------
--- Server version	12.2.2-MariaDB
+-- Server version	11.8.6-MariaDB-ubu2404
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -33,7 +33,7 @@ CREATE TABLE `classe` (
   PRIMARY KEY (`id`),
   KEY `fk_classe_gimnas` (`gimnas_id`),
   CONSTRAINT `fk_classe_gimnas` FOREIGN KEY (`gimnas_id`) REFERENCES `gimnas` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=116 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -52,7 +52,112 @@ INSERT INTO `classe` VALUES
 (7,'Body Pump','Entrenament muscular amb barra','2026-04-26 08:00:00',15,1),
 (8,'Pilates Core','Exercicis de core i flexibilitat','2026-04-28 08:00:00',12,1),
 (9,'CrossFit','Entrenament funcional alta intensitat','2026-04-29 06:00:00',20,1),
-(10,'Yoga Restauratiu','Classe de ioga relaxant','2026-04-30 15:00:00',15,1);
+(10,'Yoga Restauratiu','Classe de ioga relaxant','2026-04-30 15:00:00',15,1),
+(11,'HIIT','HIIT - sessió setmanal','2026-05-01 07:30:00',20,1),
+(12,'Pilates','Pilates - sessió setmanal','2026-05-01 10:00:00',12,1),
+(13,'Spinning','Spinning - sessió setmanal','2026-05-01 18:00:00',20,1),
+(14,'CrossFit','CrossFit - sessió setmanal','2026-05-02 09:00:00',20,1),
+(15,'Yoga Restauratiu','Yoga Restauratiu - sessió setmanal','2026-05-02 10:30:00',15,1),
+(16,'Zumba','Zumba - sessió setmanal','2026-05-02 12:00:00',25,1),
+(17,'Spinning','Spinning - sessió setmanal','2026-05-04 09:00:00',20,1),
+(18,'Zumba','Zumba - sessió setmanal','2026-05-04 11:00:00',25,1),
+(19,'Body Pump','Body Pump - sessió setmanal','2026-05-05 10:00:00',15,1),
+(20,'CrossFit','CrossFit - sessió setmanal','2026-05-06 08:00:00',20,1),
+(21,'Pilates','Pilates - sessió setmanal','2026-05-06 10:00:00',12,1),
+(22,'Yoga Restauratiu','Yoga Restauratiu - sessió setmanal','2026-05-07 17:00:00',15,1),
+(23,'HIIT','HIIT - sessió setmanal','2026-05-08 07:30:00',20,1),
+(24,'Pilates','Pilates - sessió setmanal','2026-05-08 10:00:00',12,1),
+(25,'Spinning','Spinning - sessió setmanal','2026-05-08 18:00:00',20,1),
+(26,'CrossFit','CrossFit - sessió setmanal','2026-05-09 09:00:00',20,1),
+(27,'Yoga Restauratiu','Yoga Restauratiu - sessió setmanal','2026-05-09 10:30:00',15,1),
+(28,'Zumba','Zumba - sessió setmanal','2026-05-09 12:00:00',25,1),
+(29,'Spinning','Spinning - sessió setmanal','2026-05-11 09:00:00',20,1),
+(30,'Zumba','Zumba - sessió setmanal','2026-05-11 11:00:00',25,1),
+(31,'Body Pump','Body Pump - sessió setmanal','2026-05-12 10:00:00',15,1),
+(32,'CrossFit','CrossFit - sessió setmanal','2026-05-13 08:00:00',20,1),
+(33,'Pilates','Pilates - sessió setmanal','2026-05-13 10:00:00',12,1),
+(34,'Yoga Restauratiu','Yoga Restauratiu - sessió setmanal','2026-05-14 17:00:00',15,1),
+(35,'HIIT','HIIT - sessió setmanal','2026-05-15 07:30:00',20,1),
+(36,'Pilates','Pilates - sessió setmanal','2026-05-15 10:00:00',12,1),
+(37,'Spinning','Spinning - sessió setmanal','2026-05-15 18:00:00',20,1),
+(38,'CrossFit','CrossFit - sessió setmanal','2026-05-16 09:00:00',20,1),
+(39,'Yoga Restauratiu','Yoga Restauratiu - sessió setmanal','2026-05-16 10:30:00',15,1),
+(40,'Zumba','Zumba - sessió setmanal','2026-05-16 12:00:00',25,1),
+(41,'Spinning','Spinning - sessió setmanal','2026-05-18 09:00:00',20,1),
+(42,'Zumba','Zumba - sessió setmanal','2026-05-18 11:00:00',25,1),
+(43,'Body Pump','Body Pump - sessió setmanal','2026-05-19 10:00:00',15,1),
+(44,'CrossFit','CrossFit - sessió setmanal','2026-05-20 08:00:00',20,1),
+(45,'Pilates','Pilates - sessió setmanal','2026-05-20 10:00:00',12,1),
+(46,'Yoga Restauratiu','Yoga Restauratiu - sessió setmanal','2026-05-21 17:00:00',15,1),
+(47,'HIIT','HIIT - sessió setmanal','2026-05-22 07:30:00',20,1),
+(48,'Pilates','Pilates - sessió setmanal','2026-05-22 10:00:00',12,1),
+(49,'Spinning','Spinning - sessió setmanal','2026-05-22 18:00:00',20,1),
+(50,'CrossFit','CrossFit - sessió setmanal','2026-05-23 09:00:00',20,1),
+(51,'Yoga Restauratiu','Yoga Restauratiu - sessió setmanal','2026-05-23 10:30:00',15,1),
+(52,'Zumba','Zumba - sessió setmanal','2026-05-23 12:00:00',25,1),
+(53,'Spinning','Spinning - sessió setmanal','2026-05-25 09:00:00',20,1),
+(54,'Zumba','Zumba - sessió setmanal','2026-05-25 11:00:00',25,1),
+(55,'Body Pump','Body Pump - sessió setmanal','2026-05-26 10:00:00',15,1),
+(56,'CrossFit','CrossFit - sessió setmanal','2026-05-27 08:00:00',20,1),
+(57,'Pilates','Pilates - sessió setmanal','2026-05-27 10:00:00',12,1),
+(58,'Yoga Restauratiu','Yoga Restauratiu - sessió setmanal','2026-05-28 17:00:00',15,1),
+(59,'HIIT','HIIT - sessió setmanal','2026-05-29 07:30:00',20,1),
+(60,'Pilates','Pilates - sessió setmanal','2026-05-29 10:00:00',12,1),
+(61,'Spinning','Spinning - sessió setmanal','2026-05-29 18:00:00',20,1),
+(62,'CrossFit','CrossFit - sessió setmanal','2026-05-30 09:00:00',20,1),
+(63,'Yoga Restauratiu','Yoga Restauratiu - sessió setmanal','2026-05-30 10:30:00',15,1),
+(64,'Zumba','Zumba - sessió setmanal','2026-05-30 12:00:00',25,1),
+(65,'Spinning','Spinning - sessió setmanal','2026-06-01 09:00:00',20,1),
+(66,'Zumba','Zumba - sessió setmanal','2026-06-01 11:00:00',25,1),
+(67,'Body Pump','Body Pump - sessió setmanal','2026-06-02 10:00:00',15,1),
+(68,'CrossFit','CrossFit - sessió setmanal','2026-06-03 08:00:00',20,1),
+(69,'Pilates','Pilates - sessió setmanal','2026-06-03 10:00:00',12,1),
+(70,'Yoga Restauratiu','Yoga Restauratiu - sessió setmanal','2026-06-04 17:00:00',15,1),
+(71,'HIIT','HIIT - sessió setmanal','2026-06-05 07:30:00',20,1),
+(72,'Pilates','Pilates - sessió setmanal','2026-06-05 10:00:00',12,1),
+(73,'Spinning','Spinning - sessió setmanal','2026-06-05 18:00:00',20,1),
+(74,'CrossFit','CrossFit - sessió setmanal','2026-06-06 09:00:00',20,1),
+(75,'Yoga Restauratiu','Yoga Restauratiu - sessió setmanal','2026-06-06 10:30:00',15,1),
+(76,'Zumba','Zumba - sessió setmanal','2026-06-06 12:00:00',25,1),
+(77,'Spinning','Spinning - sessió setmanal','2026-06-08 09:00:00',20,1),
+(78,'Zumba','Zumba - sessió setmanal','2026-06-08 11:00:00',25,1),
+(79,'Body Pump','Body Pump - sessió setmanal','2026-06-09 10:00:00',15,1),
+(80,'CrossFit','CrossFit - sessió setmanal','2026-06-10 08:00:00',20,1),
+(81,'Pilates','Pilates - sessió setmanal','2026-06-10 10:00:00',12,1),
+(82,'Yoga Restauratiu','Yoga Restauratiu - sessió setmanal','2026-06-11 17:00:00',15,1),
+(83,'HIIT','HIIT - sessió setmanal','2026-06-12 07:30:00',20,1),
+(84,'Pilates','Pilates - sessió setmanal','2026-06-12 10:00:00',12,1),
+(85,'Spinning','Spinning - sessió setmanal','2026-06-12 18:00:00',20,1),
+(86,'CrossFit','CrossFit - sessió setmanal','2026-06-13 09:00:00',20,1),
+(87,'Yoga Restauratiu','Yoga Restauratiu - sessió setmanal','2026-06-13 10:30:00',15,1),
+(88,'Zumba','Zumba - sessió setmanal','2026-06-13 12:00:00',25,1),
+(89,'Spinning','Spinning - sessió setmanal','2026-06-15 09:00:00',20,1),
+(90,'Zumba','Zumba - sessió setmanal','2026-06-15 11:00:00',25,1),
+(91,'Body Pump','Body Pump - sessió setmanal','2026-06-16 10:00:00',15,1),
+(92,'CrossFit','CrossFit - sessió setmanal','2026-06-17 08:00:00',20,1),
+(93,'Pilates','Pilates - sessió setmanal','2026-06-17 10:00:00',12,1),
+(94,'Yoga Restauratiu','Yoga Restauratiu - sessió setmanal','2026-06-18 17:00:00',15,1),
+(95,'HIIT','HIIT - sessió setmanal','2026-06-19 07:30:00',20,1),
+(96,'Pilates','Pilates - sessió setmanal','2026-06-19 10:00:00',12,1),
+(97,'Spinning','Spinning - sessió setmanal','2026-06-19 18:00:00',20,1),
+(98,'CrossFit','CrossFit - sessió setmanal','2026-06-20 09:00:00',20,1),
+(99,'Yoga Restauratiu','Yoga Restauratiu - sessió setmanal','2026-06-20 10:30:00',15,1),
+(100,'Zumba','Zumba - sessió setmanal','2026-06-20 12:00:00',25,1),
+(101,'Spinning','Spinning - sessió setmanal','2026-06-22 09:00:00',20,1),
+(102,'Zumba','Zumba - sessió setmanal','2026-06-22 11:00:00',25,1),
+(103,'Body Pump','Body Pump - sessió setmanal','2026-06-23 10:00:00',15,1),
+(104,'CrossFit','CrossFit - sessió setmanal','2026-06-24 08:00:00',20,1),
+(105,'Pilates','Pilates - sessió setmanal','2026-06-24 10:00:00',12,1),
+(106,'Yoga Restauratiu','Yoga Restauratiu - sessió setmanal','2026-06-25 17:00:00',15,1),
+(107,'HIIT','HIIT - sessió setmanal','2026-06-26 07:30:00',20,1),
+(108,'Pilates','Pilates - sessió setmanal','2026-06-26 10:00:00',12,1),
+(109,'Spinning','Spinning - sessió setmanal','2026-06-26 18:00:00',20,1),
+(110,'CrossFit','CrossFit - sessió setmanal','2026-06-27 09:00:00',20,1),
+(111,'Yoga Restauratiu','Yoga Restauratiu - sessió setmanal','2026-06-27 10:30:00',15,1),
+(112,'Zumba','Zumba - sessió setmanal','2026-06-27 12:00:00',25,1),
+(113,'Spinning','Spinning - sessió setmanal','2026-06-29 09:00:00',20,1),
+(114,'Zumba','Zumba - sessió setmanal','2026-06-29 11:00:00',25,1),
+(115,'Body Pump','Body Pump - sessió setmanal','2026-06-30 10:00:00',15,1);
 /*!40000 ALTER TABLE `classe` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -70,7 +175,7 @@ CREATE TABLE `contacte` (
   `missatge` varchar(1000) NOT NULL,
   `data_enviament` timestamp NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -80,7 +185,10 @@ CREATE TABLE `contacte` (
 LOCK TABLES `contacte` WRITE;
 /*!40000 ALTER TABLE `contacte` DISABLE KEYS */;
 INSERT INTO `contacte` VALUES
-(1,'Pere Martí','pere@gmail.com','Voldria informació sobre les tarifes','2026-04-16 23:21:13');
+(1,'Pere Martí','pere@gmail.com','Voldria informació sobre les tarifes','2026-04-16 23:21:13'),
+(2,'dafa','rafa@gmail.com','jhvc','2026-05-05 14:44:36'),
+(3,'pepe','pepe@correo.com','Aqui se lava ropa?','2026-05-05 14:54:51'),
+(4,'pepe','pepe@correo.com','Aqui lavan ropa?','2026-05-05 14:57:32');
 /*!40000 ALTER TABLE `contacte` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -242,7 +350,7 @@ CREATE TABLE `producte` (
   `categoria` varchar(255) DEFAULT NULL,
   `estoc` int(11) DEFAULT 0,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -253,7 +361,17 @@ LOCK TABLES `producte` WRITE;
 /*!40000 ALTER TABLE `producte` DISABLE KEYS */;
 INSERT INTO `producte` VALUES
 (1,'Proteïna Whey 1kg','Proteïna de sèrum de llet sabor xocolata',29.99,'Suplement',50),
-(2,'Samarreta Imperium','Samarreta tècnica oficial del gimnàs',19.99,'Roba',30);
+(2,'Samarreta Imperium','Samarreta tècnica oficial del gimnàs',19.99,'Roba',30),
+(3,'Creatina 300g','Creatina monohidrat pura',19.99,'Suplement',40),
+(4,'Barra de proteïna','Snack proteic sabor xocolata',2.99,'Suplement',100),
+(5,'Guants gimnàs','Guants de training amb palmell reforçat',14.99,'Accesoris',25),
+(6,'Bossa de gimnàs','Bossa esportiva 30L',29.99,'Accesoris',20),
+(7,'Samarreta tècnica home','Samarreta dry-fit transpirable',24.99,'Roba',35),
+(8,'Samarreta tècnica dona','Samarreta dry-fit transpirable',24.99,'Roba',35),
+(9,'Malla esportiva','Malla compressió negra',34.99,'Roba',20),
+(10,'Ampolla 750ml','Ampolla esportiva amb filtre',12.99,'Accesoris',50),
+(11,'Proteïna Whey 2kg','Proteïna de sèrum sabor vainilla',49.99,'Suplement',30),
+(12,'Omega-3','Àcids grassos essencials 90 càpsules',16.99,'Suplement',45);
 /*!40000 ALTER TABLE `producte` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -274,7 +392,7 @@ CREATE TABLE `reserva` (
   KEY `fk_reserva_classe` (`classe_id`),
   CONSTRAINT `fk_reserva_classe` FOREIGN KEY (`classe_id`) REFERENCES `classe` (`id`),
   CONSTRAINT `fk_reserva_usuari` FOREIGN KEY (`usuari_id`) REFERENCES `usuari` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -406,4 +524,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
 
--- Dump completed on 2026-05-05 13:30:34
+-- Dump completed on 2026-05-05 18:55:55

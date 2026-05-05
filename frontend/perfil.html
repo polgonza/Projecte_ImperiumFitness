@@ -88,16 +88,21 @@
         <div>
           <!-- Pestañas: Reservas | Pedidos | Compras antiguas -->
           <div class="profile-tabs">
-            <button class="profile-tab active" data-tab="tab-reservations">
-              Mis Reservas
-            </button>
-            <button class="profile-tab" data-tab="tab-orders">
-              Mis Pedidos
-            </button>
-            <button class="profile-tab" data-tab="tab-purchases">
-              Historial compras
-            </button>
-          </div>
+    <button class="profile-tab active" data-tab="tab-reservations">
+      Mis Reservas
+    </button>
+    <button class="profile-tab" data-tab="tab-orders">
+      Mis Pedidos
+    </button>
+    <button class="profile-tab" data-tab="tab-purchases">
+      Historial compras
+    </button>
+    <!-- Pestanya ADMIN — s'amaga si no és admin -->
+    <button class="profile-tab" data-tab="tab-stats" id="tab-stats-btn"
+            style="display:none">
+      📊 Estadísticas
+    </button>
+</div>
 
           <!-- Tab: Reservas de clases -->
           <div class="tab-content active" id="tab-reservations">
@@ -112,14 +117,21 @@
               <!-- Generado por perfil.js -->
             </div>
           </div>
-
+          <!-- Tab: Estadístiques (només ADMIN) -->
+<div class="tab-content" id="tab-stats">
+  <div id="stats-container">
+    <p style="color:var(--text-muted);text-align:center;padding:2rem">
+      ⏳ Cargando estadísticas...
+    </p>
+  </div>
+</div>
           <!-- Tab: Compras antiguas (datos hardcodeados del mock) -->
           <div class="tab-content" id="tab-purchases">
             <div class="purchases-list" id="purchases-list">
               <!-- Generado por app.js -->
             </div>
           </div>
-
+          
         </div>
       </div>
     </div>
