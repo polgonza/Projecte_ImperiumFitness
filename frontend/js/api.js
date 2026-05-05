@@ -173,6 +173,17 @@ const ApiClasses = {
       if (res && res.ok) return await res.json();
       return [];
     } catch (e) { return []; }
+  },
+  async cancelarReserva(usuariId, classeId) {
+  try {
+    const res = await apiFetch(
+      `/api/reserves/usuari/${usuariId}/classe/${classeId}`,
+      { method: "DELETE" }
+    );
+    return res && (res.status === 204 || res.status === 200);
+  } catch (e) {
+    return false;
+  }
   }
 };
 

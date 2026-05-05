@@ -235,7 +235,36 @@ function initProfileTabs() {
 /* =====================================================
    6. ARRANQUE
    ===================================================== */
+async function cancelarReservaPerfil(classeId, nomClasse) {
+  const confirmat = confirm(
+    `¿Seguro que quieres cancelar la reserva de "${nomClasse}"?`
+  );
+  if (!confirmat) return;
 
+  const user = Auth.getUser();
+  if (!user) return;
+
+  const ok = await ApiClasses.cancelarReserva(
+    parseInt(user.id),
+    parseInt(classeId)
+  );
+
+  if (ok) {
+    // Eliminem també del localStorage
+    const clau = `imperium_reservas_${user.id}`;
+    const totes = JSON.parse(localStorage.getItem(clau) || "[]");
+    const noves = totes.filter(r =>
+      String(r.classId) !== String(classeId) &&
+      r.reservaId !== `bd_${classeId}`
+    );
+    localStorage.setItem(clau, JSON.stringify(noves));
+
+    showToast(`Reserva de "${nomClasse}" cancelada.`, "success");
+    await renderReservationsInProfile();
+  } else {
+    showToast("No se pudo cancelar la reserva.", "error");
+  }
+}
 document.addEventListener("DOMContentLoaded", async function() {
 
   if (!document.getElementById("profile-initial")) return;

@@ -99,4 +99,18 @@ public class ReservaService {
         r.setClasse(c);
         return r;
     }
+    public void cancelarReserva(Long usuariId, Long classeId) {
+    List<Reserva> reserves = repo.findByUsuariId(usuariId)
+            .stream()
+            .filter(r -> r.getClasse() != null &&
+                         r.getClasse().getId().equals(classeId))
+            .collect(Collectors.toList());
+
+    if (reserves.isEmpty()) {
+        throw new ResponseStatusException(
+                HttpStatus.NOT_FOUND, "Reserva no trobada");
+    }
+
+    reserves.forEach(r -> repo.deleteById(r.getId()));
+    }
 }
