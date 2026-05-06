@@ -10,17 +10,23 @@ public class UsuariDTO {
     private String contrasenya;
     private LocalDateTime dataRegistre;
     private String rol;
+    private Long tarifaId;
+    private String tarifaNom;
 
     public UsuariDTO() {}
 
-    public UsuariDTO(Long id, String nom, String email, String contrasenya, LocalDateTime dataRegistre, String rol) {
-        this.id = id;
-        this.nom = nom;
-        this.email = email;
-        this.contrasenya = contrasenya;
-        this.dataRegistre = dataRegistre;
-        this.rol = rol;
-    }
+    public UsuariDTO(Long id, String nom, String email, String contrasenya,
+                 LocalDateTime dataRegistre, String rol,
+                 Long tarifaId, String tarifaNom) {
+    this.id = id;
+    this.nom = nom;
+    this.email = email;
+    this.contrasenya = contrasenya;
+    this.dataRegistre = dataRegistre;
+    this.rol = rol;
+    this.tarifaId = tarifaId;
+    this.tarifaNom = tarifaNom;
+}
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -39,4 +45,10 @@ public class UsuariDTO {
 
     public String getRol() { return rol; }
     public void setRol(String rol) { this.rol = rol; }
+
+    public Long getTarifaId() { return tarifaId; }
+    public void setTarifaId(Long tarifaId) { this.tarifaId = tarifaId; }
+    
+    public String getTarifaNom() { return tarifaNom; }
+    public void setTarifaNom(String tarifaNom) { this.tarifaNom = tarifaNom; }
 }
