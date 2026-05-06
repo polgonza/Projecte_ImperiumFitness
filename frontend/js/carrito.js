@@ -214,7 +214,18 @@ function renderProductosConImagenes(containerId, filter) {
   // Filtra por categoría
   const lista = filter === "all" || !filter
     ? PRODUCTS_IMG
-    : PRODUCTS_IMG.filter(function(p) { return p.category === filter; });
+    // ✅ CORREGIT — normalitza la comparació
+: PRODUCTS_IMG.filter(function(p) {
+    const cat = (p.category || "").toLowerCase();
+    const f   = (filter || "").toLowerCase();
+    // Mapeja categories BD → filtres HTML
+    const mapa = {
+      "roba": "ropa",
+      "suplement": "suplementos",
+      "accesoris": "accesorios"
+    };
+    return (mapa[cat] || cat) === f;
+  });
 
   container.innerHTML = lista.map(function(p) {
     return `
