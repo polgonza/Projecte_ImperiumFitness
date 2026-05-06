@@ -1,7 +1,9 @@
 package com.imperiumfitness.service;
 
 import com.imperiumfitness.dto.UsuariDTO;
+import com.imperiumfitness.model.entity.Tarifa;
 import com.imperiumfitness.model.entity.Usuari;
+import com.imperiumfitness.repository.TarifaRepository;
 import com.imperiumfitness.repository.UsuariRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -15,10 +17,12 @@ import java.util.stream.Collectors;
 public class UsuariService {
 
     private final UsuariRepository repo;
+    private final TarifaRepository tarifaRepo;
 
-    public UsuariService(UsuariRepository repo) {
-        this.repo = repo;
-    }
+    public UsuariService(UsuariRepository repo, TarifaRepository tarifaRepo) {
+    this.repo = repo;
+    this.tarifaRepo = tarifaRepo;
+}
 
     // ── Obtenir tots els usuaris (sense contrasenya!) ────────────────────────
     public List<UsuariDTO> getAll() {
@@ -54,16 +58,18 @@ public class UsuariService {
     }
 
     // ── Conversió Entity → DTO (mai retornem la contrasenya!) ───────────────
-    private UsuariDTO toDTO(Usuari u) {
-        return new UsuariDTO(
-                u.getId(),
-                u.getNom(),
-                u.getEmail(),
-                null,               // contrasenya sempre null en la resposta
-                u.getDataRegistre(),
-                u.getRol()
-        );
-    }
+   private UsuariDTO toDTO(Usuari u) {
+    return new UsuariDTO(
+            u.getId(),
+            u.getNom(),
+            u.getEmail(),
+            null, // contrasenya mai en resposta
+            u.getDataRegistre(),
+            u.getRol(),
+            u.getTarifa() != null ? u.getTarifa().getId()  : null,
+            u.getTarifa() != null ? u.getTarifa().getNom() : null
+    );
+}
 
     // ── Conversió DTO → Entity ───────────────────────────────────────────────
     private Usuari toEntity(UsuariDTO dto) {
@@ -75,4 +81,22 @@ public class UsuariService {
         u.setDataRegistre(LocalDateTime.now());
         return u;
     }
+
+    public UsuariDTO assignarTarifa(Long usuariId, Long tarifaId) {
+    Usuari u = repo.findById(usuariId)
+            .orElseThrow(() -> new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Usuari no trobat"));
+
+    if (tarifaId == null) {
+        u.setTarifa(null); // cancel·lar tarifa
+    } else {
+        // Necessitem TarifaRepository — afegeix-lo al constructor
+        Tarifa t = tarifaRepo.findById(tarifaId)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Tarifa no trobada"));
+        u.setTarifa(t);
+    }
+
+    return toDTO(repo.save(u));
+}
 }

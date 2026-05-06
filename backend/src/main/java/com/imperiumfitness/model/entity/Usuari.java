@@ -2,6 +2,7 @@ package com.imperiumfitness.model.entity;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import com.imperiumfitness.model.entity.Tarifa;
 
 @Entity
 @Table(name = "usuari") // nom exacte de la taula SQL
@@ -10,6 +11,10 @@ public class Usuari {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // AUTO_INCREMENT de MariaDB
     private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "tarifa_id")
+    private Tarifa tarifa;
 
     @Column(nullable = false)
     private String nom;
@@ -45,6 +50,9 @@ public class Usuari {
 
     public LocalDateTime getDataRegistre() { return dataRegistre; }
     public void setDataRegistre(LocalDateTime dataRegistre) { this.dataRegistre = dataRegistre; }
+
+    public Tarifa getTarifa() { return tarifa; }
+    public void setTarifa(Tarifa tarifa) { this.tarifa = tarifa; }
 
     public String getRol() { return rol; }
     public void setRol(String rol) { this.rol = rol; }
