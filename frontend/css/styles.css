@@ -25,3 +25,9 @@
 
 /* 6. Calendario y tarjetas de clase (actividades.html) */
 @import url("calendario.css");
+
+/* 7. Página de ocupación en tiempo real */
+@import url("ocupacion.css");
+
+/* 7. Página de Preguntas Frecuentes */
+@import url("faq.css");

@@ -1,0 +1,557 @@
+/* =====================================================
+   ocupacion.css — Página de Ocupación en Tiempo Real
+   IMPERIUM FITNESS
+   Importado desde styles.css al final.
+   ===================================================== */
+
+
+/* ── HERO ─────────────────────────────────────────── */
+
+.occ-hero {
+  padding: 7rem 0 2.5rem;
+  text-align: center;
+  background: radial-gradient(ellipse at top,
+    rgba(201,162,39,0.06) 0%, transparent 65%);
+}
+
+.occ-hero-title {
+  font-size: clamp(1.8rem, 5vw, 3rem);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--primary);
+  margin-bottom: 0.75rem;
+}
+
+.occ-hero-sub {
+  font-size: 0.92rem;
+  color: var(--text-muted);
+  max-width: 520px;
+  margin: 0 auto 2rem;
+  line-height: 1.6;
+}
+
+/* Barra EN VIVO + reloj */
+.occ-status-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  margin-bottom: 2.5rem;
+}
+
+.occ-live-pill {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(34,197,94,0.12);
+  border: 1px solid rgba(34,197,94,0.3);
+  border-radius: 50px;
+  padding: 0.35rem 0.9rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--success);
+}
+
+.occ-live-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--success);
+  animation: occ-pulse 1.8s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+@keyframes occ-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.4; transform: scale(0.8); }
+}
+
+.occ-clock {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.88rem;
+  color: var(--text-muted);
+}
+
+
+/* ── KPIs ─────────────────────────────────────────── */
+
+.occ-kpis {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.occ-kpi-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 1.25rem 1.5rem;
+  text-align: left;
+}
+
+.occ-kpi-icon {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+.trend-icon { color: var(--primary); font-weight: 900; }
+
+.occ-kpi-label {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 0.5rem;
+}
+
+.occ-kpi-value {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 0.3rem;
+}
+
+.occ-kpi-sub {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+
+/* ── CONTROLES ────────────────────────────────────── */
+
+.occ-controls-section {
+  padding: 1.5rem 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-secondary);
+}
+
+.occ-controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.occ-search {
+  flex: 1;
+  min-width: 200px;
+  padding: 0.75rem 1.1rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 0.88rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.occ-search:focus        { border-color: var(--primary); }
+.occ-search::placeholder { color: var(--text-muted); }
+
+.occ-view-toggle {
+  display: flex;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.occ-view-btn {
+  padding: 0.65rem 1.1rem;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-family: inherit;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.occ-view-btn.active { background: var(--primary); color: #000; }
+
+
+/* ── SECCIÓN CARDS ────────────────────────────────── */
+
+.occ-gyms-section { padding: 2.5rem 0 3rem; }
+
+.occ-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.5rem;
+}
+
+
+/* ── GYM CARD ─────────────────────────────────────── */
+
+.occ-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+}
+
+.occ-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.4);
+}
+
+/* Franja de color superior */
+.occ-card-stripe        { height: 4px; width: 100%; }
+.occ-card-stripe.low    { background: var(--success); }
+.occ-card-stripe.medium { background: var(--warning); }
+.occ-card-stripe.high   { background: var(--danger); }
+
+.occ-card-body { padding: 1.4rem 1.5rem 0; }
+
+.occ-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.3rem;
+}
+
+.occ-card-name {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--text);
+  line-height: 1.2;
+}
+
+.occ-level-badge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 0.25rem 0.7rem;
+  border-radius: 50px;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.occ-level-badge.low    { background:rgba(34,197,94,0.15);  color:var(--success); }
+.occ-level-badge.medium { background:rgba(245,158,11,0.15); color:var(--warning); }
+.occ-level-badge.high   { background:rgba(239,68,68,0.15);  color:var(--danger); }
+
+.occ-card-address {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-bottom: 1.25rem;
+}
+
+.occ-card-main {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 1.25rem;
+}
+
+/* Donut SVG */
+.occ-donut-wrap {
+  flex-shrink: 0;
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+
+.occ-donut-svg {
+  width: 80px;
+  height: 80px;
+  transform: rotate(-90deg);
+}
+
+.occ-donut-bg {
+  fill: none;
+  stroke: var(--bg-secondary);
+  stroke-width: 8;
+}
+
+.occ-donut-fill {
+  fill: none;
+  stroke-width: 8;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 1.2s ease;
+}
+
+.occ-donut-fill.low    { stroke: var(--success); }
+.occ-donut-fill.medium { stroke: var(--warning); }
+.occ-donut-fill.high   { stroke: var(--danger); }
+
+.occ-donut-label {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+.occ-donut-label.low    { color: var(--success); }
+.occ-donut-label.medium { color: var(--warning); }
+.occ-donut-label.high   { color: var(--danger); }
+
+/* Stats */
+.occ-card-stats {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.occ-stat-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.82rem;
+}
+
+.occ-stat-label           { color: var(--text-muted); }
+.occ-stat-value           { font-weight: 700; color: var(--text); }
+.occ-stat-value.pred-up   { color: var(--danger); }
+.occ-stat-value.pred-down { color: var(--success); }
+
+/* Barra base */
+.occ-card-bar { height: 5px; background: var(--bg-secondary); }
+
+.occ-card-bar-fill {
+  height: 100%;
+  transition: width 1.2s ease;
+}
+
+.occ-card-bar-fill.low    { background: var(--success); }
+.occ-card-bar-fill.medium { background: var(--warning); }
+.occ-card-bar-fill.high   { background: var(--danger); }
+
+/* Botón expandir */
+.occ-card-toggle {
+  width: 100%;
+  padding: 0.85rem 1.5rem;
+  background: none;
+  border: none;
+  border-top: 1px solid var(--border);
+  color: var(--text-muted);
+  font-family: inherit;
+  font-size: 0.78rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: color 0.2s, background 0.2s;
+}
+
+.occ-card-toggle:hover {
+  color: var(--text);
+  background: rgba(255,255,255,0.03);
+}
+
+/* Panel gráficas */
+.occ-charts-panel {
+  display: none;
+  padding: 1.25rem 1.5rem 1.5rem;
+  border-top: 1px solid var(--border);
+  background: var(--bg-secondary);
+}
+
+.occ-charts-panel.open { display: block; }
+
+.occ-chart-title {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--text-muted);
+  margin-bottom: 0.9rem;
+}
+
+/* Barras horarias */
+.occ-bar-chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 70px;
+  margin-bottom: 0.4rem;
+}
+
+.occ-bar-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  height: 100%;
+  gap: 2px;
+}
+
+.occ-bar {
+  width: 100%;
+  border-radius: 3px 3px 0 0;
+  min-height: 3px;
+}
+
+.occ-bar.current { background: var(--primary); }
+.occ-bar.past    { background: rgba(201,162,39,0.3); }
+.occ-bar.future  { background: var(--bg-card); border: 1px solid var(--border); }
+
+.occ-bar-hour {
+  font-size: 0.5rem;
+  color: var(--text-muted);
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* Barras por día */
+.occ-day-chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  height: 60px;
+  margin-top: 1.25rem;
+  margin-bottom: 0.4rem;
+}
+
+.occ-day-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  height: 100%;
+  gap: 3px;
+}
+
+.occ-day-bar {
+  width: 100%;
+  border-radius: 3px 3px 0 0;
+  min-height: 4px;
+}
+
+.occ-day-bar.today { background: var(--primary); }
+.occ-day-bar.other { background: rgba(201,162,39,0.45); }
+
+.occ-day-label {
+  font-size: 0.58rem;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+
+/* ── VISTA MAPA ───────────────────────────────────── */
+
+.occ-map-view { text-align: center; }
+
+.occ-map-placeholder {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 3rem 2rem;
+  min-height: 280px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.occ-map-pins {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.occ-map-pin {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.65rem 1rem;
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.occ-map-pin-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
+.occ-map-pin-dot.low    { background: var(--success); }
+.occ-map-pin-dot.medium { background: var(--warning); }
+.occ-map-pin-dot.high   { background: var(--danger); }
+
+
+/* ── LEYENDA + INFO ───────────────────────────────── */
+
+.occ-legend-section { padding: 0 0 3rem; }
+
+.occ-legend {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+  font-size: 0.83rem;
+  color: var(--text-muted);
+}
+
+.occ-legend-item { display:flex; align-items:center; gap:0.5rem; }
+
+.occ-legend-dot { width:12px; height:12px; border-radius:50%; flex-shrink:0; }
+.occ-legend-dot.low    { background: var(--success); }
+.occ-legend-dot.medium { background: var(--warning); }
+.occ-legend-dot.high   { background: var(--danger); }
+
+.occ-info-box {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 1.5rem 2rem;
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+.occ-info-title {
+  font-size: 0.92rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--primary);
+}
+
+.occ-info-box p {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.75;
+}
+
+
+/* ── RESPONSIVE ───────────────────────────────────── */
+
+@media (max-width: 768px) {
+  .occ-cards-grid { grid-template-columns: 1fr; }
+  .occ-controls   { flex-direction: column; align-items: stretch; }
+  .occ-view-toggle { align-self: flex-end; }
+}
+
+@media (max-width: 640px) {
+  .occ-kpis { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 480px) {
+  .occ-card-main { flex-direction: column; align-items: flex-start; }
+}
