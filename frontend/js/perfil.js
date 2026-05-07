@@ -32,19 +32,32 @@ async function initPerfil() {
       ? new Date(perfil.dataRegistre).toLocaleDateString("es-ES")
       : "—";
 
+    // ← Mostrem la tarifa real
+    const planNom = perfil.tarifaNom || "Sin tarifa activa";
+
     renderDatosUsuario(
       perfil.nom.charAt(0).toUpperCase(),
       perfil.nom,
       perfil.email,
-      "Sin plan activo",
+      planNom,        // ← tarifa real
       dataRegistre
     );
 
-    Auth.setUser({ ...user, name: perfil.nom, email: perfil.email });
-  }
+    // Guardem la tarifa al localStorage per usar-la al carrito i reserves
+    Auth.setUser({
+      ...user,
+      name:     perfil.nom,
+      email:    perfil.email,
+      tarifaId: perfil.tarifaId,
+      tarifaNom: perfil.tarifaNom
+    });
 
-  const noPlanMsg = document.getElementById("no-plan-msg");
-  if (noPlanMsg) noPlanMsg.style.display = "block";
+    // Amaguem o mostrem el missatge de "sense pla"
+    const noPlanMsg = document.getElementById("no-plan-msg");
+    if (noPlanMsg) {
+      noPlanMsg.style.display = perfil.tarifaId ? "none" : "block";
+    }
+}
 }
 
 function setTextById(id, text) {
