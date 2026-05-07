@@ -137,6 +137,25 @@
     </div>
   </section>
 
+  <!-- PANEL CARRITO -->
+<div class="cart-backdrop" id="cart-backdrop"></div>
+<div class="cart-drawer" id="cart-drawer">
+  <div class="cart-header">
+    <h3>Mi Carrito</h3>
+    <button class="cart-close-btn" id="cart-close-btn" title="Cerrar">&#x2715;</button>
+  </div>
+  <div class="cart-items" id="cart-items"></div>
+  <div class="cart-footer">
+    <div class="cart-total-row">
+      <span class="cart-total-label">Total</span>
+      <span class="cart-total-amount" id="cart-total">0.00 €</span>
+    </div>
+    <button class="btn btn-primary" style="width:100%;justify-content:center" id="cart-checkout-btn">
+      Finalizar Compra
+    </button>
+  </div>
+</div>
+
   <footer>
     <div class="container">
       <div class="footer-bottom">
@@ -155,7 +174,6 @@
   <!-- ORDRE IMPORTANT: api.js sempre PRIMER -->
   <script src="js/api.js"></script>
   <script src="js/render.js"></script>
-
   <script src="js/app.js"></script>
   <script src="js/carrito.js"></script>
   <script src="js/perfil.js"></script>

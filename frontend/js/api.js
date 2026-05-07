@@ -266,7 +266,35 @@ const ApiUsuari = {
       if (res && res.ok) return await res.json();
       return [];
     } catch (e) { return []; }
-  }
+  },
+  async assignarTarifa(usuariId, tarifaId) {
+    try {
+      const res = await apiFetch(`/api/usuaris/${usuariId}/tarifa`, {
+        method: "PUT",
+        body: JSON.stringify({ tarifaId })
+    });
+    if (res && res.ok) return await res.json();
+    return null;
+  } catch (e) { return null; }
+},
+async getTarifaActiva() {
+  const user = Auth.getUser();
+  if (!user) return null;
+  try {
+    const perfil = await this.getPerfil(user.id);
+    if (perfil && perfil.tarifaId) {
+      // Actualitzem el localStorage amb la tarifa real
+      Auth.setUser({
+        ...user,
+        tarifaId:  perfil.tarifaId,
+        tarifaNom: perfil.tarifaNom
+      });
+      return perfil.tarifaNom;
+    }
+    return null;
+  } catch (e) { return null; }
+}
+
 };
 /* ══════════════════════════════════════════════════════
    ESTADÍSTIQUES — només ADMIN

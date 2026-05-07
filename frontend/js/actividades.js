@@ -370,11 +370,18 @@ async function confirmReservation() {
   if (!pendingClass || !pendingDateKey) return;
 
   const user = Auth.getUser();
-  if (!user) {
-    showToast("Debes iniciar sesión para reservar.", "error");
-    setTimeout(() => window.location.href = "login.html", 1500);
-    return;
-  }
+if (!user) {
+  showToast("Debes iniciar sesión para reservar.", "error");
+  setTimeout(() => window.location.href = "login.html", 1500);
+  return;
+}
+
+// ← AFEGEIX AQUÍ: comprova si té tarifa activa
+if (!user.tarifaId) {
+  showToast("Necesitas una tarifa activa para reservar clases. Ve a Tarifas.", "error");
+  setTimeout(() => window.location.href = "tarifas.html", 2000);
+  return;
+}
 
   const btnConfirm = document.getElementById("modal-confirm-btn");
   if (btnConfirm) {
