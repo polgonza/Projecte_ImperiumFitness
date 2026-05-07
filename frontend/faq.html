@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Preguntas Frecuentes - Imperium Fitness</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- NAVBAR (idéntico al resto del proyecto) -->
+  <nav class="navbar scrolled" id="navbar">
+    <div class="container">
+      <a href="index.html" class="navbar-brand">
+        <img src="assets/logo.png" alt="Imperium">
+        <span class="text-gold">IMPERIUM</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="instalaciones.html">Instalaciones</a></li>
+        <li><a href="actividades.html">Clases</a></li>
+        <li><a href="tarifas.html">Tarifas</a></li>
+        <li><a href="tienda.html">Tienda</a></li>
+        <li><a href="blog.html">Novedades</a></li>
+        <li><a href="contacto.html">Contacto</a></li>
+      </ul>
+      <div class="nav-actions" id="nav-user-area"></div>
+      <button class="nav-toggle" id="nav-toggle">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+  <div class="nav-mobile" id="nav-mobile">
+    <a href="instalaciones.html">Instalaciones</a>
+    <a href="actividades.html">Clases</a>
+    <a href="tarifas.html">Tarifas</a>
+    <a href="tienda.html">Tienda</a>
+    <a href="blog.html">Novedades</a>
+    <a href="contacto.html">Contacto</a>
+    <div class="nav-divider"></div>
+    <div id="nav-mobile-user"></div>
+  </div>
+
+  <!-- ══ HERO ══════════════════════════════════════════ -->
+  <section class="faq-hero">
+    <div class="container">
+      <div class="faq-hero-tag">Centro de Ayuda</div>
+      <h1>Preguntas <span class="text-gold">Frecuentes</span></h1>
+      <p>Todo lo que necesitas saber sobre Imperium Fitness.<br>
+         Encuentra respuesta en segundos.</p>
+
+      <!-- Buscador -->
+      <div class="faq-search-wrap">
+        <span class="faq-search-icon">🔍</span>
+        <input
+          type="text"
+          class="faq-search"
+          id="faq-search"
+          placeholder="Busca tu pregunta..."
+          oninput="filtrarFAQ(this.value)"
+          autocomplete="off"
+        >
+      </div>
+      <div class="faq-search-count" id="faq-count"></div>
+    </div>
+  </section>
+
+  <!-- ══ PREGUNTAS ══════════════════════════════════════ -->
+  <section class="faq-section">
+    <div class="container">
+
+      <!-- ── CATEGORÍA: Tarifas y Pagos ── -->
+      <div class="faq-category-label" data-cat>💳 Tarifas y Pagos</div>
+      <div class="faq-list">
+
+        <div class="faq-item" data-question="qué incluye mi tarifa cuota plan">
+          <button class="faq-question" onclick="toggleFAQ(this)">
+            <span class="faq-question-text">¿Qué incluye mi tarifa mensual?</span>
+            <i class="faq-icon">+</i>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              Dependiendo de tu plan, tu tarifa incluye acceso ilimitado a las instalaciones,
+              clases dirigidas, zona de musculación, vestuarios y WiFi. Los planes superiores
+              incluyen además acceso a zona wellness, sesiones con entrenador personal y
+              descuento del 10% en la tienda online. Consulta la página de
+              <a href="tarifas.html">Tarifas</a> para ver el detalle completo de cada plan.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-question="puedo cancelar suscripción baja plan">
+          <button class="faq-question" onclick="toggleFAQ(this)">
+            <span class="faq-question-text">¿Puedo cancelar mi suscripción en cualquier momento?</span>
+            <i class="faq-icon">+</i>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              Sí. No existe permanencia mínima. Puedes darte de baja desde tu perfil o
+              contactando con recepción. La cancelación es efectiva al finalizar el período
+              mensual ya abonado — no realizamos devoluciones de cuotas pagadas salvo causa
+              justificada.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-question="cambiar de plan tarifa upgrade">
+          <button class="faq-question" onclick="toggleFAQ(this)">
+            <span class="faq-question-text">¿Cómo puedo cambiar de plan?</span>
+            <i class="faq-icon">+</i>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              Puedes cambiar de plan en cualquier momento desde la sección
+              <a href="tarifas.html">Tarifas</a> de la web. El nuevo plan se activa
+              inmediatamente. Si subes de plan, solo pagarás la diferencia proporcional
+              del mes en curso.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-question="métodos de pago tarjeta domiciliación">
+          <button class="faq-question" onclick="toggleFAQ(this)">
+            <span class="faq-question-text">¿Qué métodos de pago aceptáis?</span>
+            <i class="faq-icon">+</i>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              Aceptamos tarjetas de crédito y débito (Visa, Mastercard, American Express).
+              El cobro de la cuota mensual se realiza de forma automática el mismo día de
+              cada mes. Para compras en tienda también aceptamos PayPal.
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ── CATEGORÍA: Reservas y Clases ── -->
+      <div class="faq-category-label" data-cat>📅 Reservas y Clases</div>
+      <div class="faq-list">
+
+        <div class="faq-item" data-question="reservar clase cómo booking">
+          <button class="faq-question" onclick="toggleFAQ(this)">
+            <span class="faq-question-text">¿Cómo puedo reservar una clase dirigida?</span>
+            <i class="faq-icon">+</i>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              Desde la sección <a href="actividades.html">Clases</a> puedes ver el
+              calendario semanal y reservar con un solo clic. Necesitas tener una tarifa
+              activa y sesión iniciada. Te recomendamos reservar con al menos 24 horas de
+              antelación, ya que las plazas son limitadas.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-question="cancelar reserva clase anulación">
+          <button class="faq-question" onclick="toggleFAQ(this)">
+            <span class="faq-question-text">¿Puedo cancelar una reserva de clase?</span>
+            <i class="faq-icon">+</i>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              Sí, puedes cancelar tu reserva hasta <strong>2 horas antes</strong> del inicio
+              de la clase sin ninguna penalización. Si acumulas 3 ausencias sin cancelar en
+              el mismo mes, se suspenderán temporalmente tus reservas durante 7 días.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-question="cuántas clases puedo reservar semana límite">
+          <button class="faq-question" onclick="toggleFAQ(this)">
+            <span class="faq-question-text">¿Cuántas clases puedo reservar por semana?</span>
+            <i class="faq-icon">+</i>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              Puedes tener un máximo de <strong>5 reservas activas</strong> simultáneamente.
+              Con el plan Quota Flex tienes acceso a 1 clase por día; con Quota Prime, a 2
+              clases por día. No hay límite semanal siempre que no superes el máximo de
+              reservas activas.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-question="horarios gimnasio apertura cierre">
+          <button class="faq-question" onclick="toggleFAQ(this)">
+            <span class="faq-question-text">¿Cuáles son los horarios del gimnasio?</span>
+            <i class="faq-icon">+</i>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              Nuestros centros abren de <strong>lunes a viernes de 06:00 a 23:00</strong>,
+              los <strong>sábados de 08:00 a 22:00</strong> y los
+              <strong>domingos de 09:00 a 20:00</strong>. Los festivos nacionales pueden
+              tener horario reducido — lo anunciamos con antelación en redes sociales y
+              en la app.
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ── CATEGORÍA: Entrenadores y Servicios ── -->
+      <div class="faq-category-label" data-cat>💪 Entrenadores y Servicios</div>
+      <div class="faq-list">
+
+        <div class="faq-item" data-question="entrenador personal sesión PT">
+          <button class="faq-question" onclick="toggleFAQ(this)">
+            <span class="faq-question-text">¿Cómo puedo contratar un entrenador personal?</span>
+            <i class="faq-icon">+</i>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              Los socios con plan <strong>Quota Prime</strong> incluyen una sesión mensual
+              gratuita con entrenador personal. Puedes contratar sesiones adicionales
+              directamente en recepción o a través de la app. También ofrecemos packs de
+              10 sesiones con descuento especial.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-question="plan entrenamiento nutrición dieta">
+          <button class="faq-question" onclick="toggleFAQ(this)">
+            <span class="faq-question-text">¿Ofrecéis planes de nutrición personalizados?</span>
+            <i class="faq-icon">+</i>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              Sí. Al darte de alta realizamos una evaluación física inicial gratuita.
+              A partir de ahí, nuestros dietistas-nutricionistas pueden elaborar un plan
+              de alimentación adaptado a tus objetivos. El servicio está disponible en
+              todos los centros y también online.
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ── CATEGORÍA: Tienda y App ── -->
+      <div class="faq-category-label" data-cat>🛒 Tienda y App</div>
+      <div class="faq-list">
+
+        <div class="faq-item" data-question="tienda online descuento socio compra">
+          <button class="faq-question" onclick="toggleFAQ(this)">
+            <span class="faq-question-text">¿Tengo descuento en la tienda por ser socio?</span>
+            <i class="faq-icon">+</i>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              Sí. Los socios con sesión iniciada disfrutan de un
+              <strong>5% de descuento automático</strong> en todos los productos de la
+              <a href="tienda.html">tienda online</a>. Los socios Quota Prime tienen un
+              10% de descuento. El descuento se aplica directamente en el carrito, sin
+              necesidad de ningún código.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-question="aplicación móvil app descargar">
+          <button class="faq-question" onclick="toggleFAQ(this)">
+            <span class="faq-question-text">¿Tenéis aplicación móvil?</span>
+            <i class="faq-icon">+</i>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              Nuestra app para iOS y Android está actualmente en desarrollo y estará
+              disponible próximamente. Por el momento, la web está completamente adaptada
+              para móvil y puedes gestionar reservas, consultar la ocupación en tiempo real
+              y comprar en la tienda desde cualquier dispositivo.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-question="devolución producto compra tienda reembolso">
+          <button class="faq-question" onclick="toggleFAQ(this)">
+            <span class="faq-question-text">¿Puedo devolver un producto de la tienda?</span>
+            <i class="faq-icon">+</i>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              Los productos físicos pueden devolverse en un plazo de
+              <strong>14 días naturales</strong> desde la recepción, siempre que estén en
+              perfecto estado y con el embalaje original. Los suplementos abiertos no son
+              retornables por razones sanitarias. Para iniciar una devolución, contacta
+              con nosotros a través del formulario de <a href="contacto.html">contacto</a>.
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ── CATEGORÍA: Acceso y Cuenta ── -->
+      <div class="faq-category-label" data-cat>🔐 Acceso y Cuenta</div>
+      <div class="faq-list">
+
+        <div class="faq-item" data-question="olvidé contraseña recuperar acceso login">
+          <button class="faq-question" onclick="toggleFAQ(this)">
+            <span class="faq-question-text">He olvidado mi contraseña, ¿cómo la recupero?</span>
+            <i class="faq-icon">+</i>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              Desde la página de <a href="login.html">inicio de sesión</a>, haz clic en
+              "¿Has olvidado tu contraseña?". Introduce tu email y te enviaremos un enlace
+              de recuperación en segundos. Si no recibes el email, revisa la carpeta de
+              spam o contacta con nosotros.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-question="acceso RFID pulsera entrada tornos">
+          <button class="faq-question" onclick="toggleFAQ(this)">
+            <span class="faq-question-text">¿Cómo funciona el sistema de acceso al centro?</span>
+            <i class="faq-icon">+</i>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              Cada socio recibe una <strong>pulsera RFID</strong> que se activa al darse
+              de alta. Al acercarla al torno de entrada, el sistema registra tu acceso
+              automáticamente y actualiza la ocupación en tiempo real. Si pierdes la
+              pulsera, comunícalo en recepción para que te la repongan.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-question="invitar amigo pase día visita">
+          <button class="faq-question" onclick="toggleFAQ(this)">
+            <span class="faq-question-text">¿Puedo traer a un amigo al gimnasio?</span>
+            <i class="faq-icon">+</i>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              Sí. Con el plan <strong>Quota Flex</strong> dispones de 15 invitaciones
+              anuales y con <strong>Quota Prime</strong> de 20. Tu acompañante puede
+              acceder al centro durante una sesión completa usando tu invitación. Para
+              visitas sin invitación, ofrecemos un pase de día con un coste reducido
+              en recepción.
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Sin resultados -->
+      <div class="faq-no-results" id="faq-no-results">
+        <span class="faq-no-results-icon">🔎</span>
+        No hemos encontrado preguntas que coincidan con tu búsqueda.<br>
+        Prueba con otras palabras o <a href="contacto.html">contáctanos directamente</a>.
+      </div>
+
+      <!-- CTA contacto -->
+      <div class="faq-cta">
+        <div class="faq-cta-text">
+          <h3>¿No encuentras lo que buscas?</h3>
+          <p>Nuestro equipo responde en menos de 24 horas.</p>
+        </div>
+        <a href="contacto.html" class="btn btn-primary">Contactar con nosotros</a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="footer-bottom">
+        <div class="footer-legal">
+          <a href="politica-privacidad.html">Política de Privacidad</a>
+          <a href="politica-cookies.html">Política de Cookies</a>
+          <a href="terminos-condiciones.html">Términos y Condiciones</a>
+          <a href="normativa-clubes.html">Normativa de Clubes</a>
+          <a href="canal-etico.html">Canal Ético</a>
+        </div>
+        <span class="footer-copy">© 2026 Imperium Fitness. Todos los derechos reservados.</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- PANEL CARRITO -->
+  <div class="cart-backdrop" id="cart-backdrop"></div>
+  <div class="cart-drawer" id="cart-drawer">
+    <div class="cart-header">
+      <h3>Mi Carrito</h3>
+      <button class="cart-close-btn" id="cart-close-btn" title="Cerrar">&#x2715;</button>
+    </div>
+    <div class="cart-items" id="cart-items"></div>
+    <div class="cart-footer">
+      <div class="cart-total-row">
+        <span class="cart-total-label">Total</span>
+        <span class="cart-total-amount" id="cart-total">0.00 &euro;</span>
+      </div>
+      <button class="btn btn-primary"
+              style="width:100%;justify-content:center"
+              id="cart-checkout-btn">Finalizar Compra</button>
+    </div>
+  </div>
+
+  <!-- SCRIPTS — mismo orden que el resto del proyecto -->
+  <script src="js/api.js"></script>
+  <script src="js/render.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/carrito.js"></script>
+
+  <script>
+    /* ── Acordeón FAQ ─────────────────────────────── */
+    function toggleFAQ(btn) {
+      var item    = btn.closest(".faq-item");
+      var estaAbierto = item.classList.contains("open");
+
+      /* Cierra todos los del mismo grupo */
+      var lista = btn.closest(".faq-list");
+      lista.querySelectorAll(".faq-item.open").forEach(function(el) {
+        el.classList.remove("open");
+      });
+
+      /* Si estaba cerrado, lo abre */
+      if (!estaAbierto) {
+        item.classList.add("open");
+      }
+    }
+
+    /* ── Buscador FAQ ─────────────────────────────── */
+    function filtrarFAQ(texto) {
+      var query    = texto.toLowerCase().trim();
+      var items    = document.querySelectorAll(".faq-item");
+      var cats     = document.querySelectorAll("[data-cat]");
+      var noRes    = document.getElementById("faq-no-results");
+      var countEl  = document.getElementById("faq-count");
+      var visibles = 0;
+
+      items.forEach(function(item) {
+        var contenido = (item.dataset.question || "") + " " +
+                        item.textContent.toLowerCase();
+        var coincide  = !query || contenido.includes(query);
+        item.style.display = coincide ? "" : "none";
+        if (coincide) visibles++;
+      });
+
+      /* Oculta categorías que no tengan items visibles */
+      cats.forEach(function(cat) {
+        var lista       = cat.nextElementSibling;
+        var tieneItems  = lista &&
+          Array.from(lista.querySelectorAll(".faq-item"))
+               .some(function(el) { return el.style.display !== "none"; });
+        cat.style.display = tieneItems ? "" : "none";
+      });
+
+      /* Mensaje sin resultados */
+      noRes.style.display = visibles === 0 ? "block" : "none";
+
+      /* Contador */
+      if (query) {
+        countEl.textContent = visibles + " resultado" + (visibles !== 1 ? "s" : "");
+      } else {
+        countEl.textContent = "";
+      }
+    }
+
+    /* ── Arranque ─────────────────────────────────── */
+    document.addEventListener("DOMContentLoaded", function() {
+      SessionManager.init(false);
+    });
+  </script>
+
+</body>
+</html>
