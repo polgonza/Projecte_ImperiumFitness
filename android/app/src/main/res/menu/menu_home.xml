@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    MENU_HOME.XML
+    =============
+    Fitxer de menú desplegable per a la pantalla Home.
+    Conté les opcions que apareixen quan l'usuari fa clic a la icona d'engranatge.
+
+    OPCIONS:
+    - menu_perfil: Informació de Perfil (redirigeix a InfoPerfilUsuari)
+    - menu_idioma: Canvi d'idioma (mostra AlertDialog amb opcions)
+    - menu_tancar_sessio: Tanca la sessió actual (torna a MainInici)
+    - menu_ajuda: Secció d'ajuda (pendent d'implementar)
+
+    @author ImperiumGym
+    @version 1.0
+-->
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Opció 1: Informació de Perfil -->
+    <item
+        android:id="@+id/menu_perfil"
+        android:title="Informació de Perfil" />
+
+    <!-- Opció 2: Canvi d'Idioma -->
+    <item
+        android:id="@+id/menu_idioma"
+        android:title="Idioma" />
+
+    <!-- Opció 3: Tancar Sessió -->
+    <item
+        android:id="@+id/menu_tancar_sessio"
+        android:title="Tancar Sessió" />
+
+    <!-- Opció 4: Ajuda (pendent) -->
+    <item
+        android:id="@+id/menu_ajuda"
+        android:title="Ajuda" />
+
+</menu>

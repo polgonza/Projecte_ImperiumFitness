@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="8dp">
+
+    <ImageView
+        android:id="@+id/ivImatge"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/producto_2"
+        android:contentDescription="@string/producte_camiseta" />
+
+    <TextView
+        android:id="@+id/tvNomProducte"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="@string/producte_camiseta"
+        android:textColor="#FFFFFF"
+        android:paddingStart="12dp"
+        android:textSize="14sp"/>
+
+    <TextView
+        android:id="@+id/tvPreuProducte"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/producte_preu_camiseta"
+        android:textColor="#E6D91C"/>
+</LinearLayout>
