@@ -2,19 +2,13 @@
 <!--
     ACTIVITY_BOTIGA.XML
     Pantalla que mostra tots els productes de la botiga.
-    Cada producte es mostra dins d'un CardView amb un botó "Compra ara".
-    En clicar el botó, s'obre la pantalla ProductesBotiga amb el detall d'aquest producte.
-    Té topbar amb títol, subtítol, icona de cistella (per veure la cistella) i bottom navigation amb 6 ítems.
-
-    PRODUCTES DISPONIBLES:
-    - Producte 1: Proteïna (39,99€)
-    - Producte 2: Camiseta (19,99€)
+    Els productes es carreguen des del backend i es pinten dinàmicament des de Botiga.java.
+    Té topbar amb títol, subtítol, icona de cistella i bottom navigation.
 -->
 <androidx.constraintlayout.widget.ConstraintLayout
-    android:id="@+id/main"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#D9D9D9">
@@ -123,133 +117,21 @@
         app:layout_constraintEnd_toEndOf="parent">
 
         <LinearLayout
+            android:id="@+id/layoutProductes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- ==================== PRODUCTE 1: PROTEÏNA ==================== -->
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardProduct1"
+            <TextView
+                android:id="@+id/tvBotigaEstat"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp"
-                app:cardBackgroundColor="#8E8E8E"
-                app:cardCornerRadius="28dp"
-                app:cardElevation="0dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:padding="12dp">
-
-                    <ImageView
-                        android:id="@+id/imgProduct1"
-                        android:layout_width="96dp"
-                        android:layout_height="96dp"
-                        android:layout_marginEnd="14dp"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/proteina"
-                        android:contentDescription="@string/producte_proteina" />
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/producte_proteina"
-                            android:textColor="#F5F5F5"
-                            android:textSize="18sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/producte_preu_proteina"
-                            android:textColor="#F5F5F5"
-                            android:textSize="16sp"
-                            android:layout_marginTop="4dp" />
-
-                        <Button
-                            android:id="@+id/btnComprar1"
-                            android:layout_width="wrap_content"
-                            android:layout_height="32dp"
-                            android:layout_marginTop="8dp"
-                            android:text="@string/btn_comprar_ara"
-                            android:backgroundTint="#FFC107"
-                            android:textColor="#FFFFFF"
-                            android:textSize="12sp"
-                            android:textStyle="bold" />
-                    </LinearLayout>
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
-            <!-- ==================== PRODUCTE 2: CAMISETA ==================== -->
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardProduct2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp"
-                app:cardBackgroundColor="#8E8E8E"
-                app:cardCornerRadius="28dp"
-                app:cardElevation="0dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:padding="12dp">
-
-                    <ImageView
-                        android:id="@+id/imgProduct2"
-                        android:layout_width="96dp"
-                        android:layout_height="96dp"
-                        android:layout_marginEnd="14dp"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/camiseta"
-                        android:contentDescription="@string/producte_camiseta" />
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/producte_camiseta"
-                            android:textColor="#F5F5F5"
-                            android:textSize="18sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/producte_preu_camiseta"
-                            android:textColor="#F5F5F5"
-                            android:textSize="16sp"
-                            android:layout_marginTop="4dp" />
-
-                        <Button
-                            android:id="@+id/btnComprar2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="32dp"
-                            android:layout_marginTop="8dp"
-                            android:text="@string/btn_comprar_ara"
-                            android:backgroundTint="#FFC107"
-                            android:textColor="#FFFFFF"
-                            android:textSize="12sp"
-                            android:textStyle="bold" />
-                    </LinearLayout>
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
+                android:text="Carregant productes..."
+                android:textColor="#333333"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:padding="20dp" />
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
