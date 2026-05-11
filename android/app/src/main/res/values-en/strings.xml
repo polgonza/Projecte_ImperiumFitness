@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- ==================== GENERAL ==================== -->
+    <string name="si">Yes</string>
+    <string name="no">No</string>
+    <string name="d_acord">OK</string>
+    <string name="carregant">Loading...</string>
+
+    <!-- ==================== BOTTOM NAVIGATION ==================== -->
+    <string name="nav_inici">Home</string>
+    <string name="nav_classes">Classes</string>
+    <string name="nav_botiga">Shop</string>
+    <string name="nav_noticies">News</string>
+    <string name="nav_calendari">Calendar</string>
+    <string name="nav_contacte">Contact</string>
+
+    <!-- ==================== MAIN INICI ==================== -->
+    <string name="main_titol">ImperiumGYM APP</string>
+    <string name="btn_inicia_sessio">Sign in</string>
+    <string name="btn_registre">Sign up</string>
+
+    <!-- ==================== SIGN IN ==================== -->
+    <string name="login_titol_usuari">Username</string>
+    <string name="login_hint_usuari">Enter your username</string>
+    <string name="login_titol_contrasenya">Password</string>
+    <string name="login_hint_contrasenya">Enter your password</string>
+    <string name="login_oblidada">Forgot password?</string>
+    <string name="login_boto">Sign In</string>
+    <string name="login_error_camps">Enter username and password</string>
+    <string name="login_error_credencials">Incorrect username or password</string>
+    <string name="login_exit">Login successful</string>
+    <string name="login_error_servidor">Could not connect to server: %s</string>
+
+    <!-- ==================== REGISTER ==================== -->
+    <string name="register_titol_usuari">Username</string>
+    <string name="register_hint_usuari">Choose a username</string>
+    <string name="register_titol_email">Email</string>
+    <string name="register_hint_email">Enter your email</string>
+    <string name="register_titol_contrasenya">Password</string>
+    <string name="register_hint_contrasenya">Create a password</string>
+    <string name="register_boto">Sign up</string>
+    <string name="register_error_camps">Fill in all fields</string>
+    <string name="register_error_email">Enter a valid email</string>
+    <string name="register_error_password">Password must be at least 4 characters</string>
+    <string name="register_exit">User registered successfully</string>
+    <string name="register_error_exists">Registration error. Email or username may already be in use.</string>
+
+    <!-- ==================== HOME ==================== -->
+    <string name="benvinguda">Good morning, %s!</string>
+    <string name="home_benvinguda">Good morning, %s!</string>
+    <string name="home_eslogan">Only for the TOUGHEST</string>
+    <string name="home_ajuda">Help - Under development</string>
+
+    <!-- ==================== DROPDOWN MENU ==================== -->
+    <string name="menu_perfil">Profile Information</string>
+    <string name="menu_idioma">Language</string>
+    <string name="menu_tancar_sessio">Log out</string>
+    <string name="menu_ajuda">Help</string>
+
+    <!-- ==================== LANGUAGE DIALOG ==================== -->
+    <string name="selecciona_idioma">Select a language</string>
+    <string name="confirmar_canvi_idioma">Confirm language change</string>
+    <string name="missatge_confirmar_idioma">Are you sure you want to change the language to %s?</string>
+    <string name="idioma_canviat">Language changed to %s</string>
+    <string name="dialog_idioma_titol">Select a language</string>
+    <string name="dialog_idioma_confirmar_titol">Confirm language change</string>
+    <string name="dialog_idioma_confirmar_missatge">Are you sure you want to change the language to %s?</string>
+    <string name="dialog_idioma_exit">Language changed to %s</string>
+    <string name="idioma_espanyol">Spanish</string>
+    <string name="idioma_catala">Catalan</string>
+    <string name="idioma_angles">English</string>
+
+    <!-- ==================== CLASSES ==================== -->
+    <string name="classes_titol">Classes</string>
+    <string name="classes_subtitol">Book your favorite class</string>
+    <string name="classe_zumba">Zumba</string>
+    <string name="classe_spinning">Spinning</string>
+    <string name="classe_bodypump">Body Pump</string>
+    <string name="classe_desc_zumba">Dynamic dance class with Latin music. Perfect for burning calories and having fun.</string>
+    <string name="classe_desc_spinning">Intense indoor cycling class to improve your cardiovascular endurance.</string>
+    <string name="classe_desc_bodypump">Weight and bar training to tone all your body muscles.</string>
+    <string name="btn_reserva_ara">Book now</string>
+
+    <!-- ==================== BOOK CLASS ==================== -->
+    <string name="reserva_titol">Class Booking</string>
+    <string name="reserva_subtitol">Confirm your booking</string>
+    <string name="reserva_usuari_missatge" formatted="false">%s, you will book %s class</string>
+    <string name="reserva_selector_horari">Select schedule</string>
+    <string name="reserva_data">Date (optional)</string>
+    <string name="reserva_data_hint">Select a date (optional)</string>
+    <string name="reserva_notes">Additional notes</string>
+    <string name="reserva_notes_hint">Any preference or comment (e.g., injuries, special needs...)</string>
+    <string name="reserva_boto_confirmar">Confirm Booking</string>
+    <string name="reserva_confirmada">Booking confirmed!</string>
+    <string name="reserva_exit">Booking saved successfully</string>
+
+    <!-- Horaris -->
+    <string-array name="horaris_classes">
+        <item>09:00 - 10:00</item>
+        <item>11:00 - 12:00</item>
+        <item>13:00 - 14:00</item>
+        <item>16:00 - 17:00</item>
+        <item>18:00 - 19:00</item>
+        <item>20:00 - 21:00</item>
+    </string-array>
+
+    <!-- Strings for Sign In (missing) -->
+    <string name="introdueix_usuari_contrasenya">Enter username and password</string>
+    <string name="sessio_iniciada">Login successful</string>
+    <string name="error_credencials">Incorrect username or password</string>
+    <string name="error_servidor">Could not connect to server: %s</string>
+
+    <!-- Strings for Register (missing) -->
+    <string name="omple_tots_els_camps">Fill in all fields</string>
+    <string name="email_invalid">Enter a valid email</string>
+    <string name="password_min">Password must be at least 4 characters</string>
+    <string name="registre_ok">User registered successfully</string>
+    <string name="error_registre">Registration error. Email or username may already be in use.</string>
+
+    <!-- ==================== SHOP ==================== -->
+    <string name="botiga_titol">The Imperial Store</string>
+    <string name="botiga_subtitol">Gear up like a champion</string>
+    <string name="botiga_cistella">Cart</string>
+    <string name="producte_proteina">Protein</string>
+    <string name="producte_camiseta">Gym T-shirt</string>
+    <string name="producte_desc_proteina">High-quality whey protein. Perfect for post-workout muscle recovery.</string>
+    <string name="producte_desc_camiseta">Official ImperiumGym T-shirt. 100% cotton, breathable and comfortable for your workouts.</string>
+    <string name="producte_preu_proteina">39.99€</string>
+    <string name="producte_preu_camiseta">19.99€</string>
+    <string name="btn_comprar_ara">Buy now</string>
+
+    <!-- ==================== PRODUCT DETAIL ==================== -->
+    <string name="producte_detall_titol">Product details</string>
+    <string name="producte_detall_subtitol">Choose quantity and buy</string>
+    <string name="producte_quantitat">Quantity:</string>
+    <string name="producte_quantitat_default">1</string>
+    <string name="btn_afegir_cistella">Add to cart</string>
+    <string name="btn_pagar_ara">Pay now</string>
+    <string name="producte_afegit_cistella">Added to cart (%d unit/s)</string>
+
+    <!-- ==================== SHOPPING CART ==================== -->
+    <string name="cistella_titol">My cart</string>
+    <string name="cistella_subtitol">Review your products</string>
+    <string name="cistella_total">Total: %.2f€</string>
+    <string name="cistella_boto_pagament">Proceed to payment</string>
+    <string name="cistella_buida">Your cart is empty</string>
+    <string name="cistella_eliminar_titol">Delete product</string>
+    <string name="cistella_eliminar_missatge">Do you want to remove this product from your cart?</string>
+
+    <!-- ==================== PAYMENT ==================== -->
+    <string name="pagament_titol_producte">Product Payment</string>
+    <string name="pagament_titol_cistella">Cart Payment</string>
+    <string name="pagament_subtitol">Enter payment details</string>
+    <string name="pagament_resum_comanda">Order summary</string>
+    <string name="pagament_total">Total: %.2f€</string>
+    <string name="pagament_direccio_titol">Shipping address</string>
+    <string name="pagament_nom_complet">Full name</string>
+    <string name="pagament_adreca">Address</string>
+    <string name="pagament_ciutat">City</string>
+    <string name="pagament_codi_postal">Postal code</string>
+    <string name="pagament_targeta_titol">Card details</string>
+    <string name="pagament_numero_targeta">Card number</string>
+    <string name="pagament_nom_titular">Cardholder name</string>
+    <string name="pagament_data_caducitat">MM/YY</string>
+    <string name="pagament_cvv">CVV</string>
+    <string name="pagament_boto">Pay now</string>
+    <string name="pagament_error_camps">Please fill in all payment fields</string>
+    <string name="pagament_exit">Payment successful</string>
+    <string name="pagament_completat">Purchase completed!</string>
+
+    <!-- ==================== CONFIRMATIONS ==================== -->
+    <string name="confirmacio_reserva">Booking confirmed!</string>
+    <string name="confirmacio_compra">Purchase completed!</string>
+
+    <!-- ==================== USER PROFILE ==================== -->
+    <string name="perfil_titol">User Account</string>
+    <string name="perfil_subtitol">Manage your data</string>
+    <string name="perfil_nom">Name</string>
+    <string name="perfil_email">Email</string>
+    <string name="perfil_contrasenya">Password</string>
+    <string name="perfil_guardar_canvis">Save changes</string>
+    <string name="perfil_canviar_contrasenya">Change password</string>
+    <string name="perfil_error_camps">Fill in all fields</string>
+    <string name="perfil_exit">Data updated successfully</string>
+    <string name="perfil_mostrar_contrasenya">Show password</string>
+
+    <!-- ==================== CHANGE PASSWORD ==================== -->
+    <string name="canvi_contrasenya_titol">Change password</string>
+    <string name="canvi_contrasenya_subtitol">Enter your new password</string>
+    <string name="canvi_nova_contrasenya">New password</string>
+    <string name="canvi_confirmar_contrasenya">Confirm password</string>
+    <string name="canvi_boto_guardar">Save password</string>
+    <string name="canvi_error_buits">Fill in both fields</string>
+    <string name="canvi_error_longitud">Password must be at least 4 characters</string>
+    <string name="canvi_error_coincidir">Passwords do not match. Please try again.</string>
+    <string name="canvi_exit">Password changed successfully</string>
+    <string name="canvi_confirmar_dialog">Are you sure you want to change your password?</string>
+
+    <!-- ==================== CALENDAR ==================== -->
+    <string name="calendari_titol">Calendar</string>
+    <string name="calendari_subtitol">Your bookings</string>
+    <string name="calendari_sense_reserves">No bookings for this day</string>
+    <string name="calendari_reserves_titol">Bookings for this day</string>
+    <string name="calendari_reserves_missatge">Bookings for %s:\n\n</string>
+
+    <!-- ==================== CONTACT ==================== -->
+    <string name="contacte_titol">Contact</string>
+    <string name="contacte_subtitol">Get in touch with us</string>
+    <string name="contacte_adreca_titol">📍 Address</string>
+    <string name="contacte_adreca_text">Carrer de l\'Esport, 10\n08001 Barcelona</string>
+    <string name="contacte_telefon_titol">📞 Phone</string>
+    <string name="contacte_telefon_text">+34 932 123 456</string>
+    <string name="contacte_email_titol">✉️ Email</string>
+    <string name="contacte_email_text">info@imperiumgym.com</string>
+    <string name="contacte_horari_titol">🕒 Hours</string>
+    <string name="contacte_horari_text">Monday to Friday: 7:00 - 22:00\nSaturday: 9:00 - 20:00\nSunday: 10:00 - 14:00</string>
+    <string name="contacte_boto">Send us a message</string>
+
+    <!-- ==================== NEWS ==================== -->
+    <string name="noticies_titol">News</string>
+    <string name="noticies_subtitol">Stay informed about the latest news</string>
+    <string name="noticia1_titol">New Functional Fit class starts this Monday</string>
+    <string name="noticia1_desc">Dynamic workouts to improve strength and endurance. Come try it out!</string>
+    <string name="noticia2_titol">Dawn Yoga program launches</string>
+    <string name="noticia2_desc">Gentle sessions to start the day with energy. Every morning at 7:00.</string>
+    <string name="noticia3_titol">New member discount: 20% off supplements</string>
+    <string name="noticia3_desc">Take advantage of special offers in our store. Members only.</string>
+    <string name="noticia4_titol">Special holiday schedule</string>
+    <string name="noticia4_desc">Check the new hours for the upcoming holidays. Closing at 15:00.</string>
+    <string name="noticia5_titol">Sports nutrition workshop</string>
+    <string name="noticia5_desc">Learn how to eat properly for your workouts. Saturday at 11:00.</string>
+    <string name="noticia6_titol">Internal CrossFit Championship</string>
+    <string name="noticia6_desc">Sign up for our annual championship! Prizes for winners.</string>
+    <string name="noticia7_titol">New cardio machine</string>
+    <string name="noticia7_desc">We have renovated the cardio area with the latest machines on the market.</string>
+    <string name="noticia8_titol">Summer Challenge: 30 days of training</string>
+    <string name="noticia8_desc">Join our challenge and win amazing prizes. Starts June 1st.</string>
+
+    <!-- ==================== HELP ==================== -->
+
+    <string name="ajuda_titol">Help</string>
+    <string name="ajuda_subtitol">Application user guide</string>
+
+    <!-- Common elements -->
+    <string name="titol_elements_comuns">User interface</string>
+
+    <string name="ajuda_capcalera">At the top of the screen there is a welcome message and the user’s email address is shown. On the right side, the user can tap the gear icon to access the profile information, language selection, log out and help options.</string>
+
+    <string name="ajuda_peu">At the bottom of the screen there is a navigation menu, where the user can access classes, shop, news, calendar and contact.</string>
+
+    <!-- BOOKING PROCESS -->
+    <string name="titol_reserva_classes">Booking classes</string>
+
+    <string name="ajuda_reserva_acces">To book a class, the user must tap the classes section in the bottom menu.</string>
+
+    <string name="ajuda_reserva_filtratge">Inside the classes screen, the user can filter by exercise families. When tapping one of the options, the classes related to that family are displayed.</string>
+
+    <string name="ajuda_reserva_seleccio_classes">It is also possible to select a class in order to book it. This screen shows a list of available classes organised by date and time. To book, the user must find the class they want and tap the “Book now” button.</string>
+
+    <string name="ajuda_reserva_resum_classe">On the summary screen, the user can see the class information. Here, they must select the date and time that best suit their needs and tap the “Confirm booking” button.</string>
+
+    <string name="ajuda_reserva_confirmacio">At this step, the booking is completed.</string>
+
+    <!-- SHOP PROCESS -->
+    <string name="titol_compra_botiga">Buying from the shop</string>
+
+    <string name="ajuda_botiga_acces">To buy from the shop, the user must tap the shop section in the bottom menu.</string>
+
+    <string name="ajuda_botiga_seleccio_producte">To buy a product, the user must select the product they want and tap the “Buy now” button.</string>
+
+    <string name="ajuda_botiga_resum_producte">On the product summary screen, the user selects the quantity they want to buy. They can add it to the cart to buy more products or tap “Pay now” directly.</string>
+
+    <string name="ajuda_botiga_pagament_producte">On the next screen, the user must enter the shipping details and card details to complete the purchase. Then, they must tap the “Pay now” button.</string>
+
+    <string name="ajuda_botiga_confirmacio">In these steps, the purchase is completed.</string>
+
+    <string name="ajuda_reserva_compra_cistella">Is posible too buy products from the shop in the cart, and see the list of all the products was chosed</string>
+    <!-- NEWS PROCESS -->
+    <string name="titol_noticies">News</string>
+
+    <string name="ajuda_noticies_acces">To view the news, the user must tap the news section in the bottom menu.</string>
+
+    <!-- CALENDAR PROCESS -->
+    <string name="titol_calendari">Calendar</string>
+
+    <string name="ajuda_calendari_acces">To view the calendar, the user must tap the calendar section in the bottom menu.</string>
+
+    <string name="ajuda_calendari_seleccio">To check a booking in the calendar, the user must tap the day on which they have a booking. The information about the booked class will then appear.</string>
+
+    <!-- CONTACT PROCESS -->
+    <string name="titol_contacte">Contact</string>
+
+    <string name="ajuda_contacte_acces">To access the gym contact page, the user must tap the contact section in the bottom menu.</string>
+
+    <string name="ajuda_contacte_missatge">To contact us, the user only has to tap the “Send us a message” button and the email application will automatically open so they can write their message.</string>
+</resources>

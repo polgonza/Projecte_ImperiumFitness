@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    ACTIVITY_PAGAT_PRODUCTE_BOTIGA.XML
+    Pantalla que es mostra després de pagar un producte (tant si ve de compra directa com de la cesta).
+    Mostra un missatge de confirmació i un icona.
+    L'usuari pot navegar a altres seccions mitjançant el bottom navigation.
+    Té bottomNav amb 6 ítems.
+-->
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#515151">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardExterior"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="6dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="6dp"
+        android:layout_marginBottom="8dp"
+        app:cardBackgroundColor="#D9D9D9"
+        app:cardCornerRadius="22dp"
+        app:cardElevation="0dp"
+        app:layout_constraintBottom_toTopOf="@id/bottomNav"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingStart="24dp"
+            android:paddingEnd="24dp">
+
+            <ImageView
+                android:id="@+id/ivCompraOk"
+                android:layout_width="299dp"
+                android:layout_height="196dp"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter"
+                android:src="@drawable/icono_confirmacion"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/tvCompraRealitzada"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:includeFontPadding="false"
+                android:text="@string/pagament_completat"
+                android:textColor="#111111"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <!-- Bottom navigation -->
+    <LinearLayout
+        android:id="@+id/bottomNav"
+        android:layout_width="0dp"
+        android:layout_height="38dp"
+        android:background="#D9D9D9"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:weightSum="6"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <LinearLayout
+            android:id="@+id/navHome"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:clickable="true"
+            android:focusable="true">
+            <ImageView android:layout_width="18dp" android:layout_height="18dp" android:src="@drawable/home" android:contentDescription="@string/nav_inici" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="@string/nav_inici" android:textColor="#333333" android:textSize="9sp" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/navClasses"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:clickable="true"
+            android:focusable="true">
+            <ImageView android:layout_width="18dp" android:layout_height="18dp" android:src="@drawable/classes" android:contentDescription="@string/nav_classes" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="@string/nav_classes" android:textColor="#333333" android:textSize="9sp" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/navBotiga"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:clickable="true"
+            android:focusable="true">
+            <ImageView android:layout_width="18dp" android:layout_height="18dp" android:src="@drawable/shop" android:contentDescription="@string/nav_botiga" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="@string/nav_botiga" android:textColor="#333333" android:textSize="9sp" android:textStyle="bold"/>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/navNoticies"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:clickable="true"
+            android:focusable="true">
+            <ImageView android:layout_width="18dp" android:layout_height="18dp" android:src="@drawable/noticies" android:contentDescription="@string/nav_noticies" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="@string/nav_noticies" android:textColor="#333333" android:textSize="9sp" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/navCalendari"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:clickable="true"
+            android:focusable="true">
+            <ImageView android:layout_width="18dp" android:layout_height="18dp" android:src="@drawable/calendari" android:contentDescription="@string/nav_calendari" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="@string/nav_calendari" android:textColor="#333333" android:textSize="9sp" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/navContacte"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:clickable="true"
+            android:focusable="true">
+            <ImageView android:layout_width="18dp" android:layout_height="18dp" android:src="@drawable/contacte" android:contentDescription="@string/nav_contacte" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="@string/nav_contacte" android:textColor="#333333" android:textSize="9sp" />
+        </LinearLayout>
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

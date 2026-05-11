@@ -1,0 +1,412 @@
+package com.example.gymapp;
+
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.Typeface;
+import android.os.Bundle;
+import android.view.Gravity;
+import android.widget.Button;
+import android.widget.GridLayout;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.activity.EdgeToEdge;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+/*
+    CALENDARI ACTIVITY
+    ==================
+    Mostra un calendari mensual amb les reserves de l'usuari loguejat.
+
+    - Dies amb reserves marcats en GROC
+    - Avui marcat en MORAT
+    - En clicar un dia groc: diàleg amb nom de classe, data i hora
+    - Navegació entre mesos amb fletxes
+    - Propera reserva mostrada a la part inferior
+
+    Les reserves es carreguen de:
+    GET /api/reserves/usuari/{userId}
+
+    IMPORTANT: Requereix que el backend guardi la data de la CLASSE
+    (no la data de quan es fa la reserva). Veure canvi a ReservaService.java.
+
+    @author ImperiumGym
+    @version 4.0
+*/
+public class Calendari extends BaseActivity {
+
+    // Vistes
+    private GridLayout gridDies;
+    private LinearLayout llDiesSetmana;
+    private TextView tvMesAny, tvProperaReserva;
+    private Button btnMesAnterior, btnMesSeguent;
+
+    // Mes i any que estem veient ara
+    private int mesActual, anyActual;
+
+    /*
+        Mapa de reserves per data.
+        Clau: "yyyy-MM-dd" (ex: "2026-05-16")
+        Valor: llista de reserves d'aquell dia
+    */
+    private Map<String, List<ReservaDTO>> reservesPerData = new HashMap<>();
+
+    // ID de l'usuari loguejat (del token JWT)
+    private Long usuariId;
+
+    // Dies de la setmana en català, dilluns primer
+    private final String[] DIES_SETMANA = {"Dl", "Dt", "Dc", "Dj", "Dv", "Ds", "Dg"};
+
+    // Noms dels mesos en català
+    private final String[] MESOS = {
+            "Gener", "Febrer", "Març", "Abril", "Maig", "Juny",
+            "Juliol", "Agost", "Setembre", "Octubre", "Novembre", "Desembre"
+    };
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
+        setContentView(R.layout.activity_calendari);
+        setupBottomNav();
+
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
+
+        gridDies = findViewById(R.id.gridDies);
+        llDiesSetmana = findViewById(R.id.llDiesSetmana);
+        tvMesAny = findViewById(R.id.tvMesAny);
+        tvProperaReserva = findViewById(R.id.tvProperaReserva);
+        btnMesAnterior = findViewById(R.id.btnMesAnterior);
+        btnMesSeguent = findViewById(R.id.btnMesSeguent);
+
+        // Iniciem al mes i any actuals
+        java.util.Calendar ara = java.util.Calendar.getInstance(
+                java.util.TimeZone.getTimeZone("Europe/Madrid"));
+        mesActual = ara.get(java.util.Calendar.MONTH);
+        anyActual = ara.get(java.util.Calendar.YEAR);
+
+        // Extraiem userId del token JWT
+        SharedPreferences prefs = getSharedPreferences("Usuaris", Context.MODE_PRIVATE);
+        String token = prefs.getString("jwt_token", "");
+        String userIdStr = JwtUtils.getClaim(token, "userId");
+
+        if (userIdStr != null) {
+            usuariId = Long.parseLong(userIdStr);
+            carregarReservesBackend();
+        } else {
+            Toast.makeText(this, "Sessió no vàlida.", Toast.LENGTH_SHORT).show();
+            construirCapcaleraSetmana();
+            construirCalendari();
+        }
+
+        // Navegació entre mesos
+        btnMesAnterior.setOnClickListener(v -> {
+            mesActual--;
+            if (mesActual < 0) { mesActual = 11; anyActual--; }
+            construirCalendari();
+        });
+        btnMesSeguent.setOnClickListener(v -> {
+            mesActual++;
+            if (mesActual > 11) { mesActual = 0; anyActual++; }
+            construirCalendari();
+        });
+    }
+
+    /*
+        Carrega les reserves de l'usuari des del backend.
+        Un cop rebudes, les organitza per data i pinta el calendari.
+    */
+    private void carregarReservesBackend() {
+        ApiService api = ApiClient.getClient(this).create(ApiService.class);
+        api.getReservesUsuari(usuariId).enqueue(new Callback<List<ReservaDTO>>() {
+            @Override
+            public void onResponse(Call<List<ReservaDTO>> call,
+                                   Response<List<ReservaDTO>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    organitzarReservesPerData(response.body());
+                    mostrarProperaReserva(response.body());
+                } else {
+                    tvProperaReserva.setText("No s'han pogut carregar les reserves.");
+                }
+                construirCapcaleraSetmana();
+                construirCalendari();
+            }
+
+            @Override
+            public void onFailure(Call<List<ReservaDTO>> call, Throwable t) {
+                Toast.makeText(Calendari.this,
+                        "Error de connexió: " + t.getMessage(), Toast.LENGTH_LONG).show();
+                construirCapcaleraSetmana();
+                construirCalendari();
+            }
+        });
+    }
+
+    /*
+        Organitza les reserves en un mapa per data.
+        Extreu "yyyy-MM-dd" de la dataReserva que ve del backend.
+        Format possible: "2026-05-16T09:00:00" o "2026-05-16T09:00:00.000"
+    */
+    private void organitzarReservesPerData(List<ReservaDTO> reserves) {
+        reservesPerData.clear();
+        for (ReservaDTO reserva : reserves) {
+            String dataReserva = reserva.getDataReserva();
+            if (dataReserva == null || dataReserva.isEmpty()) continue;
+
+            // Extraiem només "yyyy-MM-dd"
+            String nomeData = dataReserva.contains("T")
+                    ? dataReserva.split("T")[0]
+                    : dataReserva.split(" ")[0];
+
+            if (!reservesPerData.containsKey(nomeData)) {
+                reservesPerData.put(nomeData, new ArrayList<>());
+            }
+            reservesPerData.get(nomeData).add(reserva);
+        }
+    }
+
+    /*
+        Mostra la propera reserva futura a la part inferior.
+        Busca la reserva amb data més pròxima a partir d'avui.
+    */
+    private void mostrarProperaReserva(List<ReservaDTO> reserves) {
+        java.util.Calendar avui = java.util.Calendar.getInstance(
+                java.util.TimeZone.getTimeZone("Europe/Madrid"));
+        avui.set(java.util.Calendar.HOUR_OF_DAY, 0);
+        avui.set(java.util.Calendar.MINUTE, 0);
+        avui.set(java.util.Calendar.SECOND, 0);
+        avui.set(java.util.Calendar.MILLISECOND, 0);
+
+        ReservaDTO propera = null;
+        java.util.Calendar dataPropera = null;
+
+        for (ReservaDTO reserva : reserves) {
+            if (reserva.getDataReserva() == null) continue;
+            try {
+                String horari = reserva.getDataReserva();
+                if (horari.contains(".")) horari = horari.substring(0, horari.indexOf("."));
+
+                String[] parts = horari.split("T");
+                String[] dataParts = parts[0].split("-");
+                int any = Integer.parseInt(dataParts[0]);
+                int mes = Integer.parseInt(dataParts[1]) - 1;
+                int dia = Integer.parseInt(dataParts[2]);
+
+                java.util.Calendar calReserva = java.util.Calendar.getInstance();
+                calReserva.set(any, mes, dia, 0, 0, 0);
+                calReserva.set(java.util.Calendar.MILLISECOND, 0);
+
+                if (!calReserva.before(avui)) {
+                    if (dataPropera == null || calReserva.before(dataPropera)) {
+                        propera = reserva;
+                        dataPropera = calReserva;
+                    }
+                }
+            } catch (Exception e) {
+                continue;
+            }
+        }
+
+        if (propera != null) {
+            String[] parts = propera.getDataReserva().split("T");
+            String dataFormatada = formatarData(parts[0]);
+            String hora = parts.length > 1 ? parts[1].substring(0, 5) : "";
+            tvProperaReserva.setText("Propera reserva: " + dataFormatada + " a les " + hora + "h");
+        } else if (reserves.isEmpty()) {
+            tvProperaReserva.setText("No tens cap reserva feta.");
+        } else {
+            tvProperaReserva.setText("No tens reserves properes.");
+        }
+    }
+
+    /*
+        Afegeix les capçaleres Dl, Dt, Dc... al LinearLayout.
+        Es crida una sola vegada.
+    */
+    private void construirCapcaleraSetmana() {
+        llDiesSetmana.removeAllViews();
+        for (String dia : DIES_SETMANA) {
+            TextView tv = new TextView(this);
+            tv.setText(dia);
+            tv.setTextColor(Color.parseColor("#F0DB1A"));
+            tv.setTextSize(12);
+            tv.setTypeface(null, Typeface.BOLD);
+            tv.setGravity(Gravity.CENTER);
+            LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(
+                    0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f);
+            tv.setLayoutParams(p);
+            llDiesSetmana.addView(tv);
+        }
+    }
+
+    /*
+        Construeix la graella del mes i any actuals.
+        Colors:
+        - GROC: dia amb reserves
+        - MORAT: avui
+        - GRIS: dies passats
+        - BLANC: dies futurs sense reserves
+    */
+    private void construirCalendari() {
+        gridDies.removeAllViews();
+
+        // Títol del mes (ex: "Maig 2026")
+        tvMesAny.setText(MESOS[mesActual] + " " + anyActual);
+
+        // Calculem avui
+        java.util.Calendar avui = java.util.Calendar.getInstance(
+                java.util.TimeZone.getTimeZone("Europe/Madrid"));
+        int diaAvui = avui.get(java.util.Calendar.DAY_OF_MONTH);
+        int mesAvui = avui.get(java.util.Calendar.MONTH);
+        int anyAvui = avui.get(java.util.Calendar.YEAR);
+
+        // Calculem el primer dia del mes i quants dies té
+        java.util.Calendar primerDia = java.util.Calendar.getInstance();
+        primerDia.set(anyActual, mesActual, 1);
+        int diesDelMes = primerDia.getActualMaximum(java.util.Calendar.DAY_OF_MONTH);
+
+        // Offset: quantes cel·les buides abans del dia 1
+        // Calendar.DAY_OF_WEEK: 1=Dg, 2=Dl... Convertim a 0=Dl, 6=Dg
+        int diaSemana = primerDia.get(java.util.Calendar.DAY_OF_WEEK);
+        int offset = (diaSemana == java.util.Calendar.SUNDAY) ? 6 : diaSemana - 2;
+
+        int amplada = (int)(getResources().getDisplayMetrics().widthPixels / 7f) - dp(2);
+        int alcada = dp(42);
+
+        // Cel·les buides d'offset
+        for (int i = 0; i < offset; i++) {
+            afegirCella("", amplada, alcada, Color.TRANSPARENT, Color.TRANSPARENT, null);
+        }
+
+        // Un botó per cada dia del mes
+        for (int dia = 1; dia <= diesDelMes; dia++) {
+            String clauData = String.format(Locale.getDefault(),
+                    "%04d-%02d-%02d", anyActual, mesActual + 1, dia);
+
+            boolean teReserves = reservesPerData.containsKey(clauData)
+                    && !reservesPerData.get(clauData).isEmpty();
+            boolean esAvui = (dia == diaAvui && mesActual == mesAvui && anyActual == anyAvui);
+            boolean esPassat = (anyActual < anyAvui)
+                    || (anyActual == anyAvui && mesActual < mesAvui)
+                    || (anyActual == anyAvui && mesActual == mesAvui && dia < diaAvui);
+
+            int colorFons, colorText;
+            if (esAvui) {
+                colorFons = Color.parseColor("#7B2CFF");
+                colorText = Color.WHITE;
+            } else if (teReserves) {
+                colorFons = Color.parseColor("#F0DB1A");
+                colorText = Color.BLACK;
+            } else if (esPassat) {
+                colorFons = Color.TRANSPARENT;
+                colorText = Color.parseColor("#666666");
+            } else {
+                colorFons = Color.TRANSPARENT;
+                colorText = Color.WHITE;
+            }
+
+            final String clauFinal = clauData;
+            final int diaFinal = dia;
+
+            afegirCella(String.valueOf(dia), amplada, alcada, colorFons, colorText,
+                    teReserves ? v -> mostrarDetallaReserves(clauFinal, diaFinal) : null);
+        }
+    }
+
+    /*
+        Crea i afegeix una cel·la a la graella.
+    */
+    private void afegirCella(String text, int amplada, int alcada,
+                             int colorFons, int colorText,
+                             android.view.View.OnClickListener listener) {
+        TextView tv = new TextView(this);
+        tv.setText(text);
+        tv.setGravity(Gravity.CENTER);
+        tv.setTextSize(13);
+        tv.setTextColor(colorText);
+        tv.setBackgroundColor(colorFons);
+        if (!text.isEmpty() && listener != null) tv.setTypeface(null, Typeface.BOLD);
+
+        GridLayout.LayoutParams params = new GridLayout.LayoutParams();
+        params.width = amplada;
+        params.height = alcada;
+        params.setMargins(dp(1), dp(1), dp(1), dp(1));
+        tv.setLayoutParams(params);
+
+        if (listener != null) tv.setOnClickListener(listener);
+        gridDies.addView(tv);
+    }
+
+    /*
+        Diàleg emergent en clicar un dia amb reserves.
+        Mostra: nom de classe (si disponible), data i hora.
+        Simple i net, sense informació innecessària.
+    */
+    private void mostrarDetallaReserves(String clauData, int dia) {
+        List<ReservaDTO> reserves = reservesPerData.get(clauData);
+        if (reserves == null || reserves.isEmpty()) return;
+
+        StringBuilder missatge = new StringBuilder();
+
+        for (ReservaDTO reserva : reserves) {
+            String dataReserva = reserva.getDataReserva();
+            String hora = "";
+
+            if (dataReserva != null && dataReserva.contains("T")) {
+                String horaPart = dataReserva.split("T")[1];
+                // Netegem nanosegons si n'hi ha (ex: "09:00:00.000")
+                hora = horaPart.substring(0, 5) + "h";
+            }
+
+            // Mostrem: nom de classe (si el tenim), data i hora
+            if (reserva.getNomClasse() != null && !reserva.getNomClasse().isEmpty()) {
+                missatge.append("🏋️ ").append(reserva.getNomClasse()).append("\n");
+            } else {
+                missatge.append("🏋️ Classe #").append(reserva.getClasseId()).append("\n");
+            }
+            missatge.append("📅 ").append(formatarData(clauData)).append("\n");
+            missatge.append("🕐 ").append(hora).append("\n\n");
+        }
+
+        new AlertDialog.Builder(this)
+                .setTitle("Reserves del " + formatarData(clauData))
+                .setMessage(missatge.toString().trim())
+                .setPositiveButton("Tancar", null)
+                .show();
+    }
+
+    /*
+        Converteix "2026-05-16" a "16/05/2026".
+    */
+    private String formatarData(String clauData) {
+        try {
+            String[] parts = clauData.split("-");
+            return parts[2] + "/" + parts[1] + "/" + parts[0];
+        } catch (Exception e) {
+            return clauData;
+        }
+    }
+
+    private int dp(int dp) {
+        return Math.round(dp * getResources().getDisplayMetrics().density);
+    }
+}

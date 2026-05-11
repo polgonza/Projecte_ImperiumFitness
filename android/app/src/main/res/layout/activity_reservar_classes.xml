@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    ACTIVITY_RESERVAR_CLASSES.XML
+    Pantalla per reservar una classe concreta.
+    Mostra la imatge, nom de la classe, informació de l'usuari loguejat,
+    un selector d'horaris disponibles i un botó per confirmar la reserva.
+
+    Rep la informació de la classe seleccionada (nom, imatge, descripció)
+    de la pantalla Classes mitjançant un Intent.
+
+    En el futur, en prémer "Confirmar Reserva" es guardarà a la base de dades
+    i es mostrarà la pantalla de confirmació.
+
+    Té topbar amb títol i subtítol, i bottom navigation amb 6 ítems.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#2B2B2B">
+
+    <!-- ==================== TOPBAR ==================== -->
+    <LinearLayout
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#555555"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="32dp">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvReservaTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/reserva_titol"
+                android:textColor="#F0DB1A"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvReservaSubtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/reserva_subtitol"
+                android:textColor="#CCCCCC"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <FrameLayout
+            android:id="@+id/logoContainer"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:background="#7B2CFF"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="2dp">
+
+            <ImageView
+                android:id="@+id/imgTopLogo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#555555"
+                android:contentDescription="@string/app_name"
+                android:scaleType="centerInside"
+                android:src="@drawable/logo" />
+        </FrameLayout>
+    </LinearLayout>
+
+    <!-- ==================== CONTINGUT PRINCIPAL (SCROLL) ==================== -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true"
+        android:padding="16dp"
+        android:paddingBottom="0dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="32dp">
+
+            <!-- ==================== TARGETA DE LA CLASSE ==================== -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="5dp"
+                app:cardBackgroundColor="#555555"
+                android:layout_marginBottom="20dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <ImageView
+                        android:id="@+id/ivClasseImatge"
+                        android:layout_width="match_parent"
+                        android:layout_height="180dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/zumba"
+                        android:layout_marginBottom="12dp" />
+
+                    <TextView
+                        android:id="@+id/tvClasseNom"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/classe_zumba"
+                        android:textColor="#F0DB1A"
+                        android:textSize="24sp"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="8dp" />
+
+                    <TextView
+                        android:id="@+id/tvClasseDescripcio"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/classe_desc_zumba"
+                        android:textColor="#CCCCCC"
+                        android:textSize="14sp" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- ==================== MISSATGE DE BENVINGUDA AMB NOM D'USUARI ==================== -->
+            <TextView
+                android:id="@+id/tvUsuariReserva"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/reserva_usuari_missatge"
+                android:textColor="#F0DB1A"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:layout_marginBottom="24dp" />
+
+            <!-- ==================== SELECCIONADOR D'HORARIS ==================== -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/reserva_selector_horari"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="8dp" />
+
+            <Spinner
+                android:id="@+id/spinnerHora"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="#FFFFFF"
+                android:padding="8dp"
+                android:layout_marginBottom="20dp" />
+
+            <!-- ==================== BOTÓ CONFIRMAR RESERVA ==================== -->
+            <Button
+                android:id="@+id/btnConfirmarReserva"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:backgroundTint="#FFC107"
+                android:padding="12dp"
+                android:text="@string/reserva_boto_confirmar"
+                android:textColor="#FFFFFF"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- ==================== BOTTOM NAVIGATION ==================== -->
+    <LinearLayout
+        android:id="@+id/bottomNav"
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:background="#D0D0D0"
+        android:orientation="horizontal"
+        android:paddingStart="4dp"
+        android:paddingEnd="4dp"
+        android:weightSum="6">
+
+        <LinearLayout
+            android:id="@+id/navHome"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:clickable="true"
+            android:focusable="true">
+            <ImageView android:layout_width="18dp" android:layout_height="18dp" android:src="@drawable/home" android:contentDescription="@string/nav_inici" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="@string/nav_inici" android:textColor="#333333" android:textSize="9sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/navClasses"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:clickable="true"
+            android:focusable="true">
+            <ImageView android:layout_width="18dp" android:layout_height="18dp" android:src="@drawable/classes" android:contentDescription="@string/nav_classes" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="@string/nav_classes" android:textColor="#333333" android:textSize="9sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/navBotiga"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:clickable="true"
+            android:focusable="true">
+            <ImageView android:layout_width="18dp" android:layout_height="18dp" android:src="@drawable/shop" android:contentDescription="@string/nav_botiga" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="@string/nav_botiga" android:textColor="#333333" android:textSize="9sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/navNoticies"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:clickable="true"
+            android:focusable="true">
+            <ImageView android:layout_width="18dp" android:layout_height="18dp" android:src="@drawable/noticies" android:contentDescription="@string/nav_noticies" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="@string/nav_noticies" android:textColor="#333333" android:textSize="9sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/navCalendari"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:clickable="true"
+            android:focusable="true">
+            <ImageView android:layout_width="18dp" android:layout_height="18dp" android:src="@drawable/calendari" android:contentDescription="@string/nav_calendari" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="@string/nav_calendari" android:textColor="#333333" android:textSize="9sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/navContacte"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:clickable="true"
+            android:focusable="true">
+            <ImageView android:layout_width="18dp" android:layout_height="18dp" android:src="@drawable/contacte" android:contentDescription="@string/nav_contacte" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="@string/nav_contacte" android:textColor="#111111" android:textSize="9sp" android:textStyle="bold" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

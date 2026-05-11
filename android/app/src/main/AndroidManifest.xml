@@ -1,8 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    MANIFEST.XML
+    Fitxer de manifest de l'aplicació ImperiumGym.
+    Defineix totes les Activities de l'aplicació, permisos i configuració principal.
+
+    L'aplicació comença amb MainInici (pantalla de benvinguda/landing).
+    Des d'allà es pot anar a IniciarSessio o Registre.
+    Un cop loguejat, es navega per la resta de pantalles mitjançant el bottom navigation.
+
+    En el futur, es poden afegir:
+    - Permisos d'Internet per a la base de dades remota
+    - Permisos de notificacions
+    - Configuració de Firebase si s'utilitza
+-->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+
+    <!--PERMISOS -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+
     <application
+        android:usesCleartextTraffic="true"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -11,42 +33,193 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.GymApp">
+
+
+
+        <!-- ==================== PANTALLES PRINCIPALS ==================== -->
+
+        <!--
+            MAININICI (LAUNCHER)
+            Pantalla inicial de l'aplicació.
+            Mostra el logo i dos botons: Inicia Sessió i Registre.
+            És l'Activity principal (LAUNCHER) que s'obre quan s'inicia l'app.
+        -->
         <activity
-            android:name=".pagina_confirmacion_reserva"
-            android:exported="false" />
-        <activity
-            android:name=".pagina_confirmacionPago"
-            android:exported="false" />
-        <activity
-            android:name=".pagina_pago"
-            android:exported="false" />
-        <activity
-            android:name=".pagina_productos"
-            android:exported="false" />
-        <activity
-            android:name=".pagina_tienda"
-            android:exported="false" />
-        <activity
-            android:name=".paginaInfoPerfil"
-            android:exported="false" />
-        <activity
-            android:name=".paginaNoticias"
-            android:exported="false" />
-        <activity
-            android:name=".paginaRegistre"
-            android:exported="false" />
-        <activity
-            android:name=".PaginaLogin"
-            android:exported="false" />
-        <activity
-            android:name=".MainActivity"
-            android:exported="true">
+            android:name=".MainInici"
+            android:exported="true"
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!--
+            INICIAR_SESSIO
+            Pantalla perquè l'usuari introdueixi email i contrasenya.
+            En cas d'èxit, redirigeix a Home.
+        -->
+        <activity
+            android:name=".IniciarSessio"
+            android:exported="false" />
+
+        <!--
+            REGISTRE
+            Pantalla per crear un nou compte d'usuari.
+            Demana email, contrasenya, telèfon i edat.
+        -->
+        <activity
+            android:name=".Registre"
+            android:exported="false" />
+
+        <!-- ==================== PANTALLES PRINCIPALS AMB BOTTOM NAVIGATION ==================== -->
+
+        <!--
+            HOME
+            Pantalla principal després d'iniciar sessió.
+            Mostra un missatge de benvinguda i el logo del gimnàs.
+            És el punt de partida del bottom navigation.
+        -->
+        <activity
+            android:name=".Home"
+            android:exported="false" />
+
+        <!--
+            CLASSES
+            Pantalla que mostra totes les classes disponibles del gimnàs.
+            Cada classe té un botó "Reserva ara" que porta a ReservarClasses.
+        -->
+        <activity
+            android:name=".Classes"
+            android:exported="false" />
+
+        <!--
+            RESERVAR_CLASSES
+            Pantalla per reservar una classe concreta.
+            Rep l'ID de la classe seleccionada i mostra un formulari.
+            En confirmar, guarda la reserva i va a ConfirmadaReservaClasse.
+        -->
+        <activity
+            android:name=".ReservarClasses"
+            android:exported="false" />
+
+        <!--
+            CONFIRMADA_RESERVA_CLASSE
+            Pantalla de confirmació després de reservar una classe amb èxit.
+            Mostra un missatge i una icona de confirmació.
+        -->
+        <activity
+            android:name=".ConfirmadaReservaClasse"
+            android:exported="false" />
+
+        <!--
+            BOTIGA
+            Pantalla que mostra tots els productes de la botiga.
+            Cada producte és clicable i porta a ProductesBotiga.
+        -->
+        <activity
+            android:name=".Botiga"
+            android:exported="false" />
+
+        <!--
+            PRODUCTES_BOTIGA
+            Pantalla de detall d'un producte seleccionat.
+            Mostra imatge, nom, descripció i preu.
+            Permet triar quantitat i afegir a la cesta o comprar directament.
+        -->
+        <activity
+            android:name=".ProductesBotiga"
+            android:exported="false" />
+
+        <!--
+            CISTELLA_BOTIGA
+            Pantalla que mostra tots els productes afegits a la cesta.
+            Permet modificar quantitats, eliminar productes i procedir al pagament.
+        -->
+        <activity
+            android:name=".CistellaBotiga"
+            android:exported="false" />
+
+        <!--
+            PAGAMENT_PRODUCTES_BOTIGA
+            Pantalla de pagament per a un producte comprat directament.
+            Recull dades d'enviament i targeta.
+        -->
+        <activity
+            android:name=".PagamentProductesBotiga"
+            android:exported="false" />
+
+        <!--
+            PAGAMENT_PRODUCTES_CISTELLA
+            Pantalla de pagament per als productes de la cesta.
+            Mostra el resum de la comanda i recull dades de pagament.
+        -->
+        <activity
+            android:name=".PagamentProductesCistella"
+            android:exported="false" />
+
+        <!--
+            PAGAT_PRODUCTE_BOTIGA
+            Pantalla de confirmació després de pagar un producte.
+            S'utilitza tant per a compra directa com per a compra des de la cesta.
+        -->
+        <activity
+            android:name=".PagatProducteBotiga"
+            android:exported="false" />
+
+        <!--
+            NOTICIES
+            Pantalla que mostra les últimes notícies del gimnàs.
+            Inclou un menú lateral (DrawerLayout) amb opcions addicionals.
+        -->
+        <activity
+            android:name=".Noticies"
+            android:exported="false" />
+
+        <!--
+            CALENDARI
+            Pantalla amb un calendari mensual.
+            Els dies amb reserves apareixeran ressaltats.
+            En seleccionar un dia, es mostren les reserves d'aquell dia.
+        -->
+        <activity
+            android:name=".Calendari"
+            android:exported="false" />
+
+        <!--
+            CONTACTE
+            Pantalla amb informació de contacte del gimnàs.
+            Mostra adreça, telèfon, email, horari i xarxes socials.
+        -->
+        <activity
+            android:name=".Contacte"
+            android:exported="false" />
+
+        <!-- ==================== PANTALLES DE PERFIL I CONFIGURACIÓ ==================== -->
+
+        <!--
+            INFO_PERFIL_USUARI
+            Pantalla amb la informació del perfil de l'usuari.
+            Permet editar dades personals i canviar la contrasenya.
+            També té un botó per tancar sessió.
+        -->
+        <activity
+            android:name=".InfoPerfilUsuari"
+            android:exported="false" />
+
+        <!--
+            CONTRASENYA_USUARI
+            Pantalla per canviar la contrasenya de l'usuari.
+            Demana la nova contrasenya i la confirmació.
+        -->
+        <activity
+            android:name=".ContrasenyaUsuari"
+            android:exported="false" />
+
+        <activity
+            android:name=".activity_ajuda"
+            android:exported="false" />
+
     </application>
 
 </manifest>

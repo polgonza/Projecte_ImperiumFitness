@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    ACTIVITY_CLASSES.XML
+    Pantalla que mostra totes les classes disponibles del gimnàs.
+    L'usuari pot veure la imatge, nom i prémer el botó "Reserva ara" per a cada classe.
+    En el futur, en prémer el botó es passarà l'ID de la classe a la pantalla de reserva.
+    Té una topbar amb títol i subtítol, i un bottom navigation amb 6 ítems.
+-->
+<LinearLayout
+    android:id="@+id/main"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:weightSum="1"
+    android:background="#2B2B2B">
+
+    <!-- TOPBAR: títol + subtítol + icona de perfil -->
+    <LinearLayout
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#555555"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvClassesTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/classes_titol"
+                android:textColor="#F0DB1A"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvClassesSubtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/classes_subtitol"
+                android:textColor="#CCCCCC"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <FrameLayout
+            android:id="@+id/logoContainer"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:background="#7B2CFF"
+            android:clickable="true"
+            android:focusable="true"
+            android:onClick="toggleDrawer"
+            android:padding="2dp">
+
+            <ImageView
+                android:id="@+id/imgTopLogo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#555555"
+                android:contentDescription="@string/app_name"
+                android:scaleType="centerInside"
+                android:src="@drawable/logo" />
+        </FrameLayout>
+    </LinearLayout>
+
+    <!-- Zona central amb scroll -->
+    <!-- Zona central amb scroll -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:paddingBottom="32dp">
+
+            <!-- FILTRE DE CATEGORIES: botons horitzontals amb scroll -->
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="none"
+                android:layout_marginBottom="16dp">
+
+                <LinearLayout
+                    android:id="@+id/llFiltres"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <!-- Botó Totes -->
+                    <Button
+                        android:id="@+id/btnFiltreToutes"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:text="Totes"
+                        android:textSize="12sp"
+                        android:backgroundTint="#7B2CFF"
+                        android:textColor="#FFFFFF"
+                        android:layout_marginEnd="8dp" />
+
+                    <!-- Botó Cardiovascular -->
+                    <Button
+                        android:id="@+id/btnFiltreCardio"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:text="Cardiovascular"
+                        android:textSize="12sp"
+                        android:backgroundTint="#555555"
+                        android:textColor="#FFFFFF"
+                        android:layout_marginEnd="8dp" />
+
+                    <!-- Botó Força -->
+                    <Button
+                        android:id="@+id/btnFiltreForça"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:text="Força"
+                        android:textSize="12sp"
+                        android:backgroundTint="#555555"
+                        android:textColor="#FFFFFF"
+                        android:layout_marginEnd="8dp" />
+
+                    <!-- Botó Flexibilitat -->
+                    <Button
+                        android:id="@+id/btnFiltreFlexibilitat"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:text="Flexibilitat"
+                        android:textSize="12sp"
+                        android:backgroundTint="#555555"
+                        android:textColor="#FFFFFF"
+                        android:layout_marginEnd="8dp" />
+
+                </LinearLayout>
+            </HorizontalScrollView>
+
+            <!-- CONTENIDOR DINÀMIC: s'omple des de Classes.java -->
+            <LinearLayout
+                android:id="@+id/llContainerClasses"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- BOTTOM NAVIGATION amb 6 ítems -->
+    <LinearLayout
+        android:id="@+id/bottomNav"
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:background="#D0D0D0"
+        android:orientation="horizontal"
+        android:paddingStart="4dp"
+        android:paddingEnd="4dp"
+        android:weightSum="6">
+
+        <LinearLayout
+            android:id="@+id/navHome"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:clickable="true"
+            android:focusable="true">
+            <ImageView android:layout_width="18dp" android:layout_height="18dp" android:src="@drawable/home" android:contentDescription="@string/nav_inici" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="@string/nav_inici" android:textColor="#333333" android:textSize="9sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/navClasses"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:clickable="true"
+            android:focusable="true">
+            <ImageView android:layout_width="18dp" android:layout_height="18dp" android:src="@drawable/classes" android:contentDescription="@string/nav_classes" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="@string/nav_classes" android:textColor="#111111" android:textSize="9sp" android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/navBotiga"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:clickable="true"
+            android:focusable="true">
+            <ImageView android:layout_width="18dp" android:layout_height="18dp" android:src="@drawable/shop" android:contentDescription="@string/nav_botiga" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="@string/nav_botiga" android:textColor="#333333" android:textSize="9sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/navNoticies"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:clickable="true"
+            android:focusable="true">
+            <ImageView android:layout_width="18dp" android:layout_height="18dp" android:src="@drawable/noticies" android:contentDescription="@string/nav_noticies" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="@string/nav_noticies" android:textColor="#333333" android:textSize="9sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/navCalendari"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:clickable="true"
+            android:focusable="true">
+            <ImageView android:layout_width="18dp" android:layout_height="18dp" android:src="@drawable/calendari" android:contentDescription="@string/nav_calendari" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="@string/nav_calendari" android:textColor="#333333" android:textSize="9sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/navContacte"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:clickable="true"
+            android:focusable="true">
+            <ImageView android:layout_width="18dp" android:layout_height="18dp" android:src="@drawable/contacte" android:contentDescription="@string/nav_contacte" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="@string/nav_contacte" android:textColor="#333333" android:textSize="9sp" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

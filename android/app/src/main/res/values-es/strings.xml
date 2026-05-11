@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- ==================== GENERALES ==================== -->
+    <string name="si">Sí</string>
+    <string name="no">No</string>
+    <string name="d_acord">De acuerdo</string>
+    <string name="error">Error</string>
+    <string name="carregant">Cargando...</string>
+
+    <!-- ==================== BOTTOM NAVIGATION ==================== -->
+    <string name="nav_inici">Inicio</string>
+    <string name="nav_classes">Clases</string>
+    <string name="nav_botiga">Tienda</string>
+    <string name="nav_noticies">Noticias</string>
+    <string name="nav_calendari">Calendario</string>
+    <string name="nav_contacte">Contacto</string>
+
+    <!-- ==================== MAIN INICI ==================== -->
+    <string name="main_titol">ImperiumGYM APP</string>
+    <string name="btn_inicia_sessio">Iniciar sesión</string>
+    <string name="btn_registre">Regístrate</string>
+
+    <!-- ==================== INICIAR SESIÓN ==================== -->
+    <string name="login_titol_usuari">Nombre de usuario</string>
+    <string name="login_hint_usuari">Introduce tu nombre de usuario</string>
+    <string name="login_titol_contrasenya">Contraseña</string>
+    <string name="login_hint_contrasenya">Introduce la contraseña</string>
+    <string name="login_oblidada">¿Has olvidado la contraseña?</string>
+    <string name="login_boto">Iniciar Sesión</string>
+    <string name="login_error_camps">Introduce nombre de usuario y contraseña</string>
+    <string name="login_error_credencials">Usuario o contraseña incorrectos</string>
+    <string name="login_exit">Sesión iniciada correctamente</string>
+    <string name="login_error_servidor">No se ha podido conectar al servidor: %s</string>
+
+    <!-- ==================== REGISTRO ==================== -->
+    <string name="register_titol_usuari">Nombre de usuario</string>
+    <string name="register_hint_usuari">Elige un nombre de usuario</string>
+    <string name="register_titol_email">Email</string>
+    <string name="register_hint_email">Introduce tu email</string>
+    <string name="register_titol_contrasenya">Contraseña</string>
+    <string name="register_hint_contrasenya">Crea una contraseña</string>
+    <string name="register_boto">Regístrate</string>
+    <string name="register_error_camps">Completa todos los campos</string>
+    <string name="register_error_email">Introduce un email válido</string>
+    <string name="register_error_password">La contraseña debe tener al menos 4 caracteres</string>
+    <string name="register_exit">Usuario registrado correctamente</string>
+    <string name="register_error_exists">Error en el registro. El email o nombre de usuario ya pueden estar en uso.</string>
+
+    <!-- ==================== HOME ==================== -->
+    <string name="benvinguda">¡Buenos días, %s!</string>
+    <string name="home_benvinguda">¡Buenos días, %s!</string>
+    <string name="home_eslogan">Solo para los más DUROS</string>
+    <string name="home_ajuda">Ayuda - En desarrollo</string>
+
+    <!-- ==================== MENÚ DESPLEGABLE ==================== -->
+    <string name="menu_perfil">Información de Perfil</string>
+    <string name="menu_idioma">Idioma</string>
+    <string name="menu_tancar_sessio">Cerrar Sesión</string>
+    <string name="menu_ajuda">Ayuda</string>
+
+    <!-- ==================== DIÁLOGO IDIOMA ==================== -->
+    <string name="selecciona_idioma">Selecciona un idioma</string>
+    <string name="confirmar_canvi_idioma">Confirmar cambio de idioma</string>
+    <string name="missatge_confirmar_idioma">¿Estás seguro de que quieres cambiar el idioma a %s?</string>
+    <string name="idioma_canviat">Idioma cambiado a %s</string>
+    <string name="dialog_idioma_titol">Selecciona un idioma</string>
+    <string name="dialog_idioma_confirmar_titol">Confirmar cambio de idioma</string>
+    <string name="dialog_idioma_confirmar_missatge">¿Estás seguro de que quieres cambiar el idioma a %s?</string>
+    <string name="dialog_idioma_exit">Idioma cambiado a %s</string>
+    <string name="idioma_espanyol">Español</string>
+    <string name="idioma_catala">Catalán</string>
+    <string name="idioma_angles">Inglés</string>
+
+    <!-- Strings que falten per IniciarSessio -->
+    <string name="introdueix_usuari_contrasenya">Introduce nombre de usuario y contraseña</string>
+    <string name="sessio_iniciada">Sesión iniciada correctamente</string>
+    <string name="error_credencials">Usuario o contraseña incorrectos</string>
+    <string name="error_servidor">No se ha podido conectar al servidor: %s</string>
+
+    <!-- Strings que falten per Registre -->
+    <string name="omple_tots_els_camps">Completa todos los campos</string>
+    <string name="email_invalid">Introduce un email válido</string>
+    <string name="password_min">La contraseña debe tener al menos 4 caracteres</string>
+    <string name="registre_ok">Usuario registrado correctamente</string>
+    <string name="error_registre">Error en el registro. El email o nombre de usuario ya pueden estar en uso.</string>
+
+    <!-- ==================== CLASSES ==================== -->
+    <string name="classes_titol">Clases</string>
+    <string name="classes_subtitol">Reserva tu clase preferida</string>
+    <string name="classe_zumba">Zumba</string>
+    <string name="classe_spinning">Spinning</string>
+    <string name="classe_bodypump">Body Pump</string>
+    <string name="classe_desc_zumba">Clase de baile dinámica con música latina. Perfecta para quemar calorías y divertirte.</string>
+    <string name="classe_desc_spinning">Clase de intenso ciclismo indoor para mejorar tu resistencia cardiovascular.</string>
+    <string name="classe_desc_bodypump">Entrenamiento con barras y pesos para tonificar todos los músculos del cuerpo.</string>
+    <string name="btn_reserva_ara">Reservar ahora</string>
+
+    <!-- ==================== RESERVAR CLASES ==================== -->
+    <string name="reserva_titol">Reserva de Clase</string>
+    <string name="reserva_subtitol">Confirma tu reserva</string>
+    <string name="reserva_usuari_missatge" formatted="false">%s, reservarás clase de %s</string>
+    <string name="reserva_selector_horari">Selecciona el horario</string>
+    <string name="reserva_data">Fecha (opcional)</string>
+    <string name="reserva_data_hint">Selecciona una fecha (opcional)</string>
+    <string name="reserva_notes">Notas adicionales</string>
+    <string name="reserva_notes_hint">Alguna preferencia o comentario (ej: lesiones, necesidades especiales...)</string>
+    <string name="reserva_boto_confirmar">Confirmar Reserva</string>
+    <string name="reserva_confirmada">¡Reserva realizada!</string>
+    <string name="reserva_exit">Reserva guardada correctamente</string>
+
+    <!-- Horaris -->
+    <string-array name="horaris_classes">
+        <item>09:00 - 10:00</item>
+        <item>11:00 - 12:00</item>
+        <item>13:00 - 14:00</item>
+        <item>16:00 - 17:00</item>
+        <item>18:00 - 19:00</item>
+        <item>20:00 - 21:00</item>
+    </string-array>
+
+    <!-- ==================== TIENDA ==================== -->
+    <string name="botiga_titol">La Imperial Store</string>
+    <string name="botiga_subtitol">Equípate como un campeón</string>
+    <string name="botiga_cistella">Cesta</string>
+    <string name="producte_proteina">Proteína</string>
+    <string name="producte_camiseta">Camiseta Gym</string>
+    <string name="producte_desc_proteina">Proteína de suero de alta calidad. Perfecta para después del entrenamiento para la recuperación muscular.</string>
+    <string name="producte_desc_camiseta">Camiseta oficial de ImperiumGym. 100% algodón, transpirable y cómoda para tus entrenamientos.</string>
+    <string name="producte_preu_proteina">39,99€</string>
+    <string name="producte_preu_camiseta">19,99€</string>
+    <string name="btn_comprar_ara">Comprar ahora</string>
+
+    <!-- ==================== PRODUCTOS TIENDA (DETALLE) ==================== -->
+    <string name="producte_detall_titol">Detalle del producto</string>
+    <string name="producte_detall_subtitol">Elige la cantidad y compra</string>
+    <string name="producte_quantitat">Cantidad:</string>
+    <string name="producte_quantitat_default">1</string>
+    <string name="btn_afegir_cistella">Añadir a la cesta</string>
+    <string name="btn_pagar_ara">Pagar ahora</string>
+    <string name="producte_afegit_cistella">Añadido a la cesta (%d unidad/es)</string>
+
+    <!-- ==================== CESTA ==================== -->
+    <string name="cistella_titol">Mi cesta</string>
+    <string name="cistella_subtitol">Revisa tus productos</string>
+    <string name="cistella_total">Total: %.2f€</string>
+    <string name="cistella_boto_pagament">Proceder al pago</string>
+    <string name="cistella_buida">La cesta está vacía</string>
+    <string name="cistella_eliminar_titol">Eliminar producto</string>
+    <string name="cistella_eliminar_missatge">¿Quieres eliminar este producto de la cesta?</string>
+
+    <!-- ==================== PAGO ==================== -->
+    <string name="pagament_titol_producte">Pago del Producto</string>
+    <string name="pagament_titol_cistella">Pago de la cesta</string>
+    <string name="pagament_subtitol">Introduce los datos de pago</string>
+    <string name="pagament_resum_comanda">Resumen del pedido</string>
+    <string name="pagament_total">Total: %.2f€</string>
+    <string name="pagament_direccio_titol">Dirección de envío</string>
+    <string name="pagament_nom_complet">Nombre completo</string>
+    <string name="pagament_adreca">Dirección</string>
+    <string name="pagament_ciutat">Ciudad</string>
+    <string name="pagament_codi_postal">Código postal</string>
+    <string name="pagament_targeta_titol">Datos de la tarjeta</string>
+    <string name="pagament_numero_targeta">Número de tarjeta</string>
+    <string name="pagament_nom_titular">Nombre del titular</string>
+    <string name="pagament_data_caducitat">MM/AA</string>
+    <string name="pagament_cvv">CVV</string>
+    <string name="pagament_boto">Pagar ahora</string>
+    <string name="pagament_error_camps">Completa todos los campos de pago</string>
+    <string name="pagament_exit">Pago realizado con éxito</string>
+    <string name="pagament_completat">¡Compra realizada!</string>
+
+    <!-- ==================== CONFIRMACIONES ==================== -->
+    <string name="confirmacio_reserva">¡Reserva realizada!</string>
+    <string name="confirmacio_compra">¡Compra realizada!</string>
+
+    <!-- ==================== PERFIL USUARIO ==================== -->
+    <string name="perfil_titol">Cuenta de Usuario</string>
+    <string name="perfil_subtitol">Gestiona tus datos</string>
+    <string name="perfil_nom">Nombre</string>
+    <string name="perfil_email">Email</string>
+    <string name="perfil_contrasenya">Contraseña</string>
+    <string name="perfil_guardar_canvis">Guardar cambios</string>
+    <string name="perfil_canviar_contrasenya">Cambiar contraseña</string>
+    <string name="perfil_error_camps">Completa todos los campos</string>
+    <string name="perfil_exit">Datos actualizados correctamente</string>
+    <string name="perfil_mostrar_contrasenya">Mostrar contraseña</string>
+
+    <!-- ==================== CAMBIAR CONTRASEÑA ==================== -->
+    <string name="canvi_contrasenya_titol">Cambiar contraseña</string>
+    <string name="canvi_contrasenya_subtitol">Introduce la nueva contraseña</string>
+    <string name="canvi_nova_contrasenya">Nueva contraseña</string>
+    <string name="canvi_confirmar_contrasenya">Confirmar contraseña</string>
+    <string name="canvi_boto_guardar">Guardar contraseña</string>
+    <string name="canvi_error_buits">Completa ambos campos</string>
+    <string name="canvi_error_longitud">La contraseña debe tener al menos 4 caracteres</string>
+    <string name="canvi_error_coincidir">Las contraseñas no coinciden. Vuelve a intentarlo.</string>
+    <string name="canvi_exit">Contraseña cambiada correctamente</string>
+    <string name="canvi_confirmar_dialog">¿Estás seguro de que quieres cambiar la contraseña?</string>
+
+    <!-- ==================== CALENDARIO ==================== -->
+    <string name="calendari_titol">Calendario</string>
+    <string name="calendari_subtitol">Tus reservas</string>
+    <string name="calendari_sense_reserves">No hay reservas para este día</string>
+    <string name="calendari_reserves_titol">Reservas del día</string>
+    <string name="calendari_reserves_missatge">Reservas para el %s:\n\n</string>
+
+    <!-- ==================== CONTACTO ==================== -->
+    <string name="contacte_titol">Contacto</string>
+    <string name="contacte_subtitol">Ponte en contacto con nosotros</string>
+    <string name="contacte_adreca_titol">📍 Dirección</string>
+    <string name="contacte_adreca_text">Calle del Deporte, 10\n08001 Barcelona</string>
+    <string name="contacte_telefon_titol">📞 Teléfono</string>
+    <string name="contacte_telefon_text">+34 932 123 456</string>
+    <string name="contacte_email_titol">✉️ Email</string>
+    <string name="contacte_email_text">info@imperiumgym.com</string>
+    <string name="contacte_horari_titol">🕒 Horario</string>
+    <string name="contacte_horari_text">Lunes a Viernes: 7:00 - 22:00\nSábado: 9:00 - 20:00\nDomingo: 10:00 - 14:00</string>
+    <string name="contacte_boto">Envíanos un mensaje</string>
+
+    <!-- ==================== NOTICIAS ==================== -->
+    <string name="noticies_titol">Noticias</string>
+    <string name="noticies_subtitol">Mantente informado de las novedades</string>
+    <string name="noticia1_titol">Nueva clase de Funcional Fit comienza este lunes</string>
+    <string name="noticia1_desc">Entrenamientos dinámicos para mejorar fuerza y resistencia. ¡Ven a probarla!</string>
+    <string name="noticia2_titol">Arranca el programa de Yoga al Amanecer</string>
+    <string name="noticia2_desc">Sesiones suaves para empezar el día con energía. Todas las mañanas a las 7:00.</string>
+    <string name="noticia3_titol">Nuevo descuento para miembros: 20% en suplementos</string>
+    <string name="noticia3_desc">Aprovecha las ofertas especiales en nuestra tienda. Solo para miembros.</string>
+    <string name="noticia4_titol">Horario especial durante las fiestas</string>
+    <string name="noticia4_desc">Consulta los nuevos horarios para los próximos días festivos. Cierre a las 15:00.</string>
+    <string name="noticia5_titol">Taller de nutrición deportiva</string>
+    <string name="noticia5_desc">Aprende a alimentarte correctamente para tus entrenamientos. Sábado a las 11:00.</string>
+    <string name="noticia6_titol">Campeonato de CrossFit Interno</string>
+    <string name="noticia6_desc">¡Inscríbete en nuestro campeonato anual! Premios para los ganadores.</string>
+    <string name="noticia7_titol">Nueva máquina de cardio</string>
+    <string name="noticia7_desc">Hemos renovado la zona de cardio con las últimas máquinas del mercado.</string>
+    <string name="noticia8_titol">Reto de verano: 30 días de entrenamiento</string>
+    <string name="noticia8_desc">Participa en nuestro reto y gana premios increíbles. Comienza el 1 de junio.</string>
+
+    <!-- ==================== AYUDAS ==================== -->
+
+    <string name="ajuda_titol">Ayuda</string>
+    <string name="ajuda_subtitol">Guía de uso de la aplicación</string>
+
+    <!-- Elementos comunes -->
+    <string name="titol_elements_comuns">Interfaz de usuario</string>
+
+    <string name="ajuda_capcalera">En la parte superior de la pantalla tenemos un mensaje de bienvenida y se muestra el correo del usuario. En la parte derecha podemos pulsar sobre el engranaje para acceder a las opciones de información de perfil, selección de idioma, cierre de sesión y ayuda.</string>
+
+    <string name="ajuda_peu">En la parte inferior tenemos el menú de navegación, desde donde podemos acceder a clases, tienda, noticias, calendario y contacto.</string>
+
+    <!-- PROCESO RESERVA -->
+    <string name="titol_reserva_classes">Reservar clases</string>
+
+    <string name="ajuda_reserva_acces">Para reservar una clase, tenemos que pulsar en el menú inferior sobre el apartado de clases.</string>
+
+    <string name="ajuda_reserva_filtratge">Dentro de la pantalla de clases podemos filtrar por familias de ejercicios. Al pulsar sobre una de las opciones, aparecen las clases correspondientes a esa familia.</string>
+
+    <string name="ajuda_reserva_seleccio_classes">También es posible seleccionar una clase para poder reservarla. En esta pantalla aparece un listado de las clases disponibles organizadas por fecha y horario. Para reservar, tenemos que buscar la clase que queremos y pulsar sobre el botón “Reservar ahora”.</string>
+
+    <string name="ajuda_reserva_resum_classe">En la pantalla de resumen podemos ver la información de la clase. Aquí tenemos que seleccionar la fecha y la hora que mejor se ajusten a nuestras necesidades y pulsar el botón “Confirmar reserva”.</string>
+
+    <string name="ajuda_reserva_confirmacio">En este paso, la reserva ya está completada.</string>
+
+    <string name="ajuda_reserva_compra_cistella">También es posible comprar productos de la tienda en la cesta de la compra y aquí se puede ver el listado de todos los productos seleccionados</string>
+
+
+    <!-- PROCESO TIENDA -->
+    <string name="titol_compra_botiga">Comprar en la tienda</string>
+
+    <string name="ajuda_botiga_acces">Para comprar en la tienda, tenemos que pulsar en el menú inferior sobre el apartado de tienda.</string>
+
+    <string name="ajuda_botiga_seleccio_producte">Para comprar un producto, tenemos que seleccionar el producto que queremos y pulsar sobre el botón “Comprar ahora”.</string>
+
+    <string name="ajuda_botiga_resum_producte">En la pantalla de resumen del producto seleccionamos la cantidad que queremos comprar. Podemos añadirlo a la cesta para comprar más productos o pulsar directamente en “Pagar ahora”.</string>
+
+    <string name="ajuda_botiga_pagament_producte">En la siguiente pantalla debemos introducir los datos de envío y los datos de la tarjeta para finalizar la compra. Después, hay que pulsar el botón “Pagar ahora”.</string>
+
+    <string name="ajuda_botiga_confirmacio">En este paso, la compra ya está completada.</string>
+
+
+
+    <!-- PROCESO NOTICIAS -->
+    <string name="titol_noticies">Noticias</string>
+
+    <string name="ajuda_noticies_acces">Para consultar las noticias, tenemos que pulsar en el menú inferior sobre el apartado de noticias.</string>
+
+    <!-- PROCESO CALENDARIO -->
+    <string name="titol_calendari">Calendario</string>
+
+    <string name="ajuda_calendari_acces">Para consultar el calendario, tenemos que pulsar en el menú inferior sobre el apartado de calendario.</string>
+
+    <string name="ajuda_calendari_seleccio">Para consultar una reserva en el calendario, tenemos que pulsar sobre el día en el que tenemos una reserva. A continuación, aparecerá la información de la clase reservada.</string>
+
+    <!-- PROCESO CONTACTO -->
+    <string name="titol_contacte">Contacto</string>
+
+    <string name="ajuda_contacte_acces">Para acceder a la página de contacto con el gimnasio, tenemos que pulsar en el menú inferior sobre el apartado de contacto.</string>
+
+    <string name="ajuda_contacte_missatge">Para ponerte en contacto con nosotros, solo tienes que pulsar el botón “Envíanos un mensaje” y automáticamente se abrirá el correo electrónico para escribir tu mensaje.</string>
+
+
+
+</resources>
