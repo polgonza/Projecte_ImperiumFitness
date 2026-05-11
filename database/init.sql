@@ -484,7 +484,6 @@ CREATE TABLE `usuari` (
   `tarifa_id` bigint(20) DEFAULT NULL,
   `tarifa_data_inici` timestamp NULL DEFAULT NULL,
   `tarifa_data_fi` timestamp NULL DEFAULT NULL,
-  `tarifa_cancel·lada` tinyint(1) DEFAULT 0,
   `tarifa_cancellada` tinyint(1) DEFAULT 0,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`),
