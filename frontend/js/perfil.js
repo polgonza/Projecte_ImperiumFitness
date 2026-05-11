@@ -42,7 +42,21 @@ async function initPerfil() {
       planNom,        // ← tarifa real
       dataRegistre
     );
+    if (perfil && perfil.tarifaId) {
+  // Mostrem info de la subscripció
+  const dataFi = perfil.tarifaDataFi
+    ? new Date(perfil.tarifaDataFi).toLocaleDateString("es-ES")
+    : "—";
 
+  const cancelBtn = document.getElementById("cancel-tarifa-btn");
+  if (cancelBtn) {
+    cancelBtn.style.display = "block";
+    cancelBtn.textContent = perfil.tarifaCancellada
+      ? `Cancelada (acceso hasta ${dataFi})`
+      : `Cancelar suscripción (activa hasta ${dataFi})`;
+    cancelBtn.disabled = perfil.tarifaCancellada;
+  }
+}
     // Guardem la tarifa al localStorage per usar-la al carrito i reserves
     Auth.setUser({
       ...user,
@@ -64,7 +78,26 @@ function setTextById(id, text) {
   const el = document.getElementById(id);
   if (el) el.textContent = text;
 }
+async function cancelarSubscripcio() {
+  const confirmat = confirm(
+    "¿Seguro que quieres cancelar tu suscripción?\n\n" +
+    "Seguirás teniendo acceso hasta el final del período pagado."
+  );
+  if (!confirmat) return;
 
+  const user = Auth.getUser();
+  const perfil = await ApiUsuari.cancelarTarifa(user.id);
+
+  if (perfil) {
+    const dataFi = perfil.tarifaDataFi
+      ? new Date(perfil.tarifaDataFi).toLocaleDateString("es-ES")
+      : "—";
+    showToast(`Suscripción cancelada. Acceso hasta el ${dataFi}.`, "success");
+    await initPerfil();
+  } else {
+    showToast("No se pudo cancelar. Inténtalo de nuevo.", "error");
+  }
+}
 
 /* =====================================================
    2. TAB RESERVES — dades reals del backend

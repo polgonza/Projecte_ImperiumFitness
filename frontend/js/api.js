@@ -293,8 +293,16 @@ async getTarifaActiva() {
     }
     return null;
   } catch (e) { return null; }
+},
+async cancelarTarifa(usuariId) {
+  try {
+    const res = await apiFetch(`/api/usuaris/${usuariId}/cancel-tarifa`, {
+      method: "PUT"
+    });
+    if (res && res.ok) return await res.json();
+    return null;
+  } catch (e) { return null; }
 }
-
 };
 /* ══════════════════════════════════════════════════════
    ESTADÍSTIQUES — només ADMIN

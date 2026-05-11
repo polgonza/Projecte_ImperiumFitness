@@ -45,26 +45,30 @@ public class ReservaService {
     }
 
     public ReservaDTO save(ReservaDTO dto) {
+    // Comprova si l'usuari té subscripció activa
+    Usuari u = usuariRepo.findById(dto.getUsuariId())
+            .orElseThrow(() -> new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Usuari no trobat"));
 
-    // Regla 1: límit de 5 reserves actives per usuari
+    if (!u.isSubscripcioActiva()) {
+        throw new ResponseStatusException(
+                HttpStatus.FORBIDDEN,
+                "Necessites una subscripció activa per reservar classes");
+    }
+
     long reservesActives = repo.countReservesFuturesByUsuari(
-            dto.getUsuariId(),
-            LocalDateTime.now()
-    );
+            dto.getUsuariId(), LocalDateTime.now());
     if (reservesActives >= 5) {
         throw new ResponseStatusException(
                 HttpStatus.CONFLICT,
-                "Has arribat al límit de 5 reserves actives simultànies");
+                "Has arribat al límit de 5 reserves actives");
     }
 
-  // Regla 2: duplicat NOMÉS per reserves futures
     if (repo.existsByUsuariIdAndClasseIdAndFutura(
-        dto.getUsuariId(),
-        dto.getClasseId(),
-        LocalDateTime.now())) {
+            dto.getUsuariId(), dto.getClasseId(), LocalDateTime.now())) {
         throw new ResponseStatusException(
-            HttpStatus.CONFLICT,
-            "L'usuari ja té una reserva per aquesta classe");
+                HttpStatus.CONFLICT,
+                "L'usuari ja té una reserva per aquesta classe");
     }
 
     Reserva r = toEntity(dto);

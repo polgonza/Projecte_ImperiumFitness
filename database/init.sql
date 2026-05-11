@@ -175,7 +175,7 @@ CREATE TABLE `contacte` (
   `missatge` varchar(1000) NOT NULL,
   `data_enviament` timestamp NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -188,7 +188,11 @@ INSERT INTO `contacte` VALUES
 (1,'Pere Martí','pere@gmail.com','Voldria informació sobre les tarifes','2026-04-16 23:21:13'),
 (2,'dafa','rafa@gmail.com','jhvc','2026-05-05 14:44:36'),
 (3,'pepe','pepe@correo.com','Aqui se lava ropa?','2026-05-05 14:54:51'),
-(4,'pepe','pepe@correo.com','Aqui lavan ropa?','2026-05-05 14:57:32');
+(4,'pepe','pepe@correo.com','Aqui lavan ropa?','2026-05-05 14:57:32'),
+(5,'dafa','rafa@gmail.com','pechuga','2026-05-06 16:24:15'),
+(6,'dafa','rafa@gmail.com','fqgzbshsshshhs','2026-05-06 17:39:09'),
+(7,'vsgsg','adad@asdadfj.com','asjfnaiufba','2026-05-06 17:57:19'),
+(8,'dafa','rafa@gmail.com','hola buenas','2026-05-11 13:50:16');
 /*!40000 ALTER TABLE `contacte` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -361,7 +365,7 @@ LOCK TABLES `producte` WRITE;
 /*!40000 ALTER TABLE `producte` DISABLE KEYS */;
 INSERT INTO `producte` VALUES
 (1,'Proteïna Whey 1kg','Proteïna de sèrum de llet sabor xocolata',29.99,'Suplement',50),
-(2,'Samarreta Imperium','Samarreta tècnica oficial del gimnàs',19.99,'Roba',30),
+(2,'Samarreta Imperium','Samarreta tècnica oficial del gimnàs',19.99,'Roba',29),
 (3,'Creatina 300g','Creatina monohidrat pura',19.99,'Suplement',40),
 (4,'Barra de proteïna','Snack proteic sabor xocolata',2.99,'Suplement',100),
 (5,'Guants gimnàs','Guants de training amb palmell reforçat',14.99,'Accesoris',25),
@@ -392,7 +396,7 @@ CREATE TABLE `reserva` (
   KEY `fk_reserva_classe` (`classe_id`),
   CONSTRAINT `fk_reserva_classe` FOREIGN KEY (`classe_id`) REFERENCES `classe` (`id`),
   CONSTRAINT `fk_reserva_usuari` FOREIGN KEY (`usuari_id`) REFERENCES `usuari` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=49 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -416,7 +420,19 @@ INSERT INTO `reserva` VALUES
 (12,1,2,'2026-05-01 17:48:13'),
 (13,1,10,'2026-05-01 18:04:57'),
 (14,1,4,'2026-05-01 20:06:15'),
-(15,1,8,'2026-05-01 20:06:52');
+(15,1,8,'2026-05-01 20:06:52'),
+(35,1,20,'2026-05-06 18:07:57'),
+(36,1,21,'2026-05-06 18:17:55'),
+(37,1,22,'2026-05-07 14:08:10'),
+(38,5,28,'2026-05-07 14:40:18'),
+(39,5,59,'2026-05-07 14:45:21'),
+(40,1,1,'2026-05-07 15:15:21'),
+(41,1,1,'2026-05-07 15:17:33'),
+(42,5,23,'2026-05-07 17:26:17'),
+(43,5,31,'2026-05-11 13:14:11'),
+(44,5,41,'2026-05-11 13:15:22'),
+(45,5,36,'2026-05-11 13:24:01'),
+(46,5,40,'2026-05-11 13:25:49');
 /*!40000 ALTER TABLE `reserva` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -436,7 +452,7 @@ CREATE TABLE `tarifa` (
   PRIMARY KEY (`id`),
   KEY `fk_tarifa_gimnas` (`gimnas_id`),
   CONSTRAINT `fk_tarifa_gimnas` FOREIGN KEY (`gimnas_id`) REFERENCES `gimnas` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -445,6 +461,9 @@ CREATE TABLE `tarifa` (
 
 LOCK TABLES `tarifa` WRITE;
 /*!40000 ALTER TABLE `tarifa` DISABLE KEYS */;
+INSERT INTO `tarifa` VALUES
+(2,'Quota Flex',29.99,'Quota mensual amb accés lliure',1),
+(3,'Quota Prime',49.99,'Quota mensual premium amb tots els serveis',1);
 /*!40000 ALTER TABLE `tarifa` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -462,9 +481,15 @@ CREATE TABLE `usuari` (
   `contrasenya` varchar(255) NOT NULL,
   `data_registre` timestamp NULL DEFAULT current_timestamp(),
   `rol` varchar(50) DEFAULT 'USER',
+  `tarifa_id` bigint(20) DEFAULT NULL,
+  `tarifa_data_inici` timestamp NULL DEFAULT NULL,
+  `tarifa_data_fi` timestamp NULL DEFAULT NULL,
+  `tarifa_cancel·lada` tinyint(1) DEFAULT 0,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  UNIQUE KEY `email` (`email`),
+  KEY `fk_usuari_tarifa` (`tarifa_id`),
+  CONSTRAINT `fk_usuari_tarifa` FOREIGN KEY (`tarifa_id`) REFERENCES `tarifa` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -474,10 +499,11 @@ CREATE TABLE `usuari` (
 LOCK TABLES `usuari` WRITE;
 /*!40000 ALTER TABLE `usuari` DISABLE KEYS */;
 INSERT INTO `usuari` VALUES
-(1,'Admin','admin@imperium.com','$2a$10$ru5ykaDgdlEaK26H/xAknuW3V/92RRszOFkof0aL8GcdInQk/uNa6','2026-04-16 18:24:35','ADMIN'),
-(2,'Joan Garcia','joan@gmail.com','$2a$10$CpPuIpBsxRDkhyyKyAfcg.VMsNqH4yPBUTWYoGBUOGWyHvE8vklpW','2026-04-16 18:24:35','USER'),
-(3,'Maria López','maria@gmail.com','$2a$10$ommhLP6snGAotlvt5L3Li.1vfKo5MQUhcPe/8Xv5BO3u8edSTDsvm','2026-04-20 13:10:06','USER'),
-(4,'paco paquito','paco@gmail.com','$2a$10$aA5R/KsWBkwzrNNd/B5IVOt7ItQD7cjgBsby7l2byLj.8YXTqbPcq','2026-04-28 13:22:49','USER');
+(1,'Admin','admin@imperium.com','$2a$10$ru5ykaDgdlEaK26H/xAknuW3V/92RRszOFkof0aL8GcdInQk/uNa6','2026-04-16 18:24:35','ADMIN',3,NULL,NULL,0),
+(2,'Joan Garcia','joan@gmail.com','$2a$10$CpPuIpBsxRDkhyyKyAfcg.VMsNqH4yPBUTWYoGBUOGWyHvE8vklpW','2026-04-16 18:24:35','USER',NULL,NULL,NULL,0),
+(3,'Maria López','maria@gmail.com','$2a$10$ommhLP6snGAotlvt5L3Li.1vfKo5MQUhcPe/8Xv5BO3u8edSTDsvm','2026-04-20 13:10:06','USER',NULL,NULL,NULL,0),
+(4,'paco paquito','paco@gmail.com','$2a$10$aA5R/KsWBkwzrNNd/B5IVOt7ItQD7cjgBsby7l2byLj.8YXTqbPcq','2026-04-28 13:22:49','USER',NULL,NULL,NULL,0),
+(5,'Joan Garcio','joan7@test.com','$2a$10$ls4jNPxpeaBmagwUmT6YBOwXD9lwgVepnMAwLAxQjFEMVsL56k0YS','2026-05-06 16:57:02','USER',NULL,NULL,NULL,0);
 /*!40000 ALTER TABLE `usuari` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -499,7 +525,7 @@ CREATE TABLE `venda` (
   KEY `fk_venda_usuari` (`usuari_id`),
   CONSTRAINT `fk_venda_producte` FOREIGN KEY (`producte_id`) REFERENCES `producte` (`id`),
   CONSTRAINT `fk_venda_usuari` FOREIGN KEY (`usuari_id`) REFERENCES `usuari` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -508,6 +534,8 @@ CREATE TABLE `venda` (
 
 LOCK TABLES `venda` WRITE;
 /*!40000 ALTER TABLE `venda` DISABLE KEYS */;
+INSERT INTO `venda` VALUES
+(1,2,1,1,'2026-05-07 14:23:18');
 /*!40000 ALTER TABLE `venda` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -524,4 +552,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
 
--- Dump completed on 2026-05-05 18:55:55
+-- Dump completed on 2026-05-11 16:39:10

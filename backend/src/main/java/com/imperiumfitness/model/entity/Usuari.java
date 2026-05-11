@@ -31,6 +31,15 @@ public class Usuari {
     @Column(nullable = false)
     private String rol; // valors: "USER" o "ADMIN"
 
+    @Column(name = "tarifa_data_inici")
+    private LocalDateTime tarifaDataInici;
+
+    @Column(name = "tarifa_data_fi")
+    private LocalDateTime tarifaDataFi;
+
+    @Column(name = "tarifa_cancellada")
+    private Boolean tarifaCancellada = false;
+
     // ── Constructor buit obligatori per JPA ──────────────────────────────────
     public Usuari() {}
 
@@ -56,4 +65,22 @@ public class Usuari {
 
     public String getRol() { return rol; }
     public void setRol(String rol) { this.rol = rol; }
+
+    // Getters i setters
+    public LocalDateTime getTarifaDataInici() { return tarifaDataInici; }
+    public void setTarifaDataInici(LocalDateTime t) { this.tarifaDataInici = t; }
+
+    public LocalDateTime getTarifaDataFi() { return tarifaDataFi; }
+    public void setTarifaDataFi(LocalDateTime t) { this.tarifaDataFi = t; }
+
+    public Boolean getTarifaCancellada() { return tarifaCancellada; }
+    public void setTarifaCancellada(Boolean t) { this.tarifaCancellada = t; }
+
+// Mètode útil: comprova si la subscripció és activa
+    public boolean isSubscripcioActiva() {
+        if (tarifa == null) return false;
+        if (tarifaDataFi == null) return false;
+        return LocalDateTime.now().isBefore(tarifaDataFi) && 
+           !Boolean.TRUE.equals(tarifaCancellada);
+    }
 }
