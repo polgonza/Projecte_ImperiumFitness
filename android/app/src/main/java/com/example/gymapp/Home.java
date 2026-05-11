@@ -105,7 +105,7 @@ public class Home extends BaseActivity {
                 finish();
                 return true;
             } else if (id == R.id.menu_ajuda) {
-                Intent intent = new Intent(this, activity_ajuda.class);
+                Intent intent = new Intent(this, Ajuda.class);
                 startActivity(intent);
                 return true;
             }
