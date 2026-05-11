@@ -1,9 +1,9 @@
 /*M!999999\- enable the sandbox mode */ 
 -- MariaDB dump 10.19-11.7.2-MariaDB, for Win64 (AMD64)
 --
--- Host: 10.147.17.250    Database: imperium_fitness
+-- Host: localhost    Database: imperium_fitness
 -- ------------------------------------------------------
--- Server version	11.8.6-MariaDB-ubu2404
+-- Server version	12.2.2-MariaDB
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -485,6 +485,7 @@ CREATE TABLE `usuari` (
   `tarifa_data_inici` timestamp NULL DEFAULT NULL,
   `tarifa_data_fi` timestamp NULL DEFAULT NULL,
   `tarifa_cancel·lada` tinyint(1) DEFAULT 0,
+  `tarifa_cancellada` tinyint(1) DEFAULT 0,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`),
   KEY `fk_usuari_tarifa` (`tarifa_id`),
@@ -499,11 +500,11 @@ CREATE TABLE `usuari` (
 LOCK TABLES `usuari` WRITE;
 /*!40000 ALTER TABLE `usuari` DISABLE KEYS */;
 INSERT INTO `usuari` VALUES
-(1,'Admin','admin@imperium.com','$2a$10$ru5ykaDgdlEaK26H/xAknuW3V/92RRszOFkof0aL8GcdInQk/uNa6','2026-04-16 18:24:35','ADMIN',3,NULL,NULL,0),
-(2,'Joan Garcia','joan@gmail.com','$2a$10$CpPuIpBsxRDkhyyKyAfcg.VMsNqH4yPBUTWYoGBUOGWyHvE8vklpW','2026-04-16 18:24:35','USER',NULL,NULL,NULL,0),
-(3,'Maria López','maria@gmail.com','$2a$10$ommhLP6snGAotlvt5L3Li.1vfKo5MQUhcPe/8Xv5BO3u8edSTDsvm','2026-04-20 13:10:06','USER',NULL,NULL,NULL,0),
-(4,'paco paquito','paco@gmail.com','$2a$10$aA5R/KsWBkwzrNNd/B5IVOt7ItQD7cjgBsby7l2byLj.8YXTqbPcq','2026-04-28 13:22:49','USER',NULL,NULL,NULL,0),
-(5,'Joan Garcio','joan7@test.com','$2a$10$ls4jNPxpeaBmagwUmT6YBOwXD9lwgVepnMAwLAxQjFEMVsL56k0YS','2026-05-06 16:57:02','USER',NULL,NULL,NULL,0);
+(1,'Admin','admin@imperium.com','$2a$10$ru5ykaDgdlEaK26H/xAknuW3V/92RRszOFkof0aL8GcdInQk/uNa6','2026-04-16 18:24:35','ADMIN',3,NULL,NULL,0,0),
+(2,'Joan Garcia','joan@gmail.com','$2a$10$CpPuIpBsxRDkhyyKyAfcg.VMsNqH4yPBUTWYoGBUOGWyHvE8vklpW','2026-04-16 18:24:35','USER',NULL,NULL,NULL,0,0),
+(3,'Maria López','maria@gmail.com','$2a$10$ommhLP6snGAotlvt5L3Li.1vfKo5MQUhcPe/8Xv5BO3u8edSTDsvm','2026-04-20 13:10:06','USER',NULL,NULL,NULL,0,0),
+(4,'paco paquito','paco@gmail.com','$2a$10$aA5R/KsWBkwzrNNd/B5IVOt7ItQD7cjgBsby7l2byLj.8YXTqbPcq','2026-04-28 13:22:49','USER',NULL,NULL,NULL,0,0),
+(5,'Joan Garcio','joan7@test.com','$2a$10$ls4jNPxpeaBmagwUmT6YBOwXD9lwgVepnMAwLAxQjFEMVsL56k0YS','2026-05-06 16:57:02','USER',NULL,NULL,NULL,0,0);
 /*!40000 ALTER TABLE `usuari` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -552,4 +553,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
 
--- Dump completed on 2026-05-11 16:39:10
+-- Dump completed on 2026-05-11 16:53:49
