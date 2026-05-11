@@ -12,6 +12,10 @@ public class UsuariDTO {
     private String rol;
     private Long tarifaId;
     private String tarifaNom;
+    private LocalDateTime tarifaDataInici;
+    private LocalDateTime tarifaDataFi;
+    private Boolean tarifaCancellada;
+    private Boolean subscripcioActiva;
 
     public UsuariDTO() {}
 
@@ -51,4 +55,16 @@ public class UsuariDTO {
     
     public String getTarifaNom() { return tarifaNom; }
     public void setTarifaNom(String tarifaNom) { this.tarifaNom = tarifaNom; }
+
+    public LocalDateTime getTarifaDataInici() { return tarifaDataInici; }
+    public void setTarifaDataInici(LocalDateTime t) { this.tarifaDataInici = t; }
+    
+    public LocalDateTime getTarifaDataFi() { return tarifaDataFi; }
+    public void setTarifaDataFi(LocalDateTime t) { this.tarifaDataFi = t; }
+    
+    public Boolean getTarifaCancellada() { return tarifaCancellada; }
+    public void setTarifaCancellada(Boolean t) { this.tarifaCancellada = t; }
+    
+    public Boolean getSubscripcioActiva() { return subscripcioActiva; }
+    public void setSubscripcioActiva(Boolean t) { this.subscripcioActiva = t; }
 }

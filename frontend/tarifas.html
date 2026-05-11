@@ -48,10 +48,13 @@
         <p>Encuentra el plan perfecto para tu estilo de entrenamiento</p>
       </div>
 
-      <!-- Los planes se generan dinámicamente en JS -->
-      <div class="plans-grid" id="plans-grid"></div>
+      <!-- Les tarifes es carreguen des de l'API -->
+      <div class="plans-grid" id="plans-grid">
+        <p style="color:var(--text-muted);text-align:center;padding:3rem;grid-column:1/-1">
+          ⏳ Cargando tarifas...
+        </p>
+      </div>
 
-      <!-- Garantía -->
       <div style="text-align:center;margin-top:2.5rem">
         <p style="color:var(--text-muted);font-size:0.9rem">
           ✨ Primera semana gratis &nbsp;·&nbsp; Sin permanencia &nbsp;·&nbsp; Cancela cuando quieras
@@ -60,6 +63,25 @@
 
     </div>
   </section>
+
+  <!-- PANEL CARRITO -->
+  <div class="cart-backdrop" id="cart-backdrop"></div>
+  <div class="cart-drawer" id="cart-drawer">
+    <div class="cart-header">
+      <h3>Mi Carrito</h3>
+      <button class="cart-close-btn" id="cart-close-btn" title="Cerrar">&#x2715;</button>
+    </div>
+    <div class="cart-items" id="cart-items"></div>
+    <div class="cart-footer">
+      <div class="cart-total-row">
+        <span class="cart-total-label">Total</span>
+        <span class="cart-total-amount" id="cart-total">0.00 &euro;</span>
+      </div>
+      <button class="btn btn-primary" style="width:100%;justify-content:center" id="cart-checkout-btn">
+        Finalizar Compra
+      </button>
+    </div>
+  </div>
 
   <footer>
     <div class="container">
@@ -89,9 +111,9 @@
         <div class="footer-col">
           <h4>Legal</h4>
           <ul>
-            <li><a href="#">Política de Privacidad</a></li>
-            <li><a href="#">Términos y Condiciones</a></li>
-            <li><a href="#">Política de Cookies</a></li>
+            <li><a href="legal/politica-privacidad.html">Política de Privacidad</a></li>
+            <li><a href="legal/terminos-condiciones.html">Términos y Condiciones</a></li>
+            <li><a href="legal/politica-cookies.html">Política de Cookies</a></li>
           </ul>
         </div>
         <div class="footer-col">
@@ -105,47 +127,197 @@
       </div>
       <div class="footer-bottom">
         <div class="footer-legal">
-          <a href="politica-privacidad.html">Política de Privacidad</a>
-          <a href="politica-cookies.html">Política de Cookies</a>
-          <a href="terminos-condiciones.html">Términos y Condiciones</a>
-          <a href="normativa-clubes.html">Normativa de Clubes</a>
-          <a href="canal-etico.html">Canal Ético</a>
+          <a href="legal/politica-privacidad.html">Política de Privacidad</a>
+          <a href="legal/politica-cookies.html">Política de Cookies</a>
+          <a href="legal/terminos-condiciones.html">Términos y Condiciones</a>
+          <a href="legal/normativa-clubes.html">Normativa de Clubes</a>
+          <a href="legal/canal-etico.html">Canal Ético</a>
         </div>
         <span class="footer-copy">© 2026 Imperium Fitness. Todos los derechos reservados.</span>
       </div>
     </div>
   </footer>
 
+  <!-- SCRIPTS — ordre correcte, sense duplicats -->
+  <script src="js/api.js"></script>
   <script src="js/render.js"></script>
-  <script src="js/app.js"></script>
-  <!-- PANEL CARRITO -->
-  <div class="cart-backdrop" id="cart-backdrop"></div>
-  <div class="cart-drawer" id="cart-drawer">
-    <div class="cart-header">
-      <h3>Mi Carrito</h3>
-      <button class="cart-close-btn" id="cart-close-btn" title="Cerrar">&#x2715;</button>
-    </div>
-    <div class="cart-items" id="cart-items"></div>
-    <div class="cart-footer">
-      <div class="cart-total-row">
-        <span class="cart-total-label">Total</span>
-        <span class="cart-total-amount" id="cart-total">0.00 &euro;</span>
-      </div>
-      <button class="btn btn-primary" style="width:100%;justify-content:center" id="cart-checkout-btn">Finalizar
-        Compra</button>
-    </div>
-  </div>
-
-  <script src="js/api.js"></script>   ← AFEGEIX
   <script src="js/app.js"></script>
   <script src="js/carrito.js"></script>
 
   <script>
-    document.addEventListener("DOMContentLoaded", function () {
+    /* Icones i beneficis per tarifa */
+    const TARIFA_CONFIG = {
+      "Pass Diari": {
+        icon:     "🎫",
+        popular:  false,
+        desc:     "Acceso completo al gimnasio durante un día",
+        beneficis: [
+          "Acceso a todas las instalaciones",
+          "Vestuarios y duchas",
+          "WiFi incluido",
+          "Sin compromisos"
+        ],
+        noInclos: [
+          "Clases dirigidas",
+          "Descuento en tienda",
+          "Entrenador personal"
+        ]
+      },
+      "Quota Flex": {
+        icon:     "⚡",
+        popular:  true,
+        desc:     "La opción más flexible para entrenar a tu ritmo",
+        beneficis: [
+          "Acceso ilimitado al gimnasio",
+          "1 clase dirigida al día",
+          "5% descuento en tienda",
+          "15 invitaciones anuales",
+          "Vestuarios y duchas",
+          "WiFi incluido"
+        ],
+        noInclos: [
+          "Entrenador personal",
+          "Zona wellness"
+        ]
+      },
+      "Quota Prime": {
+        icon:     "👑",
+        popular:  false,
+        desc:     "La experiencia premium sin límites",
+        beneficis: [
+          "Acceso ilimitado al gimnasio",
+          "2 clases dirigidas al día",
+          "10% descuento en tienda",
+          "20 invitaciones anuales",
+          "Sesión mensual con entrenador",
+          "Acceso zona wellness",
+          "WiFi incluido"
+        ],
+        noInclos: []
+      }
+    };
+
+    async function renderTarifes() {
+      const grid = document.getElementById("plans-grid");
+      if (!grid) return;
+
+      const user = Auth.getUser();
+      const tarifaActiva = user?.tarifaId || null;
+
+      // Carreguem tarifes des de l'API
+      let tarifes = [];
+      try {
+        const res = await apiFetch("/api/tarifes");
+        if (res && res.ok) tarifes = await res.json();
+      } catch (e) {
+        grid.innerHTML = `<p style="color:var(--danger);text-align:center;grid-column:1/-1">
+          Error al cargar las tarifas. Inténtalo de nuevo.
+        </p>`;
+        return;
+      }
+
+      if (tarifes.length === 0) {
+        grid.innerHTML = `<p style="color:var(--text-muted);text-align:center;grid-column:1/-1">
+          No hay tarifas disponibles.
+        </p>`;
+        return;
+      }
+
+      grid.innerHTML = tarifes.map(t => {
+        const cfg      = TARIFA_CONFIG[t.nom] || {};
+        const popular  = cfg.popular || false;
+        const esActual = tarifaActiva && String(tarifaActiva) === String(t.id);
+
+        const beneficisHTML = (cfg.beneficis || []).map(b =>
+          `<li><span class="check">✓</span><span>${b}</span></li>`
+        ).join("");
+
+        const noInclosHTML = (cfg.noInclos || []).map(b =>
+          `<li class="excluded"><span class="check">✗</span><span>${b}</span></li>`
+        ).join("");
+
+        let btnHTML;
+        if (esActual) {
+          btnHTML = `<button class="btn btn-secondary" style="width:100%;justify-content:center" disabled>
+            ✓ Plan Actual
+          </button>`;
+        } else if (!Auth.isLoggedIn()) {
+          btnHTML = `<a href="login.html" class="btn btn-${popular ? "primary" : "secondary"}"
+            style="width:100%;justify-content:center">
+            Iniciar sesión para contratar
+          </a>`;
+        } else {
+          btnHTML = `<button
+            class="btn btn-${popular ? "primary" : "secondary"}"
+            style="width:100%;justify-content:center"
+            onclick="contractarTarifa(${t.id}, '${t.nom}', ${t.preu})">
+            ${cfg.popular ? "Empezar ahora" : "Seleccionar"}
+          </button>`;
+        }
+
+        return `
+          <div class="plan-card ${popular ? "popular" : ""}">
+            ${popular ? '<div class="popular-badge">⭐ Más Popular</div>' : ""}
+            ${esActual ? '<div class="popular-badge" style="background:var(--success)">✓ Plan Actual</div>' : ""}
+            <div class="plan-header">
+              <div class="plan-name">${cfg.icon || ""} ${t.nom}</div>
+              <div class="plan-price">
+                <span class="amount">${parseFloat(t.preu).toFixed(2)}€</span>
+                <span class="period">${t.nom === "Pass Diari" ? "/día" : "/mes"}</span>
+              </div>
+              <p style="font-size:0.82rem;color:var(--text-muted);margin-top:0.5rem">
+                ${cfg.desc || t.descripcio || ""}
+              </p>
+            </div>
+            <ul class="plan-features">
+              ${beneficisHTML}
+              ${noInclosHTML}
+            </ul>
+            <div class="plan-footer">
+              ${btnHTML}
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    async function contractarTarifa(tarifaId, tarifaNom, preu) {
+      if (!Auth.isLoggedIn()) {
+        showToast("Debes iniciar sesión para contratar una tarifa.", "error");
+        setTimeout(() => { window.location.href = "login.html"; }, 1500);
+        return;
+      }
+
+      const confirmat = confirm(
+        `¿Confirmas la contratación de "${tarifaNom}" por ${parseFloat(preu).toFixed(2)}€?`
+      );
+      if (!confirmat) return;
+
+      const user = Auth.getUser();
+      const perfil = await ApiUsuari.assignarTarifa(user.id, tarifaId);
+
+      if (perfil) {
+        // Actualitzem el localStorage amb la nova tarifa
+        Auth.setUser({
+          ...user,
+          tarifaId:  perfil.tarifaId,
+          tarifaNom: perfil.tarifaNom
+        });
+
+        showToast(`¡Tarifa "${tarifaNom}" activada correctamente! 🎉`, "success");
+
+        // Re-renderitzem per mostrar "Plan Actual"
+        await renderTarifes();
+      } else {
+        showToast("No se pudo activar la tarifa. Inténtalo de nuevo.", "error");
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", async function () {
       SessionManager.init(false);
+      await renderTarifes();
     });
   </script>
 
 </body>
-
 </html>

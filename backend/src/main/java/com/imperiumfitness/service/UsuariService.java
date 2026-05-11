@@ -59,16 +59,17 @@ public class UsuariService {
 
     // ── Conversió Entity → DTO (mai retornem la contrasenya!) ───────────────
    private UsuariDTO toDTO(Usuari u) {
-    return new UsuariDTO(
-            u.getId(),
-            u.getNom(),
-            u.getEmail(),
-            null, // contrasenya mai en resposta
-            u.getDataRegistre(),
-            u.getRol(),
+    UsuariDTO dto = new UsuariDTO(
+            u.getId(), u.getNom(), u.getEmail(), null,
+            u.getDataRegistre(), u.getRol(),
             u.getTarifa() != null ? u.getTarifa().getId()  : null,
             u.getTarifa() != null ? u.getTarifa().getNom() : null
     );
+    dto.setTarifaDataInici(u.getTarifaDataInici());
+    dto.setTarifaDataFi(u.getTarifaDataFi());
+    dto.setTarifaCancellada(u.getTarifaCancellada());
+    dto.setSubscripcioActiva(u.isSubscripcioActiva());
+    return dto;
 }
 
     // ── Conversió DTO → Entity ───────────────────────────────────────────────
@@ -88,15 +89,31 @@ public class UsuariService {
                     HttpStatus.NOT_FOUND, "Usuari no trobat"));
 
     if (tarifaId == null) {
-        u.setTarifa(null); // cancel·lar tarifa
+        u.setTarifa(null);
+        u.setTarifaDataInici(null);
+        u.setTarifaDataFi(null);
+        u.setTarifaCancellada(false);
     } else {
-        // Necessitem TarifaRepository — afegeix-lo al constructor
         Tarifa t = tarifaRepo.findById(tarifaId)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND, "Tarifa no trobada"));
         u.setTarifa(t);
+        u.setTarifaDataInici(LocalDateTime.now());
+        // La subscripció dura 1 mes
+        u.setTarifaDataFi(LocalDateTime.now().plusMonths(1));
+        u.setTarifaCancellada(false);
     }
 
+    return toDTO(repo.save(u));
+}
+public UsuariDTO cancelarTarifa(Long usuariId) {
+    Usuari u = repo.findById(usuariId)
+            .orElseThrow(() -> new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Usuari no trobat"));
+
+    // Marquem com a cancel·lada PERÒ mantenim data_fi
+    // L'usuari seguirà tenint accés fins a data_fi
+    u.setTarifaCancellada(true);
     return toDTO(repo.save(u));
 }
 }

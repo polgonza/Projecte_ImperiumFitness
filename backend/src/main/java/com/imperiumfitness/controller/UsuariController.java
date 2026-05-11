@@ -61,4 +61,9 @@ public class UsuariController {
         @RequestBody Map<String, Long> body) {
     return ResponseEntity.ok(service.assignarTarifa(id, body.get("tarifaId")));
 }
+
+    @PutMapping("/{id}/cancel-tarifa")
+    public ResponseEntity<UsuariDTO> cancelarTarifa(@PathVariable Long id) {
+    return ResponseEntity.ok(service.cancelarTarifa(id));
+}
 }
