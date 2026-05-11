@@ -98,18 +98,18 @@
                 android:textSize="15sp"
                 android:lineSpacingExtra="6dp"
                 android:layout_marginBottom="12dp" />
-            <!--
-                        <ImageView
-                            android:layout_width="203dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            android:src="@drawable/ajuda_capcalera"
-                            android:adjustViewBounds="true"
-                            android:scaleType="fitCenter"
-                            android:layout_marginBottom="24dp"
-                            android:contentDescription="@null"
-                            android:importantForAccessibility="no" />
-            -->
+
+                <ImageView
+                    android:layout_width="203dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/ajuda_capcalera"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitCenter"
+                    android:layout_marginBottom="24dp"
+                    android:contentDescription="@null"
+                    android:importantForAccessibility="no" />
+
             <!-- PEU -->
             <TextView
                 android:layout_width="match_parent"
@@ -439,18 +439,18 @@
                 android:textSize="15sp"
                 android:lineSpacingExtra="6dp"
                 android:layout_marginBottom="12dp" />
-            <!--
-                        <ImageView
-                            android:layout_width="203dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            android:src="@drawable/ajuda_calendari_seleccio"
-                            android:adjustViewBounds="true"
-                            android:scaleType="fitCenter"
-                            android:layout_marginBottom="24dp"
-                            android:contentDescription="@null"
-                            android:importantForAccessibility="no" />
-            -->
+
+                <ImageView
+                    android:layout_width="203dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/ajuda_calendari_seleccio"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitCenter"
+                    android:layout_marginBottom="24dp"
+                    android:contentDescription="@null"
+                    android:importantForAccessibility="no" />
+
             <!-- CONTACTE -->
             <TextView
                 android:layout_width="match_parent"
@@ -500,18 +500,18 @@
                 android:layout_marginBottom="12dp"
                 android:contentDescription="@null"
                 android:importantForAccessibility="no" />
-            <!--
-                        <ImageView
-                            android:layout_width="203dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            android:src="@drawable/ajuda_contacte_missatge_2"
-                            android:adjustViewBounds="true"
-                            android:scaleType="fitCenter"
-                            android:layout_marginBottom="24dp"
-                            android:contentDescription="@null"
-                            android:importantForAccessibility="no" />
-            -->
+
+            <ImageView
+                android:layout_width="203dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/ajuda_contacte_missatge_2"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter"
+                android:layout_marginBottom="24dp"
+                android:contentDescription="@null"
+                android:importantForAccessibility="no" />
+
         </LinearLayout>
     </ScrollView>
 
