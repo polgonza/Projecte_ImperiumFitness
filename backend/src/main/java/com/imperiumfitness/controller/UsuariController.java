@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.Map;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 import com.imperiumfitness.dto.UsuariDTO;
 import com.imperiumfitness.service.UsuariService;
@@ -66,4 +67,16 @@ public class UsuariController {
     public ResponseEntity<UsuariDTO> cancelarTarifa(@PathVariable Long id) {
     return ResponseEntity.ok(service.cancelarTarifa(id));
 }
+// Fragment suggerit per assistent IA - revisar i adaptar
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/{id}/rol")
+    public ResponseEntity<UsuariDTO> canviarRol(
+            @PathVariable Long id,
+            @RequestBody Map<String, String> body) {
+        String nouRol = body.get("rol");
+        if (nouRol == null || (!nouRol.equalsIgnoreCase("ADMIN") && !nouRol.equalsIgnoreCase("USER"))) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(service.canviarRol(id, nouRol.toUpperCase()));
+    }
 }

@@ -116,4 +116,12 @@ public UsuariDTO cancelarTarifa(Long usuariId) {
     u.setTarifaCancellada(true);
     return toDTO(repo.save(u));
 }
+// Fragment suggerit per assistent IA - revisar i adaptar
+    public UsuariDTO canviarRol(Long id, String nouRol) {
+        Usuari usuari = repo.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Usuari no trobat: " + id));
+        usuari.setRol(nouRol);
+        return toDTO(repo.save(usuari));
+    }
 }
