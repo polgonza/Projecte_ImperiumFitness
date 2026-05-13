@@ -14,7 +14,7 @@ let TOTES_LES_CLASSES = [];
 function classeBackendToLocal(c) {
   const data    = new Date(c.horari);
   const dayIdx  = data.getDay();
-  const dayName = NOMBRE_DIA[dayIdx];
+  const dayName = NOMBRE_DIA[I18n.idioma][dayIdx];
   const hh = String(data.getHours()).padStart(2, "0");
   const mm = String(data.getMinutes()).padStart(2, "0");
   const dateKey = toDateKey(data.getFullYear(), data.getMonth(), data.getDate());
@@ -68,28 +68,32 @@ const CATEGORY_IMAGES = {
   boxeo:     "https://images.unsplash.com/photo-1555597673-b21d5c935865?w=120&h=120&fit=crop"
 };
 
-const NOMBRE_DIA = ["Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado"];
+// Fragment suggerit per assistent IA - revisar i adaptar
+const NOMBRE_DIA = {
+  ca: ["Diumenge","Dilluns","Dimarts","Dimecres","Dijous","Divendres","Dissabte"],
+  en: ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]
+};
 
-const NOMBRE_MES = [
-  "Enero","Febrero","Marzo","Abril","Mayo","Junio",
-  "Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"
-];
+const NOMBRE_MES = {
+  ca: ["Gener","Febrer","Març","Abril","Maig","Juny","Juliol","Agost","Setembre","Octubre","Novembre","Desembre"],
+  en: ["January","February","March","April","May","June","July","August","September","October","November","December"]
+};
 
 
 /* =====================================================
-   2. ESTADO DE LA PÁGINA
+   2. ESTAT DE LA PÀGINA
    ===================================================== */
 
-let calYear      = new Date().getFullYear();
-let calMonth     = new Date().getMonth();
-let selectedDate = new Date();
-let activeFilter = "all";
+let calYear       = new Date().getFullYear();
+let calMonth      = new Date().getMonth();
+let selectedDate  = new Date();
+let activeFilter  = "all";
 let pendingClass  = null;
 let pendingDateKey = null;
 
 
 /* =====================================================
-   3. CALENDARIO
+   3. CALENDARI
    ===================================================== */
 
 function toDateKey(year, month, day) {
@@ -112,7 +116,8 @@ function renderCalendar() {
   const selKey   = toDateKey(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate());
   const maxKey   = getMaxDateKey();
 
-  label.textContent = `${NOMBRE_MES[calMonth]} ${calYear}`;
+  // Fragment suggerit per assistent IA - revisar i adaptar
+  label.textContent = `${NOMBRE_MES[I18n.idioma][calMonth]} ${calYear}`;
 
   const firstDayRaw = new Date(calYear, calMonth, 1).getDay();
   const firstDayLun = (firstDayRaw + 6) % 7;
@@ -140,12 +145,9 @@ function renderCalendar() {
     if (isSelected) classes += " selected";
     if (isPast || isSunday || isTooFar) classes += " disabled";
 
-    // Punt — comprova si hi ha classes per aquesta data concreta
     const hasClasses = !isSunday && !isTooFar &&
       TOTES_LES_CLASSES.some(c => c.dateKey === dateKey);
-    const dot = hasClasses && !isPast
-      ? `<span class="dot"></span>`
-      : "";
+    const dot = hasClasses && !isPast ? `<span class="dot"></span>` : "";
 
     const click = (!isPast && !isSunday && !isTooFar)
       ? `onclick="selectDay(${calYear}, ${calMonth}, ${d})"`
@@ -164,29 +166,34 @@ function selectDay(year, month, day) {
   renderClasesDelDia();
 }
 
+// Fragment suggerit per assistent IA - revisar i adaptar
 function updateSelectedDayInfo() {
   const info     = document.getElementById("selected-day-info");
   const dayIndex = selectedDate.getDay();
-  const dayName  = NOMBRE_DIA[dayIndex];
+  const dayName  = NOMBRE_DIA[I18n.idioma][dayIndex];
   const dd       = selectedDate.getDate();
-  const mm       = NOMBRE_MES[selectedDate.getMonth()];
+  const mmNom    = NOMBRE_MES[I18n.idioma][selectedDate.getMonth()];
   const yyyy     = selectedDate.getFullYear();
   const selKey   = toDateKey(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate());
+  const prep     = I18n.idioma === "ca" ? "de" : "of";
 
   if (dayIndex === 0) {
-    info.innerHTML = `<strong>${dayName} ${dd} de ${mm}</strong>Sin actividades este día`;
+    info.innerHTML = `
+      <strong>${dayName} ${dd} ${prep} ${mmNom}</strong>
+      ${I18n.idioma === "ca" ? "Sense activitats aquest dia" : "No activities this day"}
+    `;
   } else {
     const clases = TOTES_LES_CLASSES.filter(c => c.dateKey === selKey);
     info.innerHTML = `
-      <strong>${dayName} ${dd} de ${mm} de ${yyyy}</strong>
-      ${clases.length} clase${clases.length !== 1 ? "s" : ""} disponible${clases.length !== 1 ? "s" : ""}
+      <strong>${dayName} ${dd} ${prep} ${mmNom} ${prep} ${yyyy}</strong>
+      ${clases.length} ${t("activitats.places")}
     `;
   }
 }
 
 
 /* =====================================================
-   4. CLASES — pintado de tarjetas
+   4. CLASSES — pintada de targetes
    ===================================================== */
 
 function renderClasesDelDia() {
@@ -195,23 +202,23 @@ function renderClasesDelDia() {
   const countEl   = document.getElementById("classes-count");
 
   const dayIndex = selectedDate.getDay();
-  const dayName  = NOMBRE_DIA[dayIndex];
+  const dayName  = NOMBRE_DIA[I18n.idioma][dayIndex];
   const dd       = selectedDate.getDate();
-  const mm       = NOMBRE_MES[selectedDate.getMonth()];
+  const mmNom    = NOMBRE_MES[I18n.idioma][selectedDate.getMonth()];
+  const prep     = I18n.idioma === "ca" ? "de" : "of";
 
-  titleEl.textContent = `${dayName} ${dd} de ${mm}`;
+  titleEl.textContent = `${dayName} ${dd} ${prep} ${mmNom}`;
 
   if (dayIndex === 0) {
     container.innerHTML = `
       <div class="no-classes-msg">
-        <strong>Sin actividades</strong>
-        Los domingos no hay clases programadas. Disfruta del descanso.
+        <strong>${I18n.idioma === "ca" ? "Sense activitats" : "No activities"}</strong>
+        ${I18n.idioma === "ca" ? "Els diumenges no hi ha classes programades." : "No classes scheduled on Sundays."}
       </div>`;
     countEl.textContent = "";
     return;
   }
 
-  // Filtrem per data exacta — FIX DUPLICATS
   const selDateKey = toDateKey(
     selectedDate.getFullYear(),
     selectedDate.getMonth(),
@@ -226,15 +233,17 @@ function renderClasesDelDia() {
   if (clases.length === 0) {
     container.innerHTML = `
       <div class="no-classes-msg">
-        <strong>Sin resultados</strong>
-        No hay clases de esta categoria para el dia seleccionado.
+        <strong>${I18n.idioma === "ca" ? "Sense resultats" : "No results"}</strong>
+        ${I18n.idioma === "ca"
+          ? "No hi ha classes d'aquesta categoria per al dia seleccionat."
+          : "No classes of this category for the selected day."}
       </div>`;
     countEl.textContent = "";
     return;
   }
 
   clases = clases.slice().sort((a, b) => a.time.localeCompare(b.time));
-  countEl.textContent = `${clases.length} clase${clases.length !== 1 ? "s" : ""}`;
+  countEl.textContent = `${clases.length} ${t("activitats.places")}`;
   container.innerHTML = clases.map(c => buildClassCard(c)).join("");
 }
 
@@ -255,9 +264,9 @@ function buildClassCard(clase) {
 
   let btnHtml;
   if (yaReservada) {
-    btnHtml = `<button class="btn-reservar reservada" disabled>Reservada</button>`;
+    btnHtml = `<button class="btn-reservar reservada" disabled>${t("activitats.reservada")}</button>`;
   } else if (estaLlena) {
-    btnHtml = `<button class="btn-reservar completo" disabled>Completo</button>`;
+    btnHtml = `<button class="btn-reservar completo" disabled>${t("activitats.plena")}</button>`;
   } else {
     btnHtml = `
       <button
@@ -265,7 +274,7 @@ function buildClassCard(clase) {
         data-class-id="${clase.id}"
         data-date-key="${dateKey}"
       >
-        Reservar
+        ${t("activitats.reservar")}
       </button>`;
   }
 
@@ -296,7 +305,9 @@ function buildClassCard(clase) {
             ></div>
           </div>
           <span class="act-spots-text">
-            ${estaLlena ? "Sin plazas" : `${disponibles} / ${clase.spots} plazas`}
+            ${estaLlena
+              ? (I18n.idioma === "ca" ? "Sense places" : "Full")
+              : `${disponibles} / ${clase.spots} ${t("activitats.places")}`}
           </span>
         </div>
         <div class="act-card-footer">
@@ -310,21 +321,19 @@ function buildClassCard(clase) {
 
 
 /* =====================================================
-   5. MODAL DE CONFIRMACION
+   5. MODAL DE CONFIRMACIÓ
    ===================================================== */
 
 function openReservationModal(classId, dateKey) {
   if (!Auth.isLoggedIn()) {
-    showToast("Debes iniciar sesión para reservar clases.", "error");
+    showToast(t("toast.sessionExp"), "error");
     setTimeout(() => { window.location.href = "login.html"; }, 1500);
     return;
   }
 
-  // Busquem la classe a TOTES_LES_CLASSES per ID
   const clase = TOTES_LES_CLASSES.find(c => String(c.id) === String(classId));
-
   if (!clase) {
-    showToast("No se encontró la clase.", "error");
+    showToast(I18n.idioma === "ca" ? "No s'ha trobat la classe." : "Class not found.", "error");
     return;
   }
 
@@ -333,11 +342,11 @@ function openReservationModal(classId, dateKey) {
 
   const msg = document.getElementById("modal-message");
   if (msg) {
-    msg.innerHTML = `
-      Quieres reservar <strong>${clase.name}</strong>
-      el día <strong>${formatDateKey(dateKey)}</strong>
-      a las <strong>${clase.time}</strong>?
-    `;
+    const prep = I18n.idioma === "ca" ? "el dia" : "on";
+    const aLes = I18n.idioma === "ca" ? "a les" : "at";
+    msg.innerHTML = I18n.idioma === "ca"
+      ? `Vols reservar <strong>${clase.name}</strong> ${prep} <strong>${formatDateKey(dateKey)}</strong> ${aLes} <strong>${clase.time}</strong>?`
+      : `Book <strong>${clase.name}</strong> ${prep} <strong>${formatDateKey(dateKey)}</strong> ${aLes} <strong>${clase.time}</strong>?`;
   }
 
   document.getElementById("reservation-modal").classList.add("open");
@@ -370,23 +379,22 @@ async function confirmReservation() {
   if (!pendingClass || !pendingDateKey) return;
 
   const user = Auth.getUser();
-if (!user) {
-  showToast("Debes iniciar sesión para reservar.", "error");
-  setTimeout(() => window.location.href = "login.html", 1500);
-  return;
-}
+  if (!user) {
+    showToast(t("toast.sessionExp"), "error");
+    setTimeout(() => window.location.href = "login.html", 1500);
+    return;
+  }
 
-// ← AFEGEIX AQUÍ: comprova si té tarifa activa
-if (!user.tarifaId) {
-  showToast("Necesitas una tarifa activa para reservar clases. Ve a Tarifas.", "error");
-  setTimeout(() => window.location.href = "tarifas.html", 2000);
-  return;
-}
+  if (!user.tarifaId) {
+    showToast(t("toast.sensePlanReserva"), "error");
+    setTimeout(() => window.location.href = "tarifas.html", 2000);
+    return;
+  }
 
   const btnConfirm = document.getElementById("modal-confirm-btn");
   if (btnConfirm) {
     btnConfirm.disabled = true;
-    btnConfirm.textContent = "Reservando...";
+    btnConfirm.textContent = t("activitats.carregantMsg");
   }
 
   const claseAReservar = pendingClass;
@@ -404,19 +412,19 @@ if (!user.tarifaId) {
       addReservacioLocal(claseAReservar, dateKeyReserva);
       renderClasesDelDia();
       renderMisReservas();
-      showToast(`Reserva de "${claseAReservar.name}" confirmada. 🎉`, "success");
+      showToast(t("toast.reservaOk", [claseAReservar.name]), "success");
     } else {
-      showToast(result.error || "No se pudo completar la reserva.", "error");
+      showToast(result.error || t("toast.reservaError"), "error");
     }
 
   } catch (e) {
     console.error("Error confirmReservation:", e);
     closeModal();
-    showToast("Error al procesar la reserva.", "error");
+    showToast(t("toast.reservaError"), "error");
   } finally {
     if (btnConfirm) {
       btnConfirm.disabled = false;
-      btnConfirm.textContent = "Confirmar";
+      btnConfirm.textContent = t("activitats.confirmar");
     }
   }
 }
@@ -463,9 +471,7 @@ function getReservasDelDia(dateKey, classId) {
 
 function userHasReservation(reservaId) {
   const totes = loadAllReservas();
-  // Comprova per reservaId exacte
   if (totes.some(r => r.reservaId === reservaId)) return true;
-  // Comprova per classeId (reserves sincronitzades de la BD)
   const classeId = reservaId.split("_")[1];
   return totes.some(r => r.reservaId === `bd_${classeId}`);
 }
@@ -476,13 +482,14 @@ async function cancelReservation(reservaId) {
   saveAllReservas(totes);
   renderClasesDelDia();
   renderMisReservas();
-  showToast("Reserva cancelada correctamente.", "success");
+  showToast(t("toast.cancelReservaOk", [""]), "success");
 }
 
 /* =====================================================
-   RENDER — Llista "Mis Reservas"
+   RENDER — Llista "Les meves reserves"
    ===================================================== */
 
+// Fragment suggerit per assistent IA - revisar i adaptar
 function renderMisReservas() {
   const lista = document.getElementById("my-reservations-list");
   if (!lista) return;
@@ -491,32 +498,29 @@ function renderMisReservas() {
   if (!Auth.isLoggedIn() || !user) {
     lista.innerHTML = `
       <p class="no-reservations">
-        <a href="login.html">Inicia sesión</a> para ver tus reservas
+        <a href="login.html">${t("nav.iniciSessio")}</a>
+        ${I18n.idioma === "ca" ? "per veure les teves reserves" : "to see your bookings"}
       </p>`;
     return;
   }
 
   const totes = loadAllReservas();
-  const avui  = toDateKey(
-    new Date().getFullYear(),
-    new Date().getMonth(),
-    new Date().getDate()
-  );
+  const avui  = toDateKey(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
 
-  // Filtrem reserves passades I les reserves de sincronització BD (prefix bd_)
   const vigents = totes.filter(r =>
-    r.dateKey >= avui &&
-    !r.reservaId.startsWith("bd_") // ← amaguem les de sincronització
+    r.dateKey >= avui && !r.reservaId.startsWith("bd_")
   );
 
-  if (vigents.length !== totes.length) saveAllReservas(
-    totes.filter(r => !r.reservaId.startsWith("bd_") ? r.dateKey >= avui : true)
-  );
+  if (vigents.length !== totes.length) {
+    saveAllReservas(totes.filter(r => !r.reservaId.startsWith("bd_") ? r.dateKey >= avui : true));
+  }
 
   const misReservas = vigents.filter(r => r.userEmail === user.email);
 
   if (misReservas.length === 0) {
-    lista.innerHTML = `<p class="no-reservations">No tienes ninguna reserva próxima.</p>`;
+    lista.innerHTML = `<p class="no-reservations">
+      ${I18n.idioma === "ca" ? "No tens cap reserva pròxima." : "You have no upcoming bookings."}
+    </p>`;
     return;
   }
 
@@ -533,7 +537,7 @@ function renderMisReservas() {
       </div>
       <button
         class="btn-cancel-res"
-        title="Cancelar reserva"
+        title="${I18n.idioma === "ca" ? "Cancel·lar reserva" : "Cancel booking"}"
         onclick="cancelReservation('${r.reservaId}')"
       >✕</button>
     </div>
@@ -553,25 +557,21 @@ async function sincronitzaReserves() {
     const totes = loadAllReservas();
 
     reserves.forEach(r => {
-  // Usem classeId com a clau única — un usuari no pot tenir
-  // dues reserves per la mateixa classe (regla de negoci)
-  const reservaId = `bd_${r.classeId}`;
-
-  if (!totes.find(x => x.reservaId === reservaId)) {
-    const classe = TOTES_LES_CLASSES.find(c => String(c.id) === String(r.classeId));
-
-    totes.push({
-      reservaId,
-      classId:    String(r.classeId),
-      dateKey:    "9999-12-31", // data futura perquè no s'elimini
-      className:  classe ? classe.name     : `Clase #${r.classeId}`,
-      category:   classe ? classe.category : "funcional",
-      time:       classe ? classe.time     : "—",
-      instructor: "—",
-      userEmail:  user.email
+      const reservaId = `bd_${r.classeId}`;
+      if (!totes.find(x => x.reservaId === reservaId)) {
+        const classe = TOTES_LES_CLASSES.find(c => String(c.id) === String(r.classeId));
+        totes.push({
+          reservaId,
+          classId:    String(r.classeId),
+          dateKey:    "9999-12-31",
+          className:  classe ? classe.name     : `Classe #${r.classeId}`,
+          category:   classe ? classe.category : "funcional",
+          time:       classe ? classe.time     : "—",
+          instructor: "—",
+          userEmail:  user.email
+        });
+      }
     });
-  }
-});
 
     saveAllReservas(totes);
 
@@ -582,7 +582,7 @@ async function sincronitzaReserves() {
 
 
 /* =====================================================
-   7. ARRANQUE — càrrega asíncrona des del backend
+   7. ARRENCADA — càrrega asíncrona des del backend
    ===================================================== */
 
 document.addEventListener("DOMContentLoaded", async function () {
@@ -593,18 +593,15 @@ document.addEventListener("DOMContentLoaded", async function () {
   if (container) {
     container.innerHTML = `
       <div style="text-align:center;padding:3rem;color:var(--text-muted)">
-        ⏳ Cargando clases...
+        ${t("activitats.carregant")}
       </div>`;
   }
 
-  // Carreguem les classes del backend
   const classes = await ApiClasses.getAll();
   HORARIO_SEMANAL = construeixHorari(classes);
 
-  // Sincronitzem reserves BD → localStorage
   await sincronitzaReserves();
 
-  // Renderitzem
   renderCalendar();
   updateSelectedDayInfo();
   renderClasesDelDia();
@@ -617,7 +614,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     openReservationModal(btn.dataset.classId, btn.dataset.dateKey);
   });
 
-  // Navegació del calendari — amb límit de 2 mesos
+  // Navegació del calendari
   document.getElementById("cal-prev").addEventListener("click", function () {
     calMonth--;
     if (calMonth < 0) { calMonth = 11; calYear--; }
@@ -626,13 +623,16 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   document.getElementById("cal-next").addEventListener("click", function () {
     const today    = new Date();
-    const maxYear  = today.getMonth() >= 10
-      ? today.getFullYear() + 1
-      : today.getFullYear();
+    const maxYear  = today.getMonth() >= 10 ? today.getFullYear() + 1 : today.getFullYear();
     const maxMonth = (today.getMonth() + 2) % 12;
 
     if (calYear === maxYear && calMonth === maxMonth) {
-      showToast("No puedes ver clases más allá de 2 meses.", "error");
+      showToast(
+        I18n.idioma === "ca"
+          ? "No pots veure classes més enllà de 2 mesos."
+          : "Cannot view classes beyond 2 months.",
+        "error"
+      );
       return;
     }
 
@@ -644,8 +644,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   // Filtres de categoria
   document.querySelectorAll("#act-filters .filter-tab").forEach(function (btn) {
     btn.addEventListener("click", function () {
-      document.querySelectorAll("#act-filters .filter-tab")
-              .forEach(b => b.classList.remove("active"));
+      document.querySelectorAll("#act-filters .filter-tab").forEach(b => b.classList.remove("active"));
       this.classList.add("active");
       activeFilter = this.dataset.filter;
       renderClasesDelDia();
@@ -662,5 +661,14 @@ document.addEventListener("DOMContentLoaded", async function () {
   });
   document.addEventListener("keydown", function (e) {
     if (e.key === "Escape") closeModal();
+  });
+
+  // Re-renderitza quan canvia l'idioma
+  // Fragment suggerit per assistent IA - revisar i adaptar
+  document.addEventListener("idioma:canvi", function () {
+    renderCalendar();
+    updateSelectedDayInfo();
+    renderClasesDelDia();
+    renderMisReservas();
   });
 });

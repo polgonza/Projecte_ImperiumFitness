@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Finalizar Compra - Imperium Fitness</title>
+  <title>Finalitzar Compra - Imperium Fitness</title>
   <link rel="stylesheet" href="css/styles.css">
 </head>
 
@@ -52,8 +52,8 @@
     <div class="container">
 
       <div class="section-header">
-        <h2>Finalizar Compra</h2>
-        <p>Revisa tu pedido e introduce tus datos de pago</p>
+        <h2 data-i18n="checkout.titol">Finalitzar Compra</h2>
+        <p data-i18n="checkout.subtitol">Revisa la teva comanda i introdueix les dades de pagament</p>
       </div>
 
       <!--
@@ -71,12 +71,11 @@
         -->
         <div class="login-required-box" id="login-required-box" style="display:none">
           <p>
-            <strong>Debes iniciar sesión</strong> para completar tu compra.
-            Tu carrito se guardará hasta que vuelvas.
+            <strong data-i18n="checkout.loginRequerit">Has d'iniciar sessió</strong>
+            <span data-i18n="checkout.loginDesc"> per completar la compra. El teu carret es guardarà fins que tornis.</span>
           </p>
-          <a href="login.html" class="btn btn-primary" style="display:inline-flex">
-            Iniciar Sesión
-          </a>
+          <a href="login.html" class="btn btn-primary" style="display:inline-flex"
+             data-i18n="nav.iniciSessio">Inicia sessió</a>
         </div>
 
         <div class="checkout-layout" id="checkout-layout">
@@ -86,31 +85,31 @@
 
             <!-- SECCIÓN: Datos de envío -->
             <div class="checkout-card">
-              <h3>Datos de envío</h3>
+             <h3 data-i18n="checkout.dadesEnviament">Dades d'enviament</h3>
               <div class="checkout-form-grid">
 
                 <div class="form-field full-width">
-                  <label for="ch-nombre">Nombre completo</label>
+                  <label for="ch-nombre" data-i18n="registre.nom">Nom complet</label>
                   <input type="text" id="ch-nombre" placeholder="Carlos García López">
-                  <span class="field-err">Este campo es obligatorio</span>
+                  <span class="field-err" data-i18n="checkout.campObligatori">Aquest camp és obligatori</span>
                 </div>
 
                 <div class="form-field full-width">
-                  <label for="ch-direccion">Dirección</label>
-                  <input type="text" id="ch-direccion" placeholder="Calle Mayor 12, 3ºB">
-                  <span class="field-err">Este campo es obligatorio</span>
+                  <label for="ch-direccion" data-i18n="checkout.adreca">Adreça</label>
+                  <input type="text" id="ch-direccion" placeholder="Carrer Major 12, 3r B">
+                  <span class="field-err" data-i18n="checkout.campObligatori">Aquest camp és obligatori</span>
                 </div>
 
                 <div class="form-field">
-                  <label for="ch-ciudad">Ciudad</label>
-                  <input type="text" id="ch-ciudad" placeholder="Madrid">
-                  <span class="field-err">Este campo es obligatorio</span>
+                  <label for="ch-ciudad" data-i18n="checkout.ciutat">Ciutat</label>
+                  <input type="text" id="ch-ciudad" placeholder="Barcelona">
+                  <span class="field-err" data-i18n="checkout.campObligatori">Aquest camp és obligatori</span>
                 </div>
 
                 <div class="form-field">
-                  <label for="ch-cp">Código postal</label>
-                  <input type="text" id="ch-cp" placeholder="28001" maxlength="5">
-                  <span class="field-err">Código postal inválido</span>
+                  <label for="ch-cp" data-i18n="checkout.cp">Codi postal</label>
+                  <input type="text" id="ch-cp" placeholder="08001" maxlength="5">
+                  <span class="field-err" data-i18n="checkout.cpInvalid">Codi postal invàlid</span>
                 </div>
 
               </div>
@@ -118,7 +117,7 @@
 
             <!-- SECCIÓN: Datos de pago (simulado) -->
             <div class="checkout-card">
-              <h3>Datos de pago</h3>
+              <h3 data-i18n="checkout.dadesPagament">Dades de pagament</h3>
 
               <!--
                 Tarjeta decorativa — se actualiza en tiempo real con lo que
@@ -142,20 +141,20 @@
               <div class="checkout-form-grid">
 
                 <div class="form-field full-width">
-                  <label for="ch-titular">Nombre del titular</label>
+                  <label for="ch-titular" data-i18n="checkout.titular">Nom del titular</label>
                   <input type="text" id="ch-titular" placeholder="CARLOS GARCIA" oninput="updateCardPreview()">
                   <span class="field-err">Este campo es obligatorio</span>
                 </div>
 
                 <div class="form-field full-width">
-                  <label for="ch-tarjeta">Número de tarjeta</label>
+                  <label for="ch-tarjeta" data-i18n="checkout.numTarjeta">Número de targeta</label>
                   <input type="text" id="ch-tarjeta" placeholder="1234 5678 9012 3456" maxlength="19"
                     oninput="formatCardNumber(this); updateCardPreview()">
                   <span class="field-err">Introduce 16 dígitos</span>
                 </div>
 
                 <div class="form-field">
-                  <label for="ch-expira">Fecha de caducidad</label>
+                  <label for="ch-expira" data-i18n="checkout.caducitat">Data de caducitat</label>
                   <input type="text" id="ch-expira" placeholder="MM/AA" maxlength="5"
                     oninput="formatExpiry(this); updateCardPreview()">
                   <span class="field-err">Formato MM/AA</span>
@@ -172,41 +171,39 @@
 
             <!-- Botón de pago -->
             <button class="btn btn-primary" id="pay-btn"
-              style="width:100%;justify-content:center;padding:1rem;font-size:0.9rem">
-              Pagar ahora
+              style="width:100%;justify-content:center;padding:1rem;font-size:0.9rem"
+              data-i18n="checkout.pagar">
+              Pagar ara
             </button>
 
           </div>
 
           <!-- Columna derecha: resumen del pedido -->
           <div class="order-summary">
-            <h3>Tu Pedido</h3>
+            <h3 data-i18n="checkout.laTevaComanda">La teva comanda</h3>
             <!-- Líneas de productos (generadas por checkout.js) -->
             <div id="summary-items"></div>
             <!-- Totales -->
             <div class="summary-totals">
               <div class="summary-row">
-                <span>Subtotal</span>
+                <span data-i18n="checkout.subtotal">Subtotal</span>
                 <span id="summary-subtotal">0.00 €</span>
               </div>
               <!-- Fila de descuento: visible solo si el usuario está logueado -->
               <div class="summary-row" id="summary-discount-row" style="color:var(--success)">
-                <span>Descuento socio (5%)</span>
+                <span data-i18n="checkout.descompte">Descompte soci (5%)</span>
                 <span id="summary-discount">− 0.00 €</span>
               </div>
               <div class="summary-row">
-                <span>Envío</span>
-                <span style="color:var(--success)">Gratis</span>
+                <span data-i18n="checkout.enviament">Enviament</span>
+                <span style="color:var(--success)" data-i18n="checkout.gratis">Gratuït</span>
               </div>
               <div class="summary-row total">
-                <span>Total</span>
+                <span data-i18n="carret.total">Total</span>
                 <span id="summary-total">0.00 €</span>
               </div>
             </div>
-            <a href="tienda.html"
-              style="display:block;text-align:center;margin-top:1rem;font-size:0.82rem;color:var(--text-muted)">
-              ← Volver a la tienda
-            </a>
+             <a href="tienda.html" ... data-i18n="checkout.tornarBotiga">← Tornar a la botiga</a>
           </div>
 
         </div><!-- /checkout-layout -->
@@ -216,15 +213,12 @@
       <div id="checkout-success" style="display:none">
         <div class="checkout-success">
           <div class="success-icon">&#10003;</div>
-          <h2>Pago realizado</h2>
-          <p>
-            Tu pedido ha sido confirmado y está en preparación.
-            Recibirás un correo con el seguimiento.
-          </p>
+           <h2 data-i18n="checkout.pagamentFet">Pagament realitzat</h2>
+          <p data-i18n="checkout.confirmacioDesc">La teva comanda ha estat confirmada i està en preparació. Rebràs un correu amb el seguiment.</p>
           <div class="order-number" id="success-order-id">Pedido #000000</div>
           <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
-            <a href="tienda.html" class="btn btn-outline">Seguir comprando</a>
-            <a href="perfil.html" class="btn btn-primary">Ver mis pedidos</a>
+            <a href="tienda.html" class="btn btn-outline" data-i18n="checkout.seguirComprant">Continuar comprant</a>
+            <a href="perfil.html" class="btn btn-primary" data-i18n="checkout.versPedidos">Veure els meus pedidos</a>
           </div>
         </div>
       </div>

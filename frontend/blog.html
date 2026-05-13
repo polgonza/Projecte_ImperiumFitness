@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Novedades - Imperium Fitness</title>
+  <title>Novetats - Imperium Fitness</title>
   <link rel="stylesheet" href="css/styles.css">
 </head>
 
@@ -51,8 +51,8 @@
     <div class="container">
 
       <div class="section-header">
-        <h2>Novedades</h2>
-        <p>Artículos, eventos y consejos del mundo del fitness</p>
+        <h2 data-i18n="nav.novetats">Novetats</h2>
+        <p data-i18n="blog.subtitol">Articles, esdeveniments i consells del món del fitness</p>
       </div>
 
       <!-- Grid de posts - generado por JS -->
@@ -65,17 +65,8 @@
     <div class="container">
       <div class="footer-grid">
         <div class="footer-brand">
-          <div class="logo-row">
-            <img src="assets/logo.png" alt="Logo">
-            <span class="text-gold">IMPERIUM FITNESS</span>
-          </div>
-          <p data-i18n="footer.desc">La cadena de gimnasos premium amb tecnologia d'ocupació en temps real. Transforma la teva vida.</p>
-          <div class="social-links">
-            <a href="#" class="social-btn"><i class="fab fa-instagram"></i></a>
-            <a href="#" class="social-btn"><i class="fab fa-facebook-f"></i></a>
-            <a href="#" class="social-btn"><i class="fab fa-twitter"></i></a>
-            <a href="#" class="social-btn"><i class="fab fa-youtube"></i></a>
-          </div>
+          <div class="logo-row"><img src="assets/logo.png" alt="Logo"><span class="text-gold">IMPERIUM FITNESS</span></div>
+          <p data-i18n="footer.desc">La cadena de gimnasos premium amb tecnologia d'ocupació en temps real.</p>
         </div>
         <div class="footer-col">
           <h4 data-i18n="footer.explorar">Explorar</h4>
@@ -84,7 +75,6 @@
             <li><a href="actividades.html"   data-i18n="nav.classes">Classes</a></li>
             <li><a href="tarifas.html"       data-i18n="nav.tarifes">Tarifes</a></li>
             <li><a href="tienda.html"        data-i18n="nav.botiga">Botiga</a></li>
-            <li><a href="blog.html"          data-i18n="nav.novetats">Novetats</a></li>
             <li><a href="contacto.html"      data-i18n="nav.contacte">Contacte</a></li>
           </ul>
         </div>
@@ -95,7 +85,6 @@
             <li><a href="legal/terminos-condiciones.html" data-i18n="footer.termes">Termes i Condicions</a></li>
             <li><a href="legal/politica-cookies.html"     data-i18n="footer.cookies">Política de Cookies</a></li>
             <li><a href="legal/normativa-clubes.html"     data-i18n="footer.normativa">Normativa de Clubs</a></li>
-            <li><a href="faq.html">FAQ</a></li>
           </ul>
         </div>
       </div>
@@ -104,7 +93,6 @@
           <a href="legal/politica-privacidad.html"  data-i18n="footer.privacitat">Política de Privacitat</a>
           <a href="legal/politica-cookies.html"     data-i18n="footer.cookies">Política de Cookies</a>
           <a href="legal/terminos-condiciones.html" data-i18n="footer.termes">Termes i Condicions</a>
-          <a href="legal/normativa-clubes.html"     data-i18n="footer.normativa">Normativa de Clubs</a>
           <a href="legal/canal-etico.html"          data-i18n="footer.canal">Canal Ètic</a>
         </div>
         <span class="footer-copy" data-i18n="footer.drets">© 2026 Imperium Fitness. Tots els drets reservats.</span>
@@ -112,24 +100,23 @@
     </div>
   </footer>
 
-  <!-- PANEL CARRITO -->
   <div class="cart-backdrop" id="cart-backdrop"></div>
   <div class="cart-drawer" id="cart-drawer">
     <div class="cart-header">
-      <h3>Mi Carrito</h3>
-      <button class="cart-close-btn" id="cart-close-btn" title="Cerrar">&#x2715;</button>
+      <h3 data-i18n="carret.titol">El meu carret</h3>
+      <button class="cart-close-btn" id="cart-close-btn" title="Tancar">&#x2715;</button>
     </div>
     <div class="cart-items" id="cart-items"></div>
     <div class="cart-footer">
       <div class="cart-total-row">
-        <span class="cart-total-label">Total</span>
+        <span class="cart-total-label" data-i18n="carret.total">Total</span>
         <span class="cart-total-amount" id="cart-total">0.00 &euro;</span>
       </div>
-      <button class="btn btn-primary" style="width:100%;justify-content:center" id="cart-checkout-btn">Finalizar
-        Compra</button>
+      <button class="btn btn-primary" style="width:100%;justify-content:center"
+              id="cart-checkout-btn" data-i18n="carret.finalitzar">Finalitzar compra</button>
     </div>
   </div>
-      <!-- ORDRE IMPORTANT: api.js sempre PRIMER -->
+
   <script src="js/i18n.js"></script>
   <script src="js/api.js"></script>
   <script src="js/render.js"></script>
@@ -141,7 +128,5 @@
       SessionManager.init(false);
     });
   </script>
-
 </body>
-
 </html>

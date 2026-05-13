@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ocupación en Tiempo Real - Imperium Fitness</title>
+  <title>Ocupació en Temps Real - Imperium Fitness</title>
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
@@ -48,16 +48,15 @@
   <!-- HERO -->
   <section class="occ-hero">
     <div class="container">
-      <h1 class="occ-hero-title">OCUPACIÓN EN TIEMPO REAL</h1>
-      <p class="occ-hero-sub">
-        Datos actualizados cada 30 segundos vía sistema RFID de control de accesos
+      <h1 class="occ-hero-title" data-i18n="ocupacio.titolPagina">OCUPACIÓ EN TEMPS REAL</h1>
+      <p class="occ-hero-sub" data-i18n="ocupacio.heroSub">
+        Dades actualitzades cada 30 segons via sistema RFID de control d'accessos
       </p>
 
       <!-- Barra de estado -->
       <div class="occ-status-bar">
         <div class="occ-live-pill">
-          <span class="occ-live-dot"></span>
-          EN VIVO
+          <span data-i18n="ocupacio.enviu">EN DIRECTE</span>
         </div>
         <div class="occ-clock">
           <span>🕐</span>
@@ -66,24 +65,23 @@
       </div>
 
       <!-- 3 tarjetas KPI -->
-      <div class="occ-kpis">
-        <div class="occ-kpi-card">
+      <div class="occ-kpi-card">
           <div class="occ-kpi-icon">💡</div>
-          <div class="occ-kpi-label">MEJOR HORA HOY</div>
+          <div class="occ-kpi-label" data-i18n="ocupacio.millorHora">MILLOR HORA AVUI</div>
           <div class="occ-kpi-value" id="kpi-best-hour">--:--</div>
-          <div class="occ-kpi-sub"   id="kpi-best-sub">Calculando...</div>
+          <div class="occ-kpi-sub"   id="kpi-best-sub" data-i18n="ocupacio.calculant">Calculant...</div>
         </div>
         <div class="occ-kpi-card">
           <div class="occ-kpi-icon">📍</div>
-          <div class="occ-kpi-label">MENOS LLENO AHORA</div>
+          <div class="occ-kpi-label" data-i18n="ocupacio.menysOcupat">MENYS OCUPAT ARA</div>
           <div class="occ-kpi-value" id="kpi-least-busy">—</div>
-          <div class="occ-kpi-sub"   id="kpi-least-sub">Calculando...</div>
+          <div class="occ-kpi-sub"   id="kpi-least-sub" data-i18n="ocupacio.calculant">Calculant...</div>
         </div>
         <div class="occ-kpi-card">
           <div class="occ-kpi-icon trend-icon">↗</div>
-          <div class="occ-kpi-label">PREDICCIÓN 30 MIN</div>
+          <div class="occ-kpi-label" data-i18n="ocupacio.prediccio">PREDICCIÓ 30 MIN</div>
           <div class="occ-kpi-value" id="kpi-prediction">—</div>
-          <div class="occ-kpi-sub">Reserva tu sitio antes de que se llene</div>
+          <div class="occ-kpi-sub"   data-i18n="ocupacio.prediccioSub">Reserva el teu lloc abans que s'ompli</div>
         </div>
       </div>
     </div>
@@ -94,7 +92,7 @@
     <div class="container">
       <div class="occ-controls">
         <input type="text" class="occ-search" id="occ-search"
-               placeholder="Buscar gimnasio..."
+               data-i18n="ocupacio.cerca" placeholder="Cerca gimnàs..."
                oninput="filtrarGimnasios(this.value)">
         <div class="occ-view-toggle">
           <button class="occ-view-btn active" id="btn-cards"
@@ -133,32 +131,14 @@
     <div class="container">
 
       <div class="occ-legend">
-        <span class="occ-legend-item">
-          <span class="occ-legend-dot low"></span>
-          Baja (&lt;40%)
-        </span>
-        <span class="occ-legend-item">
-          <span class="occ-legend-dot medium"></span>
-          Media (40-70%)
-        </span>
-        <span class="occ-legend-item">
-          <span class="occ-legend-dot high"></span>
-          Alta (&gt;70%)
-        </span>
+        <span class="occ-legend-item"><span class="occ-legend-dot low"></span><span data-i18n="ocupacio.baixa">Baixa (&lt;40%)</span></span>
+        <span class="occ-legend-item"><span class="occ-legend-dot medium"></span><span data-i18n="ocupacio.mitja">Mitja (40-70%)</span></span>
+        <span class="occ-legend-item"><span class="occ-legend-dot high"></span><span data-i18n="ocupacio.alta">Alta (&gt;70%)</span></span>
       </div>
 
       <div class="occ-info-box">
-        <div class="occ-info-title">
-          <span>⚡</span> ¿Cómo funciona?
-        </div>
-        <p>
-          Cada centro Imperium cuenta con un sistema de control de accesos
-          mediante pulseras RFID. Cuando un usuario entra o sale del gimnasio,
-          los tornos registran el movimiento automáticamente, actualizando la
-          ocupación en tiempo real. El sistema predictivo analiza patrones
-          históricos para anticipar la ocupación futura y recomendarte el mejor
-          momento para entrenar.
-        </p>
+         <div class="occ-info-title"><span>⚡</span> <span data-i18n="ocupacio.comFunciona">Com funciona?</span></div>
+          <p data-i18n="ocupacio.comFuncionaDesc">Cada centre Imperium compta amb un sistema de control d'accessos mitjançant polseres RFID. Quan un usuari entra o surt del gimnàs, els torns registren el moviment automàticament, actualitzant l'ocupació en temps real.</p>
       </div>
 
     </div>
@@ -243,5 +223,27 @@
   <script src="js/ocupacion_data.js"></script>
   <script src="js/ocupacion.js"></script>
 
+  <div class="cart-backdrop" id="cart-backdrop"></div>
+  <div class="cart-drawer" id="cart-drawer">
+    <div class="cart-header">
+      <h3 data-i18n="carret.titol">El meu carret</h3>
+      <button class="cart-close-btn" id="cart-close-btn" title="Tancar">&#x2715;</button>
+    </div>
+    <div class="cart-items" id="cart-items"></div>
+    <div class="cart-footer">
+      <div class="cart-total-row">
+        <span class="cart-total-label" data-i18n="carret.total">Total</span>
+        <span class="cart-total-amount" id="cart-total">0.00 €</span>
+      </div>
+      <button class="btn btn-primary" style="width:100%;justify-content:center"
+              id="cart-checkout-btn" data-i18n="carret.finalitzar">Finalitzar compra</button>
+    </div>
+  </div>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      I18n.init();
+      SessionManager.init(false);
+    });
+  </script>
 </body>
 </html>
