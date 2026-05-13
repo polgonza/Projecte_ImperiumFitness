@@ -415,7 +415,6 @@ function initProfileTabs() {
 // =====================================================
 // 7. FORMULARIS D'AUTENTICACIÓ CONNECTATS AL BACKEND
 // =====================================================
-
 function initLoginForm() {
   const form = document.getElementById("login-form");
   if (!form) return;
@@ -429,23 +428,22 @@ function initLoginForm() {
     const btn      = form.querySelector("button[type=submit]");
 
     if (!email || !password) {
-      showAlert(alertEl, "Rellena todos los campos.", "error");
+      showAlert(alertEl, t("toast.campsBuits"), "error");
       return;
     }
 
-    // Deshabilitem el botó mentre esperem la resposta
     btn.disabled = true;
-    btn.textContent = "Entrando...";
+    btn.textContent = t("login.entrant");
 
     const result = await Auth.login(email, password);
 
     if (result.ok) {
-      showAlert(alertEl, "¡Bienvenido! Redirigiendo...", "success");
+      showAlert(alertEl, t("toast.benvingut"), "success");
       setTimeout(() => window.location.href = "index.html", 1200);
     } else {
       showAlert(alertEl, result.error, "error");
       btn.disabled = false;
-      btn.textContent = "Entrar";
+      btn.textContent = t("login.entrar");
     }
   });
 }
@@ -464,32 +462,31 @@ function initRegisterForm() {
     const alertEl  = document.getElementById("reg-alert");
     const btn      = form.querySelector("button[type=submit]");
 
-    // Validacions del client
     if (!nom || !email || !password || !confirm) {
-      showAlert(alertEl, "Rellena todos los campos.", "error");
+      showAlert(alertEl, t("toast.campsBuits"), "error");
       return;
     }
     if (password.length < 6) {
-      showAlert(alertEl, "La contraseña debe tener al menos 6 caracteres.", "error");
+      showAlert(alertEl, t("toast.contraError"), "error");
       return;
     }
     if (password !== confirm) {
-      showAlert(alertEl, "Las contraseñas no coinciden.", "error");
+      showAlert(alertEl, t("toast.contraNoCoincid"), "error");
       return;
     }
 
     btn.disabled = true;
-    btn.textContent = "Creando cuenta...";
+    btn.textContent = t("registre.creant");
 
     const result = await Auth.register(nom, email, password);
 
     if (result.ok) {
-      showAlert(alertEl, "¡Cuenta creada! Redirigiendo...", "success");
+      showAlert(alertEl, t("toast.compteCreat"), "success");
       setTimeout(() => window.location.href = "index.html", 1200);
     } else {
       showAlert(alertEl, result.error, "error");
       btn.disabled = false;
-      btn.textContent = "Crear Cuenta";
+      btn.textContent = t("registre.crear");
     }
   });
 }
@@ -501,46 +498,35 @@ function initRecoverForm() {
   form.addEventListener("submit", function(e) {
     e.preventDefault();
 
-    const email = document.getElementById("recover-email").value.trim();
-    const alert = document.getElementById("recover-alert");
+    const email   = document.getElementById("recover-email").value.trim();
+    const alertEl = document.getElementById("recover-alert");
 
     if (!email) {
-      showAlert(alert, "Introduce tu email.", "error");
+      showAlert(alertEl, t("toast.emailInvalid"), "error");
       return;
     }
 
-    // Simulación: simplemente muestra un mensaje de éxito
-    showAlert(alert, `Hemos enviado un enlace de recuperación a ${email}.`, "success");
+    showAlert(alertEl, `S'ha enviat un enllaç de recuperació a ${email}.`, "success");
     form.reset();
   });
 }
 
-// Muestra / oculta un mensaje de alerta en un formulario
 function showAlert(alertEl, msg, type) {
   if (!alertEl) return;
   alertEl.textContent = msg;
   alertEl.className = `alert ${type} show`;
 }
 
-
-// =====================================================
-// 8. TOGGLE CONTRASEÑA (mostrar/ocultar)
-// =====================================================
-
 function initPasswordToggle() {
   document.querySelectorAll(".toggle-password").forEach(btn => {
     btn.addEventListener("click", function() {
-      const targetId = this.dataset.target;
-      const input = document.getElementById(targetId);
+      const input = document.getElementById(this.dataset.target);
       if (!input) return;
-
-      if (input.type === "password") {
-        input.type = "text";
-        this.textContent = "🙈";
-      } else {
-        input.type = "password";
-        this.textContent = "👁";
-      }
+      const visible = input.type === "text";
+      input.type = visible ? "password" : "text";
+      this.innerHTML = visible
+        ? `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`
+        : `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>`;
     });
   });
 }
