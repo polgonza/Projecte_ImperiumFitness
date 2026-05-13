@@ -17,16 +17,17 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import java.io.IOException;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 /*
     PAGAMENT PRODUCTES BOTIGA ACTIVITY
     ==================================
-    Pantalla de pagament per a un producte comprat directament.
-    Mostra la informació del producte (nom, imatge, preu, quantitat).
-    L'usuari ha d'omplir les dades d'enviament i targeta.
-    En prémer "Pagar ara", valida els camps i redirigeix a PagatProducteBotiga.
-
-    @author ImperiumGym
-    @version 2.0
+    Pantalla de pagament simulat per a un producte comprat directament.
+    Aunque el pago sea simulado, se registra la venta en backend.
 */
 public class PagamentProductesBotiga extends AppCompatActivity {
 
@@ -37,6 +38,9 @@ public class PagamentProductesBotiga extends AppCompatActivity {
     private Button btnPagar;
 
     private SharedPreferences sharedPreferences;
+
+    private Long producteId;
+    private int quantitat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,12 +70,13 @@ public class PagamentProductesBotiga extends AppCompatActivity {
 
         sharedPreferences = getSharedPreferences("Usuaris", Context.MODE_PRIVATE);
 
-        // Carregar dades del producte directe
+        long idRebut = sharedPreferences.getLong("producte_directe_id", -1);
+        producteId = idRebut != -1 ? idRebut : null;
+
         String nom = sharedPreferences.getString("producte_directe_nom", "");
         float preu = sharedPreferences.getFloat("producte_directe_preu", 0f);
         int imatge = sharedPreferences.getInt("producte_directe_imatge", R.drawable.producto_2);
-        int quantitat = sharedPreferences.getInt("producte_directe_quantitat", 1);
-        String descripcio = sharedPreferences.getString("producte_directe_descripcio", "");
+        quantitat = sharedPreferences.getInt("producte_directe_quantitat", 1);
 
         imgProducte.setImageResource(imatge);
         tvNom.setText(nom);
@@ -95,19 +100,92 @@ public class PagamentProductesBotiga extends AppCompatActivity {
             return;
         }
 
-        // Aquí es faria el procés de pagament real...
-        Toast.makeText(this, "Pagament realitzat amb èxit", Toast.LENGTH_SHORT).show();
+        if (producteId == null) {
+            Toast.makeText(this, "Error: no s'ha trobat l'ID del producte", Toast.LENGTH_LONG).show();
+            return;
+        }
 
-        // Netejar les dades del producte directe per evitar reutilització
-        sharedPreferences.edit().remove("producte_directe_nom")
+        Long usuariId = obtenirUsuariId();
+
+        if (usuariId == null) {
+            Toast.makeText(this, "Error: sessió no vàlida. Torna a iniciar sessió.", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        btnPagar.setEnabled(false);
+
+        ApiService api = ApiClient.getClient(this).create(ApiService.class);
+        VendaDTO vendaDTO = new VendaDTO(producteId, usuariId, quantitat);
+
+        api.crearVenda(vendaDTO).enqueue(new Callback<VendaDTO>() {
+            @Override
+            public void onResponse(Call<VendaDTO> call, Response<VendaDTO> response) {
+                btnPagar.setEnabled(true);
+
+                if (response.isSuccessful()) {
+                    netejarProducteDirecte();
+
+                    Toast.makeText(
+                            PagamentProductesBotiga.this,
+                            "Pagament simulat i venda registrada correctament",
+                            Toast.LENGTH_SHORT
+                    ).show();
+
+                    Intent intent = new Intent(PagamentProductesBotiga.this, PagatProducteBotiga.class);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    Toast.makeText(
+                            PagamentProductesBotiga.this,
+                            "Error registrant la venda: " + llegirError(response),
+                            Toast.LENGTH_LONG
+                    ).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<VendaDTO> call, Throwable t) {
+                btnPagar.setEnabled(true);
+
+                Toast.makeText(
+                        PagamentProductesBotiga.this,
+                        "Error de connexió: " + t.getMessage(),
+                        Toast.LENGTH_LONG
+                ).show();
+            }
+        });
+    }
+
+    private Long obtenirUsuariId() {
+        String token = sharedPreferences.getString("jwt_token", "");
+        String userIdStr = JwtUtils.getClaim(token, "userId");
+
+        try {
+            return userIdStr != null ? Long.parseLong(userIdStr) : null;
+        } catch (NumberFormatException e) {
+            return null;
+        }
+    }
+
+    private void netejarProducteDirecte() {
+        sharedPreferences.edit()
+                .remove("producte_directe_id")
+                .remove("producte_directe_nom")
                 .remove("producte_directe_preu")
                 .remove("producte_directe_imatge")
                 .remove("producte_directe_quantitat")
                 .remove("producte_directe_descripcio")
                 .apply();
+    }
 
-        Intent intent = new Intent(this, PagatProducteBotiga.class);
-        startActivity(intent);
-        finish();
+    private String llegirError(Response<?> response) {
+        try {
+            if (response.errorBody() != null) {
+                return response.errorBody().string();
+            }
+        } catch (IOException ignored) {
+        }
+
+        return "codi " + response.code();
     }
 }
