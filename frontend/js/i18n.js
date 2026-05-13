@@ -136,6 +136,13 @@ const I18n = (() => {
       "registre.jaCompte":      "Ja tens compte?",
       "registre.inicia":        "Inicia sessió",
       "registre.creant":        "Creant compte...",
+      "registre.placeholderNom":     "El teu nom",
+      "registre.placeholderPass":    "Mínim 6 caràcters",
+      "registre.placeholderConfirm": "Repeteix la contrasenya",
+      "registre.termes":             "Accepto els",
+      "registre.termesLink":         "Termes i Condicions",
+      "registre.iLa":                "i la",
+      "registre.privacitat":         "Política de Privacitat",
 
       // Tarifes
       "tarifes.titol":          "Tarifes",
@@ -369,7 +376,14 @@ const I18n = (() => {
       "registre.jaCompte":      "Already have an account?",
       "registre.inicia":        "Log in",
       "registre.creant":        "Creating account...",
-
+      "registre.placeholderNom":     "Your name",
+      "registre.placeholderPass":    "At least 6 characters",
+      "registre.placeholderConfirm": "Repeat your password",
+      "registre.termes":             "I accept the",
+      "registre.termesLink":         "Terms and Conditions",
+      "registre.iLa":                "and the",
+      "registre.privacitat":         "Privacy Policy",
+      
       // Tarifes
       "tarifes.titol":          "Pricing",
       "tarifes.subtitol":       "Find the perfect plan for your training style",

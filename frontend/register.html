@@ -19,60 +19,56 @@
         <span class="text-gold">IMPERIUM</span>
       </div>
 
-      <h2>Únete a Imperium</h2>
-      <p class="subtitle">Crea tu cuenta y empieza hoy</p>
+      <h2 data-i18n="registre.titol">Crea el teu compte</h2>
+      <p class="subtitle" data-i18n="registre.subtitol">Uneix-te a Imperium Fitness</p>
 
-      <!-- Mensaje de error/éxito -->
       <div id="reg-alert" class="alert"></div>
 
-      <!-- Formulario de registro -->
       <form id="register-form">
-
         <div class="field-group">
-          <label for="reg-name">Nombre completo</label>
-          <input type="text" id="reg-name" class="input-field" placeholder="Tu nombre" required>
+          <label for="reg-name" data-i18n="registre.nom">Nom complet</label>
+          <input type="text" id="reg-name" class="input-field" data-i18n="registre.placeholderNom" placeholder="El teu nom" required>
         </div>
 
         <div class="field-group">
-          <label for="reg-email">Email</label>
+          <label for="reg-email" data-i18n="registre.email">Correu electrònic</label>
           <input type="email" id="reg-email" class="input-field" placeholder="tu@email.com" required>
         </div>
 
         <div class="field-group">
-          <label for="reg-password">Contraseña</label>
+          <label for="reg-password" data-i18n="registre.contrasenya">Contrasenya</label>
           <div class="password-wrapper">
-            <input type="password" id="reg-password" class="input-field" placeholder="Mínimo 6 caracteres" required>
+            <input type="password" id="reg-password" class="input-field" data-i18n="registre.placeholderPass" placeholder="Mínim 6 caràcters" required>
             <button type="button" class="toggle-password" data-target="reg-password">👁</button>
           </div>
         </div>
 
         <div class="field-group">
-          <label for="reg-confirm">Confirmar contraseña</label>
+          <label for="reg-confirm" data-i18n="registre.confirmar">Confirma la contrasenya</label>
           <div class="password-wrapper">
-            <input type="password" id="reg-confirm" class="input-field" placeholder="Repite la contraseña" required>
+            <input type="password" id="reg-confirm" class="input-field" data-i18n="registre.placeholderConfirm" placeholder="Repeteix la contrasenya" required>
             <button type="button" class="toggle-password" data-target="reg-confirm">👁</button>
           </div>
         </div>
 
-        <!-- Checkbox de términos -->
-        <label
-          style="display:flex;align-items:flex-start;gap:0.75rem;font-size:0.82rem;color:var(--text-muted);cursor:pointer;margin-bottom:1.25rem">
+        <label id="terms-label" style="display:flex;align-items:flex-start;gap:0.75rem;font-size:0.82rem;color:var(--text-muted);cursor:pointer;margin-bottom:1.25rem">
           <input type="checkbox" id="reg-terms" required style="margin-top:3px;accent-color:var(--primary)">
-          Acepto los <a href="#" style="color:var(--primary)">Términos y Condiciones</a> y la
-          <a href="#" style="color:var(--primary)">Política de Privacidad</a>
+          <span id="terms-text"></span>
         </label>
 
-        <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;padding:0.85rem">
-          Crear Cuenta
+        <button type="submit" class="btn btn-primary"
+          style="width:100%;justify-content:center;padding:0.85rem"
+          data-i18n="registre.crear">
+          Crear compte
         </button>
       </form>
 
-      <!-- Links -->
       <div class="auth-links">
-        ¿Ya tienes cuenta? <a href="login.html">Inicia sesión</a>
+        <span data-i18n="registre.jaCompte">Ja tens compte?</span>
+        <a href="login.html" data-i18n="registre.inicia">Inicia sessió</a>
       </div>
       <div class="auth-links">
-        <a href="index.html">← Volver al inicio</a>
+        <a href="index.html" data-i18n="login.tornar">← Tornar a l'inici</a>
       </div>
 
     </div>
@@ -86,7 +82,13 @@
   <script src="js/carrito.js"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-      I18n.init();  
+      I18n.init(); 
+      function renderTermesText() {
+  const el = document.getElementById("terms-text");
+  if (el) el.innerHTML = `${t("registre.termes")} <a href="#" style="color:var(--primary)">${t("registre.termesLink")}</a> ${t("registre.iLa")} <a href="#" style="color:var(--primary)">${t("registre.privacitat")}</a>`;
+}
+renderTermesText();
+document.addEventListener("idioma:canvi", renderTermesText); 
       SessionManager.init(false);
     });
 </script>

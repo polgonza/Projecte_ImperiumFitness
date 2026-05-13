@@ -26,6 +26,10 @@
   o los botones de login/registro según si hay sesión.
   Reemplaza a: updateNavbarUser() en app.js
 */
+// Fragment suggerit per assistent IA - revisar i adaptar
+document.addEventListener("idioma:canvi", function () {
+  renderNavbarUser();
+});
 function renderNavbarUser() {
   const user          = Auth.getUser();
   const loggedIn      = Auth.isLoggedIn();
@@ -36,7 +40,7 @@ function renderNavbarUser() {
 
   if (loggedIn && user) {
     const inicial = user.name ? user.name.charAt(0).toUpperCase() : "?";
-    const prenom  = user.name ? user.name.split(" ")[0] : "Usuario";
+    const prenom  = user.name ? user.name.split(" ")[0] : "—";
 
     navUserArea.innerHTML = `
       <a href="perfil.html" class="btn-user">
@@ -45,28 +49,32 @@ function renderNavbarUser() {
       </a>
       <button onclick="Auth.logout()" class="btn btn-secondary"
               style="padding:0.4rem 0.9rem;font-size:0.75rem">
-        Salir
+        ${t("nav.sortir")}
       </button>
     `;
     if (navMobileUser) {
       navMobileUser.innerHTML = `
-        <a href="perfil.html">Mi Perfil</a>
-        <button onclick="Auth.logout()">Cerrar Sesión</button>
+        <a href="perfil.html">${t("nav.elMeuPerfil")}</a>
+        <button onclick="Auth.logout()">${t("nav.tancarSessio")}</button>
       `;
     }
   } else {
     navUserArea.innerHTML = `
-      <a href="login.html" class="btn-user">👤 Iniciar sesión</a>
+      <a href="login.html" class="btn-user">👤 ${t("nav.iniciSessio")}</a>
       <a href="tarifas.html" class="btn btn-primary"
-         style="padding:0.45rem 1.25rem;font-size:0.75rem">Únete</a>
+         style="padding:0.45rem 1.25rem;font-size:0.75rem">${t("nav.uneix")}</a>
     `;
     if (navMobileUser) {
       navMobileUser.innerHTML = `
-        <a href="login.html">Iniciar Sesión</a>
-        <a href="register.html">Registrarse</a>
+        <a href="login.html">${t("nav.iniciSessio")}</a>
+        <a href="register.html">${t("nav.registrat")}</a>
       `;
     }
   }
+
+  // Actualitza el selector d'idioma segons la preferència guardada
+  // Fragment suggerit per assistent IA - revisar i adaptar
+  I18n._actualitzaSelector();
 }
 
 
