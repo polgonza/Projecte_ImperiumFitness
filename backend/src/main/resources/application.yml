@@ -1,10 +1,11 @@
 server:
   port: 8080
 
+# Fragment suggerit per assistent IA - revisar i adaptar
 app:
   jwt:
-    secret: "V9sK2F4L8QpR0E3TnX6B1ZC5H7MJAUYDWPASDFGHJKLZXCVBN123456"
-    ttlSeconds: 1800
+    secret: ${JWT_SECRET:V9sK2F4L8QpR0E3TnX6B1ZC5H7MJAUYDWPASDFGHJKLZXCVBN123456}
+    ttlSeconds: ${JWT_TTL:1800}
 
 security:
   lockout:

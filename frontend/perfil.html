@@ -1,17 +1,17 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="ca">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mi Perfil - Imperium Fitness</title>
+  <title>El meu Perfil - Imperium Fitness</title>
   <link rel="stylesheet" href="css/styles.css">
 </head>
 
 <body>
 
   <!-- ========== NAVBAR ========== -->
-  <nav class="navbar" id="navbar">
+  <nav class="navbar scrolled" id="navbar">
     <div class="container">
       <a href="index.html" class="navbar-brand">
         <img src="assets/logo.png" alt="Imperium Fitness">
@@ -51,128 +51,136 @@
     <div class="container">
 
       <div class="section-header">
-        <h2>Mi Perfil</h2>
-        <p>Gestiona tu cuenta y consulta tu actividad</p>
+        <h2 data-i18n="perfil.titol">El meu Perfil</h2>
+        <p data-i18n="perfil.subtitol">Gestiona el teu compte i consulta la teva activitat</p>
       </div>
 
       <div class="profile-grid">
 
-        <!-- Sidebar izquierdo: datos del usuario -->
+        <!-- Sidebar esquerre: dades de l'usuari -->
         <div class="profile-sidebar">
           <div class="profile-avatar" id="profile-initial">?</div>
-          <div class="profile-name" id="profile-name">Cargando...</div>
+          <div class="profile-name" id="profile-name" data-i18n="perfil.carregant">Carregant...</div>
           <div class="profile-plan" id="profile-plan">—</div>
 
           <div class="profile-stat">
-            <span>Email</span>
+            <span data-i18n="perfil.email">Correu electrònic</span>
             <span id="profile-email">—</span>
           </div>
           <div class="profile-stat">
-            <span>Miembro desde</span>
+            <span data-i18n="perfil.membre">Membre des de</span>
             <span id="profile-since">—</span>
           </div>
           <div class="profile-stat">
-            <span>Plan activo</span>
+            <span data-i18n="perfil.planActiu">Pla actiu</span>
             <span id="profile-plan-stat" style="color:var(--primary)">—</span>
           </div>
 
-          <!-- Mensaje si no hay plan (se muestra/oculta desde JS) -->
           <div id="no-plan-msg"
-            style="display:none;background:rgba(212,175,55,0.1);border:1px solid var(--primary);border-radius:8px;padding:0.75rem;margin-top:0.5rem;font-size:0.8rem;color:var(--text-muted);text-align:center">
-            ⚠️ Sin tarifa activa.<br>Contrata un plan para reservar clases.
+            style="display:none;background:rgba(212,175,55,0.1);border:1px solid var(--primary);
+                   border-radius:8px;padding:0.75rem;margin-top:0.5rem;
+                   font-size:0.8rem;color:var(--text-muted);text-align:center"
+            data-i18n="perfil.senseTarifa">
+            ⚠️ Sense tarifa activa.<br>Contracta un pla per reservar classes.
           </div>
+
           <button id="cancel-tarifa-btn" onclick="cancelarSubscripcio()"
-        class="btn btn-secondary" 
-        style="justify-content:center;display:none;
-               border-color:var(--danger);color:var(--danger)">
-              Cancelar suscripción
-           </button>
+            class="btn btn-secondary"
+            style="justify-content:center;display:none;
+                   border-color:var(--danger);color:var(--danger)"
+            data-i18n="perfil.cancelSub">
+            Cancelar subscripció
+          </button>
+
           <div style="margin-top:1.5rem;display:flex;flex-direction:column;gap:0.75rem">
-            <a href="tarifas.html" class="btn btn-primary" style="justify-content:center">
-              Cambiar Plan
+            <a href="tarifas.html" class="btn btn-primary" style="justify-content:center"
+               data-i18n="perfil.canviarPla">
+              Canviar Pla
             </a>
-            <button onclick="Auth.logout()" class="btn btn-secondary" style="justify-content:center">
-              Cerrar Sesión
+            <button onclick="Auth.logout()" class="btn btn-secondary" style="justify-content:center"
+                    data-i18n="perfil.tancarSessio">
+              Tanca la sessió
             </button>
           </div>
         </div>
 
-        <!-- Columna derecha: tabs -->
+        <!-- Columna dreta: tabs -->
         <div>
-          <!-- Pestañas: Reservas | Pedidos | Compras antiguas -->
           <div class="profile-tabs">
-    <button class="profile-tab active" data-tab="tab-reservations">
-      Mis Reservas
-    </button>
-    <button class="profile-tab" data-tab="tab-orders">
-      Mis Pedidos
-    </button>
-    <button class="profile-tab" data-tab="tab-purchases">
-      Historial compras
-    </button>
-   <button class="profile-tab" data-tab="tab-stats" id="tab-stats-btn"
-            style="display:none">
-      📊 Estadístiques
-    </button>
-    <button class="profile-tab" data-tab="tab-gestio-usuaris"
-            id="tab-gestio-btn" style="display:none">
-      👥 Gestió d'usuaris
-    </button>
-</div>
+            <button class="profile-tab active" data-tab="tab-reservations"
+                    data-i18n="perfil.tabReserves">
+              Les meves Reserves
+            </button>
+            <button class="profile-tab" data-tab="tab-orders"
+                    data-i18n="perfil.tabPedidos">
+              Els meus Pedidos
+            </button>
+            <button class="profile-tab" data-tab="tab-purchases"
+                    data-i18n="perfil.tabHistorial">
+              Historial de compres
+            </button>
+            <button class="profile-tab" data-tab="tab-stats" id="tab-stats-btn"
+                    style="display:none" data-i18n="perfil.tabEstadistiques">
+              📊 Estadístiques
+            </button>
+            <button class="profile-tab" data-tab="tab-gestio-usuaris" id="tab-gestio-btn"
+                    style="display:none" data-i18n="perfil.tabGestioUsuaris">
+              👥 Gestió d'usuaris
+            </button>
+          </div>
 
-          <!-- Tab: Reservas de clases -->
+          <!-- Tab: Reserves de classes -->
           <div class="tab-content active" id="tab-reservations">
-            <div class="reservations-list" id="reservations-list">
-              <!-- Generado por JS -->
+            <div class="reservations-list" id="reservations-list"></div>
+          </div>
+
+          <!-- Tab: Pedidos de la botiga -->
+          <div class="tab-content" id="tab-orders">
+            <div id="orders-list"></div>
+          </div>
+
+          <!-- Tab: Estadístiques (només ADMIN) -->
+          <div class="tab-content" id="tab-stats">
+            <div id="stats-container">
+              <p style="color:var(--text-muted);text-align:center;padding:2rem"
+                 data-i18n="perfil.carregant">Carregant...</p>
             </div>
           </div>
 
-          <!-- Tab: Pedidos de la tienda (nuevo) -->
-          <div class="tab-content" id="tab-orders">
-            <div id="orders-list">
-              <!-- Generado por perfil.js -->
-            </div>
-          </div>
-          <!-- Tab: Estadístiques (només ADMIN) -->
-<div class="tab-content" id="tab-stats">
-  <div id="stats-container">
-    <p style="color:var(--text-muted);text-align:center;padding:2rem">
-      ⏳ Cargando estadísticas...
-    </p>
-  </div>
-</div>
-          <!-- Tab: Compras antiguas (datos hardcodeados del mock) -->
+          <!-- Tab: Historial de compres -->
           <div class="tab-content" id="tab-purchases">
-            <div class="purchases-list" id="purchases-list">
-              <!-- Generado por app.js -->
-            </div>
+            <div class="purchases-list" id="purchases-list"></div>
           </div>
+
+          <!-- Tab: Gestió d'usuaris (només ADMIN) -->
           <div class="tab-content" id="tab-gestio-usuaris">
             <div id="gestio-usuaris-container"></div>
           </div>
+
         </div>
       </div>
     </div>
   </section>
 
   <!-- PANEL CARRITO -->
-<div class="cart-backdrop" id="cart-backdrop"></div>
-<div class="cart-drawer" id="cart-drawer">
-  <div class="cart-header">
-    <h3>Mi Carrito</h3>
-    <button class="cart-close-btn" id="cart-close-btn" title="Cerrar">&#x2715;</button>
-  </div>
-  <div class="cart-items" id="cart-items"></div>
-  <div class="cart-footer">
-    <div class="cart-total-row">
-      <span class="cart-total-label">Total</span>
-      <span class="cart-total-amount" id="cart-total">0.00 €</span>
+  <div class="cart-backdrop" id="cart-backdrop"></div>
+  <div class="cart-drawer" id="cart-drawer">
+    <div class="cart-header">
+      <h3 data-i18n="carret.titol">El meu carret</h3>
+      <button class="cart-close-btn" id="cart-close-btn" title="Tancar">&#x2715;</button>
     </div>
-    <button class="btn btn-primary" style="width:100%;justify-content:center" id="cart-checkout-btn">
-      Finalizar Compra
-    </button>
+    <div class="cart-items" id="cart-items"></div>
+    <div class="cart-footer">
+      <div class="cart-total-row">
+        <span class="cart-total-label" data-i18n="carret.total">Total</span>
+        <span class="cart-total-amount" id="cart-total">0.00 €</span>
+      </div>
+      <button class="btn btn-primary" style="width:100%;justify-content:center"
+              id="cart-checkout-btn" data-i18n="carret.finalitzar">
+        Finalitzar compra
+      </button>
+    </div>
   </div>
-</div>
 
   <footer>
     <div class="container">
@@ -183,12 +191,6 @@
             <span class="text-gold">IMPERIUM FITNESS</span>
           </div>
           <p data-i18n="footer.desc">La cadena de gimnasos premium amb tecnologia d'ocupació en temps real. Transforma la teva vida.</p>
-          <div class="social-links">
-            <a href="#" class="social-btn"><i class="fab fa-instagram"></i></a>
-            <a href="#" class="social-btn"><i class="fab fa-facebook-f"></i></a>
-            <a href="#" class="social-btn"><i class="fab fa-twitter"></i></a>
-            <a href="#" class="social-btn"><i class="fab fa-youtube"></i></a>
-          </div>
         </div>
         <div class="footer-col">
           <h4 data-i18n="footer.explorar">Explorar</h4>
@@ -225,7 +227,6 @@
     </div>
   </footer>
 
-  <!-- ORDRE IMPORTANT: api.js sempre PRIMER -->
   <script src="js/i18n.js"></script>
   <script src="js/api.js"></script>
   <script src="js/render.js"></script>
@@ -234,17 +235,19 @@
   <script src="js/perfil.js"></script>
   <script src="js/gestio-usuaris.js"></script>
 
-<script>
+  <script>
     document.addEventListener("DOMContentLoaded", async function () {
       I18n.init();
       SessionManager.init(true);
+
       const user = Auth.getUser();
       if (user && user.roles && user.roles.includes("ROLE_ADMIN")) {
-        const tabStats = document.getElementById("tab-stats-btn");
-        if (tabStats) tabStats.style.display = "block";
+        const tabStats  = document.getElementById("tab-stats-btn");
         const tabGestio = document.getElementById("tab-gestio-btn");
+        if (tabStats)  tabStats.style.display  = "block";
         if (tabGestio) tabGestio.style.display = "block";
       }
+
       await Promise.all([
         initPerfil(),
         renderReservationsInProfile(),
@@ -252,8 +255,14 @@
         renderStats(),
         renderGestioUsuaris()
       ]);
+
       renderOldPurchases();
       initProfileTabs();
+
+      // Re-aplica traduccions quan canvia idioma (textos generats per JS)
+      document.addEventListener("idioma:canvi", function () {
+        I18n.aplicar();
+      });
     });
   </script>
 

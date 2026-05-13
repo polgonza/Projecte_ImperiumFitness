@@ -11,15 +11,6 @@
 
 const PLANS = [
   {
-    name: "Pass Diario",
-    price: "12.99",
-    period: "día",
-    features: ["Acceso puntual a 1 centro", "Zona de musculación completa", "Vestuarios y duchas", "WiFi gratuito"],
-    notIncluded: ["Clases dirigidas", "Zona wellness", "Invitaciones", "Descuentos tienda"],
-    popular: false,
-    cta: "Comprar Pass"
-  },
-  {
     name: "Quota Flex",
     price: "34.99",
     period: "mes",

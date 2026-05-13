@@ -65,7 +65,7 @@
 
       <div style="text-align:center;margin-top:2.5rem">
         <p style="color:var(--text-muted);font-size:0.9rem">
-          ✨ Primera semana gratis &nbsp;·&nbsp; Sin permanencia &nbsp;·&nbsp; Cancela cuando quieras
+           Sin permanencia &nbsp;·&nbsp; Cancela cuando quieras
         </p>
       </div>
 
@@ -150,55 +150,34 @@
   <script src="js/carrito.js"></script>
 
   <script>
-    /* Icones i beneficis per tarifa */
+    // Fragment suggerit per assistent IA - revisar i adaptar
     const TARIFA_CONFIG = {
-      "Pass Diari": {
-        icon:     "🎫",
-        popular:  false,
-        desc:     "Acceso completo al gimnasio durante un día",
-        beneficis: [
-          "Acceso a todas las instalaciones",
-          "Vestuarios y duchas",
-          "WiFi incluido",
-          "Sin compromisos"
-        ],
-        noInclos: [
-          "Clases dirigidas",
-          "Descuento en tienda",
-          "Entrenador personal"
-        ]
-      },
       "Quota Flex": {
-        icon:     "⚡",
-        popular:  true,
-        desc:     "La opción más flexible para entrenar a tu ritmo",
-        beneficis: [
-          "Acceso ilimitado al gimnasio",
-          "1 clase dirigida al día",
-          "5% descuento en tienda",
-          "15 invitaciones anuales",
-          "Vestuarios y duchas",
-          "WiFi incluido"
-        ],
-        noInclos: [
-          "Entrenador personal",
-          "Zona wellness"
-        ]
+        icon: "⚡", popular: true,
+        desc: {
+          ca: "El pla mensual per entrenar amb llibertat",
+          en: "The monthly plan to train on your terms"
+        },
+        beneficis: {
+          ca: ["Accés il·limitat al gimnàs","Accés a totes les classes dirigides","5% de descompte a la botiga","Taquilla personal assignada","Accés a l'app de seguiment"],
+          en: ["Unlimited gym access","Access to all group classes","5% shop discount","Personal locker assigned","Activity tracking app access"]
+        },
+        noInclos: {
+          ca: ["Zona wellness i sauna","Assessorament nutricional"],
+          en: ["Wellness zone & sauna","Nutritional guidance"]
+        }
       },
       "Quota Prime": {
-        icon:     "👑",
-        popular:  false,
-        desc:     "La experiencia premium sin límites",
-        beneficis: [
-          "Acceso ilimitado al gimnasio",
-          "2 clases dirigidas al día",
-          "10% descuento en tienda",
-          "20 invitaciones anuales",
-          "Sesión mensual con entrenador",
-          "Acceso zona wellness",
-          "WiFi incluido"
-        ],
-        noInclos: []
+        icon: "👑", popular: false,
+        desc: {
+          ca: "L'experiència premium sense límits",
+          en: "The unlimited premium experience"
+        },
+        beneficis: {
+          ca: ["Accés il·limitat al gimnàs","Accés a totes les classes dirigides","10% de descompte a la botiga","Taquilla personal assignada","Accés a zona wellness i sauna","Assessorament nutricional inicial","Accés a l'app de seguiment"],
+          en: ["Unlimited gym access","Access to all group classes","10% shop discount","Personal locker assigned","Wellness zone & sauna access","Initial nutritional guidance","Activity tracking app access"]
+        },
+        noInclos: { ca: [], en: [] }
       }
     };
 
@@ -206,117 +185,107 @@
       const grid = document.getElementById("plans-grid");
       if (!grid) return;
 
-      const user = Auth.getUser();
+      const user        = Auth.getUser();
       const tarifaActiva = user?.tarifaId || null;
+      const lang        = I18n.idioma;
 
-      // Carreguem tarifes des de l'API
       let tarifes = [];
       try {
         const res = await apiFetch("/api/tarifes");
         if (res && res.ok) tarifes = await res.json();
       } catch (e) {
         grid.innerHTML = `<p style="color:var(--danger);text-align:center;grid-column:1/-1">
-          Error al cargar las tarifas. Inténtalo de nuevo.
-        </p>`;
+          ${t("tarifes.error")}</p>`;
         return;
       }
 
       if (tarifes.length === 0) {
         grid.innerHTML = `<p style="color:var(--text-muted);text-align:center;grid-column:1/-1">
-          No hay tarifas disponibles.
-        </p>`;
+          ${t("tarifes.buit")}</p>`;
         return;
       }
 
-      grid.innerHTML = tarifes.map(t => {
-        const cfg      = TARIFA_CONFIG[t.nom] || {};
+      grid.innerHTML = tarifes.map(tarifa => {
+        const cfg      = TARIFA_CONFIG[tarifa.nom] || {};
         const popular  = cfg.popular || false;
-        const esActual = tarifaActiva && String(tarifaActiva) === String(t.id);
+        const esActual = tarifaActiva && String(tarifaActiva) === String(tarifa.id);
 
-        const beneficisHTML = (cfg.beneficis || []).map(b =>
+        const beneficisHTML = ((cfg.beneficis || {})[lang] || []).map(b =>
           `<li><span class="check">✓</span><span>${b}</span></li>`
         ).join("");
 
-        const noInclosHTML = (cfg.noInclos || []).map(b =>
+        const noInclosHTML = ((cfg.noInclos || {})[lang] || []).map(b =>
           `<li class="excluded"><span class="check">✗</span><span>${b}</span></li>`
         ).join("");
 
         let btnHTML;
         if (esActual) {
-          btnHTML = `<button class="btn btn-secondary" style="width:100%;justify-content:center" disabled>
-            ✓ Plan Actual
+          btnHTML = `<button class="btn btn-secondary"
+            style="width:100%;justify-content:center" disabled>
+            ${t("tarifes.planActual")}
           </button>`;
         } else if (!Auth.isLoggedIn()) {
-          btnHTML = `<a href="login.html" class="btn btn-${popular ? "primary" : "secondary"}"
+          btnHTML = `<a href="login.html"
+            class="btn btn-${popular ? "primary" : "secondary"}"
             style="width:100%;justify-content:center">
-            Iniciar sesión para contratar
+            ${t("tarifes.iniciarPerContractar")}
           </a>`;
         } else {
           btnHTML = `<button
             class="btn btn-${popular ? "primary" : "secondary"}"
             style="width:100%;justify-content:center"
-            onclick="contractarTarifa(${t.id}, '${t.nom}', ${t.preu})">
-            ${cfg.popular ? "Empezar ahora" : "Seleccionar"}
+            onclick="contractarTarifa(${tarifa.id}, '${tarifa.nom}', ${tarifa.preu})">
+            ${popular ? t("tarifes.comencarAra") : t("tarifes.seleccionar")}
           </button>`;
         }
 
         return `
           <div class="plan-card ${popular ? "popular" : ""}">
-            ${popular ? '<div class="popular-badge">⭐ Más Popular</div>' : ""}
-            ${esActual ? '<div class="popular-badge" style="background:var(--success)">✓ Plan Actual</div>' : ""}
+            ${popular  ? `<div class="popular-badge">${t("tarifes.mesPopular")}</div>` : ""}
+            ${esActual ? `<div class="popular-badge" style="background:var(--success)">${t("tarifes.planActual")}</div>` : ""}
             <div class="plan-header">
-              <div class="plan-name">${cfg.icon || ""} ${t.nom}</div>
+              <div class="plan-name">${cfg.icon || ""} ${tarifa.nom}</div>
               <div class="plan-price">
-                <span class="amount">${parseFloat(t.preu).toFixed(2)}€</span>
-                <span class="period">${t.nom === "Pass Diari" ? "/día" : "/mes"}</span>
+                <span class="amount">${parseFloat(tarifa.preu).toFixed(2)}€</span>
+                <span class="period">/mes</span>
               </div>
               <p style="font-size:0.82rem;color:var(--text-muted);margin-top:0.5rem">
-                ${cfg.desc || t.descripcio || ""}
+                ${(cfg.desc || {})[lang] || tarifa.descripcio || ""}
               </p>
             </div>
             <ul class="plan-features">
               ${beneficisHTML}
               ${noInclosHTML}
             </ul>
-            <div class="plan-footer">
-              ${btnHTML}
-            </div>
-          </div>
-        `;
+            <div class="plan-footer">${btnHTML}</div>
+          </div>`;
       }).join("");
     }
 
     async function contractarTarifa(tarifaId, tarifaNom, preu) {
       if (!Auth.isLoggedIn()) {
-        showToast("Debes iniciar sesión para contratar una tarifa.", "error");
+        showToast(t("tarifes.iniciarPerContractar"), "error");
         setTimeout(() => { window.location.href = "login.html"; }, 1500);
         return;
       }
 
-      const confirmat = confirm(
-        `¿Confirmas la contratación de "${tarifaNom}" por ${parseFloat(preu).toFixed(2)}€?`
-      );
+      const confirmat = confirm(t("tarifes.confirmar", [tarifaNom, parseFloat(preu).toFixed(2)]));
       if (!confirmat) return;
 
-      const user = Auth.getUser();
+      const user   = Auth.getUser();
       const perfil = await ApiUsuari.assignarTarifa(user.id, tarifaId);
 
       if (perfil) {
-        // Actualitzem el localStorage amb la nova tarifa
-        Auth.setUser({
-          ...user,
-          tarifaId:  perfil.tarifaId,
-          tarifaNom: perfil.tarifaNom
-        });
-
-        showToast(`¡Tarifa "${tarifaNom}" activada correctamente! 🎉`, "success");
-
-        // Re-renderitzem per mostrar "Plan Actual"
+        Auth.setUser({ ...user, tarifaId: perfil.tarifaId, tarifaNom: perfil.tarifaNom });
+        showToast(t("tarifes.activada", [tarifaNom]), "success");
         await renderTarifes();
       } else {
-        showToast("No se pudo activar la tarifa. Inténtalo de nuevo.", "error");
+        showToast(t("tarifes.errorActivar"), "error");
       }
     }
+
+    // Re-renderitza quan canvia l'idioma
+    document.addEventListener("idioma:canvi", renderTarifes);
 
     document.addEventListener("DOMContentLoaded", async function () {
       I18n.init();

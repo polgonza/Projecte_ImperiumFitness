@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Fragment suggerit per assistent IA - revisar i adaptar -->
+<configuration>
+
+  <!-- Propietat: directori de logs (es pot sobreescriure amb variable d'entorn LOG_PATH) -->
+  <property name="LOG_PATH" value="${LOG_PATH:-logs}" />
+  <property name="APP_NAME" value="imperium-fitness" />
+
+  <!-- FORMAT CONSOLA -->
+  <appender name="CONSOLA" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+    </encoder>
+  </appender>
+
+  <!-- FITXER DIARI — rota cada dia, conserva 30 dies, màx 50MB per fitxer -->
+  <appender name="FITXER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>${LOG_PATH}/${APP_NAME}.log</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <fileNamePattern>${LOG_PATH}/${APP_NAME}-%d{yyyy-MM-dd}.log</fileNamePattern>
+      <maxHistory>30</maxHistory>
+      <totalSizeCap>200MB</totalSizeCap>
+    </rollingPolicy>
+    <encoder>
+      <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
+    </encoder>
+  </appender>
+
+  <!-- FITXER ERRORS — només ERROR i FATAL -->
+  <appender name="FITXER_ERRORS" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>${LOG_PATH}/${APP_NAME}-errors.log</file>
+    <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+      <level>ERROR</level>
+    </filter>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <fileNamePattern>${LOG_PATH}/${APP_NAME}-errors-%d{yyyy-MM-dd}.log</fileNamePattern>
+      <maxHistory>60</maxHistory>
+    </rollingPolicy>
+    <encoder>
+      <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
+    </encoder>
+  </appender>
+
+  <!-- Nivell INFO per a l'aplicació pròpia -->
+  <logger name="com.imperiumfitness" level="INFO" />
+
+  <!-- Silencia Hibernate per no omplir el log -->
+  <logger name="org.hibernate.SQL"                      level="WARN" />
+  <logger name="org.hibernate.type.descriptor.sql"      level="WARN" />
+  <logger name="org.springframework.web"                level="WARN" />
+  <logger name="org.springframework.security"           level="WARN" />
+
+  <!-- ROOT: INFO a consola i fitxer, errors al fitxer d'errors -->
+  <root level="INFO">
+    <appender-ref ref="CONSOLA" />
+    <appender-ref ref="FITXER" />
+    <appender-ref ref="FITXER_ERRORS" />
+  </root>
+
+</configuration>

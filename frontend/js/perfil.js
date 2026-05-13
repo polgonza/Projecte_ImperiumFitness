@@ -9,95 +9,72 @@
    ===================================================== */
 
 async function initPerfil() {
-  if (!Auth.isLoggedIn()) {
-    window.location.href = "login.html";
-    return;
-  }
-
+  if (!Auth.isLoggedIn()) { window.location.href = "login.html"; return; }
   const user = Auth.getUser();
-  if (!user) {
-    window.location.href = "login.html";
-    return;
-  }
+  if (!user) { window.location.href = "login.html"; return; }
 
-  // Mostrem dades bàsiques mentre carreguen les del backend
   const inicial = user.name ? user.name.charAt(0).toUpperCase() : "?";
-  renderDatosUsuario(inicial, user.name || "—", user.email || "—", "Sin plan activo", "—");
+  renderDatosUsuario(inicial, user.name || "—", user.email || "—", t("perfil.sensePla"), "—");
 
-  // Carreguem dades reals del backend
   const perfil = await ApiUsuari.getPerfil(user.id);
+  if (!perfil) return;
 
-  if (perfil) {
-    const dataRegistre = perfil.dataRegistre
-      ? new Date(perfil.dataRegistre).toLocaleDateString("es-ES")
-      : "—";
-
-    // ← Mostrem la tarifa real
-    const planNom = perfil.tarifaNom || "Sin tarifa activa";
-
-    renderDatosUsuario(
-      perfil.nom.charAt(0).toUpperCase(),
-      perfil.nom,
-      perfil.email,
-      planNom,        // ← tarifa real
-      dataRegistre
-    );
-    if (perfil && perfil.tarifaId) {
-  // Mostrem info de la subscripció
-  const dataFi = perfil.tarifaDataFi
-    ? new Date(perfil.tarifaDataFi).toLocaleDateString("es-ES")
+  const dataRegistre = perfil.dataRegistre
+    ? new Date(perfil.dataRegistre).toLocaleDateString(I18n.idioma === "ca" ? "ca-ES" : "en-GB")
     : "—";
 
-  const cancelBtn = document.getElementById("cancel-tarifa-btn");
-  if (cancelBtn) {
-    cancelBtn.style.display = "block";
-    cancelBtn.textContent = perfil.tarifaCancellada
-      ? `Cancelada (acceso hasta ${dataFi})`
-      : `Cancelar suscripción (activa hasta ${dataFi})`;
-    cancelBtn.disabled = perfil.tarifaCancellada;
-  }
-}
-    // Guardem la tarifa al localStorage per usar-la al carrito i reserves
-    Auth.setUser({
-      ...user,
-      name:     perfil.nom,
-      email:    perfil.email,
-      tarifaId: perfil.tarifaId,
-      tarifaNom: perfil.tarifaNom
-    });
+  const planNom = perfil.tarifaNom || t("perfil.sensePla");
+  renderDatosUsuario(
+    perfil.nom.charAt(0).toUpperCase(),
+    perfil.nom,
+    perfil.email,
+    planNom,
+    dataRegistre
+  );
 
-    // Amaguem o mostrem el missatge de "sense pla"
-    const noPlanMsg = document.getElementById("no-plan-msg");
-    if (noPlanMsg) {
-      noPlanMsg.style.display = perfil.tarifaId ? "none" : "block";
+  if (perfil.tarifaId) {
+    const dataFi = perfil.tarifaDataFi
+      ? new Date(perfil.tarifaDataFi).toLocaleDateString(I18n.idioma === "ca" ? "ca-ES" : "en-GB")
+      : "—";
+    const cancelBtn = document.getElementById("cancel-tarifa-btn");
+    if (cancelBtn) {
+      cancelBtn.style.display = "block";
+      cancelBtn.textContent = perfil.tarifaCancellada
+        ? (I18n.idioma === "ca" ? `Cancel·lada (accés fins al ${dataFi})` : `Cancelled (access until ${dataFi})`)
+        : (I18n.idioma === "ca" ? `Cancelar subscripció (activa fins al ${dataFi})` : `Cancel subscription (active until ${dataFi})`);
+      cancelBtn.disabled = perfil.tarifaCancellada;
     }
-}
+  }
+
+  Auth.setUser({ ...user, name: perfil.nom, email: perfil.email, tarifaId: perfil.tarifaId, tarifaNom: perfil.tarifaNom });
+
+  const noPlanMsg = document.getElementById("no-plan-msg");
+  if (noPlanMsg) noPlanMsg.style.display = perfil.tarifaId ? "none" : "block";
 }
 
 function setTextById(id, text) {
   const el = document.getElementById(id);
   if (el) el.textContent = text;
 }
+
 async function cancelarSubscripcio() {
-  const confirmat = confirm(
-    "¿Seguro que quieres cancelar tu suscripción?\n\n" +
-    "Seguirás teniendo acceso hasta el final del período pagado."
-  );
+  const confirmat = confirm(t("perfil.confirmCancel"));
   if (!confirmat) return;
 
-  const user = Auth.getUser();
+  const user   = Auth.getUser();
   const perfil = await ApiUsuari.cancelarTarifa(user.id);
 
   if (perfil) {
     const dataFi = perfil.tarifaDataFi
-      ? new Date(perfil.tarifaDataFi).toLocaleDateString("es-ES")
+      ? new Date(perfil.tarifaDataFi).toLocaleDateString(I18n.idioma === "ca" ? "ca-ES" : "en-GB")
       : "—";
-    showToast(`Suscripción cancelada. Acceso hasta el ${dataFi}.`, "success");
+    showToast(t("perfil.cancelOk", [dataFi]), "success");
     await initPerfil();
   } else {
-    showToast("No se pudo cancelar. Inténtalo de nuevo.", "error");
+    showToast(t("perfil.cancelError"), "error");
   }
 }
+
 
 /* =====================================================
    2. TAB RESERVES — dades reals del backend
@@ -110,72 +87,59 @@ async function renderReservationsInProfile() {
   const user = Auth.getUser();
   if (!user) return;
 
-  lista.innerHTML = `
-    <p style="color:var(--text-muted);text-align:center;padding:2rem">
-      ⏳ Cargando reservas...
-    </p>`;
+  lista.innerHTML = `<p style="color:var(--text-muted);text-align:center;padding:2rem">
+    ⏳ ${t("activitats.carregant")}</p>`;
 
   const reserves = await ApiUsuari.getReserves(user.id);
 
   if (!reserves || reserves.length === 0) {
-    lista.innerHTML = `
-      <p style="color:var(--text-muted);text-align:center;padding:2rem">
-        No tienes reservas de clases.<br>
-        <a href="actividades.html" style="color:var(--primary)">
-          Ver clases disponibles
-        </a>
-      </p>`;
+    lista.innerHTML = `<p style="color:var(--text-muted);text-align:center;padding:2rem">
+      ${I18n.idioma === "ca" ? "No tens reserves de classes." : "You have no class bookings."}
+      <br><a href="actividades.html" style="color:var(--primary)">
+        ${I18n.idioma === "ca" ? "Veure classes disponibles" : "View available classes"}
+      </a></p>`;
     return;
   }
 
-  // Filtrem reserves futures o d'avui
   const ara = new Date();
   ara.setHours(0, 0, 0, 0);
 
   const reservesFutures = reserves.filter(r => {
     if (!r.dataReserva) return true;
-    const dataReserva = new Date(r.dataReserva);
-    dataReserva.setHours(0, 0, 0, 0);
-    return dataReserva >= ara;
+    const d = new Date(r.dataReserva);
+    d.setHours(0, 0, 0, 0);
+    return d >= ara;
   });
 
   if (reservesFutures.length === 0) {
-    lista.innerHTML = `
-      <p style="color:var(--text-muted);text-align:center;padding:2rem">
-        No tienes reservas próximas.<br>
-        <a href="actividades.html" style="color:var(--primary)">
-          Reservar una clase
-        </a>
-      </p>`;
+    lista.innerHTML = `<p style="color:var(--text-muted);text-align:center;padding:2rem">
+      ${I18n.idioma === "ca" ? "No tens reserves pròximes." : "You have no upcoming bookings."}
+      <br><a href="actividades.html" style="color:var(--primary)">
+        ${I18n.idioma === "ca" ? "Reservar una classe" : "Book a class"}
+      </a></p>`;
     return;
   }
 
-  // Ordenem de més pròxima a més llunyana
   reservesFutures.sort((a, b) => new Date(a.dataReserva) - new Date(b.dataReserva));
 
-  // Obtenim el nom de cada classe
   const classesCache = {};
   const reservesAmbNom = await Promise.all(reservesFutures.map(async r => {
-    let nomClasse = `Clase #${r.classeId}`;
+    let nomClasse = `${I18n.idioma === "ca" ? "Classe" : "Class"} #${r.classeId}`;
     try {
       if (!classesCache[r.classeId]) {
         const res = await apiFetch(`/api/classes/${r.classeId}`);
-        if (res && res.ok) {
-          const classe = await res.json();
-          classesCache[r.classeId] = classe.nom;
-        }
+        if (res && res.ok) classesCache[r.classeId] = (await res.json()).nom;
       }
       nomClasse = classesCache[r.classeId] || nomClasse;
     } catch (e) {}
-
     return {
-      classeId:    r.classeId,    // ← AFEGEIX AIXÒ
+      classeId:    r.classeId,
       nomClasse,
       dataReserva: r.dataReserva
-        ? new Date(r.dataReserva).toLocaleDateString("es-ES")
+        ? new Date(r.dataReserva).toLocaleDateString(I18n.idioma === "ca" ? "ca-ES" : "en-GB")
         : "—"
     };
-}));
+  }));
 
   renderReservasPerfil(reservesAmbNom);
 }
@@ -189,10 +153,8 @@ async function renderOrderHistory() {
   const container = document.getElementById("orders-list");
   if (!container) return;
 
-  container.innerHTML = `
-    <p style="color:var(--text-muted);text-align:center;padding:2rem">
-      ⏳ Cargando pedidos...
-    </p>`;
+  container.innerHTML = `<p style="color:var(--text-muted);text-align:center;padding:2rem">
+    ⏳ ${I18n.idioma === "ca" ? "Carregant pedidos..." : "Loading orders..."}</p>`;
 
   const user = Auth.getUser();
   if (!user) return;
@@ -200,36 +162,30 @@ async function renderOrderHistory() {
   const vendes = await ApiUsuari.getVendes(user.id);
 
   if (!vendes || vendes.length === 0) {
-    container.innerHTML = `
-      <div style="color:var(--text-muted);text-align:center;padding:2rem">
-        No has realizado ningún pedido aún.<br>
-        <a href="tienda.html" style="color:var(--primary)">
-          Ir a la tienda
-        </a>
-      </div>`;
+    container.innerHTML = `<div style="color:var(--text-muted);text-align:center;padding:2rem">
+      ${I18n.idioma === "ca" ? "Encara no has fet cap comanda." : "You haven't placed any orders yet."}
+      <br><a href="tienda.html" style="color:var(--primary)">
+        ${I18n.idioma === "ca" ? "Anar a la botiga" : "Go to the shop"}
+      </a></div>`;
     return;
   }
 
   const productesCache = {};
   const vendesAmbNom = await Promise.all(vendes.map(async v => {
-    let nomProducte = `Producto #${v.producteId}`;
+    let nomProducte = `${I18n.idioma === "ca" ? "Producte" : "Product"} #${v.producteId}`;
     try {
       if (!productesCache[v.producteId]) {
         const res = await apiFetch(`/api/productes/${v.producteId}`);
-        if (res && res.ok) {
-          const p = await res.json();
-          productesCache[v.producteId] = p;
-        }
+        if (res && res.ok) productesCache[v.producteId] = await res.json();
       }
       const prod = productesCache[v.producteId];
       if (prod) nomProducte = prod.nom;
     } catch (e) {}
-
     return {
       ...v,
       nomProducte,
       dataVenda: v.dataVenda
-        ? new Date(v.dataVenda).toLocaleDateString("es-ES")
+        ? new Date(v.dataVenda).toLocaleDateString(I18n.idioma === "ca" ? "ca-ES" : "en-GB")
         : "—"
     };
   }));
@@ -239,7 +195,7 @@ async function renderOrderHistory() {
 
 
 /* =====================================================
-   4. TAB HISTORIAL — localStorage (pedidos del carrito)
+   4. TAB HISTORIAL — localStorage
    ===================================================== */
 
 function renderOldPurchases() {
@@ -252,9 +208,7 @@ function renderOldPurchases() {
   const allOrders  = localStorage.getItem("imperium_pedidos");
   const pedidos    = allOrders ? JSON.parse(allOrders) : [];
   const misPedidos = pedidos.filter(p => p.userEmail === user.email);
-
   misPedidos.sort((a, b) => b.pedidoId.localeCompare(a.pedidoId));
-
   renderHistorialLocal(misPedidos);
 }
 
@@ -268,7 +222,7 @@ function initProfileTabs() {
   const contents = document.querySelectorAll(".tab-content");
 
   tabs.forEach(tab => {
-    tab.addEventListener("click", function() {
+    tab.addEventListener("click", function () {
       tabs.forEach(t     => t.classList.remove("active"));
       contents.forEach(c => c.classList.remove("active"));
       tab.classList.add("active");
@@ -280,44 +234,47 @@ function initProfileTabs() {
 
 
 /* =====================================================
-   6. ARRANQUE
+   6. CANCEL·LAR RESERVA DES DEL PERFIL
    ===================================================== */
+
 async function cancelarReservaPerfil(classeId, nomClasse) {
   const confirmat = confirm(
-    `¿Seguro que quieres cancelar la reserva de "${nomClasse}"?`
+    I18n.idioma === "ca"
+      ? `Segur que vols cancel·lar la reserva de "${nomClasse}"?`
+      : `Are you sure you want to cancel the booking for "${nomClasse}"?`
   );
   if (!confirmat) return;
 
   const user = Auth.getUser();
   if (!user) return;
 
-  const ok = await ApiClasses.cancelarReserva(
-    parseInt(user.id),
-    parseInt(classeId)
-  );
+  const ok = await ApiClasses.cancelarReserva(parseInt(user.id), parseInt(classeId));
 
   if (ok) {
-    // Eliminem també del localStorage
     const clau = `imperium_reservas_${user.id}`;
     const totes = JSON.parse(localStorage.getItem(clau) || "[]");
     const noves = totes.filter(r =>
-      String(r.classId) !== String(classeId) &&
-      r.reservaId !== `bd_${classeId}`
+      String(r.classId) !== String(classeId) && r.reservaId !== `bd_${classeId}`
     );
     localStorage.setItem(clau, JSON.stringify(noves));
-
-    showToast(`Reserva de "${nomClasse}" cancelada.`, "success");
+    showToast(t("toast.cancelReservaOk", [nomClasse]), "success");
     await renderReservationsInProfile();
   } else {
-    showToast("No se pudo cancelar la reserva.", "error");
+    showToast(t("toast.cancelReservaErr"), "error");
   }
 }
+
+
+/* =====================================================
+   7. ESTADÍSTIQUES (només ADMIN)
+   // Fragment suggerit per assistent IA - revisar i adaptar
+   ===================================================== */
+
 async function renderStats() {
   const container = document.getElementById("stats-container");
   if (!container) return;
 
-  const user = Auth.getUser();
-  // Només mostrem la pestanya si és ADMIN
+  const user   = Auth.getUser();
   const tabBtn = document.getElementById("tab-stats-btn");
   if (!user || !user.roles || !user.roles.includes("ROLE_ADMIN")) {
     if (tabBtn) tabBtn.style.display = "none";
@@ -325,95 +282,80 @@ async function renderStats() {
   }
   if (tabBtn) tabBtn.style.display = "block";
 
-  // Carreguem les dues seccions en paral·lel
   const [resum, productes] = await Promise.all([
     ApiStats.getResum(),
     ApiStats.getProductes()
   ]);
 
   if (!resum && !productes) {
-    container.innerHTML = `
-      <p style="color:var(--text-muted);text-align:center;padding:2rem">
-        No se pudieron cargar las estadísticas.
-      </p>`;
+    container.innerHTML = `<p style="color:var(--text-muted);text-align:center;padding:2rem">
+      ${t("stats.error")}</p>`;
     return;
   }
 
   container.innerHTML = `
-    <!-- Bloc 1: Resum general -->
     <div style="margin-bottom:2rem">
       <h3 style="font-size:0.85rem;font-weight:700;text-transform:uppercase;
                  letter-spacing:0.1em;color:var(--primary);margin-bottom:1rem">
-        Resumen General
+        ${t("stats.resum")}
       </h3>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1rem">
-        ${statCard("👥", "Usuarios totales", resum?.totalUsuaris ?? "—")}
-        ${statCard("🆕", "Nuevos este mes", resum?.usuarisNousMes ?? "—")}
-        ${statCard("📅", "Reservas activas", resum?.totalReservesActives ?? "—")}
-        ${statCard("🏆", "Clase más reservada",
+        ${statCard("👥", t("stats.totalUsuaris"),  resum?.totalUsuaris         ?? "—")}
+        ${statCard("🆕", t("stats.nousM"),         resum?.usuarisNousMes       ?? "—")}
+        ${statCard("📅", t("stats.reservesActives"),resum?.totalReservesActives ?? "—")}
+        ${statCard("🏆", t("stats.classeMes"),
           resum?.classeMesReservada
             ? `${resum.classeMesReservada} (${resum.classeMesReservadaCount})`
             : "—"
         )}
       </div>
     </div>
-
-    <!-- Bloc 2: Productes -->
     <div>
       <h3 style="font-size:0.85rem;font-weight:700;text-transform:uppercase;
                  letter-spacing:0.1em;color:var(--primary);margin-bottom:1rem">
-        Tienda
+        ${t("stats.botiga")}
       </h3>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1rem">
-        ${statCard("📦", "Top producto del mes",
+        ${statCard("📦", t("stats.topMes"),
           productes?.topProducteMes
             ? `${productes.topProducteMes} (${productes.topProducteMesUnitats} uds)`
-            : "Sin ventas"
+            : t("stats.senseVendes")
         )}
-        ${statCard("📆", "Top producto del año",
+        ${statCard("📆", t("stats.topAny"),
           productes?.topProducteAny
             ? `${productes.topProducteAny} (${productes.topProducteAnyUnitats} uds)`
-            : "Sin ventas"
+            : t("stats.senseVendes")
         )}
-        ${statCard("⚠️", "Menos stock", 
+        ${statCard("⚠️", t("stats.menysEstoc"),
           productes?.menysEstocNom
             ? `${productes.menysEstocNom} (${productes.menysEstocUnitats} uds)`
             : "—"
         )}
-        ${statCard("🛒", "Ventas este mes", productes?.totalVendesMes ?? "—")}
+        ${statCard("🛒", t("stats.vendesMes"), productes?.totalVendesMes ?? "—")}
       </div>
     </div>
   `;
 }
 
-/* Genera una card d'estadística */
 function statCard(icon, label, value) {
   return `
-    <div style="
-      background:var(--bg-secondary);
-      border:1px solid var(--border);
-      border-radius:12px;
-      padding:1.25rem;
-      text-align:center;
-    ">
+    <div style="background:var(--bg-secondary);border:1px solid var(--border);
+                border-radius:12px;padding:1.25rem;text-align:center">
       <div style="font-size:1.8rem;margin-bottom:0.5rem">${icon}</div>
-      <div style="font-size:0.75rem;color:var(--text-muted);
-                  text-transform:uppercase;letter-spacing:0.08em;
-                  margin-bottom:0.5rem">${label}</div>
+      <div style="font-size:0.75rem;color:var(--text-muted);text-transform:uppercase;
+                  letter-spacing:0.08em;margin-bottom:0.5rem">${label}</div>
       <div style="font-size:1rem;font-weight:700;color:var(--text)">${value}</div>
-    </div>
-  `;
+    </div>`;
 }
-document.addEventListener("DOMContentLoaded", async function() {
-  if (!document.getElementById("profile-initial")) return;
 
+// Re-renderitza quan canvia l'idioma
+// Fragment suggerit per assistent IA - revisar i adaptar
+document.addEventListener("idioma:canvi", async function () {
   await Promise.all([
-    initPerfil(),
     renderReservationsInProfile(),
     renderOrderHistory(),
-    renderStats()              // ← AFEGEIX
+    renderStats(),
+    renderGestioUsuaris()
   ]);
-
   renderOldPurchases();
-  initProfileTabs();
 });
