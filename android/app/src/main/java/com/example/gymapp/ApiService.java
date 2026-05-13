@@ -28,4 +28,7 @@ public interface ApiService {
 
     @GET("api/productes")
     Call<List<ProducteDTO>> getProductes();
+
+    @POST("api/vendes")
+    Call<VendaDTO> crearVenda(@Body VendaDTO body);
 }

@@ -1,8 +1,6 @@
 package com.example.gymapp;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -30,11 +28,8 @@ import java.util.ArrayList;
     Pantalla de detall d'un producte seleccionat.
     Mostra imatge, nom, descripció i preu.
     L'usuari pot triar una quantitat i:
-    - Afegir a la cistella (guarda a SharedPreferences)
-    - Pagar ara (va a PagamentProductesBotiga)
-
-    @author ImperiumGym
-    @version 2.0
+    - Afegir a la cistella
+    - Pagar ara
 */
 public class ProductesBotiga extends AppCompatActivity {
 
@@ -43,6 +38,7 @@ public class ProductesBotiga extends AppCompatActivity {
     private EditText etQuantitat;
     private Button btnAfegirCesta, btnPagarAra;
 
+    private Long idProducte;
     private String nomProducte;
     private double preuProducte;
     private int idImatge;
@@ -70,13 +66,14 @@ public class ProductesBotiga extends AppCompatActivity {
         btnAfegirCesta = findViewById(R.id.btnAfegirCesta);
         btnPagarAra = findViewById(R.id.btnPagarAra);
 
-        // Recollim les dades de l'Intent
+        long idRebut = getIntent().getLongExtra("id_producte", -1);
+        idProducte = idRebut != -1 ? idRebut : null;
+
         nomProducte = getIntent().getStringExtra("nom_producte");
         preuProducte = getIntent().getDoubleExtra("preu_producte", 0.0);
         idImatge = getIntent().getIntExtra("imatge_producte", R.drawable.producto_2);
         descripcio = getIntent().getStringExtra("descripcio_producte");
 
-        // Configurem les vistes
         ivProducte.setImageResource(idImatge);
         tvNom.setText(nomProducte);
         tvDescripcio.setText(descripcio);
@@ -88,26 +85,47 @@ public class ProductesBotiga extends AppCompatActivity {
         btnPagarAra.setOnClickListener(v -> pagarAra());
     }
 
-    private void afegirACesta() {
+    private int obtenirQuantitat() {
         int quantitat;
+
         try {
             quantitat = Integer.parseInt(etQuantitat.getText().toString());
-            if (quantitat < 1) quantitat = 1;
+            if (quantitat < 1) {
+                quantitat = 1;
+            }
         } catch (NumberFormatException e) {
             quantitat = 1;
         }
 
-        // Carregar la cistella actual
-        String json = sharedPreferences.getString("cistella", "[]");
-        Type type = new TypeToken<ArrayList<ProducteCistella>>(){}.getType();
-        ArrayList<ProducteCistella> cistella = new Gson().fromJson(json, type);
+        return quantitat;
+    }
 
-        // Afegim el producte (tantes vegades com quantitat)
-        for (int i = 0; i < quantitat; i++) {
-            cistella.add(new ProducteCistella(nomProducte, preuProducte, idImatge, descripcio));
+    private void afegirACesta() {
+        if (idProducte == null) {
+            Toast.makeText(this, "Error: no s'ha trobat l'ID del producte", Toast.LENGTH_LONG).show();
+            return;
         }
 
-        // Guardar la cistella actualitzada
+        int quantitat = obtenirQuantitat();
+
+        String json = sharedPreferences.getString("cistella", "[]");
+        Type type = new TypeToken<ArrayList<ProducteCistella>>() {}.getType();
+        ArrayList<ProducteCistella> cistella = new Gson().fromJson(json, type);
+
+        if (cistella == null) {
+            cistella = new ArrayList<>();
+        }
+
+        for (int i = 0; i < quantitat; i++) {
+            cistella.add(new ProducteCistella(
+                    idProducte,
+                    nomProducte,
+                    preuProducte,
+                    idImatge,
+                    descripcio
+            ));
+        }
+
         String newJson = new Gson().toJson(cistella);
         sharedPreferences.edit().putString("cistella", newJson).apply();
 
@@ -115,20 +133,21 @@ public class ProductesBotiga extends AppCompatActivity {
     }
 
     private void pagarAra() {
-        int quantitat;
-        try {
-            quantitat = Integer.parseInt(etQuantitat.getText().toString());
-            if (quantitat < 1) quantitat = 1;
-        } catch (NumberFormatException e) {
-            quantitat = 1;
+        if (idProducte == null) {
+            Toast.makeText(this, "Error: no s'ha trobat l'ID del producte", Toast.LENGTH_LONG).show();
+            return;
         }
 
-        // Guardem el producte per a la compra directa
-        sharedPreferences.edit().putString("producte_directe_nom", nomProducte).apply();
-        sharedPreferences.edit().putFloat("producte_directe_preu", (float) preuProducte).apply();
-        sharedPreferences.edit().putInt("producte_directe_imatge", idImatge).apply();
-        sharedPreferences.edit().putInt("producte_directe_quantitat", quantitat).apply();
-        sharedPreferences.edit().putString("producte_directe_descripcio", descripcio).apply();
+        int quantitat = obtenirQuantitat();
+
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putLong("producte_directe_id", idProducte);
+        editor.putString("producte_directe_nom", nomProducte);
+        editor.putFloat("producte_directe_preu", (float) preuProducte);
+        editor.putInt("producte_directe_imatge", idImatge);
+        editor.putInt("producte_directe_quantitat", quantitat);
+        editor.putString("producte_directe_descripcio", descripcio);
+        editor.apply();
 
         Intent intent = new Intent(this, PagamentProductesBotiga.class);
         startActivity(intent);
