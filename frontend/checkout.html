@@ -10,32 +10,39 @@
 
 <body>
 
-  <!-- NAVBAR -->
-  <nav class="navbar scrolled" id="navbar">
+  <!-- ========== NAVBAR ========== -->
+  <nav class="navbar" id="navbar">
     <div class="container">
       <a href="index.html" class="navbar-brand">
-        <img src="assets/logo.png" alt="Imperium">
+        <img src="assets/logo.png" alt="Imperium Fitness">
         <span class="text-gold">IMPERIUM</span>
       </a>
       <ul class="nav-links">
-        <li><a href="instalaciones.html">Instalaciones</a></li>
-        <li><a href="actividades.html">Clases</a></li>
-        <li><a href="tarifas.html">Tarifas</a></li>
-        <li><a href="tienda.html">Tienda</a></li>
-        <li><a href="blog.html">Novedades</a></li>
-        <li><a href="contacto.html">Contacto</a></li>
+        <li><a href="instalaciones.html" data-i18n="nav.instalacions">Instal·lacions</a></li>
+        <li><a href="actividades.html"   data-i18n="nav.classes">Classes</a></li>
+        <li><a href="tarifas.html"       data-i18n="nav.tarifes">Tarifes</a></li>
+        <li><a href="tienda.html"        data-i18n="nav.botiga">Botiga</a></li>
+        <li><a href="blog.html"          data-i18n="nav.novetats">Novetats</a></li>
+        <li><a href="contacto.html"      data-i18n="nav.contacte">Contacte</a></li>
       </ul>
       <div class="nav-actions" id="nav-user-area"></div>
-      <button class="nav-toggle" id="nav-toggle"><span></span><span></span><span></span></button>
+      <div class="lang-selector">
+        <button class="lang-btn active" data-lang="ca" onclick="I18n.canviaIdioma('ca')">CA</button>
+        <span style="color:var(--border);font-size:.7rem">|</span>
+        <button class="lang-btn" data-lang="en" onclick="I18n.canviaIdioma('en')">EN</button>
+      </div>
+      <button class="nav-toggle" id="nav-toggle" aria-label="Menú">
+        <span></span><span></span><span></span>
+      </button>
     </div>
   </nav>
   <div class="nav-mobile" id="nav-mobile">
-    <a href="instalaciones.html">Instalaciones</a>
-    <a href="actividades.html">Clases</a>
-    <a href="tarifas.html">Tarifas</a>
-    <a href="tienda.html">Tienda</a>
-    <a href="blog.html">Novedades</a>
-    <a href="contacto.html">Contacto</a>
+    <a href="instalaciones.html" data-i18n="nav.instalacions">Instal·lacions</a>
+    <a href="actividades.html"   data-i18n="nav.classes">Classes</a>
+    <a href="tarifas.html"       data-i18n="nav.tarifes">Tarifes</a>
+    <a href="tienda.html"        data-i18n="nav.botiga">Botiga</a>
+    <a href="blog.html"          data-i18n="nav.novetats">Novetats</a>
+    <a href="contacto.html"      data-i18n="nav.contacte">Contacte</a>
     <div class="nav-divider"></div>
     <div id="nav-mobile-user"></div>
   </div>
@@ -240,6 +247,7 @@
     </div>
   </footer>
 
+  <script src="js/i18n.js"></script>
   <script src="js/render.js"></script>
   <script src="js/api.js"></script>
   <script src="js/app.js"></script>
@@ -248,6 +256,7 @@
 
   <script>
     document.addEventListener("DOMContentLoaded", function () {
+      I18n.init();
       SessionManager.init(true);
     });
   </script>
