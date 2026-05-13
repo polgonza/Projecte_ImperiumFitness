@@ -31,4 +31,7 @@ public interface ApiService {
 
     @POST("api/vendes")
     Call<VendaDTO> crearVenda(@Body VendaDTO body);
+
+    @GET("api/usuaris/perfil/{id}")
+    Call<UsuariDTO> getPerfil(@Path("id") Long id);
 }

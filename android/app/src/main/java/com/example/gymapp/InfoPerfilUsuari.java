@@ -18,33 +18,36 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import java.io.IOException;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 /*
     INFO PERFIL USUARI ACTIVITY
     ============================
-    Pantalla amb la informació del perfil de l'usuari.
-    Mostra les dades de l'usuari actiu (llegides de SharedPreferences):
+    Pantalla de perfil conectada al backend.
+
+    Ahora carga:
     - Nom
     - Email
-    - Contrasenya (mostrada amb punts, amb opció de veure-la)
+    - Pla actual / tarifa
+    - Estado de la suscripción
 
-    Permet editar el nom i l'email.
-    El botó "Guardar canvis" actualitza les dades.
-    El botó "Canviar contrasenya" obre un diàleg de confirmació
-    i després la pantalla ContrasenyaUsuari.
-
-    @author ImperiumGym
-    @version 3.0
+    Endpoint usado:
+    GET /api/usuaris/perfil/{id}
 */
 public class InfoPerfilUsuari extends BaseActivity {
 
     private static final String TAG = "InfoPerfilUsuari";
 
-    // Variables per als camps del formulari (només 3 camps)
-    private EditText etNom, etEmailUsuari, etPassword;
+    private EditText etNom, etEmailUsuari, etPassword, etPlaActual;
     private Button btnGuardarCanvis, btnCanviarPassword;
     private ImageButton btnMostrarPassword;
+
     private SharedPreferences sharedPreferences;
-    private String usuariActiu;
+    private Long usuariId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,70 +57,37 @@ public class InfoPerfilUsuari extends BaseActivity {
             EdgeToEdge.enable(this);
             setContentView(R.layout.activity_info_perfil_usuari);
 
-            // Configura el footer de navegació
             setupBottomNav();
 
-            // Configura els insets per a la vista principal
             ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
                 Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
                 v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
                 return insets;
             });
 
-            // Inicialitza els components del layout (només 3 camps)
             etNom = findViewById(R.id.etNom);
             etEmailUsuari = findViewById(R.id.etEmailUsuari);
             etPassword = findViewById(R.id.etPassword);
+            etPlaActual = findViewById(R.id.etPlaActual);
+
             btnGuardarCanvis = findViewById(R.id.btnGuardarCanvis);
             btnCanviarPassword = findViewById(R.id.btnCanviarPassword);
             btnMostrarPassword = findViewById(R.id.btnMostrarPassword);
 
-            // Comprova que els components no siguin null (per depuració)
-            if (etNom == null) Log.e(TAG, "etNom és NULL!");
-            if (etEmailUsuari == null) Log.e(TAG, "etEmailUsuari és NULL!");
-            if (etPassword == null) Log.e(TAG, "etPassword és NULL!");
-
-            // Carrega les SharedPreferences i l'usuari actiu
             sharedPreferences = getSharedPreferences("Usuaris", Context.MODE_PRIVATE);
-            usuariActiu = sharedPreferences.getString("usuari_actiu", "");
 
-            if (usuariActiu.isEmpty()) {
-                Toast.makeText(this, "Error: No hi ha sessió activa", Toast.LENGTH_SHORT).show();
+            usuariId = obtenirUsuariIdDelToken();
+
+            if (usuariId == null) {
+                Toast.makeText(this, "Error: sessió no vàlida. Torna a iniciar sessió.", Toast.LENGTH_LONG).show();
                 finish();
                 return;
             }
 
-            // Carrega les dades de l'usuari als camps
+            configurarCamps();
+            configurarBotons();
+
             carregarDadesUsuari();
-
-            /*
-                FUNCIONALITAT DEL BOTÓ MOSTRAR CONTRASENYA
-                ==========================================
-                Quan l'usuari prem i manté premut el botó (ACTION_DOWN),
-                la contrasenya es mostra en text clar.
-                Quan deixa de prémer (ACTION_UP), torna a mostrar punts.
-            */
-            if (btnMostrarPassword != null) {
-                btnMostrarPassword.setOnTouchListener((v, event) -> {
-                    switch (event.getAction()) {
-                        case MotionEvent.ACTION_DOWN:
-                            // Quan es prem: mostrar la contrasenya en text clar
-                            etPassword.setInputType(InputType.TYPE_CLASS_TEXT);
-                            etPassword.setSelection(etPassword.getText().length());
-                            break;
-                        case MotionEvent.ACTION_UP:
-                            // Quan es deixa de prémer: tornar a mostrar punts
-                            etPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                            etPassword.setSelection(etPassword.getText().length());
-                            break;
-                    }
-                    return true;
-                });
-            }
-
-            // Listeners per als botons
-            btnGuardarCanvis.setOnClickListener(v -> guardarCanvis());
-            btnCanviarPassword.setOnClickListener(v -> confirmarCanviContrasenya());
 
         } catch (Exception e) {
             Log.e(TAG, "ERROR en onCreate: " + e.getMessage(), e);
@@ -125,68 +95,186 @@ public class InfoPerfilUsuari extends BaseActivity {
         }
     }
 
-    /*
-        MÈTODE PER CARREGAR LES DADES DE L'USUARI
-        =========================================
-        Llegeix de SharedPreferences les dades de l'usuari actiu
-        i les mostra als camps EditText.
-        Només carrega: Nom, Email i Contrasenya.
-    */
+    private void configurarCamps() {
+        /*
+            De momento solo mostramos datos.
+            El perfil se recibe del backend, pero no estamos implementando editar perfil.
+        */
+        etNom.setEnabled(false);
+        etEmailUsuari.setEnabled(false);
+        etPlaActual.setEnabled(false);
+
+        /*
+            El backend NO devuelve la contraseña por seguridad.
+            Por eso mostramos puntos fijos.
+        */
+        etPassword.setText("********");
+        etPassword.setEnabled(false);
+        etPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+    }
+
+    private void configurarBotons() {
+        /*
+            Usamos este botón para refrescar datos desde backend.
+            En el XML ya le hemos puesto texto "Actualitzar dades".
+        */
+        btnGuardarCanvis.setOnClickListener(v -> carregarDadesUsuari());
+
+        btnCanviarPassword.setOnClickListener(v -> confirmarCanviContrasenya());
+
+        if (btnMostrarPassword != null) {
+            btnMostrarPassword.setOnTouchListener((v, event) -> {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        etPassword.setInputType(InputType.TYPE_CLASS_TEXT);
+                        etPassword.setSelection(etPassword.getText().length());
+                        break;
+
+                    case MotionEvent.ACTION_UP:
+                    case MotionEvent.ACTION_CANCEL:
+                        etPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                        etPassword.setSelection(etPassword.getText().length());
+                        break;
+                }
+                return true;
+            });
+        }
+    }
+
     private void carregarDadesUsuari() {
-        String nom = sharedPreferences.getString(usuariActiu + "_nom", "");
-        String email = sharedPreferences.getString(usuariActiu + "_email", "");
-        String password = sharedPreferences.getString(usuariActiu + "_password", "");
+        ApiService api = ApiClient.getClient(this).create(ApiService.class);
 
-        etNom.setText(nom);
-        etEmailUsuari.setText(email);
-        etPassword.setText(password);
+        api.getPerfil(usuariId).enqueue(new Callback<UsuariDTO>() {
+            @Override
+            public void onResponse(Call<UsuariDTO> call, Response<UsuariDTO> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    UsuariDTO usuari = response.body();
 
-        Log.d(TAG, "Dades carregades - Nom: " + nom + ", Email: " + email);
+                    String nom = usuari.getNom() != null ? usuari.getNom() : "";
+                    String email = usuari.getEmail() != null ? usuari.getEmail() : "";
+
+                    etNom.setText(nom);
+                    etEmailUsuari.setText(email);
+                    etPlaActual.setText(obtenirTextPla(usuari));
+
+                    /*
+                        Guardamos también en SharedPreferences por si otras pantallas
+                        quieren mostrar el nombre/email sin volver a llamar al backend.
+                    */
+                    sharedPreferences.edit()
+                            .putString("nom_actiu", nom)
+                            .putString("email_actiu", email)
+                            .putString("pla_actiu", obtenirTextPla(usuari))
+                            .apply();
+
+                    Toast.makeText(
+                            InfoPerfilUsuari.this,
+                            "Dades carregades correctament",
+                            Toast.LENGTH_SHORT
+                    ).show();
+
+                    Log.d(TAG, "Perfil carregat: " + nom + " - " + email);
+
+                } else {
+                    Toast.makeText(
+                            InfoPerfilUsuari.this,
+                            "Error carregant perfil: " + llegirError(response),
+                            Toast.LENGTH_LONG
+                    ).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UsuariDTO> call, Throwable t) {
+                Toast.makeText(
+                        InfoPerfilUsuari.this,
+                        "Error de connexió: " + t.getMessage(),
+                        Toast.LENGTH_LONG
+                ).show();
+
+                Log.e(TAG, "Error connexió perfil", t);
+            }
+        });
     }
 
-    /*
-        MÈTODE PER GUARDAR ELS CANVIS
-        =============================
-        Valida que els camps no estiguin buits i actualitza
-        les dades de l'usuari a SharedPreferences.
-        Només guarda: Nom i Email (la contrasenya es canvia a una altra pantalla)
-    */
-    private void guardarCanvis() {
-        String nom = etNom.getText().toString().trim();
-        String email = etEmailUsuari.getText().toString().trim();
+    private String obtenirTextPla(UsuariDTO usuari) {
+        String tarifaNom = usuari.getTarifaNom();
+        Boolean subscripcioActiva = usuari.getSubscripcioActiva();
+        Boolean tarifaCancellada = usuari.getTarifaCancellada();
+        String dataFi = usuari.getTarifaDataFi();
 
-        // Validació: comprova que cap camp estigui buit
-        if (nom.isEmpty()) {
-            Toast.makeText(this, "Introdueix el teu nom", Toast.LENGTH_SHORT).show();
-            return;
+        if (tarifaNom == null || tarifaNom.trim().isEmpty()) {
+            return "Sense pla assignat";
         }
 
-        if (email.isEmpty()) {
-            Toast.makeText(this, "Introdueix el teu email", Toast.LENGTH_SHORT).show();
-            return;
+        boolean activa = subscripcioActiva != null && subscripcioActiva;
+        boolean cancellada = tarifaCancellada != null && tarifaCancellada;
+
+        if (activa && cancellada) {
+            if (dataFi != null && !dataFi.isEmpty()) {
+                return tarifaNom + " - cancel·lat, actiu fins " + formatData(dataFi);
+            }
+            return tarifaNom + " - cancel·lat";
         }
 
-        // Validació bàsica d'email
-        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            Toast.makeText(this, "Introdueix un email vàlid", Toast.LENGTH_SHORT).show();
-            return;
+        if (activa) {
+            if (dataFi != null && !dataFi.isEmpty()) {
+                return tarifaNom + " - actiu fins " + formatData(dataFi);
+            }
+            return tarifaNom + " - actiu";
         }
 
-        // Guarda les dades actualitzades
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(usuariActiu + "_nom", nom);
-        editor.putString(usuariActiu + "_email", email);
-        editor.apply();
-
-        Toast.makeText(this, "Dades actualitzades correctament", Toast.LENGTH_SHORT).show();
+        return tarifaNom + " - no actiu";
     }
 
-    /*
-        MÈTODE PER CONFIRMAR CANVI DE CONTRASENYA
-        =========================================
-        Mostra un diàleg de confirmació.
-        Si l'usuari confirma, obre la pantalla ContrasenyaUsuari.
-    */
+    private String formatData(String data) {
+        /*
+            El backend normalmente devuelve algo tipo:
+            2026-05-13T18:30:00
+
+            Lo convertimos a:
+            13/05/2026
+        */
+        try {
+            if (data.length() >= 10) {
+                String any = data.substring(0, 4);
+                String mes = data.substring(5, 7);
+                String dia = data.substring(8, 10);
+                return dia + "/" + mes + "/" + any;
+            }
+        } catch (Exception ignored) {
+        }
+
+        return data;
+    }
+
+    private Long obtenirUsuariIdDelToken() {
+        String token = sharedPreferences.getString("jwt_token", "");
+
+        if (token == null || token.trim().isEmpty()) {
+            return null;
+        }
+
+        String userIdStr = JwtUtils.getClaim(token, "userId");
+
+        try {
+            return userIdStr != null ? Long.parseLong(userIdStr) : null;
+        } catch (NumberFormatException e) {
+            return null;
+        }
+    }
+
+    private String llegirError(Response<?> response) {
+        try {
+            if (response.errorBody() != null) {
+                return response.errorBody().string();
+            }
+        } catch (IOException ignored) {
+        }
+
+        return "codi " + response.code();
+    }
+
     private void confirmarCanviContrasenya() {
         new AlertDialog.Builder(this)
                 .setTitle("Canviar contrasenya")
