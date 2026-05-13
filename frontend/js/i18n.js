@@ -255,7 +255,7 @@ const I18n = (() => {
     en: {
       // Navbar
       "nav.instalacions":       "Facilities",
-      "nav.classes":            "Classes",
+      "nav.classes":            "Activities",
       "nav.tarifes":            "Pricing",
       "nav.botiga":             "Shop",
       "nav.novetats":           "News",

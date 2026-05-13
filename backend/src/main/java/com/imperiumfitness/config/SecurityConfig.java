@@ -96,7 +96,7 @@ SecurityFilterChain filterChain(HttpSecurity http, JwtService jwtService) throws
         .requestMatchers(HttpMethod.DELETE, "/api/reserves/**").authenticated()
         .requestMatchers(HttpMethod.PUT, "/api/usuaris/*/tarifa").authenticated()
         .requestMatchers(HttpMethod.PUT, "/api/usuaris/*/cancel-tarifa").authenticated()
-
+        .requestMatchers(HttpMethod.PUT, "/api/usuaris/*/rol").hasRole("ADMIN")
         // Endpoints ADMIN
         .requestMatchers("/api/usuaris/**").hasRole("ADMIN")
         .requestMatchers("/api/estadistiques/**").hasRole("ADMIN")
