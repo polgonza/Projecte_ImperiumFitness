@@ -25,6 +25,11 @@
         <li><a href="contacto.html">Contacto</a></li>
       </ul>
       <div class="nav-actions" id="nav-user-area"></div>
+      <div class="lang-selector">
+        <button class="lang-btn active" data-lang="ca" onclick="I18n.canviaIdioma('ca')">CA</button>
+        <span style="color:var(--border);font-size:.7rem">|</span>
+        <button class="lang-btn" data-lang="en" onclick="I18n.canviaIdioma('en')">EN</button>
+      </div>
       <button class="nav-toggle" id="nav-toggle"><span></span><span></span><span></span></button>
     </div>
   </nav>
@@ -102,10 +107,13 @@
     <button class="profile-tab" data-tab="tab-purchases">
       Historial compras
     </button>
-    <!-- Pestanya ADMIN — s'amaga si no és admin -->
-    <button class="profile-tab" data-tab="tab-stats" id="tab-stats-btn"
+   <button class="profile-tab" data-tab="tab-stats" id="tab-stats-btn"
             style="display:none">
-      📊 Estadísticas
+      📊 Estadístiques
+    </button>
+    <button class="profile-tab" data-tab="tab-gestio-usuaris"
+            id="tab-gestio-btn" style="display:none">
+      👥 Gestió d'usuaris
     </button>
 </div>
 
@@ -136,7 +144,9 @@
               <!-- Generado por app.js -->
             </div>
           </div>
-          
+          <div class="tab-content" id="tab-gestio-usuaris">
+            <div id="gestio-usuaris-container"></div>
+          </div>
         </div>
       </div>
     </div>
@@ -177,15 +187,34 @@
   </footer>
 
   <!-- ORDRE IMPORTANT: api.js sempre PRIMER -->
+  <script src="js/i18n.js"></script>
   <script src="js/api.js"></script>
   <script src="js/render.js"></script>
   <script src="js/app.js"></script>
   <script src="js/carrito.js"></script>
   <script src="js/perfil.js"></script>
+  <script src="js/gestio-usuaris.js"></script>
 
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
+<script>
+    document.addEventListener("DOMContentLoaded", async function () {
+      I18n.init();
       SessionManager.init(true);
+      const user = Auth.getUser();
+      if (user && user.roles && user.roles.includes("ROLE_ADMIN")) {
+        const tabStats = document.getElementById("tab-stats-btn");
+        if (tabStats) tabStats.style.display = "block";
+        const tabGestio = document.getElementById("tab-gestio-btn");
+        if (tabGestio) tabGestio.style.display = "block";
+      }
+      await Promise.all([
+        initPerfil(),
+        renderReservationsInProfile(),
+        renderOrderHistory(),
+        renderStats(),
+        renderGestioUsuaris()
+      ]);
+      renderOldPurchases();
+      initProfileTabs();
     });
   </script>
 
