@@ -1,12 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-    ACTIVITY_INFOPERFILUSUARI.XML
-    Pantalla amb la informació del perfil de l'usuari.
-    L'usuari pot editar el seu nom, email i contrasenya.
-    També pot canviar la contrasenya mitjançant un botó que obre una altra pantalla.
-    Botons per guardar canvis i tancar sessió.
-    Té topbar amb títol i subtítol, i bottom navigation amb 6 ítems.
--->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/main"
     android:layout_width="match_parent"
@@ -72,7 +64,7 @@
         </FrameLayout>
     </LinearLayout>
 
-    <!-- ScrollView amb el formulari -->
+    <!-- CONTENIDO -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -84,12 +76,13 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- ==================== CAMP 1: NOM ==================== -->
+            <!-- NOM -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/perfil_nom"
                 android:textColor="#FFFFFF" />
+
             <EditText
                 android:id="@+id/etNom"
                 android:layout_width="match_parent"
@@ -99,12 +92,13 @@
                 android:layout_marginBottom="12dp"
                 android:inputType="text" />
 
-            <!-- ==================== CAMP 2: EMAIL ==================== -->
+            <!-- EMAIL -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/perfil_email"
                 android:textColor="#FFFFFF" />
+
             <EditText
                 android:id="@+id/etEmailUsuari"
                 android:layout_width="match_parent"
@@ -114,12 +108,31 @@
                 android:layout_marginBottom="12dp"
                 android:inputType="textEmailAddress" />
 
-            <!-- ==================== CAMP 3: CONTRASENYA ==================== -->
+            <!-- PLA ACTUAL -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pla actual"
+                android:textColor="#FFFFFF" />
+
+            <EditText
+                android:id="@+id/etPlaActual"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#FFFFFF"
+                android:padding="10dp"
+                android:layout_marginBottom="12dp"
+                android:enabled="false"
+                android:textColor="#000000"
+                android:inputType="text" />
+
+            <!-- CONTRASENYA -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/perfil_contrasenya"
                 android:textColor="#FFFFFF" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -127,6 +140,7 @@
                 android:background="#FFFFFF"
                 android:padding="6dp"
                 android:layout_marginBottom="16dp">
+
                 <EditText
                     android:id="@+id/etPassword"
                     android:layout_width="0dp"
@@ -135,6 +149,7 @@
                     android:inputType="textPassword"
                     android:background="@android:color/transparent"
                     android:padding="10dp" />
+
                 <ImageButton
                     android:id="@+id/btnMostrarPassword"
                     android:layout_width="40dp"
@@ -144,12 +159,12 @@
                     android:contentDescription="@string/perfil_mostrar_contrasenya" />
             </LinearLayout>
 
-            <!-- ==================== BOTONS ==================== -->
+            <!-- BOTONES -->
             <Button
                 android:id="@+id/btnGuardarCanvis"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/perfil_guardar_canvis"
+                android:text="Actualitzar dades"
                 android:textColor="#FFFFFF"
                 android:backgroundTint="#FFC107"
                 android:layout_marginBottom="12dp" />
@@ -184,9 +199,22 @@
             android:orientation="vertical"
             android:clickable="true"
             android:focusable="true">
-            <ImageView android:layout_width="18dp" android:layout_height="18dp" android:src="@drawable/home" android:contentDescription="@string/nav_inici" />
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="@string/nav_inici" android:textColor="#333333" android:textSize="9sp" />
+
+            <ImageView
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:src="@drawable/home"
+                android:contentDescription="@string/nav_inici" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="@string/nav_inici"
+                android:textColor="#333333"
+                android:textSize="9sp" />
         </LinearLayout>
+
         <LinearLayout
             android:id="@+id/navClasses"
             android:layout_width="0dp"
@@ -196,9 +224,22 @@
             android:orientation="vertical"
             android:clickable="true"
             android:focusable="true">
-            <ImageView android:layout_width="18dp" android:layout_height="18dp" android:src="@drawable/classes" android:contentDescription="@string/nav_classes" />
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="@string/nav_classes" android:textColor="#333333" android:textSize="9sp" />
+
+            <ImageView
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:src="@drawable/classes"
+                android:contentDescription="@string/nav_classes" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="@string/nav_classes"
+                android:textColor="#333333"
+                android:textSize="9sp" />
         </LinearLayout>
+
         <LinearLayout
             android:id="@+id/navBotiga"
             android:layout_width="0dp"
@@ -208,9 +249,22 @@
             android:orientation="vertical"
             android:clickable="true"
             android:focusable="true">
-            <ImageView android:layout_width="18dp" android:layout_height="18dp" android:src="@drawable/shop" android:contentDescription="@string/nav_botiga" />
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="@string/nav_botiga" android:textColor="#333333" android:textSize="9sp" />
+
+            <ImageView
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:src="@drawable/shop"
+                android:contentDescription="@string/nav_botiga" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="@string/nav_botiga"
+                android:textColor="#333333"
+                android:textSize="9sp" />
         </LinearLayout>
+
         <LinearLayout
             android:id="@+id/navNoticies"
             android:layout_width="0dp"
@@ -220,9 +274,22 @@
             android:orientation="vertical"
             android:clickable="true"
             android:focusable="true">
-            <ImageView android:layout_width="18dp" android:layout_height="18dp" android:src="@drawable/noticies" android:contentDescription="@string/nav_noticies" />
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="@string/nav_noticies" android:textColor="#333333" android:textSize="9sp" />
+
+            <ImageView
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:src="@drawable/noticies"
+                android:contentDescription="@string/nav_noticies" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="@string/nav_noticies"
+                android:textColor="#333333"
+                android:textSize="9sp" />
         </LinearLayout>
+
         <LinearLayout
             android:id="@+id/navCalendari"
             android:layout_width="0dp"
@@ -232,9 +299,22 @@
             android:orientation="vertical"
             android:clickable="true"
             android:focusable="true">
-            <ImageView android:layout_width="18dp" android:layout_height="18dp" android:src="@drawable/calendari" android:contentDescription="@string/nav_calendari" />
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="@string/nav_calendari" android:textColor="#333333" android:textSize="9sp" />
+
+            <ImageView
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:src="@drawable/calendari"
+                android:contentDescription="@string/nav_calendari" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="@string/nav_calendari"
+                android:textColor="#333333"
+                android:textSize="9sp" />
         </LinearLayout>
+
         <LinearLayout
             android:id="@+id/navContacte"
             android:layout_width="0dp"
@@ -244,8 +324,20 @@
             android:orientation="vertical"
             android:clickable="true"
             android:focusable="true">
-            <ImageView android:layout_width="18dp" android:layout_height="18dp" android:src="@drawable/contacte" android:contentDescription="@string/nav_contacte" />
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="@string/nav_contacte" android:textColor="#333333" android:textSize="9sp" />
+
+            <ImageView
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:src="@drawable/contacte"
+                android:contentDescription="@string/nav_contacte" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="@string/nav_contacte"
+                android:textColor="#333333"
+                android:textSize="9sp" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>
