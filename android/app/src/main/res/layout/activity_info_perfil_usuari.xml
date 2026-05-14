@@ -90,7 +90,8 @@
                 android:background="#FFFFFF"
                 android:padding="10dp"
                 android:layout_marginBottom="12dp"
-                android:inputType="text" />
+                android:inputType="text"
+                android:textColor="#000000"/>
 
             <!-- EMAIL -->
             <TextView
@@ -106,7 +107,8 @@
                 android:background="#FFFFFF"
                 android:padding="10dp"
                 android:layout_marginBottom="12dp"
-                android:inputType="textEmailAddress" />
+                android:inputType="textEmailAddress"
+                android:textColor="#000000"/>
 
             <!-- PLA ACTUAL -->
             <TextView
@@ -148,33 +150,12 @@
                     android:layout_weight="1"
                     android:inputType="textPassword"
                     android:background="@android:color/transparent"
-                    android:padding="10dp" />
+                    android:padding="10dp"
+                    android:textColor="#000000"/>
 
-                <ImageButton
-                    android:id="@+id/btnMostrarPassword"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:src="@android:drawable/ic_menu_view"
-                    android:background="@android:color/transparent"
-                    android:contentDescription="@string/perfil_mostrar_contrasenya" />
             </LinearLayout>
 
             <!-- BOTONES -->
-            <Button
-                android:id="@+id/btnGuardarCanvis"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Actualitzar dades"
-                android:textColor="#FFFFFF"
-                android:backgroundTint="#FFC107"
-                android:layout_marginBottom="12dp" />
-
-            <Button
-                android:id="@+id/btnCanviarPassword"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/perfil_canviar_contrasenya"
-                android:layout_marginBottom="12dp" />
 
         </LinearLayout>
     </ScrollView>

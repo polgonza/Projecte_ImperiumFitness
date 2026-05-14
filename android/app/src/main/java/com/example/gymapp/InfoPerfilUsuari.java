@@ -1,19 +1,14 @@
 package com.example.gymapp;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
-import android.view.MotionEvent;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AlertDialog;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -24,27 +19,11 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-/*
-    INFO PERFIL USUARI ACTIVITY
-    ============================
-    Pantalla de perfil conectada al backend.
-
-    Ahora carga:
-    - Nom
-    - Email
-    - Pla actual / tarifa
-    - Estado de la suscripción
-
-    Endpoint usado:
-    GET /api/usuaris/perfil/{id}
-*/
 public class InfoPerfilUsuari extends BaseActivity {
 
     private static final String TAG = "InfoPerfilUsuari";
 
     private EditText etNom, etEmailUsuari, etPassword, etPlaActual;
-    private Button btnGuardarCanvis, btnCanviarPassword;
-    private ImageButton btnMostrarPassword;
 
     private SharedPreferences sharedPreferences;
     private Long usuariId;
@@ -70,23 +49,21 @@ public class InfoPerfilUsuari extends BaseActivity {
             etPassword = findViewById(R.id.etPassword);
             etPlaActual = findViewById(R.id.etPlaActual);
 
-            btnGuardarCanvis = findViewById(R.id.btnGuardarCanvis);
-            btnCanviarPassword = findViewById(R.id.btnCanviarPassword);
-            btnMostrarPassword = findViewById(R.id.btnMostrarPassword);
-
             sharedPreferences = getSharedPreferences("Usuaris", Context.MODE_PRIVATE);
 
             usuariId = obtenirUsuariIdDelToken();
 
             if (usuariId == null) {
-                Toast.makeText(this, "Error: sessió no vàlida. Torna a iniciar sessió.", Toast.LENGTH_LONG).show();
+                Toast.makeText(
+                        this,
+                        "Error: sessió no vàlida. Torna a iniciar sessió.",
+                        Toast.LENGTH_LONG
+                ).show();
                 finish();
                 return;
             }
 
             configurarCamps();
-            configurarBotons();
-
             carregarDadesUsuari();
 
         } catch (Exception e) {
@@ -96,49 +73,17 @@ public class InfoPerfilUsuari extends BaseActivity {
     }
 
     private void configurarCamps() {
-        /*
-            De momento solo mostramos datos.
-            El perfil se recibe del backend, pero no estamos implementando editar perfil.
-        */
         etNom.setEnabled(false);
         etEmailUsuari.setEnabled(false);
         etPlaActual.setEnabled(false);
 
         /*
-            El backend NO devuelve la contraseña por seguridad.
+            El backend no devuelve la contraseña por seguridad.
             Por eso mostramos puntos fijos.
         */
         etPassword.setText("********");
         etPassword.setEnabled(false);
         etPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-    }
-
-    private void configurarBotons() {
-        /*
-            Usamos este botón para refrescar datos desde backend.
-            En el XML ya le hemos puesto texto "Actualitzar dades".
-        */
-        btnGuardarCanvis.setOnClickListener(v -> carregarDadesUsuari());
-
-        btnCanviarPassword.setOnClickListener(v -> confirmarCanviContrasenya());
-
-        if (btnMostrarPassword != null) {
-            btnMostrarPassword.setOnTouchListener((v, event) -> {
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        etPassword.setInputType(InputType.TYPE_CLASS_TEXT);
-                        etPassword.setSelection(etPassword.getText().length());
-                        break;
-
-                    case MotionEvent.ACTION_UP:
-                    case MotionEvent.ACTION_CANCEL:
-                        etPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                        etPassword.setSelection(etPassword.getText().length());
-                        break;
-                }
-                return true;
-            });
-        }
     }
 
     private void carregarDadesUsuari() {
@@ -152,28 +97,19 @@ public class InfoPerfilUsuari extends BaseActivity {
 
                     String nom = usuari.getNom() != null ? usuari.getNom() : "";
                     String email = usuari.getEmail() != null ? usuari.getEmail() : "";
+                    String pla = obtenirTextPla(usuari);
 
                     etNom.setText(nom);
                     etEmailUsuari.setText(email);
-                    etPlaActual.setText(obtenirTextPla(usuari));
+                    etPlaActual.setText(pla);
 
-                    /*
-                        Guardamos también en SharedPreferences por si otras pantallas
-                        quieren mostrar el nombre/email sin volver a llamar al backend.
-                    */
                     sharedPreferences.edit()
                             .putString("nom_actiu", nom)
                             .putString("email_actiu", email)
-                            .putString("pla_actiu", obtenirTextPla(usuari))
+                            .putString("pla_actiu", pla)
                             .apply();
 
-                    Toast.makeText(
-                            InfoPerfilUsuari.this,
-                            "Dades carregades correctament",
-                            Toast.LENGTH_SHORT
-                    ).show();
-
-                    Log.d(TAG, "Perfil carregat: " + nom + " - " + email);
+                    Log.d(TAG, "Perfil carregat: " + nom + " - " + email + " - " + pla);
 
                 } else {
                     Toast.makeText(
@@ -214,6 +150,7 @@ public class InfoPerfilUsuari extends BaseActivity {
             if (dataFi != null && !dataFi.isEmpty()) {
                 return tarifaNom + " - cancel·lat, actiu fins " + formatData(dataFi);
             }
+
             return tarifaNom + " - cancel·lat";
         }
 
@@ -221,6 +158,7 @@ public class InfoPerfilUsuari extends BaseActivity {
             if (dataFi != null && !dataFi.isEmpty()) {
                 return tarifaNom + " - actiu fins " + formatData(dataFi);
             }
+
             return tarifaNom + " - actiu";
         }
 
@@ -228,18 +166,12 @@ public class InfoPerfilUsuari extends BaseActivity {
     }
 
     private String formatData(String data) {
-        /*
-            El backend normalmente devuelve algo tipo:
-            2026-05-13T18:30:00
-
-            Lo convertimos a:
-            13/05/2026
-        */
         try {
             if (data.length() >= 10) {
                 String any = data.substring(0, 4);
                 String mes = data.substring(5, 7);
                 String dia = data.substring(8, 10);
+
                 return dia + "/" + mes + "/" + any;
             }
         } catch (Exception ignored) {
@@ -273,17 +205,5 @@ public class InfoPerfilUsuari extends BaseActivity {
         }
 
         return "codi " + response.code();
-    }
-
-    private void confirmarCanviContrasenya() {
-        new AlertDialog.Builder(this)
-                .setTitle("Canviar contrasenya")
-                .setMessage("Estàs segur que vols canviar la contrasenya?")
-                .setPositiveButton("Sí", (dialog, which) -> {
-                    Intent intent = new Intent(this, ContrasenyaUsuari.class);
-                    startActivity(intent);
-                })
-                .setNegativeButton("No", null)
-                .show();
     }
 }

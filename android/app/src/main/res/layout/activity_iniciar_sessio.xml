@@ -1,11 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-    ACTIVITY_INICIAR_SESSIO.XML
-    Pantalla perquè l'usuari introdueixi les seves credencials (Nom d'usuari i contrasenya).
-    Quan l'usuari premi "Inicia Sessió", es validaran les dades amb la base de dades.
-    Si són correctes, es guardarà la sessió i es redirigirà a Home.
-    No té bottom navigation perquè encara no ha iniciat sessió.
--->
 <androidx.constraintlayout.widget.ConstraintLayout
     android:id="@+id/main"
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -13,7 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- FONS: imatge de fons del gimnàs -->
     <ImageView
         android:id="@+id/imgBackground"
         android:layout_width="0dp"
@@ -26,7 +18,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Capa fosca per millorar la llegibilitat del text -->
     <View
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -38,7 +29,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0" />
 
-    <!-- Contenidor del formulari -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -50,7 +40,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <!-- Logo a dalt (per sobre del formulari) -->
         <ImageView
             android:id="@+id/imageView10"
             android:layout_width="109dp"
@@ -61,7 +50,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
-        <!-- ==================== CAMP 1: NOM D'USUARI ==================== -->
         <TextView
             android:id="@+id/tvUsernameLabel"
             android:layout_width="0dp"
@@ -106,7 +94,6 @@
                 android:textColorHint="#7A7A7A" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- ==================== CAMP 2: CONTRASENYA ==================== -->
         <TextView
             android:id="@+id/tvPassLabel"
             android:layout_width="0dp"
@@ -152,19 +139,6 @@
                 android:textColorHint="#7A7A7A" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Enllaç per recuperar contrasenya (futur) -->
-        <TextView
-            android:id="@+id/tvForgot"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="@string/login_oblidada"
-            android:textColor="@android:color/holo_blue_light"
-            android:textSize="12sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tilPass" />
-
-        <!-- Botó Inicia Sessió -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnLogin"
             android:layout_width="0dp"
@@ -178,7 +152,7 @@
             app:cornerRadius="6dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvForgot"
+            app:layout_constraintTop_toBottomOf="@id/tilPass"
             app:strokeColor="#F4D000"
             app:strokeWidth="2dp" />
 
