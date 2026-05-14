@@ -1,30 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-    MANIFEST.XML
-    Fitxer de manifest de l'aplicació ImperiumGym.
-    Defineix totes les Activities de l'aplicació, permisos i configuració principal.
-
-    L'aplicació comença amb MainInici (pantalla de benvinguda/landing).
-    Des d'allà es pot anar a IniciarSessio o Registre.
-    Un cop loguejat, es navega per la resta de pantalles mitjançant el bottom navigation.
-
-    En el futur, es poden afegir:
-    - Permisos d'Internet per a la base de dades remota
-    - Permisos de notificacions
-    - Configuració de Firebase si s'utilitza
--->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-
-
-    <!--PERMISOS -->
+    <!-- PERMISOS -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
-
     <application
-        android:usesCleartextTraffic="true"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -32,12 +14,12 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.GymApp">
-
-
-
+        android:theme="@style/Theme.GymApp"
+        android:usesCleartextTraffic="true">
+        <activity
+            android:name=".Noticies"
+            android:exported="false" />
         <!-- ==================== PANTALLES PRINCIPALS ==================== -->
-
         <!--
             MAININICI (LAUNCHER)
             Pantalla inicial de l'aplicació.
@@ -50,10 +32,10 @@
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <!--
             INICIAR_SESSIO
             Pantalla perquè l'usuari introdueixi email i contrasenya.
@@ -62,7 +44,6 @@
         <activity
             android:name=".IniciarSessio"
             android:exported="false" />
-
         <!--
             REGISTRE
             Pantalla per crear un nou compte d'usuari.
@@ -70,10 +51,7 @@
         -->
         <activity
             android:name=".Registre"
-            android:exported="false" />
-
-        <!-- ==================== PANTALLES PRINCIPALS AMB BOTTOM NAVIGATION ==================== -->
-
+            android:exported="false" /> <!-- ==================== PANTALLES PRINCIPALS AMB BOTTOM NAVIGATION ==================== -->
         <!--
             HOME
             Pantalla principal després d'iniciar sessió.
@@ -83,7 +61,6 @@
         <activity
             android:name=".Home"
             android:exported="false" />
-
         <!--
             CLASSES
             Pantalla que mostra totes les classes disponibles del gimnàs.
@@ -92,7 +69,6 @@
         <activity
             android:name=".Classes"
             android:exported="false" />
-
         <!--
             RESERVAR_CLASSES
             Pantalla per reservar una classe concreta.
@@ -102,7 +78,6 @@
         <activity
             android:name=".ReservarClasses"
             android:exported="false" />
-
         <!--
             CONFIRMADA_RESERVA_CLASSE
             Pantalla de confirmació després de reservar una classe amb èxit.
@@ -111,7 +86,6 @@
         <activity
             android:name=".ConfirmadaReservaClasse"
             android:exported="false" />
-
         <!--
             BOTIGA
             Pantalla que mostra tots els productes de la botiga.
@@ -120,7 +94,6 @@
         <activity
             android:name=".Botiga"
             android:exported="false" />
-
         <!--
             PRODUCTES_BOTIGA
             Pantalla de detall d'un producte seleccionat.
@@ -130,7 +103,6 @@
         <activity
             android:name=".ProductesBotiga"
             android:exported="false" />
-
         <!--
             CISTELLA_BOTIGA
             Pantalla que mostra tots els productes afegits a la cesta.
@@ -139,7 +111,6 @@
         <activity
             android:name=".CistellaBotiga"
             android:exported="false" />
-
         <!--
             PAGAMENT_PRODUCTES_BOTIGA
             Pantalla de pagament per a un producte comprat directament.
@@ -148,7 +119,6 @@
         <activity
             android:name=".PagamentProductesBotiga"
             android:exported="false" />
-
         <!--
             PAGAMENT_PRODUCTES_CISTELLA
             Pantalla de pagament per als productes de la cesta.
@@ -157,7 +127,6 @@
         <activity
             android:name=".PagamentProductesCistella"
             android:exported="false" />
-
         <!--
             PAGAT_PRODUCTE_BOTIGA
             Pantalla de confirmació després de pagar un producte.
@@ -166,16 +135,6 @@
         <activity
             android:name=".PagatProducteBotiga"
             android:exported="false" />
-
-        <!--
-            NOTICIES
-            Pantalla que mostra les últimes notícies del gimnàs.
-            Inclou un menú lateral (DrawerLayout) amb opcions addicionals.
-        -->
-        <activity
-            android:name=".Noticies"
-            android:exported="false" />
-
         <!--
             CALENDARI
             Pantalla amb un calendari mensual.
@@ -185,7 +144,6 @@
         <activity
             android:name=".Calendari"
             android:exported="false" />
-
         <!--
             CONTACTE
             Pantalla amb informació de contacte del gimnàs.
@@ -193,10 +151,7 @@
         -->
         <activity
             android:name=".Contacte"
-            android:exported="false" />
-
-        <!-- ==================== PANTALLES DE PERFIL I CONFIGURACIÓ ==================== -->
-
+            android:exported="false" /> <!-- ==================== PANTALLES DE PERFIL I CONFIGURACIÓ ==================== -->
         <!--
             INFO_PERFIL_USUARI
             Pantalla amb la informació del perfil de l'usuari.
@@ -206,7 +161,6 @@
         <activity
             android:name=".InfoPerfilUsuari"
             android:exported="false" />
-
         <!--
             CONTRASENYA_USUARI
             Pantalla per canviar la contrasenya de l'usuari.
@@ -215,11 +169,9 @@
         <activity
             android:name=".ContrasenyaUsuari"
             android:exported="false" />
-
         <activity
             android:name=".Ajuda"
             android:exported="false" />
-
     </application>
 
 </manifest>
