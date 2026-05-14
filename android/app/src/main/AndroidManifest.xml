@@ -167,9 +167,6 @@
             Demana la nova contrasenya i la confirmació.
         -->
         <activity
-            android:name=".ContrasenyaUsuari"
-            android:exported="false" />
-        <activity
             android:name=".Ajuda"
             android:exported="false" />
     </application>

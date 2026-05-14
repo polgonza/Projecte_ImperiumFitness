@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    ITEM_NOTICIA.XML
+    ================
+    Layout per a cada element de la llista de notícies.
+    Mostra:
+    - Imatge destacada (ImageView)
+    - Títol (TextView amb text més gran)
+    - Descripció (TextView amb text més petit)
+
+    @author ImperiumGym
+    @version 1.0
+-->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="12dp"
+    android:layout_margin="8dp"
+    android:background="#333333"
+    android:elevation="4dp">
+
+    <!-- Imatge destacada de la notícia -->
+    <ImageView
+        android:id="@+id/imgNoticia"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:scaleType="centerCrop"
+        android:background="#555555"/>
+
+    <!-- Títol de la notícia (mida més gran, negreta) -->
+    <TextView
+        android:id="@+id/txtTitulo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="#F0DB1A"
+        android:paddingTop="12dp"
+        android:paddingBottom="4dp"/>
+
+    <!-- Descripció de la notícia (mida més petita) -->
+    <TextView
+        android:id="@+id/txtDescripcio"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:textColor="#CCCCCC"
+        android:paddingBottom="8dp"/>
+
+</LinearLayout>
