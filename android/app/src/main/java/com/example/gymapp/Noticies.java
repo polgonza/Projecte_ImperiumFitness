@@ -1,6 +1,7 @@
 package com.example.gymapp;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -21,20 +22,13 @@ import retrofit2.Response;
     =================
     Pantalla que mostra les últimes notícies del gimnàs.
 
-    Funcionalitat:
-    - Carrega notícies des de WordPress mitjançant Retrofit
-    - Mostra les notícies en un RecyclerView
-    - Cada notícia conté: imatge, títol i descripció
-
-    Hereta de BaseActivity per tenir el footer de navegació.
-
     @author ImperiumGym
     @version 2.0
 */
 public class Noticies extends BaseActivity {
 
+    private static final String TAG = "Noticies";
     private RecyclerView recyclerNoticies;
-    private NoticiasAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,51 +36,47 @@ public class Noticies extends BaseActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_noticies);
 
-        // Configura el footer de navegació (heretat de BaseActivity)
+        // Configura el footer de navegació
         setupBottomNav();
 
-        // Configura els insets per a la vista principal
+        // Configura els insets
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
 
-        // ==================== INICIALITZAR RECYCLERVIEW ====================
+        // Inicialitzar RecyclerView
         recyclerNoticies = findViewById(R.id.recyclerNoticies);
         recyclerNoticies.setLayoutManager(new LinearLayoutManager(this));
 
-        // Mostrem un loading inicial
-        Toast.makeText(this, "Carregant notícies...", Toast.LENGTH_SHORT).show();
-
-        // Carreguem les notícies des de WordPress
+        // Carregar notícies
         carregarNoticies();
     }
 
-    /*
-        MÈTODE PER CARREGAR NOTÍCIES DES DE WORDPRESS
-        =============================================
-        Fa una petició GET a la API de WordPress i obté totes les notícies.
-        Un cop rebudes, les mostra al RecyclerView.
-    */
     private void carregarNoticies() {
+        Toast.makeText(this, "Carregant notícies...", Toast.LENGTH_SHORT).show();
+
         ApiService apiService = RetrofitClient.getApiService();
         apiService.obtenerNoticias().enqueue(new Callback<List<Noticia>>() {
 
             @Override
             public void onResponse(Call<List<Noticia>> call, Response<List<Noticia>> response) {
+                Log.d(TAG, "Codi resposta: " + response.code());
+
                 if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
-                    // Creem l'adaptador amb les notícies rebudes
-                    adapter = new NoticiasAdapter(response.body());
+                    Log.d(TAG, "Notícies rebudes: " + response.body().size());
+                    NoticiasAdapter adapter = new NoticiasAdapter(response.body());
                     recyclerNoticies.setAdapter(adapter);
                 } else {
+                    Log.e(TAG, "Resposta buida o error");
                     Toast.makeText(Noticies.this, "No s'han trobat notícies", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<List<Noticia>> call, Throwable t) {
-                // Error de connexió amb el servidor
+                Log.e(TAG, "Error de connexió: " + t.getMessage(), t);
                 Toast.makeText(Noticies.this, "Error carregant notícies: " + t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });

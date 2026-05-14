@@ -8,14 +8,14 @@ import retrofit2.converter.gson.GsonConverterFactory;
     ===============
     Classe singleton que configura el client Retrofit per connectar amb WordPress.
 
-    URL BASE: https://noticiasappimperium.infinityfreeapp.com/wp/
-
     @author ImperiumGym
-    @version 1.0
+    @version 2.0
 */
 public class RetrofitClient {
 
+    // La URL BASE ha d'acabar amb "wp/"
     private static final String BASE_URL = "https://noticiasappimperium.infinityfreeapp.com/wp/";
+
     private static Retrofit retrofit;
 
     public static ApiService getApiService() {
