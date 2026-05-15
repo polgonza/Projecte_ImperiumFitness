@@ -33,12 +33,10 @@ import retrofit2.Response;
     ==================
     Mostra un calendari mensual amb les reserves de l'usuari loguejat.
 
-    IMPORTANT:
-    Para no tocar backend, el calendario NO depende solo de dataReserva.
-    Ahora hace:
-    reserva.classeId -> busca la clase -> usa classe.horari
-
-    Así se marca el día real de la clase.
+    Sin tocar backend:
+    - El calendario usa classe.horari para marcar el día real de la clase.
+    - El popup muestra la capacidad de la clase.
+    - El popup permite cancelar la reserva.
 */
 public class Calendari extends BaseActivity {
 
@@ -65,16 +63,17 @@ public class Calendari extends BaseActivity {
     };
 
     /*
-        Clase interna para guardar la reserva ya preparada para calendario.
-        Así podemos usar el horario real de la clase sin tocar backend.
+        Guardamos también ClasseDTO para poder mostrar la capacidad.
     */
     private static class ReservaCalendari {
         ReservaDTO reserva;
+        ClasseDTO classe;
         String nomClasse;
         String dataHora;
 
-        ReservaCalendari(ReservaDTO reserva, String nomClasse, String dataHora) {
+        ReservaCalendari(ReservaDTO reserva, ClasseDTO classe, String nomClasse, String dataHora) {
             this.reserva = reserva;
+            this.classe = classe;
             this.nomClasse = nomClasse;
             this.dataHora = dataHora;
         }
@@ -151,7 +150,10 @@ public class Calendari extends BaseActivity {
 
     /*
         Primero cargamos reservas.
-        Después cargamos clases para saber el horario real de cada reserva.
+        Después cargamos clases para saber:
+        - horario real
+        - nombre
+        - capacidad
     */
     private void carregarReservesBackend() {
         ApiService api = ApiClient.getClient(this).create(ApiService.class);
@@ -184,7 +186,7 @@ public class Calendari extends BaseActivity {
 
     /*
         Cargamos todas las clases para poder relacionar:
-        reserva.classeId -> classe.horari
+        reserva.classeId -> classe.horari / classe.capacitat
     */
     private void carregarClassesIOrganitzar(List<ReservaDTO> reserves) {
         ApiService api = ApiClient.getClient(this).create(ApiService.class);
@@ -213,7 +215,7 @@ public class Calendari extends BaseActivity {
             public void onFailure(Call<List<ClasseDTO>> call, Throwable t) {
                 /*
                     Si falla cargar clases, usamos dataReserva como antes.
-                    Así al menos no rompemos el calendario.
+                    No podremos mostrar capacidad en este caso.
                 */
                 organitzarReservesPerData(reserves, new HashMap<>());
                 mostrarProperaReserva();
@@ -283,7 +285,7 @@ public class Calendari extends BaseActivity {
             }
 
             reservesPerData.get(clauData).add(
-                    new ReservaCalendari(reserva, nomClasse, dataHora)
+                    new ReservaCalendari(reserva, classe, nomClasse, dataHora)
             );
         }
     }
@@ -444,9 +446,7 @@ public class Calendari extends BaseActivity {
             int colorText;
 
             /*
-                Importante:
-                Ponemos primero teReserves para que una reserva de hoy
-                se vea amarilla y no quede escondida detrás del morado.
+                Si hay reserva, gana el amarillo.
             */
             if (teReserves) {
                 colorFons = Color.parseColor("#F0DB1A");
@@ -516,6 +516,34 @@ public class Calendari extends BaseActivity {
             return;
         }
 
+        String missatge = construirMissatgeReserves(reserves, clauData);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this)
+                .setTitle("Reserves del " + formatarData(clauData))
+                .setMessage(missatge)
+                .setPositiveButton("Tancar", null);
+
+        /*
+            Si solo hay una reserva ese día, cancelamos directamente esa.
+            Si hay varias, dejamos elegir cuál cancelar.
+        */
+        if (reserves.size() == 1) {
+            ReservaCalendari reserva = reserves.get(0);
+
+            builder.setNegativeButton("Cancel·lar reserva", (dialog, which) -> {
+                confirmarCancelacio(reserva);
+            });
+
+        } else {
+            builder.setNegativeButton("Cancel·lar una", (dialog, which) -> {
+                mostrarSelectorCancelacio(reserves);
+            });
+        }
+
+        builder.show();
+    }
+
+    private String construirMissatgeReserves(List<ReservaCalendari> reserves, String clauData) {
         StringBuilder missatge = new StringBuilder();
 
         for (ReservaCalendari reservaCalendari : reserves) {
@@ -532,14 +560,108 @@ public class Calendari extends BaseActivity {
 
             missatge.append("🏋️ ").append(reservaCalendari.nomClasse).append("\n");
             missatge.append("📅 ").append(formatarData(clauData)).append("\n");
-            missatge.append("🕐 ").append(hora).append("\n\n");
+            missatge.append("🕐 ").append(hora).append("\n");
+
+            if (reservaCalendari.classe != null && reservaCalendari.classe.getCapacitat() != null) {
+                missatge.append("👥 Capacitat: ")
+                        .append(reservaCalendari.classe.getCapacitat())
+                        .append(" persones")
+                        .append("\n");
+            } else {
+                missatge.append("👥 Capacitat: No disponible\n");
+            }
+
+            missatge.append("\n");
+        }
+
+        return missatge.toString().trim();
+    }
+
+    private void mostrarSelectorCancelacio(List<ReservaCalendari> reserves) {
+        String[] opcions = new String[reserves.size()];
+
+        for (int i = 0; i < reserves.size(); i++) {
+            ReservaCalendari reserva = reserves.get(i);
+            String hora = obtenirHora(reserva.dataHora);
+
+            opcions[i] = reserva.nomClasse + " - " + hora;
         }
 
         new AlertDialog.Builder(this)
-                .setTitle("Reserves del " + formatarData(clauData))
-                .setMessage(missatge.toString().trim())
-                .setPositiveButton("Tancar", null)
+                .setTitle("Quina reserva vols cancel·lar?")
+                .setItems(opcions, (dialog, which) -> confirmarCancelacio(reserves.get(which)))
+                .setNegativeButton("Tornar", null)
                 .show();
+    }
+
+    private void confirmarCancelacio(ReservaCalendari reservaCalendari) {
+        new AlertDialog.Builder(this)
+                .setTitle("Cancel·lar reserva")
+                .setMessage("Vols cancel·lar la reserva de " + reservaCalendari.nomClasse + "?")
+                .setPositiveButton("Sí, cancel·lar", (dialog, which) -> cancelarReserva(reservaCalendari))
+                .setNegativeButton("No", null)
+                .show();
+    }
+
+    private void cancelarReserva(ReservaCalendari reservaCalendari) {
+        if (reservaCalendari.reserva == null || reservaCalendari.reserva.getClasseId() == null) {
+            Toast.makeText(this, "No s'ha pogut identificar la classe.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        ApiService api = ApiClient.getClient(this).create(ApiService.class);
+
+        api.cancelarReserva(usuariId, reservaCalendari.reserva.getClasseId())
+                .enqueue(new Callback<Void>() {
+                    @Override
+                    public void onResponse(Call<Void> call, Response<Void> response) {
+                        if (response.isSuccessful()) {
+                            Toast.makeText(
+                                    Calendari.this,
+                                    "Reserva cancel·lada correctament",
+                                    Toast.LENGTH_SHORT
+                            ).show();
+
+                            /*
+                                Recargamos reservas para actualizar el calendario.
+                            */
+                            carregarReservesBackend();
+
+                        } else {
+                            Toast.makeText(
+                                    Calendari.this,
+                                    "Error cancel·lant reserva: codi " + response.code(),
+                                    Toast.LENGTH_LONG
+                            ).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Void> call, Throwable t) {
+                        Toast.makeText(
+                                Calendari.this,
+                                "Error de connexió: " + t.getMessage(),
+                                Toast.LENGTH_LONG
+                        ).show();
+                    }
+                });
+    }
+
+    private String obtenirHora(String dataHora) {
+        try {
+            String neta = netejarDecimalsData(dataHora);
+
+            if (neta.contains("T")) {
+                String horaPart = neta.split("T")[1];
+
+                if (horaPart.length() >= 5) {
+                    return horaPart.substring(0, 5) + "h";
+                }
+            }
+        } catch (Exception ignored) {
+        }
+
+        return "";
     }
 
     private String netejarDecimalsData(String dataHora) {
