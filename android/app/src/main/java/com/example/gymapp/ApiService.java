@@ -8,6 +8,7 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
+import retrofit2.http.DELETE;
 
 public interface ApiService {
 
@@ -37,4 +38,10 @@ public interface ApiService {
 
     @GET("wp/wp-json/wp/v2/noticia?_embed")
     Call<List<Noticia>> obtenerNoticias();
+
+    @DELETE("api/reserves/usuari/{usuariId}/classe/{classeId}")
+    Call<Void> cancelarReserva(
+            @Path("usuariId") Long usuariId,
+            @Path("classeId") Long classeId
+    );
 }
