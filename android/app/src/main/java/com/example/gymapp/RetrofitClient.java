@@ -1,5 +1,6 @@
 package com.example.gymapp;
 
+import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -8,20 +9,29 @@ import retrofit2.converter.gson.GsonConverterFactory;
     ===============
     Classe singleton que configura el client Retrofit per connectar amb WordPress.
 
-    URL BASE: https://noticiasappimperium.infinityfreeapp.com/wp/
-
     @author ImperiumGym
-    @version 1.0
+    @version 3.0
 */
 public class RetrofitClient {
 
-    private static final String BASE_URL = "https://noticiasappimperium.infinityfreeapp.com/wp/";
+    // URL BASE - assegura't que acaba amb /
+    private static final String BASE_URL = "https://noticiasappimperium.infinityfreeapp.com/";
+
     private static Retrofit retrofit;
 
     public static ApiService getApiService() {
         if (retrofit == null) {
+            // Configurar OkHttpClient amb timeout i seguiment de redireccions
+            OkHttpClient client = new OkHttpClient.Builder()
+                    .connectTimeout(30, java.util.concurrent.TimeUnit.SECONDS)
+                    .readTimeout(30, java.util.concurrent.TimeUnit.SECONDS)
+                    .followRedirects(true)
+                    .followSslRedirects(true)
+                    .build();
+
             retrofit = new Retrofit.Builder()
                     .baseUrl(BASE_URL)
+                    .client(client)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
         }
