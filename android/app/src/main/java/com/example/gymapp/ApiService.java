@@ -35,6 +35,6 @@ public interface ApiService {
     @GET("api/usuaris/perfil/{id}")
     Call<UsuariDTO> getPerfil(@Path("id") Long id);
 
-    @GET("wp-json/wp/v2/noticia?_embed")
+    @GET("wp/wp-json/wp/v2/noticia?_embed")
     Call<List<Noticia>> obtenerNoticias();
 }
