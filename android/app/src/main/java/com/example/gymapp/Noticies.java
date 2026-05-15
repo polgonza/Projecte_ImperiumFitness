@@ -1,3 +1,4 @@
+/*
 package com.example.gymapp;
 
 import android.os.Bundle;
@@ -30,6 +31,7 @@ import retrofit2.Response;
     @author ImperiumGym
     @version 3.0
 */
+/*
 public class Noticies extends BaseActivity {
 
     private static final String TAG = "Noticies";
@@ -68,6 +70,7 @@ public class Noticies extends BaseActivity {
         Aquest mètode fa una petició HTTP directa per veure què retorna el servidor.
         Ens ajuda a diagnosticar si el problema és de Retrofit o de la URL.
     */
+/*
     private void provarConnexioManual() {
         new Thread(() -> {
             try {
@@ -144,6 +147,7 @@ public class Noticies extends BaseActivity {
         =========================================
         Fa una petició a l'API de WordPress i processa la resposta.
     */
+/*
     private void carregarNoticies() {
         Toast.makeText(this, "Carregant notícies...", Toast.LENGTH_SHORT).show();
 
@@ -210,3 +214,4 @@ public class Noticies extends BaseActivity {
         }
     }
 }
+*/

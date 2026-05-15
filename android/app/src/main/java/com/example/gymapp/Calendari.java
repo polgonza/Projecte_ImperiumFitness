@@ -280,6 +280,15 @@ public class Calendari extends BaseActivity {
                 continue;
             }
 
+/*
+    No mostramos reservas anteriores al día actual.
+    Las reservas siguen existiendo en la base de datos,
+    simplemente no se pintan en el calendario.
+*/
+            if (esDataAnteriorAvui(clauData)) {
+                continue;
+            }
+
             if (!reservesPerData.containsKey(clauData)) {
                 reservesPerData.put(clauData, new ArrayList<>());
             }
@@ -682,6 +691,36 @@ public class Calendari extends BaseActivity {
             return parts[2] + "/" + parts[1] + "/" + parts[0];
         } catch (Exception e) {
             return clauData;
+        }
+    }
+    private boolean esDataAnteriorAvui(String clauData) {
+        try {
+            String[] parts = clauData.split("-");
+
+            int any = Integer.parseInt(parts[0]);
+            int mes = Integer.parseInt(parts[1]) - 1;
+            int dia = Integer.parseInt(parts[2]);
+
+            java.util.Calendar dataReserva = java.util.Calendar.getInstance(
+                    java.util.TimeZone.getTimeZone("Europe/Madrid")
+            );
+
+            dataReserva.set(any, mes, dia, 0, 0, 0);
+            dataReserva.set(java.util.Calendar.MILLISECOND, 0);
+
+            java.util.Calendar avui = java.util.Calendar.getInstance(
+                    java.util.TimeZone.getTimeZone("Europe/Madrid")
+            );
+
+            avui.set(java.util.Calendar.HOUR_OF_DAY, 0);
+            avui.set(java.util.Calendar.MINUTE, 0);
+            avui.set(java.util.Calendar.SECOND, 0);
+            avui.set(java.util.Calendar.MILLISECOND, 0);
+
+            return dataReserva.before(avui);
+
+        } catch (Exception e) {
+            return false;
         }
     }
 
