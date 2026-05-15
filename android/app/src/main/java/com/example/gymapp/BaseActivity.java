@@ -73,13 +73,13 @@ public class BaseActivity extends AppCompatActivity {
         if (botiga != null) {
             botiga.setOnClickListener(v -> startActivity(new Intent(this, Botiga.class)));
         }
-
+/*
         // 4. NOTÍCIES -> Noticies
         LinearLayout noticies = findViewById(R.id.navNoticies);
         if (noticies != null) {
             noticies.setOnClickListener(v -> startActivity(new Intent(this, Noticies.class)));
         }
-
+*/
         // 5. CALENDARI -> Calendari
         LinearLayout calendari = findViewById(R.id.navCalendari);
         if (calendari != null) {

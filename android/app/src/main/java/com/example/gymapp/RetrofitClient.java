@@ -1,3 +1,4 @@
+/*
 package com.example.gymapp;
 
 import okhttp3.OkHttpClient;
@@ -12,12 +13,14 @@ import retrofit2.converter.gson.GsonConverterFactory;
     @author ImperiumGym
     @version 3.0
 */
+/*
 public class RetrofitClient {
 
     // URL BASE - assegura't que acaba amb /
     private static final String BASE_URL = "https://noticiasappimperium.infinityfreeapp.com/";
     @version 2.0
 */
+/*
 public class RetrofitClient {
 
     // La URL BASE ha d'acabar amb "wp/"
@@ -44,3 +47,5 @@ public class RetrofitClient {
         return retrofit.create(ApiService.class);
     }
 }
+
+ */
