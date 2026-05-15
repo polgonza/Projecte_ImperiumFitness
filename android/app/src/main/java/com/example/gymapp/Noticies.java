@@ -41,10 +41,10 @@ public class Noticies extends BaseActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_noticies);
 
-        // Configura el footer de navegació (heretat de BaseActivity)
+        // Configura el footer de navegació
         setupBottomNav();
 
-        // Configura els insets per a la vista principal
+        // Configura els insets
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -109,11 +109,32 @@ public class Noticies extends BaseActivity {
                     }
                 } else {
                     Log.e(TAG, "Resposta buida");
+    private void carregarNoticies() {
+        Toast.makeText(this, "Carregant notícies...", Toast.LENGTH_SHORT).show();
+
+        ApiService apiService = RetrofitClient.getApiService();
+        apiService.obtenerNoticias().enqueue(new Callback<List<Noticia>>() {
+
+            @Override
+            public void onResponse(Call<List<Noticia>> call, Response<List<Noticia>> response) {
+                Log.d(TAG, "Codi resposta: " + response.code());
+
+                if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
+                    Log.d(TAG, "Notícies rebudes: " + response.body().size());
+                    NoticiasAdapter adapter = new NoticiasAdapter(response.body());
+                    recyclerNoticies.setAdapter(adapter);
+                } else {
+                    Log.e(TAG, "Resposta buida o error");
+                    Toast.makeText(Noticies.this, "No s'han trobat notícies", Toast.LENGTH_SHORT).show();
                 }
 
             } catch (Exception e) {
                 Log.e(TAG, "Error en connexió manual: " + e.getMessage(), e);
                 runOnUiThread(() -> Toast.makeText(Noticies.this, "Error manual: " + e.getMessage(), Toast.LENGTH_LONG).show());
+            @Override
+            public void onFailure(Call<List<Noticia>> call, Throwable t) {
+                Log.e(TAG, "Error de connexió: " + t.getMessage(), t);
+                Toast.makeText(Noticies.this, "Error carregant notícies: " + t.getMessage(), Toast.LENGTH_LONG).show();
             }
         }).start();
     }

@@ -7,7 +7,6 @@ import java.util.List;
     EMBEDDED.JAVA
     =============
     Classe model per extreure la informació incrustada (embed) de la notícia.
-    WordPress retorna les imatges dins de "_embedded" → "wp:featuredmedia".
 
     @author ImperiumGym
     @version 1.0

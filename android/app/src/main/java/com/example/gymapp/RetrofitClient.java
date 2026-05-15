@@ -16,6 +16,12 @@ public class RetrofitClient {
 
     // URL BASE - assegura't que acaba amb /
     private static final String BASE_URL = "https://noticiasappimperium.infinityfreeapp.com/";
+    @version 2.0
+*/
+public class RetrofitClient {
+
+    // La URL BASE ha d'acabar amb "wp/"
+    private static final String BASE_URL = "https://noticiasappimperium.infinityfreeapp.com/wp/";
 
     private static Retrofit retrofit;
 
