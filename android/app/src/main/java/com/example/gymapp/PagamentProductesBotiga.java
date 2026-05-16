@@ -12,7 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
+
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -29,7 +29,7 @@ import retrofit2.Response;
     Pantalla de pagament simulat per a un producte comprat directament.
     Aunque el pago sea simulado, se registra la venta en backend.
 */
-public class PagamentProductesBotiga extends AppCompatActivity {
+public class PagamentProductesBotiga extends BaseActivity {
 
     private ImageView imgProducte;
     private TextView tvNom, tvPreu, tvQuantitat;
@@ -47,6 +47,8 @@ public class PagamentProductesBotiga extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_pagament_productes_botiga);
+
+        setupBottomNav();
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());

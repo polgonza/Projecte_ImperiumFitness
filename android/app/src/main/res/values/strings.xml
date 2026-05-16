@@ -78,9 +78,6 @@
     <string name="classe_zumba">Zumba</string>
     <string name="classe_spinning">Spinning</string>
     <string name="classe_bodypump">Body Pump</string>
-    <string name="classe_desc_zumba">Classe de ball dinàmica amb música llatina. Perfecta per cremar calories i divertir-te.</string>
-    <string name="classe_desc_spinning">Classe d\'intens ciclisme indoor per millorar la teva resistència cardiovascular.</string>
-    <string name="classe_desc_bodypump">Entrenament amb barres i pesos per tonificar tots els músculs del cos.</string>
     <string name="btn_reserva_ara">Reserva ara</string>
 
     <!-- ==================== RESERVAR CLASSES ==================== -->
@@ -306,16 +303,6 @@
 
     <string name="ajuda_contacte_missatge">Per posar-te en contacte amb nosaltres, només has de prémer el botó “Envia’ns un missatge” i automàticament s’obrirà el correu electrònic per escriure el teu missatge.</string>
 
-    <!-- ==================== BOTIGA DINÀMICA ==================== -->
-    <string name="botiga_carregant_productes">Carregant productes...</string>
-    <string name="botiga_error_carregar_productes">No s\'han pogut carregar els productes.</string>
-    <string name="botiga_error_connexio">Error de connexió amb el servidor.</string>
-    <string name="botiga_error_prefix">Error: %1$s</string>
-    <string name="botiga_no_productes">No hi ha productes disponibles.</string>
-    <string name="botiga_producte_default">Producte</string>
-    <string name="botiga_estoc">Estoc: %1$d</string>
-    <string name="botiga_sense_estoc">Sense estoc</string>
-
     <!-- ==================== PRODUCTE / PAGAMENT ==================== -->
     <string name="pagament_quantitat_producte">Quantitat: %1$d</string>
     <string name="pagament_producte_error_id">Error: no s\'ha trobat l\'ID del producte</string>
@@ -348,6 +335,14 @@
     <string name="reserva_error_generic">Error fent la reserva. Torna-ho a intentar.</string>
     <string name="reserva_error_connexio">No s\'ha pogut connectar: %1$s</string>
     <string name="reserva_format_horari">%1$s %2$s a les %3$sh</string>
+    <string name="classe_desc_zumba">Classe divertida amb música llatina per cremar calories i millorar la coordinació.</string>
+    <string name="classe_desc_spinning">Sessió intensa de bicicleta indoor per millorar la resistència cardiovascular.</string>
+    <string name="classe_desc_bodypump">Entrenament de força amb barres i peses per tonificar tot el cos.</string>
+    <string name="classe_desc_yoga">Classe per millorar la flexibilitat, la respiració i el equilibri corporal.</string>
+    <string name="classe_desc_pilates">Exercicis de control postural, força abdominal i estabilitat.</string>
+    <string name="classe_desc_crossfit">Entrenament funcional de alta intensitat amb exercicis variats.</string>
+    <string name="classe_desc_hiit">Intervals de alta intensitat per cremar calories en poc temps.</string>
+    <string name="classe_desc_default">Classe dirigida de Imperium Fitness.</string>
 
     <string-array name="dies_setmana_llargs">
         <item>Diumenge</item>

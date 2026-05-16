@@ -76,9 +76,6 @@
     <string name="classe_zumba">Zumba</string>
     <string name="classe_spinning">Spinning</string>
     <string name="classe_bodypump">Body Pump</string>
-    <string name="classe_desc_zumba">Dynamic dance class with Latin music. Perfect for burning calories and having fun.</string>
-    <string name="classe_desc_spinning">Intense indoor cycling class to improve your cardiovascular endurance.</string>
-    <string name="classe_desc_bodypump">Weight and bar training to tone all your body muscles.</string>
     <string name="btn_reserva_ara">Book now</string>
 
     <!-- ==================== BOOK CLASS ==================== -->
@@ -301,16 +298,6 @@
     <string name="ajuda_contacte_acces">To access the gym contact page, the user must tap the contact section in the bottom menu.</string>
 
     <string name="ajuda_contacte_missatge">To contact us, the user only has to tap the “Send us a message” button and the email application will automatically open so they can write their message.</string>
-    <!-- ==================== DYNAMIC SHOP ==================== -->
-    <string name="botiga_carregant_productes">Loading products...</string>
-    <string name="botiga_error_carregar_productes">Products could not be loaded.</string>
-    <string name="botiga_error_connexio">Connection error with the server.</string>
-    <string name="botiga_error_prefix">Error: %1$s</string>
-    <string name="botiga_no_productes">No products available.</string>
-    <string name="botiga_producte_default">Product</string>
-    <string name="botiga_estoc">Stock: %1$d</string>
-    <string name="botiga_sense_estoc">Out of stock</string>
-
     <!-- ==================== PRODUCT / PAYMENT ==================== -->
     <string name="pagament_quantitat_producte">Quantity: %1$d</string>
     <string name="pagament_producte_error_id">Error: product ID was not found</string>
@@ -331,6 +318,14 @@
     <string name="classes_error_carregar">Error loading classes</string>
     <string name="classes_error_connexio">Could not connect: %1$s</string>
     <string name="classes_sessions_disponibles">📅 %1$d sessions available (14 days)</string>
+    <string name="classe_desc_zumba">A fun class with Latin music to burn calories and improve coordination.</string>
+    <string name="classe_desc_spinning">An intense indoor cycling session to improve cardiovascular endurance.</string>
+    <string name="classe_desc_bodypump">Strength training with bars and weights to tone the whole body.</string>
+    <string name="classe_desc_yoga">A class to improve flexibility, breathing and body balance.</string>
+    <string name="classe_desc_pilates">Exercises focused on posture control, core strength and stability.</string>
+    <string name="classe_desc_crossfit">High-intensity functional training with varied exercises.</string>
+    <string name="classe_desc_hiit">High-intensity intervals to burn calories in less time.</string>
+    <string name="classe_desc_default">A guided class from Imperium Fitness.</string>
 
     <!-- ==================== BOOKING CLASSES ==================== -->
     <string name="usuari_default">User</string>

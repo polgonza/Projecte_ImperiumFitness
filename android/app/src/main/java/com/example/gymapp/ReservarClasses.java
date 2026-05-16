@@ -13,12 +13,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import java.io.IOException;
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,10 +26,10 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ReservarClasses extends AppCompatActivity {
+public class ReservarClasses extends BaseActivity {
 
     private ImageView ivClasseImatge;
-    private TextView tvClasseNom, tvUsuariReserva;
+    private TextView tvClasseNom, tvClasseDescripcio, tvUsuariReserva;
     private Spinner spinnerSessions;
     private Button btnConfirmarReserva;
 
@@ -50,6 +50,8 @@ public class ReservarClasses extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_reservar_classes);
 
+        setupBottomNav();
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -58,18 +60,26 @@ public class ReservarClasses extends AppCompatActivity {
 
         ivClasseImatge = findViewById(R.id.ivClasseImatge);
         tvClasseNom = findViewById(R.id.tvClasseNom);
+        tvClasseDescripcio = findViewById(R.id.tvClasseDescripcio);
         tvUsuariReserva = findViewById(R.id.tvUsuariReserva);
         spinnerSessions = findViewById(R.id.spinnerHora);
         btnConfirmarReserva = findViewById(R.id.btnConfirmarReserva);
 
         sharedPreferences = getSharedPreferences("Usuaris", Context.MODE_PRIVATE);
         token = sharedPreferences.getString("jwt_token", "");
-        usuariActiu = sharedPreferences.getString("usuari_actiu", getString(R.string.usuari_default));
+        usuariActiu = sharedPreferences.getString(
+                "usuari_actiu",
+                getString(R.string.usuari_default)
+        );
 
         usuariId = obtenirUsuariIdDelToken();
 
         if (usuariId == null) {
-            Toast.makeText(this, getString(R.string.reserva_sessio_invalida), Toast.LENGTH_LONG).show();
+            Toast.makeText(
+                    this,
+                    getString(R.string.reserva_sessio_invalida),
+                    Toast.LENGTH_LONG
+            ).show();
 
             finish();
             return;
@@ -80,19 +90,41 @@ public class ReservarClasses extends AppCompatActivity {
         int imatgeClasse = getIntent().getIntExtra("imatge_classe", R.drawable.logo);
 
         ivClasseImatge.setImageResource(imatgeClasse);
-        tvClasseNom.setText(nomClasse);
-        tvUsuariReserva.setText(getString(R.string.reserva_tria_sessio, usuariActiu, nomClasse));
+        tvClasseNom.setText(nomClasse != null ? nomClasse : "");
+
+        /*
+            Descripción hardcodeada según el nombre de la clase.
+        */
+        tvClasseDescripcio.setText(obtenirDescripcioClasse(nomClasse));
+
+        tvUsuariReserva.setText(
+                getString(
+                        R.string.reserva_tria_sessio,
+                        usuariActiu,
+                        nomClasse != null ? nomClasse : ""
+                )
+        );
 
         if (sessionsSerialized != null && !sessionsSerialized.isEmpty()) {
             parsejaSessions(sessionsSerialized);
         } else {
-            Toast.makeText(this, getString(R.string.reserva_no_sessions), Toast.LENGTH_SHORT).show();
+            Toast.makeText(
+                    this,
+                    getString(R.string.reserva_no_sessions),
+                    Toast.LENGTH_SHORT
+            ).show();
+
             finish();
             return;
         }
 
         if (sessionIds.isEmpty()) {
-            Toast.makeText(this, getString(R.string.reserva_no_sessions), Toast.LENGTH_SHORT).show();
+            Toast.makeText(
+                    this,
+                    getString(R.string.reserva_no_sessions),
+                    Toast.LENGTH_SHORT
+            ).show();
+
             finish();
             return;
         }
@@ -155,25 +187,39 @@ public class ReservarClasses extends AppCompatActivity {
     private String formatarHorariPerMostrar(String horariISO) {
         try {
             String[] parts = horariISO.split("T");
+
+            if (parts.length < 2) {
+                return horariISO;
+            }
+
             String data = parts[0];
             String hora = parts[1].substring(0, 5);
 
-            String[] dataparts = data.split("-");
-            String dataFormatada = dataparts[2] + "/" + dataparts[1] + "/" + dataparts[0];
+            String[] dataParts = data.split("-");
+
+            if (dataParts.length < 3) {
+                return horariISO;
+            }
+
+            String dataFormatada = dataParts[2] + "/" + dataParts[1] + "/" + dataParts[0];
 
             java.util.Calendar cal = java.util.Calendar.getInstance();
 
             cal.set(
-                    Integer.parseInt(dataparts[0]),
-                    Integer.parseInt(dataparts[1]) - 1,
-                    Integer.parseInt(dataparts[2])
+                    Integer.parseInt(dataParts[0]),
+                    Integer.parseInt(dataParts[1]) - 1,
+                    Integer.parseInt(dataParts[2])
             );
 
             String[] diesSetmana = getResources().getStringArray(R.array.dies_setmana_llargs);
+            String diaSetmana = diesSetmana[cal.get(java.util.Calendar.DAY_OF_WEEK) - 1];
 
-            String diaSemana = diesSetmana[cal.get(java.util.Calendar.DAY_OF_WEEK) - 1];
-
-            return getString(R.string.reserva_format_horari, diaSemana, dataFormatada, hora);
+            return getString(
+                    R.string.reserva_format_horari,
+                    diaSetmana,
+                    dataFormatada,
+                    hora
+            );
 
         } catch (Exception e) {
             return horariISO;
@@ -182,17 +228,29 @@ public class ReservarClasses extends AppCompatActivity {
 
     private void confirmarReserva() {
         if (sessionIds.isEmpty()) {
-            Toast.makeText(this, getString(R.string.reserva_no_sessions), Toast.LENGTH_SHORT).show();
+            Toast.makeText(
+                    this,
+                    getString(R.string.reserva_no_sessions),
+                    Toast.LENGTH_SHORT
+            ).show();
             return;
         }
 
         if (sessioSeleccionadaIndex < 0 || sessioSeleccionadaIndex >= sessionIds.size()) {
-            Toast.makeText(this, "Selecciona una sessió vàlida.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(
+                    this,
+                    getString(R.string.reserva_selecciona_sessio_valida),
+                    Toast.LENGTH_SHORT
+            ).show();
             return;
         }
 
         Long idClasseSeleccionada = sessionIds.get(sessioSeleccionadaIndex);
 
+        /*
+            No enviamos dataReserva.
+            El backend actual crea la reserva con usuariId + classeId.
+        */
         ReservaDTO reserva = new ReservaDTO(usuariId, idClasseSeleccionada);
 
         btnConfirmarReserva.setEnabled(false);
@@ -221,7 +279,7 @@ public class ReservarClasses extends AppCompatActivity {
                 } else {
                     Toast.makeText(
                             ReservarClasses.this,
-                            "Error fent la reserva: " + llegirError(response),
+                            getString(R.string.reserva_error_backend, llegirError(response)),
                             Toast.LENGTH_LONG
                     ).show();
                 }
@@ -233,11 +291,55 @@ public class ReservarClasses extends AppCompatActivity {
 
                 Toast.makeText(
                         ReservarClasses.this,
-                        "No s'ha pogut connectar: " + t.getMessage(),
+                        getString(R.string.reserva_error_connexio, t.getMessage()),
                         Toast.LENGTH_LONG
                 ).show();
             }
         });
+    }
+
+    private String obtenirDescripcioClasse(String nomClasse) {
+        if (nomClasse == null) {
+            return getString(R.string.classe_desc_default);
+        }
+
+        String nom = normalitzar(nomClasse);
+
+        if (nom.contains("zumba")) {
+            return getString(R.string.classe_desc_zumba);
+        }
+
+        if (nom.contains("spinning") || nom.contains("spining") || nom.contains("ciclisme")) {
+            return getString(R.string.classe_desc_spinning);
+        }
+
+        if (nom.contains("body pump") || nom.contains("bodypump") || nom.contains("pump")) {
+            return getString(R.string.classe_desc_bodypump);
+        }
+
+        if (nom.contains("yoga")) {
+            return getString(R.string.classe_desc_yoga);
+        }
+
+        if (nom.contains("pilates")) {
+            return getString(R.string.classe_desc_pilates);
+        }
+
+        if (nom.contains("crossfit") || nom.contains("cross fit")) {
+            return getString(R.string.classe_desc_crossfit);
+        }
+
+        if (nom.contains("hiit")) {
+            return getString(R.string.classe_desc_hiit);
+        }
+
+        return getString(R.string.classe_desc_default);
+    }
+
+    private String normalitzar(String text) {
+        String normalitzat = Normalizer.normalize(text, Normalizer.Form.NFD);
+        normalitzat = normalitzat.replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
+        return normalitzat.toLowerCase().trim();
     }
 
     private Long obtenirUsuariIdDelToken() {

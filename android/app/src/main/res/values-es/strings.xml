@@ -90,9 +90,6 @@
     <string name="classe_zumba">Zumba</string>
     <string name="classe_spinning">Spinning</string>
     <string name="classe_bodypump">Body Pump</string>
-    <string name="classe_desc_zumba">Clase de baile dinámica con música latina. Perfecta para quemar calorías y divertirte.</string>
-    <string name="classe_desc_spinning">Clase de intenso ciclismo indoor para mejorar tu resistencia cardiovascular.</string>
-    <string name="classe_desc_bodypump">Entrenamiento con barras y pesos para tonificar todos los músculos del cuerpo.</string>
     <string name="btn_reserva_ara">Reservar ahora</string>
 
     <!-- ==================== RESERVAR CLASES ==================== -->
@@ -307,16 +304,6 @@
 
     <string name="ajuda_contacte_missatge">Para ponerte en contacto con nosotros, solo tienes que pulsar el botón “Envíanos un mensaje” y automáticamente se abrirá el correo electrónico para escribir tu mensaje.</string>
 
-    <!-- ==================== TIENDA DINÁMICA ==================== -->
-    <string name="botiga_carregant_productes">Cargando productos...</string>
-    <string name="botiga_error_carregar_productes">No se han podido cargar los productos.</string>
-    <string name="botiga_error_connexio">Error de conexión con el servidor.</string>
-    <string name="botiga_error_prefix">Error: %1$s</string>
-    <string name="botiga_no_productes">No hay productos disponibles.</string>
-    <string name="botiga_producte_default">Producto</string>
-    <string name="botiga_estoc">Stock: %1$d</string>
-    <string name="botiga_sense_estoc">Sin stock</string>
-
     <!-- ==================== PRODUCTO / PAGO ==================== -->
     <string name="pagament_quantitat_producte">Cantidad: %1$d</string>
     <string name="pagament_producte_error_id">Error: no se ha encontrado el ID del producto</string>
@@ -349,6 +336,14 @@
     <string name="reserva_error_generic">Error haciendo la reserva. Vuelve a intentarlo.</string>
     <string name="reserva_error_connexio">No se ha podido conectar: %1$s</string>
     <string name="reserva_format_horari">%1$s %2$s a las %3$sh</string>
+    <string name="classe_desc_zumba">Clase divertida con música latina para quemar calorías y mejorar la coordinación.</string>
+    <string name="classe_desc_spinning">Sesión intensa de bicicleta indoor para mejorar la resistencia cardiovascular.</string>
+    <string name="classe_desc_bodypump">Entrenamiento de fuerza con barras y pesas para tonificar todo el cuerpo.</string>
+    <string name="classe_desc_yoga">Clase para mejorar la flexibilidad, la respiración y el equilibrio corporal.</string>
+    <string name="classe_desc_pilates">Ejercicios de control postural, fuerza abdominal y estabilidad.</string>
+    <string name="classe_desc_crossfit">Entrenamiento funcional de alta intensidad con ejercicios variados.</string>
+    <string name="classe_desc_hiit">Intervalos de alta intensidad para quemar calorías en poco tiempo.</string>
+    <string name="classe_desc_default">Clase dirigida de Imperium Fitness.</string>
 
     <string-array name="dies_setmana_llargs">
         <item>Domingo</item>

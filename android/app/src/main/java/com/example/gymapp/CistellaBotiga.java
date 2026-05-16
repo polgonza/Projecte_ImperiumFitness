@@ -191,7 +191,7 @@ public class CistellaBotiga extends BaseActivity {
             holder.tvPreu.setText(String.format("%.2f€", producte.preu));
 
             holder.btnEliminar.setOnClickListener(v -> {
-                int posicioActual = holder.getAdapterPosition();
+                int posicioActual = holder.getBindingAdapterPosition();
 
                 if (posicioActual == RecyclerView.NO_POSITION) {
                     return;
