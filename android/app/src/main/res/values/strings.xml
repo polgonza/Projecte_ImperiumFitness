@@ -127,14 +127,7 @@
     <string name="producte_preu_proteina">39,99€</string>
     <string name="producte_preu_camiseta">19,99€</string>
     <string name="btn_comprar_ara">Compra ara</string>
-    <string name="botiga_carregant_productes">Carregant productes...</string>
-    <string name="botiga_error_carregar_productes">No shan pogut carregar els productes.</string>
-    <string name="botiga_error_connexio">Error de connexió amb el servidor.</string>
-    <string name="botiga_error_prefix">Error: %1$s</string>
-    <string name="botiga_no_productes">No hi ha productes disponibles.</string>
-    <string name="botiga_producte_default">Producte</string>
-    <string name="botiga_estoc">Estoc: %1$d</string>
-    <string name="botiga_sense_estoc">Sense estoc</string>
+
 
     <!-- ==================== PRODUCTES BOTIGA (DETALL) ==================== -->
     <string name="producte_detall_titol">Detall del producte</string>
@@ -307,6 +300,16 @@
 
     <string name="ajuda_contacte_missatge">Per posar-te en contacte amb nosaltres, només has de prémer el botó “Envia’ns un missatge” i automàticament s’obrirà el correu electrònic per escriure el teu missatge.</string>
 
+    <!-- ==================== BOTIGA DINÀMICA ==================== -->
+    <string name="botiga_carregant_productes">Carregant productes...</string>
+    <string name="botiga_error_carregar_productes">No s\'han pogut carregar els productes.</string>
+    <string name="botiga_error_connexio">Error de connexió amb el servidor.</string>
+    <string name="botiga_error_prefix">Error: %1$s</string>
+    <string name="botiga_no_productes">No hi ha productes disponibles.</string>
+    <string name="botiga_producte_default">Producte</string>
+    <string name="botiga_estoc">Estoc: %1$d</string>
+    <string name="botiga_sense_estoc">Sense estoc</string>
+
     <!-- ==================== PRODUCTE / PAGAMENT ==================== -->
     <string name="pagament_quantitat_producte">Quantitat: %1$d</string>
     <string name="pagament_producte_error_id">Error: no s\'ha trobat l\'ID del producte</string>
@@ -410,4 +413,11 @@
         <item>Novembre</item>
         <item>Desembre</item>
     </string-array>
+
+    <!-- ==================== ACCES PLA ==================== -->
+    <string name="pla_necessari_titol">Pla necessari</string>
+    <string name="pla_necessari_missatge">Necessites comprar un pla a la web per poder continuar.</string>
+    <string name="pla_necessari_boto">Dacord</string>
+
 </resources>
+

@@ -221,7 +221,7 @@ public class PagamentProductesBotiga extends BaseActivity {
                     startActivity(intent);
                     finish();
 
-                } else {
+                }  else {
                     String errorBackend = llegirError(response);
 
                     if (esErrorEstocInsuficient(response, errorBackend)) {

@@ -412,4 +412,9 @@
         <item>Diciembre</item>
     </string-array>
 
+    <!-- ==================== ACCESO PLAN ==================== -->
+    <string name="pla_necessari_titol">Plan necesario</string>
+    <string name="pla_necessari_missatge">Necesitas comprar un plan en la web para poder continuar.</string>
+    <string name="pla_necessari_boto">Entendido</string>
+
 </resources>

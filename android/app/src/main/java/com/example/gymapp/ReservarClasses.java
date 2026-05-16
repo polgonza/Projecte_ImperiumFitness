@@ -286,13 +286,20 @@ public class ReservarClasses extends BaseActivity {
                     finish();
 
                 } else {
-                    Toast.makeText(
-                            ReservarClasses.this,
-                            getString(R.string.reserva_error_backend, llegirError(response)),
-                            Toast.LENGTH_LONG
-                    ).show();
+                    String errorBackend = llegirError(response);
+
+                    if (PlaHelper.esErrorDePla(response, errorBackend)) {
+                        PlaHelper.mostrarPopupNecessitaPla(ReservarClasses.this);
+                    } else {
+                        Toast.makeText(
+                                ReservarClasses.this,
+                                getString(R.string.reserva_error_backend, errorBackend),
+                                Toast.LENGTH_LONG
+                        ).show();
+                    }
                 }
             }
+
 
             @Override
             public void onFailure(Call<ReservaDTO> call, Throwable t) {
