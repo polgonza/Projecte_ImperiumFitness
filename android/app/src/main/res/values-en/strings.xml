@@ -151,6 +151,10 @@
     <string name="cistella_buida">Your cart is empty</string>
     <string name="cistella_eliminar_titol">Delete product</string>
     <string name="cistella_eliminar_missatge">Do you want to remove this product from your cart?</string>
+    <string name="cistella_buidar">Empty</string>
+    <string name="cistella_buidar_titol">Empty cart</string>
+    <string name="cistella_buidar_missatge">Do you want to remove all products from the cart?</string>
+    <string name="cistella_buidada">Cart emptied successfully</string>
 
     <!-- ==================== PAYMENT ==================== -->
     <string name="pagament_titol_producte">Product Payment</string>
@@ -303,10 +307,12 @@
     <string name="pagament_quantitat_producte">Quantity: %1$d</string>
     <string name="pagament_producte_error_id">Error: product ID was not found</string>
     <string name="pagament_error_sessio">Error: invalid session. Please log in again.</string>
-    <string name="pagament_venda_correcta">Simulated payment and sale registered successfully</string>
+    <string name="pagament_venda_correcta">Confirmed payment and sale registered successfully</string>
     <string name="pagament_error_venda">Error registering sale: %1$s</string>
     <string name="pagament_error_connexio">Connection error: %1$s</string>
     <string name="producte_error_id">Error: product ID was not found</string>
+    <string name="pagament_error_estoc_insuficient">There is not enough stock to complete this purchase.</string>
+    <string name="pagament_error_codi">code %1$d</string>
 
     <!-- ==================== CLASSES ==================== -->
     <string name="classes_filtre_totes">All</string>

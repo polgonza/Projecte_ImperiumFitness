@@ -67,10 +67,19 @@ public class ReservarClasses extends BaseActivity {
 
         sharedPreferences = getSharedPreferences("Usuaris", Context.MODE_PRIVATE);
         token = sharedPreferences.getString("jwt_token", "");
-        usuariActiu = sharedPreferences.getString(
+
+        String usuariGuardat = sharedPreferences.getString(
                 "usuari_actiu",
                 getString(R.string.usuari_default)
         );
+
+        String nomGuardat = sharedPreferences.getString("nom_actiu", "");
+
+        if (nomGuardat != null && !nomGuardat.trim().isEmpty() && !nomGuardat.contains("@")) {
+            usuariActiu = nomGuardat;
+        } else {
+            usuariActiu = netejarNomUsuari(usuariGuardat);
+        }
 
         usuariId = obtenirUsuariIdDelToken();
 
@@ -354,6 +363,23 @@ public class ReservarClasses extends BaseActivity {
         } catch (NumberFormatException e) {
             return null;
         }
+    }
+    private String netejarNomUsuari(String usuari) {
+        if (usuari == null || usuari.trim().isEmpty()) {
+            return getString(R.string.usuari_default);
+        }
+
+        String net = usuari.trim();
+
+        if (net.contains("@")) {
+            net = net.substring(0, net.indexOf("@"));
+        }
+
+        if (net.isEmpty()) {
+            return getString(R.string.usuari_default);
+        }
+
+        return net.substring(0, 1).toUpperCase() + net.substring(1);
     }
 
     private String llegirError(Response<?> response) {

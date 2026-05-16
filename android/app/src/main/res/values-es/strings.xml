@@ -152,6 +152,10 @@
     <string name="cistella_buida">La cesta está vacía</string>
     <string name="cistella_eliminar_titol">Eliminar producto</string>
     <string name="cistella_eliminar_missatge">¿Quieres eliminar este producto de la cesta?</string>
+    <string name="cistella_buidar">Vaciar</string>
+    <string name="cistella_buidar_titol">Vaciar cesta</string>
+    <string name="cistella_buidar_missatge">¿Quieres eliminar todos los productos de la cesta?</string>
+    <string name="cistella_buidada">Cesta vaciada correctamente</string>
 
     <!-- ==================== PAGO ==================== -->
     <string name="pagament_titol_producte">Pago del Producto</string>
@@ -309,10 +313,12 @@
     <string name="pagament_quantitat_producte">Cantidad: %1$d</string>
     <string name="pagament_producte_error_id">Error: no se ha encontrado el ID del producto</string>
     <string name="pagament_error_sessio">Error: sesión no válida. Vuelve a iniciar sesión.</string>
-    <string name="pagament_venda_correcta">Pago simulado y venta registrada correctamente</string>
+    <string name="pagament_venda_correcta">Pago realizado y venta registrada correctamente</string>
     <string name="pagament_error_venda">Error registrando la venta: %1$s</string>
     <string name="pagament_error_connexio">Error de conexión: %1$s</string>
     <string name="producte_error_id">Error: no se ha encontrado el ID del producto</string>
+    <string name="pagament_error_estoc_insuficient">No hay suficiente stock para hacer esta compra.</string>
+    <string name="pagament_error_codi">código %1$d</string>
 
     <!-- ==================== CLASES ==================== -->
     <string name="classes_filtre_totes">Todas</string>

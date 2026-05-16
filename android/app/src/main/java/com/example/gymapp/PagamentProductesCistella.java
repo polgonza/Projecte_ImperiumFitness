@@ -28,6 +28,8 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import retrofit2.Call;
@@ -78,6 +80,7 @@ public class PagamentProductesCistella extends BaseActivity {
 
         rvResum = findViewById(R.id.rvResumComanda);
         tvTotal = findViewById(R.id.tvTotalComanda);
+
         etNomComplet = findViewById(R.id.etNomComplet);
         etAdreca = findViewById(R.id.etAdreca);
         etCiutat = findViewById(R.id.etCiutat);
@@ -86,6 +89,7 @@ public class PagamentProductesCistella extends BaseActivity {
         etNomTargeta = findViewById(R.id.etNomTargeta);
         etDataCaducitat = findViewById(R.id.etDataCaducitat);
         etCVV = findViewById(R.id.etCVV);
+
         btnPagar = findViewById(R.id.btnPagar);
 
         sharedPreferences = getSharedPreferences("Usuaris", Context.MODE_PRIVATE);
@@ -128,47 +132,50 @@ public class PagamentProductesCistella extends BaseActivity {
                 TextUtils.isEmpty(etDataCaducitat.getText()) ||
                 TextUtils.isEmpty(etCVV.getText())) {
 
-            Toast.makeText(this, getString(R.string.pagament_error_camps), Toast.LENGTH_SHORT).show();
+            Toast.makeText(
+                    this,
+                    getString(R.string.pagament_error_camps),
+                    Toast.LENGTH_SHORT
+            ).show();
             return;
         }
 
         if (cistella == null || cistella.isEmpty()) {
-            Toast.makeText(this, "La cistella està buida", Toast.LENGTH_SHORT).show();
+            Toast.makeText(
+                    this,
+                    getString(R.string.cistella_buida),
+                    Toast.LENGTH_SHORT
+            ).show();
             return;
         }
 
         Long usuariId = obtenirUsuariId();
 
         if (usuariId == null) {
-            Toast.makeText(this, "Error: sessió no vàlida. Torna a iniciar sessió.", Toast.LENGTH_LONG).show();
-            return;
-        }
-
-        ArrayList<LiniaVenda> linies = crearLiniesVenda();
-
-        if (linies.isEmpty()) {
             Toast.makeText(
                     this,
-                    "Error: hi ha productes sense ID. Buida la cistella i torna a afegir-los.",
+                    getString(R.string.pagament_error_sessio),
                     Toast.LENGTH_LONG
             ).show();
             return;
         }
 
+        ArrayList<LiniaVenda> linies = crearLiniesVenda();
+
         btnPagar.setEnabled(false);
 
         ApiService api = ApiClient.getClient(this).create(ApiService.class);
-        crearVendesSequencialment(api, usuariId, linies, 0);
+
+        /*
+            Primero comprobamos el stock real de todos los productos.
+        */
+        comprovarStockICrearVendes(api, usuariId, linies);
     }
 
     private ArrayList<LiniaVenda> crearLiniesVenda() {
         Map<Long, Integer> quantitats = new HashMap<>();
 
         for (ProducteCistella p : cistella) {
-            if (p.producteId == null || p.producteId <= 0) {
-                return new ArrayList<>();
-            }
-
             int quantitatActual = quantitats.containsKey(p.producteId)
                     ? quantitats.get(p.producteId)
                     : 0;
@@ -185,7 +192,76 @@ public class PagamentProductesCistella extends BaseActivity {
         return linies;
     }
 
-    private void crearVendesSequencialment(ApiService api, Long usuariId, ArrayList<LiniaVenda> linies, int index) {
+    private void comprovarStockICrearVendes(
+            ApiService api,
+            Long usuariId,
+            ArrayList<LiniaVenda> linies
+    ) {
+        api.getProductes().enqueue(new Callback<List<ProducteDTO>>() {
+            @Override
+            public void onResponse(Call<List<ProducteDTO>> call, Response<List<ProducteDTO>> response) {
+                if (!response.isSuccessful() || response.body() == null) {
+                    btnPagar.setEnabled(true);
+
+                    Toast.makeText(
+                            PagamentProductesCistella.this,
+                            getString(
+                                    R.string.pagament_error_venda,
+                                    getString(R.string.pagament_error_codi, response.code())
+                            ),
+                            Toast.LENGTH_LONG
+                    ).show();
+                    return;
+                }
+
+                Map<Long, Integer> stockPerProducte = new HashMap<>();
+
+                for (ProducteDTO producte : response.body()) {
+                    if (producte.getId() != null) {
+                        stockPerProducte.put(
+                                producte.getId().longValue(),
+                                producte.getEstoc() != null ? producte.getEstoc() : 0
+                        );
+                    }
+                }
+
+                for (LiniaVenda linia : linies) {
+                    Integer stockActual = stockPerProducte.get(linia.producteId);
+
+                    if (stockActual == null || stockActual < linia.quantitat) {
+                        btnPagar.setEnabled(true);
+
+                        Toast.makeText(
+                                PagamentProductesCistella.this,
+                                getString(R.string.pagament_error_estoc_insuficient),
+                                Toast.LENGTH_LONG
+                        ).show();
+                        return;
+                    }
+                }
+
+                crearVendesSequencialment(api, usuariId, linies, 0);
+            }
+
+            @Override
+            public void onFailure(Call<List<ProducteDTO>> call, Throwable t) {
+                btnPagar.setEnabled(true);
+
+                Toast.makeText(
+                        PagamentProductesCistella.this,
+                        getString(R.string.pagament_error_connexio, t.getMessage()),
+                        Toast.LENGTH_LONG
+                ).show();
+            }
+        });
+    }
+
+    private void crearVendesSequencialment(
+            ApiService api,
+            Long usuariId,
+            ArrayList<LiniaVenda> linies,
+            int index
+    ) {
         if (index >= linies.size()) {
             sharedPreferences.edit().putString("cistella", "[]").apply();
 
@@ -209,14 +285,26 @@ public class PagamentProductesCistella extends BaseActivity {
             public void onResponse(Call<VendaDTO> call, Response<VendaDTO> response) {
                 if (response.isSuccessful()) {
                     crearVendesSequencialment(api, usuariId, linies, index + 1);
+
                 } else {
                     btnPagar.setEnabled(true);
 
-                    Toast.makeText(
-                            PagamentProductesCistella.this,
-                            "Error registrant la venda: " + llegirError(response),
-                            Toast.LENGTH_LONG
-                    ).show();
+                    String errorBackend = llegirError(response);
+
+                    if (esErrorEstocInsuficient(response, errorBackend)) {
+                        Toast.makeText(
+                                PagamentProductesCistella.this,
+                                getString(R.string.pagament_error_estoc_insuficient),
+                                Toast.LENGTH_LONG
+                        ).show();
+
+                    } else {
+                        Toast.makeText(
+                                PagamentProductesCistella.this,
+                                getString(R.string.pagament_error_venda, errorBackend),
+                                Toast.LENGTH_LONG
+                        ).show();
+                    }
                 }
             }
 
@@ -226,11 +314,30 @@ public class PagamentProductesCistella extends BaseActivity {
 
                 Toast.makeText(
                         PagamentProductesCistella.this,
-                        "Error de connexió: " + t.getMessage(),
+                        getString(R.string.pagament_error_connexio, t.getMessage()),
                         Toast.LENGTH_LONG
                 ).show();
             }
         });
+    }
+
+    private boolean esErrorEstocInsuficient(Response<?> response, String errorBackend) {
+        if (response.code() == 409) {
+            return true;
+        }
+
+        if (errorBackend == null) {
+            return false;
+        }
+
+        String error = errorBackend.toLowerCase(Locale.ROOT);
+
+        return error.contains("estoc insuficient")
+                || error.contains("stock insuficiente")
+                || error.contains("not enough stock")
+                || error.contains("insufficient stock")
+                || error.contains("estoc")
+                || error.contains("stock");
     }
 
     private Long obtenirUsuariId() {
@@ -252,28 +359,31 @@ public class PagamentProductesCistella extends BaseActivity {
         } catch (IOException ignored) {
         }
 
-        return "codi " + response.code();
+        return getString(R.string.pagament_error_codi, response.code());
     }
 
     private class ResumAdapter extends RecyclerView.Adapter<ResumAdapter.ViewHolder> {
 
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_resum_comanda, parent, false);
+            View view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.item_resum_comanda, parent, false);
+
             return new ViewHolder(view);
         }
 
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
             ProducteCistella p = cistella.get(position);
+
             holder.ivImatge.setImageResource(p.imatge);
             holder.tvNom.setText(p.nom);
-            holder.tvPreu.setText(String.format("%.2f€", p.preu));
+            holder.tvPreu.setText(String.format(Locale.getDefault(), "%.2f€", p.preu));
         }
 
         @Override
         public int getItemCount() {
-            return cistella.size();
+            return cistella != null ? cistella.size() : 0;
         }
 
         class ViewHolder extends RecyclerView.ViewHolder {
@@ -282,6 +392,7 @@ public class PagamentProductesCistella extends BaseActivity {
 
             ViewHolder(View itemView) {
                 super(itemView);
+
                 ivImatge = itemView.findViewById(R.id.ivImatge);
                 tvNom = itemView.findViewById(R.id.tvNomProducte);
                 tvPreu = itemView.findViewById(R.id.tvPreuProducte);

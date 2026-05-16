@@ -98,7 +98,32 @@
             android:textColor="#F0DB1A"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:layout_marginBottom="12dp" />
+            android:layout_marginBottom="8dp" />
+
+        <!-- Botó buidar cistella: 1/4 de pantalla, enganxat a la dreta -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="end"
+            android:layout_marginBottom="12dp">
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="3" />
+
+            <Button
+                android:id="@+id/btnBuidarCistella"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:text="@string/cistella_buidar"
+                android:textColor="#FFFFFF"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:backgroundTint="#D32F2F" />
+        </LinearLayout>
 
         <Button
             android:id="@+id/btnProcedirPagament"

@@ -12,12 +12,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -60,6 +61,7 @@ public class PagamentProductesBotiga extends BaseActivity {
         tvNom = findViewById(R.id.tvNomProducte);
         tvPreu = findViewById(R.id.tvPreu);
         tvQuantitat = findViewById(R.id.tvQuantitat);
+
         etNomComplet = findViewById(R.id.etNomComplet);
         etAdreca = findViewById(R.id.etAdreca);
         etCiutat = findViewById(R.id.etCiutat);
@@ -68,6 +70,7 @@ public class PagamentProductesBotiga extends BaseActivity {
         etNomTargeta = findViewById(R.id.etNomTargeta);
         etDataCaducitat = findViewById(R.id.etDataCaducitat);
         etCVV = findViewById(R.id.etCVV);
+
         btnPagar = findViewById(R.id.btnPagar);
 
         sharedPreferences = getSharedPreferences("Usuaris", Context.MODE_PRIVATE);
@@ -82,7 +85,7 @@ public class PagamentProductesBotiga extends BaseActivity {
 
         imgProducte.setImageResource(imatge);
         tvNom.setText(nom);
-        tvPreu.setText(String.format("%.2f€", preu));
+        tvPreu.setText(String.format(Locale.getDefault(), "%.2f€", preu));
         tvQuantitat.setText(getString(R.string.pagament_quantitat_producte, quantitat));
 
         btnPagar.setOnClickListener(v -> ferPagament());
@@ -98,25 +101,102 @@ public class PagamentProductesBotiga extends BaseActivity {
                 TextUtils.isEmpty(etDataCaducitat.getText()) ||
                 TextUtils.isEmpty(etCVV.getText())) {
 
-            Toast.makeText(this, getString(R.string.pagament_error_camps), Toast.LENGTH_SHORT).show();
+            Toast.makeText(
+                    this,
+                    getString(R.string.pagament_error_camps),
+                    Toast.LENGTH_SHORT
+            ).show();
             return;
         }
 
         if (producteId == null) {
-            Toast.makeText(this, "Error: no s'ha trobat l'ID del producte", Toast.LENGTH_LONG).show();
+            Toast.makeText(
+                    this,
+                    getString(R.string.pagament_producte_error_id),
+                    Toast.LENGTH_LONG
+            ).show();
             return;
         }
 
         Long usuariId = obtenirUsuariId();
 
         if (usuariId == null) {
-            Toast.makeText(this, "Error: sessió no vàlida. Torna a iniciar sessió.", Toast.LENGTH_LONG).show();
+            Toast.makeText(
+                    this,
+                    getString(R.string.pagament_error_sessio),
+                    Toast.LENGTH_LONG
+            ).show();
             return;
         }
 
         btnPagar.setEnabled(false);
 
         ApiService api = ApiClient.getClient(this).create(ApiService.class);
+
+        /*
+            Primero comprobamos stock real.
+            Así mostramos mensaje claro antes de intentar registrar la venta.
+        */
+        comprovarStockIComprar(api, usuariId);
+    }
+
+    private void comprovarStockIComprar(ApiService api, Long usuariId) {
+        api.getProductes().enqueue(new Callback<List<ProducteDTO>>() {
+            @Override
+            public void onResponse(Call<List<ProducteDTO>> call, Response<List<ProducteDTO>> response) {
+                if (!response.isSuccessful() || response.body() == null) {
+                    btnPagar.setEnabled(true);
+
+                    Toast.makeText(
+                            PagamentProductesBotiga.this,
+                            getString(
+                                    R.string.pagament_error_venda,
+                                    getString(R.string.pagament_error_codi, response.code())
+                            ),
+                            Toast.LENGTH_LONG
+                    ).show();
+                    return;
+                }
+
+                Integer stockActual = null;
+
+                for (ProducteDTO producte : response.body()) {
+                    if (producte.getId() != null
+                            && producte.getId().longValue() == producteId.longValue()) {
+
+                        stockActual = producte.getEstoc() != null ? producte.getEstoc() : 0;
+                        break;
+                    }
+                }
+
+                if (stockActual == null || stockActual < quantitat) {
+                    btnPagar.setEnabled(true);
+
+                    Toast.makeText(
+                            PagamentProductesBotiga.this,
+                            getString(R.string.pagament_error_estoc_insuficient),
+                            Toast.LENGTH_LONG
+                    ).show();
+                    return;
+                }
+
+                registrarVenda(api, usuariId);
+            }
+
+            @Override
+            public void onFailure(Call<List<ProducteDTO>> call, Throwable t) {
+                btnPagar.setEnabled(true);
+
+                Toast.makeText(
+                        PagamentProductesBotiga.this,
+                        getString(R.string.pagament_error_connexio, t.getMessage()),
+                        Toast.LENGTH_LONG
+                ).show();
+            }
+        });
+    }
+
+    private void registrarVenda(ApiService api, Long usuariId) {
         VendaDTO vendaDTO = new VendaDTO(producteId, usuariId, quantitat);
 
         api.crearVenda(vendaDTO).enqueue(new Callback<VendaDTO>() {
@@ -133,15 +213,31 @@ public class PagamentProductesBotiga extends BaseActivity {
                             Toast.LENGTH_SHORT
                     ).show();
 
-                    Intent intent = new Intent(PagamentProductesBotiga.this, PagatProducteBotiga.class);
+                    Intent intent = new Intent(
+                            PagamentProductesBotiga.this,
+                            PagatProducteBotiga.class
+                    );
+
                     startActivity(intent);
                     finish();
+
                 } else {
-                    Toast.makeText(
-                            PagamentProductesBotiga.this,
-                            "Error registrant la venda: " + llegirError(response),
-                            Toast.LENGTH_LONG
-                    ).show();
+                    String errorBackend = llegirError(response);
+
+                    if (esErrorEstocInsuficient(response, errorBackend)) {
+                        Toast.makeText(
+                                PagamentProductesBotiga.this,
+                                getString(R.string.pagament_error_estoc_insuficient),
+                                Toast.LENGTH_LONG
+                        ).show();
+
+                    } else {
+                        Toast.makeText(
+                                PagamentProductesBotiga.this,
+                                getString(R.string.pagament_error_venda, errorBackend),
+                                Toast.LENGTH_LONG
+                        ).show();
+                    }
                 }
             }
 
@@ -151,11 +247,30 @@ public class PagamentProductesBotiga extends BaseActivity {
 
                 Toast.makeText(
                         PagamentProductesBotiga.this,
-                        "Error de connexió: " + t.getMessage(),
+                        getString(R.string.pagament_error_connexio, t.getMessage()),
                         Toast.LENGTH_LONG
                 ).show();
             }
         });
+    }
+
+    private boolean esErrorEstocInsuficient(Response<?> response, String errorBackend) {
+        if (response.code() == 409) {
+            return true;
+        }
+
+        if (errorBackend == null) {
+            return false;
+        }
+
+        String error = errorBackend.toLowerCase(Locale.ROOT);
+
+        return error.contains("estoc insuficient")
+                || error.contains("stock insuficiente")
+                || error.contains("not enough stock")
+                || error.contains("insufficient stock")
+                || error.contains("estoc")
+                || error.contains("stock");
     }
 
     private Long obtenirUsuariId() {
@@ -188,6 +303,6 @@ public class PagamentProductesBotiga extends BaseActivity {
         } catch (IOException ignored) {
         }
 
-        return "codi " + response.code();
+        return getString(R.string.pagament_error_codi, response.code());
     }
 }
