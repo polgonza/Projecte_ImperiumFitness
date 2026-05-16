@@ -81,7 +81,7 @@ public class PagamentProductesBotiga extends AppCompatActivity {
         imgProducte.setImageResource(imatge);
         tvNom.setText(nom);
         tvPreu.setText(String.format("%.2f€", preu));
-        tvQuantitat.setText("Quantitat: " + quantitat);
+        tvQuantitat.setText(getString(R.string.pagament_quantitat_producte, quantitat));
 
         btnPagar.setOnClickListener(v -> ferPagament());
     }
@@ -96,7 +96,7 @@ public class PagamentProductesBotiga extends AppCompatActivity {
                 TextUtils.isEmpty(etDataCaducitat.getText()) ||
                 TextUtils.isEmpty(etCVV.getText())) {
 
-            Toast.makeText(this, "Omple tots els camps de pagament", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.pagament_error_camps), Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -127,7 +127,7 @@ public class PagamentProductesBotiga extends AppCompatActivity {
 
                     Toast.makeText(
                             PagamentProductesBotiga.this,
-                            "Pagament simulat i venda registrada correctament",
+                            "Pagament realitzat i venda registrada correctament",
                             Toast.LENGTH_SHORT
                     ).show();
 

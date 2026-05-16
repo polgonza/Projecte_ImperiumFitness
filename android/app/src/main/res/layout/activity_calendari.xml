@@ -155,7 +155,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Dia amb reserva"
+                android:text="@string/calendari_llegenda_reserva"
                 android:textColor="#CCCCCC"
                 android:textSize="12sp"
                 android:layout_marginEnd="20dp" />
@@ -168,7 +168,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Avui"
+                android:text="@string/calendari_llegenda_avui"
                 android:textColor="#CCCCCC"
                 android:textSize="12sp" />
         </LinearLayout>
@@ -186,7 +186,7 @@
                 android:id="@+id/tvProperaReserva"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Carregant reserves..."
+                android:text="@string/calendari_carregant_reserves"
                 android:textColor="#F0DB1A"
                 android:textSize="13sp"
                 android:gravity="center" />

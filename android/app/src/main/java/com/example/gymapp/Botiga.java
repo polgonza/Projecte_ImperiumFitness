@@ -18,7 +18,9 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import java.text.Normalizer;
 import java.util.List;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -47,6 +49,7 @@ public class Botiga extends BaseActivity {
         tvBotigaEstat = findViewById(R.id.tvBotigaEstat);
 
         LinearLayout llCistella = findViewById(R.id.llCistella);
+
         if (llCistella != null) {
             llCistella.setOnClickListener(v -> {
                 Intent intent = new Intent(this, CistellaBotiga.class);
@@ -58,7 +61,7 @@ public class Botiga extends BaseActivity {
     }
 
     private void carregarProductesBackend() {
-        tvBotigaEstat.setText("Carregant productes...");
+        tvBotigaEstat.setText(getString(R.string.botiga_carregant_productes));
 
         ApiService api = ApiClient.getClient(this).create(ApiService.class);
 
@@ -68,15 +71,25 @@ public class Botiga extends BaseActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     pintarProductes(response.body());
                 } else {
-                    tvBotigaEstat.setText("No s'han pogut carregar els productes.");
-                    Toast.makeText(Botiga.this, "Error carregant productes", Toast.LENGTH_SHORT).show();
+                    tvBotigaEstat.setText(getString(R.string.botiga_error_carregar_productes));
+
+                    Toast.makeText(
+                            Botiga.this,
+                            getString(R.string.botiga_error_carregar_productes),
+                            Toast.LENGTH_SHORT
+                    ).show();
                 }
             }
 
             @Override
             public void onFailure(Call<List<ProducteDTO>> call, Throwable t) {
-                tvBotigaEstat.setText("Error de connexió amb el servidor.");
-                Toast.makeText(Botiga.this, "Error: " + t.getMessage(), Toast.LENGTH_LONG).show();
+                tvBotigaEstat.setText(getString(R.string.botiga_error_connexio));
+
+                Toast.makeText(
+                        Botiga.this,
+                        getString(R.string.botiga_error_prefix, t.getMessage()),
+                        Toast.LENGTH_LONG
+                ).show();
             }
         });
     }
@@ -86,11 +99,12 @@ public class Botiga extends BaseActivity {
 
         if (productes == null || productes.isEmpty()) {
             TextView buit = new TextView(this);
-            buit.setText("No hi ha productes disponibles.");
+            buit.setText(getString(R.string.botiga_no_productes));
             buit.setTextColor(Color.parseColor("#333333"));
             buit.setTextSize(16);
             buit.setGravity(Gravity.CENTER);
             buit.setPadding(dp(20), dp(20), dp(20), dp(20));
+
             layoutProductes.addView(buit);
             return;
         }
@@ -107,6 +121,7 @@ public class Botiga extends BaseActivity {
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
         );
+
         cardParams.setMargins(0, 0, 0, dp(12));
 
         card.setLayoutParams(cardParams);
@@ -122,6 +137,7 @@ public class Botiga extends BaseActivity {
         ImageView imagen = new ImageView(this);
         LinearLayout.LayoutParams imgParams = new LinearLayout.LayoutParams(dp(96), dp(96));
         imgParams.setMargins(0, 0, dp(14), 0);
+
         imagen.setLayoutParams(imgParams);
         imagen.setScaleType(ImageView.ScaleType.CENTER_CROP);
         imagen.setImageResource(imatgePerProducte(producte));
@@ -135,41 +151,45 @@ public class Botiga extends BaseActivity {
         ));
 
         TextView tvNom = new TextView(this);
-        tvNom.setText(producte.getNom() != null ? producte.getNom() : "Producte");
+        tvNom.setText(producte.getNom() != null
+                ? producte.getNom()
+                : getString(R.string.botiga_producte_default));
         tvNom.setTextColor(Color.WHITE);
         tvNom.setTextSize(18);
         tvNom.setTypeface(null, Typeface.BOLD);
 
         TextView tvPreu = new TextView(this);
         double preu = producte.getPreu() != null ? producte.getPreu() : 0.0;
-        tvPreu.setText(String.format("%.2f€", preu));
+        tvPreu.setText(String.format(Locale.getDefault(), "%.2f€", preu));
         tvPreu.setTextColor(Color.WHITE);
         tvPreu.setTextSize(16);
         tvPreu.setPadding(0, dp(4), 0, 0);
 
         TextView tvEstoc = new TextView(this);
         int estoc = producte.getEstoc() != null ? producte.getEstoc() : 0;
-        tvEstoc.setText("Estoc: " + estoc);
+        tvEstoc.setText(getString(R.string.botiga_estoc, estoc));
         tvEstoc.setTextColor(Color.WHITE);
         tvEstoc.setTextSize(12);
         tvEstoc.setPadding(0, dp(4), 0, 0);
 
         Button btnComprar = new Button(this);
+
         LinearLayout.LayoutParams btnParams = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 dp(38)
         );
+
         btnParams.setMargins(0, dp(8), 0, 0);
 
         btnComprar.setLayoutParams(btnParams);
-        btnComprar.setText("Compra ara");
+        btnComprar.setText(getString(R.string.btn_comprar_ara));
         btnComprar.setTextSize(12);
         btnComprar.setTextColor(Color.WHITE);
         btnComprar.setTypeface(null, Typeface.BOLD);
         btnComprar.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FFC107")));
 
         if (estoc <= 0) {
-            btnComprar.setText("Sense estoc");
+            btnComprar.setText(getString(R.string.botiga_sense_estoc));
             btnComprar.setEnabled(false);
         } else {
             btnComprar.setOnClickListener(v -> obrirProducte(producte));
@@ -200,31 +220,99 @@ public class Botiga extends BaseActivity {
         intent.putExtra("nom_producte", producte.getNom());
         intent.putExtra("preu_producte", preu);
         intent.putExtra("descripcio_producte", producte.getDescripcio());
+
+        /*
+            Imagen hardcodeada según el nombre/categoría del producto.
+            ProductesBotiga la recibe y la reutiliza en carrito/pago.
+        */
         intent.putExtra("imatge_producte", imatgePerProducte(producte));
 
         startActivity(intent);
     }
 
     private int imatgePerProducte(ProducteDTO producte) {
-        String categoria = producte.getCategoria() != null
-                ? producte.getCategoria().toLowerCase()
-                : "";
-
         String nom = producte.getNom() != null
-                ? producte.getNom().toLowerCase()
+                ? normalitzar(producte.getNom())
                 : "";
 
-        if (categoria.contains("suplement") || nom.contains("prote")) {
-            return R.drawable.proteina;
+        String categoria = producte.getCategoria() != null
+                ? normalitzar(producte.getCategoria())
+                : "";
+
+        String nomDrawable = "producto_2";
+
+        /*
+            Productos actuales:
+            - Proteïna Whey 1kg / 2kg       -> proteina
+            - Samarreta Imperium            -> samarreta
+            - Creatina 300g                 -> creatina
+            - Barra de proteïna             -> barra_proteina
+            - Guants gimnàs                 -> guants
+            - Bossa de gimnàs               -> bossa
+            - Samarreta tècnica home/dona   -> samarreta
+            - Malla esportiva               -> malla
+            - Ampolla 750ml                 -> ampolla
+            - Omega-3                       -> omega3
+        */
+
+        if (nom.contains("creatina")) {
+            nomDrawable = "creatina";
+
+        } else if (nom.contains("barra")) {
+            nomDrawable = "barra_proteina";
+
+        } else if (nom.contains("omega")) {
+            nomDrawable = "omega3";
+
+        } else if (nom.contains("proteina") || nom.contains("protein") || nom.contains("whey")) {
+            nomDrawable = "proteina";
+
+        } else if (nom.contains("guants") || nom.contains("guant") || nom.contains("guantes")) {
+            nomDrawable = "guants";
+
+        } else if (nom.contains("bossa") || nom.contains("bolsa") || nom.contains("motxilla") || nom.contains("mochila")) {
+            nomDrawable = "bossa";
+
+        } else if (nom.contains("malla")) {
+            nomDrawable = "malla";
+
+        } else if (nom.contains("ampolla") || nom.contains("botella")) {
+            nomDrawable = "ampolla";
+
+        } else if (nom.contains("samarreta") || nom.contains("camiseta") || nom.contains("tshirt")) {
+            nomDrawable = "samarreta";
+
+        } else if (categoria.contains("suplement")) {
+            nomDrawable = "proteina";
+
+        } else if (categoria.contains("roba") || categoria.contains("ropa")) {
+            nomDrawable = "samarreta";
+
+        } else if (categoria.contains("accesori") || categoria.contains("accesorio")) {
+            nomDrawable = "guants";
         }
 
-        if (categoria.contains("roba") ||
-                categoria.contains("ropa") ||
-                nom.contains("camiseta")) {
-            return R.drawable.camiseta;
+        return obtenirDrawableONDefault(nomDrawable);
+    }
+
+    private int obtenirDrawableONDefault(String nomDrawable) {
+        int resId = getResources().getIdentifier(
+                nomDrawable,
+                "drawable",
+                getPackageName()
+        );
+
+        if (resId == 0) {
+            return R.drawable.producto_2;
         }
 
-        return R.drawable.producto_2;
+        return resId;
+    }
+
+    private String normalitzar(String text) {
+        String normalitzat = Normalizer.normalize(text, Normalizer.Form.NFD);
+        normalitzat = normalitzat.replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
+        return normalitzat.toLowerCase().trim();
     }
 
     private int dp(int value) {

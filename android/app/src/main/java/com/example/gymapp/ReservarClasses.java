@@ -64,16 +64,12 @@ public class ReservarClasses extends AppCompatActivity {
 
         sharedPreferences = getSharedPreferences("Usuaris", Context.MODE_PRIVATE);
         token = sharedPreferences.getString("jwt_token", "");
-        usuariActiu = sharedPreferences.getString("usuari_actiu", "Usuari");
+        usuariActiu = sharedPreferences.getString("usuari_actiu", getString(R.string.usuari_default));
 
         usuariId = obtenirUsuariIdDelToken();
 
         if (usuariId == null) {
-            Toast.makeText(
-                    this,
-                    "Sessió no vàlida. Torna a iniciar sessió.",
-                    Toast.LENGTH_LONG
-            ).show();
+            Toast.makeText(this, getString(R.string.reserva_sessio_invalida), Toast.LENGTH_LONG).show();
 
             finish();
             return;
@@ -85,18 +81,18 @@ public class ReservarClasses extends AppCompatActivity {
 
         ivClasseImatge.setImageResource(imatgeClasse);
         tvClasseNom.setText(nomClasse);
-        tvUsuariReserva.setText(usuariActiu + ", tria una sessió de " + nomClasse);
+        tvUsuariReserva.setText(getString(R.string.reserva_tria_sessio, usuariActiu, nomClasse));
 
         if (sessionsSerialized != null && !sessionsSerialized.isEmpty()) {
             parsejaSessions(sessionsSerialized);
         } else {
-            Toast.makeText(this, "No hi ha sessions disponibles.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.reserva_no_sessions), Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
 
         if (sessionIds.isEmpty()) {
-            Toast.makeText(this, "No hi ha sessions disponibles.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.reserva_no_sessions), Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
@@ -173,19 +169,11 @@ public class ReservarClasses extends AppCompatActivity {
                     Integer.parseInt(dataparts[2])
             );
 
-            String[] diesSetmana = {
-                    "Diumenge",
-                    "Dilluns",
-                    "Dimarts",
-                    "Dimecres",
-                    "Dijous",
-                    "Divendres",
-                    "Dissabte"
-            };
+            String[] diesSetmana = getResources().getStringArray(R.array.dies_setmana_llargs);
 
             String diaSemana = diesSetmana[cal.get(java.util.Calendar.DAY_OF_WEEK) - 1];
 
-            return diaSemana + " " + dataFormatada + " a les " + hora + "h";
+            return getString(R.string.reserva_format_horari, diaSemana, dataFormatada, hora);
 
         } catch (Exception e) {
             return horariISO;
@@ -194,7 +182,7 @@ public class ReservarClasses extends AppCompatActivity {
 
     private void confirmarReserva() {
         if (sessionIds.isEmpty()) {
-            Toast.makeText(this, "No hi ha sessions disponibles.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.reserva_no_sessions), Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -219,7 +207,7 @@ public class ReservarClasses extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     Toast.makeText(
                             ReservarClasses.this,
-                            "Reserva confirmada! ✅",
+                            getString(R.string.reserva_confirmada_ok),
                             Toast.LENGTH_SHORT
                     ).show();
 

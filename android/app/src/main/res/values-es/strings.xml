@@ -129,6 +129,14 @@
     <string name="producte_preu_proteina">39,99€</string>
     <string name="producte_preu_camiseta">19,99€</string>
     <string name="btn_comprar_ara">Comprar ahora</string>
+    <string name="botiga_carregant_productes">Cargando productos...</string>
+    <string name="botiga_error_carregar_productes">No se han podido cargar los productos.</string>
+    <string name="botiga_error_connexio">Error de conexión con el servidor.</string>
+    <string name="botiga_error_prefix">Error: %1$s</string>
+    <string name="botiga_no_productes">No hay productos disponibles.</string>
+    <string name="botiga_producte_default">Producto</string>
+    <string name="botiga_estoc">Stock: %1$d</string>
+    <string name="botiga_sense_estoc">Sin stock</string>
 
     <!-- ==================== PRODUCTOS TIENDA (DETALLE) ==================== -->
     <string name="producte_detall_titol">Detalle del producto</string>
@@ -299,6 +307,107 @@
 
     <string name="ajuda_contacte_missatge">Para ponerte en contacto con nosotros, solo tienes que pulsar el botón “Envíanos un mensaje” y automáticamente se abrirá el correo electrónico para escribir tu mensaje.</string>
 
+    <!-- ==================== TIENDA DINÁMICA ==================== -->
+    <string name="botiga_carregant_productes">Cargando productos...</string>
+    <string name="botiga_error_carregar_productes">No se han podido cargar los productos.</string>
+    <string name="botiga_error_connexio">Error de conexión con el servidor.</string>
+    <string name="botiga_error_prefix">Error: %1$s</string>
+    <string name="botiga_no_productes">No hay productos disponibles.</string>
+    <string name="botiga_producte_default">Producto</string>
+    <string name="botiga_estoc">Stock: %1$d</string>
+    <string name="botiga_sense_estoc">Sin stock</string>
 
+    <!-- ==================== PRODUCTO / PAGO ==================== -->
+    <string name="pagament_quantitat_producte">Cantidad: %1$d</string>
+    <string name="pagament_producte_error_id">Error: no se ha encontrado el ID del producto</string>
+    <string name="pagament_error_sessio">Error: sesión no válida. Vuelve a iniciar sesión.</string>
+    <string name="pagament_venda_correcta">Pago simulado y venta registrada correctamente</string>
+    <string name="pagament_error_venda">Error registrando la venta: %1$s</string>
+    <string name="pagament_error_connexio">Error de conexión: %1$s</string>
+    <string name="producte_error_id">Error: no se ha encontrado el ID del producto</string>
+
+    <!-- ==================== CLASES ==================== -->
+    <string name="classes_filtre_totes">Todas</string>
+    <string name="classes_categoria_cardio">Cardiovascular</string>
+    <string name="classes_categoria_forca">Fuerza</string>
+    <string name="classes_categoria_flexibilitat">Flexibilidad</string>
+    <string name="classes_categoria_altres">Otras</string>
+    <string name="classes_categoria_flexibilitat_llarga">Flexibilidad y Cuerpo-Mente</string>
+    <string name="classes_buit_14_dies">No hay clases disponibles para los próximos 14 días.</string>
+    <string name="classes_error_carregar">Error cargando clases</string>
+    <string name="classes_error_connexio">No se ha podido conectar: %1$s</string>
+    <string name="classes_sessions_disponibles">📅 %1$d sesiones disponibles (14 días)</string>
+
+    <!-- ==================== RESERVA CLASES ==================== -->
+    <string name="usuari_default">Usuario</string>
+    <string name="reserva_sessio_invalida">Sesión no válida. Vuelve a iniciar sesión.</string>
+    <string name="reserva_tria_sessio">%1$s, elige una sesión de %2$s</string>
+    <string name="reserva_no_sessions">No hay sesiones disponibles.</string>
+    <string name="reserva_selecciona_sessio_valida">Selecciona una sesión válida.</string>
+    <string name="reserva_confirmada_ok">¡Reserva confirmada! ✅</string>
+    <string name="reserva_error_backend">Error haciendo la reserva: %1$s</string>
+    <string name="reserva_error_generic">Error haciendo la reserva. Vuelve a intentarlo.</string>
+    <string name="reserva_error_connexio">No se ha podido conectar: %1$s</string>
+    <string name="reserva_format_horari">%1$s %2$s a las %3$sh</string>
+
+    <string-array name="dies_setmana_llargs">
+        <item>Domingo</item>
+        <item>Lunes</item>
+        <item>Martes</item>
+        <item>Miércoles</item>
+        <item>Jueves</item>
+        <item>Viernes</item>
+        <item>Sábado</item>
+    </string-array>
+
+    <!-- ==================== CALENDARIO ==================== -->
+    <string name="calendari_llegenda_reserva">Día con reserva</string>
+    <string name="calendari_llegenda_avui">Hoy</string>
+    <string name="calendari_carregant_reserves">Cargando reservas...</string>
+    <string name="calendari_sessio_invalida">Sesión no válida.</string>
+    <string name="calendari_error_carregar_reserves">No se han podido cargar las reservas.</string>
+    <string name="calendari_error_connexio">Error de conexión: %1$s</string>
+    <string name="calendari_propera_reserva">Próxima reserva: %1$s a las %2$sh</string>
+    <string name="calendari_sense_cap_reserva">No tienes ninguna reserva hecha.</string>
+    <string name="calendari_sense_reserves_properes">No tienes reservas próximas.</string>
+    <string name="calendari_reserves_del_dia">Reservas del %1$s</string>
+    <string name="calendari_tancar">Cerrar</string>
+    <string name="calendari_classe_id">Clase #%1$d</string>
+    <string name="calendari_capacitat">👥 Capacidad: %1$d personas</string>
+    <string name="calendari_capacitat_no_disponible">👥 Capacidad: No disponible</string>
+    <string name="calendari_cancelar_reserva">Cancelar reserva</string>
+    <string name="calendari_cancelar_una">Cancelar una</string>
+    <string name="calendari_cancelar_titol">Cancelar reserva</string>
+    <string name="calendari_cancelar_missatge">¿Quieres cancelar la reserva de %1$s?</string>
+    <string name="calendari_cancelar_confirmar">Sí, cancelar</string>
+    <string name="calendari_cancelada_ok">Reserva cancelada correctamente</string>
+    <string name="calendari_error_cancelar">Error cancelando reserva: código %1$d</string>
+    <string name="calendari_selector_cancelar">¿Qué reserva quieres cancelar?</string>
+    <string name="calendari_tornar">Volver</string>
+
+    <string-array name="calendari_dies_curts">
+        <item>L</item>
+        <item>M</item>
+        <item>X</item>
+        <item>J</item>
+        <item>V</item>
+        <item>S</item>
+        <item>D</item>
+    </string-array>
+
+    <string-array name="calendari_mesos">
+        <item>Enero</item>
+        <item>Febrero</item>
+        <item>Marzo</item>
+        <item>Abril</item>
+        <item>Mayo</item>
+        <item>Junio</item>
+        <item>Julio</item>
+        <item>Agosto</item>
+        <item>Septiembre</item>
+        <item>Octubre</item>
+        <item>Noviembre</item>
+        <item>Diciembre</item>
+    </string-array>
 
 </resources>

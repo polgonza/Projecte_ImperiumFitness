@@ -129,7 +129,11 @@ public class ProductesBotiga extends AppCompatActivity {
         String newJson = new Gson().toJson(cistella);
         sharedPreferences.edit().putString("cistella", newJson).apply();
 
-        Toast.makeText(this, "Afegit a la cistella", Toast.LENGTH_SHORT).show();
+        Toast.makeText(
+                this,
+                getString(R.string.producte_afegit_cistella, quantitat),
+                Toast.LENGTH_SHORT
+        ).show();
     }
 
     private void pagarAra() {

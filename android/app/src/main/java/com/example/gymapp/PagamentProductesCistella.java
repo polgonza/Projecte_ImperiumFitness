@@ -94,7 +94,7 @@ public class PagamentProductesCistella extends AppCompatActivity {
         rvResum.setAdapter(new ResumAdapter());
 
         calcularTotal();
-        tvTotal.setText(String.format("Total: %.2f€", totalComanda));
+        tvTotal.setText(getString(R.string.pagament_total, totalComanda));
 
         btnPagar.setOnClickListener(v -> ferPagament());
     }
@@ -127,7 +127,7 @@ public class PagamentProductesCistella extends AppCompatActivity {
                 TextUtils.isEmpty(etDataCaducitat.getText()) ||
                 TextUtils.isEmpty(etCVV.getText())) {
 
-            Toast.makeText(this, "Omple tots els camps de pagament", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.pagament_error_camps), Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -190,7 +190,7 @@ public class PagamentProductesCistella extends AppCompatActivity {
 
             Toast.makeText(
                     PagamentProductesCistella.this,
-                    "Pagament simulat i venda registrada correctament",
+                    "Pagament realitzat i venda registrada correctament",
                     Toast.LENGTH_SHORT
             ).show();
 
