@@ -273,7 +273,7 @@ public class Classes extends BaseActivity {
         tvCategoria.setTypeface(null, Typeface.ITALIC);
 
         TextView tvDesc = new TextView(this);
-        tvDesc.setText(representant.getDescripcio() != null ? representant.getDescripcio() : "");
+        tvDesc.setText(obtenirDescripcioClasse(representant.getNom()));
         tvDesc.setTextColor(Color.LTGRAY);
         tvDesc.setTextSize(12);
         tvDesc.setMaxLines(2);
@@ -380,6 +380,45 @@ public class Classes extends BaseActivity {
         startActivity(intent);
     }
 
+    private String obtenirDescripcioClasse(String nomClasse) {
+        if (nomClasse == null) {
+            return getString(R.string.classe_desc_default);
+        }
+
+        String nom = java.text.Normalizer.normalize(nomClasse, java.text.Normalizer.Form.NFD);
+        nom = nom.replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
+        nom = nom.toLowerCase().trim();
+
+        if (nom.contains("zumba")) {
+            return getString(R.string.classe_desc_zumba);
+        }
+
+        if (nom.contains("spinning") || nom.contains("spining") || nom.contains("ciclisme")) {
+            return getString(R.string.classe_desc_spinning);
+        }
+
+        if (nom.contains("body pump") || nom.contains("bodypump") || nom.contains("pump")) {
+            return getString(R.string.classe_desc_bodypump);
+        }
+
+        if (nom.contains("yoga")) {
+            return getString(R.string.classe_desc_yoga);
+        }
+
+        if (nom.contains("pilates")) {
+            return getString(R.string.classe_desc_pilates);
+        }
+
+        if (nom.contains("crossfit") || nom.contains("cross fit")) {
+            return getString(R.string.classe_desc_crossfit);
+        }
+
+        if (nom.contains("hiit")) {
+            return getString(R.string.classe_desc_hiit);
+        }
+
+        return getString(R.string.classe_desc_default);
+    }
     private int dp(int dp) {
         float density = getResources().getDisplayMetrics().density;
         return Math.round(dp * density);
