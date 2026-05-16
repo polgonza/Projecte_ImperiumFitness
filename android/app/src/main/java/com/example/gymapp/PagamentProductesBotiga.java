@@ -12,7 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
+
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -29,7 +29,7 @@ import retrofit2.Response;
     Pantalla de pagament simulat per a un producte comprat directament.
     Aunque el pago sea simulado, se registra la venta en backend.
 */
-public class PagamentProductesBotiga extends AppCompatActivity {
+public class PagamentProductesBotiga extends BaseActivity {
 
     private ImageView imgProducte;
     private TextView tvNom, tvPreu, tvQuantitat;
@@ -47,6 +47,8 @@ public class PagamentProductesBotiga extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_pagament_productes_botiga);
+
+        setupBottomNav();
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -81,7 +83,7 @@ public class PagamentProductesBotiga extends AppCompatActivity {
         imgProducte.setImageResource(imatge);
         tvNom.setText(nom);
         tvPreu.setText(String.format("%.2f€", preu));
-        tvQuantitat.setText("Quantitat: " + quantitat);
+        tvQuantitat.setText(getString(R.string.pagament_quantitat_producte, quantitat));
 
         btnPagar.setOnClickListener(v -> ferPagament());
     }
@@ -96,7 +98,7 @@ public class PagamentProductesBotiga extends AppCompatActivity {
                 TextUtils.isEmpty(etDataCaducitat.getText()) ||
                 TextUtils.isEmpty(etCVV.getText())) {
 
-            Toast.makeText(this, "Omple tots els camps de pagament", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.pagament_error_camps), Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -127,7 +129,7 @@ public class PagamentProductesBotiga extends AppCompatActivity {
 
                     Toast.makeText(
                             PagamentProductesBotiga.this,
-                            "Pagament simulat i venda registrada correctament",
+                            "Pagament realitzat i venda registrada correctament",
                             Toast.LENGTH_SHORT
                     ).show();
 

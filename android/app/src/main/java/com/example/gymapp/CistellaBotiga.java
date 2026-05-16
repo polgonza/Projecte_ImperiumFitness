@@ -24,23 +24,15 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
+import java.text.Normalizer;
 import java.util.ArrayList;
 
-/*
-    CISTELLA BOTIGA ACTIVITY
-    ========================
-    Pantalla que mostra tots els productes afegits a la cistella.
-    Permet eliminar cada producte amb una creu (X).
-    Calcula el total automàticament i ofereix un botó per procedir al pagament.
-
-    @author ImperiumGym
-    @version 2.0
-*/
 public class CistellaBotiga extends BaseActivity {
 
     private RecyclerView rvCistella;
     private TextView tvTotal;
     private Button btnProcedirPagament;
+
     private ArrayList<ProducteCistella> cistella;
     private ProducteCistellaAdapter adapter;
     private SharedPreferences sharedPreferences;
@@ -64,6 +56,7 @@ public class CistellaBotiga extends BaseActivity {
         btnProcedirPagament = findViewById(R.id.btnProcedirPagament);
 
         sharedPreferences = getSharedPreferences("Usuaris", Context.MODE_PRIVATE);
+
         carregarCistella();
 
         rvCistella.setLayoutManager(new LinearLayoutManager(this));
@@ -75,68 +68,150 @@ public class CistellaBotiga extends BaseActivity {
 
     private void carregarCistella() {
         String json = sharedPreferences.getString("cistella", "[]");
-        Type type = new TypeToken<ArrayList<ProducteCistella>>(){}.getType();
+
+        Type type = new TypeToken<ArrayList<ProducteCistella>>() {}.getType();
         cistella = new Gson().fromJson(json, type);
+
+        if (cistella == null) {
+            cistella = new ArrayList<>();
+        }
+
         actualitzarTotal();
     }
 
     private void guardarCistella() {
         String json = new Gson().toJson(cistella);
         sharedPreferences.edit().putString("cistella", json).apply();
+
         actualitzarTotal();
-        adapter.notifyDataSetChanged();
+
+        if (adapter != null) {
+            adapter.notifyDataSetChanged();
+        }
     }
 
     private void actualitzarTotal() {
         double total = 0;
-        for (ProducteCistella p : cistella) {
-            total += p.preu;
+
+        if (cistella != null) {
+            for (ProducteCistella p : cistella) {
+                total += p.preu;
+            }
         }
-        tvTotal.setText(String.format("Total: %.2f€", total));
+
+        tvTotal.setText(getString(R.string.cistella_total, total));
     }
 
     private void procedirPagament() {
-        if (cistella.isEmpty()) {
-            Toast.makeText(this, "La cistella està buida", Toast.LENGTH_SHORT).show();
+        if (cistella == null || cistella.isEmpty()) {
+            Toast.makeText(this, getString(R.string.cistella_buida), Toast.LENGTH_SHORT).show();
             return;
         }
-        // Guardem la cistella per a la pantalla de pagament
+
         Intent intent = new Intent(this, PagamentProductesCistella.class);
         startActivity(intent);
     }
 
-    // ----- ADAPTER PER AL RECYCLERVIEW -----
+    private int imatgePerProducte(ProducteCistella producte) {
+        if (producte == null) {
+            return R.drawable.producto_2;
+        }
+
+        String nom = producte.nom != null ? normalitzar(producte.nom) : "";
+
+        String nomDrawable = "producto_2";
+
+        if (nom.contains("creatina")) {
+            nomDrawable = "creatina";
+
+        } else if (nom.contains("barra")) {
+            nomDrawable = "barra_proteina";
+
+        } else if (nom.contains("omega")) {
+            nomDrawable = "omega3";
+
+        } else if (nom.contains("proteina") || nom.contains("whey")) {
+            nomDrawable = "proteina";
+
+        } else if (nom.contains("guants") || nom.contains("guant")) {
+            nomDrawable = "guants";
+
+        } else if (nom.contains("bossa") || nom.contains("bolsa") || nom.contains("motxilla")) {
+            nomDrawable = "bossa";
+
+        } else if (nom.contains("malla")) {
+            nomDrawable = "malla";
+
+        } else if (nom.contains("ampolla") || nom.contains("botella")) {
+            nomDrawable = "ampolla";
+
+        } else if (nom.contains("samarreta") || nom.contains("camiseta")) {
+            nomDrawable = "samarreta";
+        }
+
+        int resId = getResources().getIdentifier(
+                nomDrawable,
+                "drawable",
+                getPackageName()
+        );
+
+        if (resId != 0) {
+            return resId;
+        }
+
+        if (producte.imatge != 0) {
+            return producte.imatge;
+        }
+
+        return R.drawable.producto_2;
+    }
+
+    private String normalitzar(String text) {
+        String normalitzat = Normalizer.normalize(text, Normalizer.Form.NFD);
+        normalitzat = normalitzat.replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
+        return normalitzat.toLowerCase().trim();
+    }
+
     private class ProducteCistellaAdapter extends RecyclerView.Adapter<ProducteCistellaAdapter.ViewHolder> {
 
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_cistella, parent, false);
+            View view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.item_cistella, parent, false);
+
             return new ViewHolder(view);
         }
 
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
             ProducteCistella producte = cistella.get(position);
-            holder.ivImatge.setImageResource(producte.imatge);
-            holder.tvNom.setText(producte.nom);
+
+            holder.ivImatge.setImageResource(imatgePerProducte(producte));
+            holder.tvNom.setText(producte.nom != null ? producte.nom : "");
             holder.tvPreu.setText(String.format("%.2f€", producte.preu));
+
             holder.btnEliminar.setOnClickListener(v -> {
-                // Confirmar eliminació
+                int posicioActual = holder.getBindingAdapterPosition();
+
+                if (posicioActual == RecyclerView.NO_POSITION) {
+                    return;
+                }
+
                 new AlertDialog.Builder(CistellaBotiga.this)
-                        .setTitle("Eliminar producte")
-                        .setMessage("Vols eliminar aquest producte de la cistella?")
-                        .setPositiveButton("Sí", (dialog, which) -> {
-                            cistella.remove(position);
+                        .setTitle(getString(R.string.cistella_eliminar_titol))
+                        .setMessage(getString(R.string.cistella_eliminar_missatge))
+                        .setPositiveButton(getString(R.string.si), (dialog, which) -> {
+                            cistella.remove(posicioActual);
                             guardarCistella();
                         })
-                        .setNegativeButton("No", null)
+                        .setNegativeButton(getString(R.string.no), null)
                         .show();
             });
         }
 
         @Override
         public int getItemCount() {
-            return cistella.size();
+            return cistella != null ? cistella.size() : 0;
         }
 
         class ViewHolder extends RecyclerView.ViewHolder {
@@ -146,6 +221,7 @@ public class CistellaBotiga extends BaseActivity {
 
             ViewHolder(View itemView) {
                 super(itemView);
+
                 ivImatge = itemView.findViewById(R.id.ivImatge);
                 tvNom = itemView.findViewById(R.id.tvNomProducte);
                 tvPreu = itemView.findViewById(R.id.tvPreuProducte);

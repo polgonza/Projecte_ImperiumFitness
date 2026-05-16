@@ -76,9 +76,6 @@
     <string name="classe_zumba">Zumba</string>
     <string name="classe_spinning">Spinning</string>
     <string name="classe_bodypump">Body Pump</string>
-    <string name="classe_desc_zumba">Dynamic dance class with Latin music. Perfect for burning calories and having fun.</string>
-    <string name="classe_desc_spinning">Intense indoor cycling class to improve your cardiovascular endurance.</string>
-    <string name="classe_desc_bodypump">Weight and bar training to tone all your body muscles.</string>
     <string name="btn_reserva_ara">Book now</string>
 
     <!-- ==================== BOOK CLASS ==================== -->
@@ -128,6 +125,14 @@
     <string name="producte_preu_proteina">39.99€</string>
     <string name="producte_preu_camiseta">19.99€</string>
     <string name="btn_comprar_ara">Buy now</string>
+    <string name="botiga_carregant_productes">Loading products...</string>
+    <string name="botiga_error_carregar_productes">Products could not be loaded.</string>
+    <string name="botiga_error_connexio">Connection error with the server.</string>
+    <string name="botiga_error_prefix">Error: %1$s</string>
+    <string name="botiga_no_productes">No products available.</string>
+    <string name="botiga_producte_default">Product</string>
+    <string name="botiga_estoc">Stock: %1$d</string>
+    <string name="botiga_sense_estoc">Out of stock</string>
 
     <!-- ==================== PRODUCT DETAIL ==================== -->
     <string name="producte_detall_titol">Product details</string>
@@ -293,4 +298,104 @@
     <string name="ajuda_contacte_acces">To access the gym contact page, the user must tap the contact section in the bottom menu.</string>
 
     <string name="ajuda_contacte_missatge">To contact us, the user only has to tap the “Send us a message” button and the email application will automatically open so they can write their message.</string>
+    <!-- ==================== PRODUCT / PAYMENT ==================== -->
+    <string name="pagament_quantitat_producte">Quantity: %1$d</string>
+    <string name="pagament_producte_error_id">Error: product ID was not found</string>
+    <string name="pagament_error_sessio">Error: invalid session. Please log in again.</string>
+    <string name="pagament_venda_correcta">Simulated payment and sale registered successfully</string>
+    <string name="pagament_error_venda">Error registering sale: %1$s</string>
+    <string name="pagament_error_connexio">Connection error: %1$s</string>
+    <string name="producte_error_id">Error: product ID was not found</string>
+
+    <!-- ==================== CLASSES ==================== -->
+    <string name="classes_filtre_totes">All</string>
+    <string name="classes_categoria_cardio">Cardio</string>
+    <string name="classes_categoria_forca">Strength</string>
+    <string name="classes_categoria_flexibilitat">Flexibility</string>
+    <string name="classes_categoria_altres">Other</string>
+    <string name="classes_categoria_flexibilitat_llarga">Flexibility and Mind-Body</string>
+    <string name="classes_buit_14_dies">No classes available for the next 14 days.</string>
+    <string name="classes_error_carregar">Error loading classes</string>
+    <string name="classes_error_connexio">Could not connect: %1$s</string>
+    <string name="classes_sessions_disponibles">📅 %1$d sessions available (14 days)</string>
+    <string name="classe_desc_zumba">A fun class with Latin music to burn calories and improve coordination.</string>
+    <string name="classe_desc_spinning">An intense indoor cycling session to improve cardiovascular endurance.</string>
+    <string name="classe_desc_bodypump">Strength training with bars and weights to tone the whole body.</string>
+    <string name="classe_desc_yoga">A class to improve flexibility, breathing and body balance.</string>
+    <string name="classe_desc_pilates">Exercises focused on posture control, core strength and stability.</string>
+    <string name="classe_desc_crossfit">High-intensity functional training with varied exercises.</string>
+    <string name="classe_desc_hiit">High-intensity intervals to burn calories in less time.</string>
+    <string name="classe_desc_default">A guided class from Imperium Fitness.</string>
+
+    <!-- ==================== BOOKING CLASSES ==================== -->
+    <string name="usuari_default">User</string>
+    <string name="reserva_sessio_invalida">Invalid session. Please log in again.</string>
+    <string name="reserva_tria_sessio">%1$s, choose a session for %2$s</string>
+    <string name="reserva_no_sessions">No sessions available.</string>
+    <string name="reserva_selecciona_sessio_valida">Select a valid session.</string>
+    <string name="reserva_confirmada_ok">Booking confirmed! ✅</string>
+    <string name="reserva_error_backend">Error booking class: %1$s</string>
+    <string name="reserva_error_generic">Error booking class. Please try again.</string>
+    <string name="reserva_error_connexio">Could not connect: %1$s</string>
+    <string name="reserva_format_horari">%1$s %2$s at %3$sh</string>
+
+    <string-array name="dies_setmana_llargs">
+        <item>Sunday</item>
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+        <item>Friday</item>
+        <item>Saturday</item>
+    </string-array>
+
+    <!-- ==================== CALENDAR ==================== -->
+    <string name="calendari_llegenda_reserva">Day with booking</string>
+    <string name="calendari_llegenda_avui">Today</string>
+    <string name="calendari_carregant_reserves">Loading bookings...</string>
+    <string name="calendari_sessio_invalida">Invalid session.</string>
+    <string name="calendari_error_carregar_reserves">Bookings could not be loaded.</string>
+    <string name="calendari_error_connexio">Connection error: %1$s</string>
+    <string name="calendari_propera_reserva">Next booking: %1$s at %2$sh</string>
+    <string name="calendari_sense_cap_reserva">You have no bookings.</string>
+    <string name="calendari_sense_reserves_properes">You have no upcoming bookings.</string>
+    <string name="calendari_reserves_del_dia">Bookings for %1$s</string>
+    <string name="calendari_tancar">Close</string>
+    <string name="calendari_classe_id">Class #%1$d</string>
+    <string name="calendari_capacitat">👥 Capacity: %1$d people</string>
+    <string name="calendari_capacitat_no_disponible">👥 Capacity: Not available</string>
+    <string name="calendari_cancelar_reserva">Cancel booking</string>
+    <string name="calendari_cancelar_una">Cancel one</string>
+    <string name="calendari_cancelar_titol">Cancel booking</string>
+    <string name="calendari_cancelar_missatge">Do you want to cancel your booking for %1$s?</string>
+    <string name="calendari_cancelar_confirmar">Yes, cancel</string>
+    <string name="calendari_cancelada_ok">Booking cancelled successfully</string>
+    <string name="calendari_error_cancelar">Error cancelling booking: code %1$d</string>
+    <string name="calendari_selector_cancelar">Which booking do you want to cancel?</string>
+    <string name="calendari_tornar">Back</string>
+
+    <string-array name="calendari_dies_curts">
+        <item>Mon</item>
+        <item>Tue</item>
+        <item>Wed</item>
+        <item>Thu</item>
+        <item>Fri</item>
+        <item>Sat</item>
+        <item>Sun</item>
+    </string-array>
+
+    <string-array name="calendari_mesos">
+        <item>January</item>
+        <item>February</item>
+        <item>March</item>
+        <item>April</item>
+        <item>May</item>
+        <item>June</item>
+        <item>July</item>
+        <item>August</item>
+        <item>September</item>
+        <item>October</item>
+        <item>November</item>
+        <item>December</item>
+    </string-array>
 </resources>

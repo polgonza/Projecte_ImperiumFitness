@@ -15,7 +15,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -41,7 +40,7 @@ import retrofit2.Response;
     Pantalla de pagament simulat per als productes de la cistella.
     Aunque el pago sea simulado, se registran las ventas en backend.
 */
-public class PagamentProductesCistella extends AppCompatActivity {
+public class PagamentProductesCistella extends BaseActivity {
 
     private RecyclerView rvResum;
     private TextView tvTotal;
@@ -69,6 +68,8 @@ public class PagamentProductesCistella extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_pagament_productes_cistella);
 
+        setupBottomNav();
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -94,7 +95,7 @@ public class PagamentProductesCistella extends AppCompatActivity {
         rvResum.setAdapter(new ResumAdapter());
 
         calcularTotal();
-        tvTotal.setText(String.format("Total: %.2f€", totalComanda));
+        tvTotal.setText(getString(R.string.pagament_total, totalComanda));
 
         btnPagar.setOnClickListener(v -> ferPagament());
     }
@@ -127,7 +128,7 @@ public class PagamentProductesCistella extends AppCompatActivity {
                 TextUtils.isEmpty(etDataCaducitat.getText()) ||
                 TextUtils.isEmpty(etCVV.getText())) {
 
-            Toast.makeText(this, "Omple tots els camps de pagament", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.pagament_error_camps), Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -190,7 +191,7 @@ public class PagamentProductesCistella extends AppCompatActivity {
 
             Toast.makeText(
                     PagamentProductesCistella.this,
-                    "Pagament simulat i venda registrada correctament",
+                    "Pagament realitzat i venda registrada correctament",
                     Toast.LENGTH_SHORT
             ).show();
 

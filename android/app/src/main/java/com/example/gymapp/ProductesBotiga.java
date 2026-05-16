@@ -11,7 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
+
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -31,7 +31,7 @@ import java.util.ArrayList;
     - Afegir a la cistella
     - Pagar ara
 */
-public class ProductesBotiga extends AppCompatActivity {
+public class ProductesBotiga extends BaseActivity {
 
     private ImageView ivProducte;
     private TextView tvNom, tvDescripcio, tvPreu;
@@ -51,6 +51,8 @@ public class ProductesBotiga extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_productes_botiga);
+
+        setupBottomNav();
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -129,7 +131,11 @@ public class ProductesBotiga extends AppCompatActivity {
         String newJson = new Gson().toJson(cistella);
         sharedPreferences.edit().putString("cistella", newJson).apply();
 
-        Toast.makeText(this, "Afegit a la cistella", Toast.LENGTH_SHORT).show();
+        Toast.makeText(
+                this,
+                getString(R.string.producte_afegit_cistella, quantitat),
+                Toast.LENGTH_SHORT
+        ).show();
     }
 
     private void pagarAra() {
