@@ -207,6 +207,7 @@
     <string name="calendari_sense_reserves">No bookings for this day</string>
     <string name="calendari_reserves_titol">Bookings for this day</string>
     <string name="calendari_reserves_missatge">Bookings for %s:\n\n</string>
+    <string name="calendari_propera_reserva_amb_classe">Next booking: %1$s - %2$s at %3$sh</string>
 
     <!-- ==================== CONTACT ==================== -->
     <string name="contacte_titol">Contact</string>

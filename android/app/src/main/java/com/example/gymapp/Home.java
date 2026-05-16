@@ -43,11 +43,23 @@ public class Home extends BaseActivity {
 
         // Carreguem l'usuari que ha iniciat sessió
         sharedPreferences = getSharedPreferences("Usuaris", Context.MODE_PRIVATE);
-        usuariActiu = sharedPreferences.getString("usuari_actiu", "Usuari");
+        usuariActiu = sharedPreferences.getString(
+                "usuari_actiu",
+                getString(R.string.usuari_default)
+        );
 
-        // Carreguem el NOM REAL de l'usuari (no el nom d'usuari)
-        // Si no existeix, fem servir el nom d'usuari com a fallback
-        nomRealUsuari = sharedPreferences.getString("nom_actiu", usuariActiu);
+        /*
+            Carreguem el NOM REAL de l'usuari.
+            Si encara no existeix nom_actiu, netegem el correu:
+            admin@imperium.com -> Admin
+        */
+        String nomGuardat = sharedPreferences.getString("nom_actiu", "");
+
+        if (nomGuardat != null && !nomGuardat.trim().isEmpty()) {
+            nomRealUsuari = nomGuardat;
+        } else {
+            nomRealUsuari = netejarNomUsuari(usuariActiu);
+        }
 
         // Inicialitzem les vistes
         tvBenvinguda = findViewById(R.id.tvBenvinguda);
@@ -109,6 +121,7 @@ public class Home extends BaseActivity {
                 startActivity(intent);
                 return true;
             }
+
             return false;
         });
 
@@ -142,11 +155,34 @@ public class Home extends BaseActivity {
                         // Reiniciem l'Activity per aplicar els canvis
                         recreate();
 
-                        Toast.makeText(this, getString(R.string.idioma_canviat, idiomaSeleccionat), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(
+                                this,
+                                getString(R.string.idioma_canviat, idiomaSeleccionat),
+                                Toast.LENGTH_SHORT
+                        ).show();
                     })
                     .setNegativeButton(R.string.no, null)
                     .show();
         });
+
         builder.show();
+    }
+
+    private String netejarNomUsuari(String usuari) {
+        if (usuari == null || usuari.trim().isEmpty()) {
+            return getString(R.string.usuari_default);
+        }
+
+        String net = usuari.trim();
+
+        if (net.contains("@")) {
+            net = net.substring(0, net.indexOf("@"));
+        }
+
+        if (net.isEmpty()) {
+            return getString(R.string.usuari_default);
+        }
+
+        return net.substring(0, 1).toUpperCase() + net.substring(1);
     }
 }

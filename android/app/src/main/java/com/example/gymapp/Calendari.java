@@ -369,8 +369,12 @@ public class Calendari extends BaseActivity {
             }
 
             tvProperaReserva.setText(
-                    "Propera reserva: " + propera.nomClasse + " - " +
-                            dataFormatada + " a les " + hora + "h"
+                    getString(
+                            R.string.calendari_propera_reserva_amb_classe,
+                            propera.nomClasse,
+                            dataFormatada,
+                            hora
+                    )
             );
 
         } else if (reservesPerData.isEmpty()) {
@@ -571,12 +575,14 @@ public class Calendari extends BaseActivity {
             missatge.append("🕐 ").append(hora).append("\n");
 
             if (reservaCalendari.classe != null && reservaCalendari.classe.getCapacitat() != null) {
-                missatge.append("👥 Capacitat: ")
-                        .append(reservaCalendari.classe.getCapacitat())
-                        .append(" persones")
-                        .append("\n");
+                missatge.append(
+                        getString(
+                                R.string.calendari_capacitat,
+                                reservaCalendari.classe.getCapacitat()
+                        )
+                ).append("\n");
             } else {
-                missatge.append("👥 Capacitat: No disponible\n");
+                missatge.append(getString(R.string.calendari_capacitat_no_disponible)).append("\n");
             }
 
             missatge.append("\n");
