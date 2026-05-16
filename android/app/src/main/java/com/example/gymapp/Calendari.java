@@ -55,12 +55,8 @@ public class Calendari extends BaseActivity {
 
     private Long usuariId;
 
-    private final String[] DIES_SETMANA = {"Dl", "Dt", "Dc", "Dj", "Dv", "Ds", "Dg"};
-
-    private final String[] MESOS = {
-            "Gener", "Febrer", "Març", "Abril", "Maig", "Juny",
-            "Juliol", "Agost", "Setembre", "Octubre", "Novembre", "Desembre"
-    };
+    private String[] diesSetmana;
+    private String[] mesos;
 
     /*
         Guardamos también ClasseDTO para poder mostrar la capacidad.
@@ -85,6 +81,9 @@ public class Calendari extends BaseActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_calendari);
         setupBottomNav();
+
+        diesSetmana = getResources().getStringArray(R.array.calendari_dies_curts);
+        mesos = getResources().getStringArray(R.array.calendari_mesos);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -115,12 +114,12 @@ public class Calendari extends BaseActivity {
                 usuariId = Long.parseLong(userIdStr);
                 carregarReservesBackend();
             } catch (NumberFormatException e) {
-                Toast.makeText(this, "Sessió no vàlida.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.calendari_sessio_invalida), Toast.LENGTH_SHORT).show();
                 construirCapcaleraSetmana();
                 construirCalendari();
             }
         } else {
-            Toast.makeText(this, "Sessió no vàlida.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.calendari_sessio_invalida), Toast.LENGTH_SHORT).show();
             construirCapcaleraSetmana();
             construirCalendari();
         }
@@ -164,7 +163,7 @@ public class Calendari extends BaseActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     carregarClassesIOrganitzar(response.body());
                 } else {
-                    tvProperaReserva.setText("No s'han pogut carregar les reserves.");
+                    tvProperaReserva.setText(getString(R.string.calendari_error_carregar_reserves));
                     construirCapcaleraSetmana();
                     construirCalendari();
                 }
@@ -174,7 +173,7 @@ public class Calendari extends BaseActivity {
             public void onFailure(Call<List<ReservaDTO>> call, Throwable t) {
                 Toast.makeText(
                         Calendari.this,
-                        "Error de connexió: " + t.getMessage(),
+                        getString(R.string.calendari_error_connexio, t.getMessage()),
                         Toast.LENGTH_LONG
                 ).show();
 
@@ -375,16 +374,16 @@ public class Calendari extends BaseActivity {
             );
 
         } else if (reservesPerData.isEmpty()) {
-            tvProperaReserva.setText("No tens cap reserva feta.");
+            tvProperaReserva.setText(getString(R.string.calendari_sense_cap_reserva));
         } else {
-            tvProperaReserva.setText("No tens reserves properes.");
+            tvProperaReserva.setText(getString(R.string.calendari_sense_cap_reserva));
         }
     }
 
     private void construirCapcaleraSetmana() {
         llDiesSetmana.removeAllViews();
 
-        for (String dia : DIES_SETMANA) {
+        for (String dia : diesSetmana) {
             TextView tv = new TextView(this);
             tv.setText(dia);
             tv.setTextColor(Color.parseColor("#F0DB1A"));
@@ -406,7 +405,7 @@ public class Calendari extends BaseActivity {
     private void construirCalendari() {
         gridDies.removeAllViews();
 
-        tvMesAny.setText(MESOS[mesActual] + " " + anyActual);
+        tvMesAny.setText(mesos[mesActual] + " " + anyActual);
 
         java.util.Calendar avui = java.util.Calendar.getInstance(
                 java.util.TimeZone.getTimeZone("Europe/Madrid")
@@ -528,9 +527,9 @@ public class Calendari extends BaseActivity {
         String missatge = construirMissatgeReserves(reserves, clauData);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this)
-                .setTitle("Reserves del " + formatarData(clauData))
+                .setTitle(getString(R.string.calendari_reserves_del_dia, formatarData(clauData)))
                 .setMessage(missatge)
-                .setPositiveButton("Tancar", null);
+                .setPositiveButton(getString(R.string.calendari_tancar), null);
 
         /*
             Si solo hay una reserva ese día, cancelamos directamente esa.
@@ -539,12 +538,12 @@ public class Calendari extends BaseActivity {
         if (reserves.size() == 1) {
             ReservaCalendari reserva = reserves.get(0);
 
-            builder.setNegativeButton("Cancel·lar reserva", (dialog, which) -> {
+            builder.setNegativeButton(getString(R.string.calendari_cancelar_reserva), (dialog, which) -> {
                 confirmarCancelacio(reserva);
             });
 
         } else {
-            builder.setNegativeButton("Cancel·lar una", (dialog, which) -> {
+            builder.setNegativeButton(getString(R.string.calendari_cancelar_una), (dialog, which) -> {
                 mostrarSelectorCancelacio(reserves);
             });
         }
@@ -605,10 +604,10 @@ public class Calendari extends BaseActivity {
 
     private void confirmarCancelacio(ReservaCalendari reservaCalendari) {
         new AlertDialog.Builder(this)
-                .setTitle("Cancel·lar reserva")
-                .setMessage("Vols cancel·lar la reserva de " + reservaCalendari.nomClasse + "?")
-                .setPositiveButton("Sí, cancel·lar", (dialog, which) -> cancelarReserva(reservaCalendari))
-                .setNegativeButton("No", null)
+                .setTitle(getString(R.string.calendari_cancelar_titol))
+                .setMessage(getString(R.string.calendari_cancelar_missatge, reservaCalendari.nomClasse))
+                .setPositiveButton(getString(R.string.calendari_cancelar_confirmar), (dialog, which) -> cancelarReserva(reservaCalendari))
+                .setNegativeButton(getString(R.string.no), null)
                 .show();
     }
 
@@ -627,7 +626,7 @@ public class Calendari extends BaseActivity {
                         if (response.isSuccessful()) {
                             Toast.makeText(
                                     Calendari.this,
-                                    "Reserva cancel·lada correctament",
+                                    getString(R.string.calendari_cancelada_ok),
                                     Toast.LENGTH_SHORT
                             ).show();
 
@@ -639,7 +638,7 @@ public class Calendari extends BaseActivity {
                         } else {
                             Toast.makeText(
                                     Calendari.this,
-                                    "Error cancel·lant reserva: codi " + response.code(),
+                                    getString(R.string.calendari_error_cancelar, response.code()) + response.code(),
                                     Toast.LENGTH_LONG
                             ).show();
                         }

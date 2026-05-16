@@ -129,7 +129,7 @@ public class PagamentProductesBotiga extends BaseActivity {
 
                     Toast.makeText(
                             PagamentProductesBotiga.this,
-                            "Pagament realitzat i venda registrada correctament",
+                            getString(R.string.pagament_venda_correcta),
                             Toast.LENGTH_SHORT
                     ).show();
 

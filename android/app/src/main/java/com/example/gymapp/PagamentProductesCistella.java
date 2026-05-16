@@ -191,7 +191,7 @@ public class PagamentProductesCistella extends BaseActivity {
 
             Toast.makeText(
                     PagamentProductesCistella.this,
-                    "Pagament realitzat i venda registrada correctament",
+                    getString(R.string.pagament_venda_correcta),
                     Toast.LENGTH_SHORT
             ).show();
 
