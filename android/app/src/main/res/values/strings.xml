@@ -153,6 +153,10 @@
     <string name="cistella_buida">La cistella està buida</string>
     <string name="cistella_eliminar_titol">Eliminar producte</string>
     <string name="cistella_eliminar_missatge">Vols eliminar aquest producte de la cistella?</string>
+    <string name="cistella_buidar">Buidar</string>
+    <string name="cistella_buidar_titol">Buidar cistella</string>
+    <string name="cistella_buidar_missatge">Vols eliminar tots els productes de la cistella?</string>
+    <string name="cistella_buidada">Cistella buidada correctament</string>
 
     <!-- ==================== PAGAMENT ==================== -->
     <string name="pagament_titol_producte">Pagament del Producte</string>
@@ -307,10 +311,12 @@
     <string name="pagament_quantitat_producte">Quantitat: %1$d</string>
     <string name="pagament_producte_error_id">Error: no s\'ha trobat l\'ID del producte</string>
     <string name="pagament_error_sessio">Error: sessió no vàlida. Torna a iniciar sessió.</string>
-    <string name="pagament_venda_correcta">Pagament simulat i venda registrada correctament</string>
+    <string name="pagament_venda_correcta">Pagament realitzat i venda registrada correctament</string>
     <string name="pagament_error_venda">Error registrant la venda: %1$s</string>
     <string name="pagament_error_connexio">Error de connexió: %1$s</string>
     <string name="producte_error_id">Error: no s\'ha trobat l\'ID del producte</string>
+    <string name="pagament_error_estoc_insuficient">No hi ha prou estoc per fer aquesta compra.</string>
+    <string name="pagament_error_codi">codi %1$d</string>
 
     <!-- ==================== CLASSES ==================== -->
     <string name="classes_filtre_totes">Totes</string>

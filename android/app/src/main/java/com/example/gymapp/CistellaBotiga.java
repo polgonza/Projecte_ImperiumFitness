@@ -31,7 +31,7 @@ public class CistellaBotiga extends BaseActivity {
 
     private RecyclerView rvCistella;
     private TextView tvTotal;
-    private Button btnProcedirPagament;
+    private Button btnProcedirPagament, btnBuidarCistella;
 
     private ArrayList<ProducteCistella> cistella;
     private ProducteCistellaAdapter adapter;
@@ -54,6 +54,7 @@ public class CistellaBotiga extends BaseActivity {
         rvCistella = findViewById(R.id.rvCistella);
         tvTotal = findViewById(R.id.tvTotal);
         btnProcedirPagament = findViewById(R.id.btnProcedirPagament);
+        btnBuidarCistella = findViewById(R.id.btnBuidarCistella);
 
         sharedPreferences = getSharedPreferences("Usuaris", Context.MODE_PRIVATE);
 
@@ -64,6 +65,10 @@ public class CistellaBotiga extends BaseActivity {
         rvCistella.setAdapter(adapter);
 
         btnProcedirPagament.setOnClickListener(v -> procedirPagament());
+
+        btnBuidarCistella.setOnClickListener(v -> confirmarBuidarCistella());
+
+        actualitzarEstatBotons();
     }
 
     private void carregarCistella() {
@@ -84,6 +89,7 @@ public class CistellaBotiga extends BaseActivity {
         sharedPreferences.edit().putString("cistella", json).apply();
 
         actualitzarTotal();
+        actualitzarEstatBotons();
 
         if (adapter != null) {
             adapter.notifyDataSetChanged();
@@ -102,6 +108,18 @@ public class CistellaBotiga extends BaseActivity {
         tvTotal.setText(getString(R.string.cistella_total, total));
     }
 
+    private void actualitzarEstatBotons() {
+        boolean teProductes = cistella != null && !cistella.isEmpty();
+
+        if (btnProcedirPagament != null) {
+            btnProcedirPagament.setEnabled(teProductes);
+        }
+
+        if (btnBuidarCistella != null) {
+            btnBuidarCistella.setEnabled(teProductes);
+        }
+    }
+
     private void procedirPagament() {
         if (cistella == null || cistella.isEmpty()) {
             Toast.makeText(this, getString(R.string.cistella_buida), Toast.LENGTH_SHORT).show();
@@ -110,6 +128,31 @@ public class CistellaBotiga extends BaseActivity {
 
         Intent intent = new Intent(this, PagamentProductesCistella.class);
         startActivity(intent);
+    }
+
+    private void confirmarBuidarCistella() {
+        if (cistella == null || cistella.isEmpty()) {
+            Toast.makeText(this, getString(R.string.cistella_buida), Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        new AlertDialog.Builder(this)
+                .setTitle(getString(R.string.cistella_buidar_titol))
+                .setMessage(getString(R.string.cistella_buidar_missatge))
+                .setPositiveButton(getString(R.string.si), (dialog, which) -> buidarCistella())
+                .setNegativeButton(getString(R.string.no), null)
+                .show();
+    }
+
+    private void buidarCistella() {
+        cistella.clear();
+        guardarCistella();
+
+        Toast.makeText(
+                this,
+                getString(R.string.cistella_buidada),
+                Toast.LENGTH_SHORT
+        ).show();
     }
 
     private int imatgePerProducte(ProducteCistella producte) {

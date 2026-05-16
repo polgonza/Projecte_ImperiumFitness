@@ -16,17 +16,6 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-/*
-    HOME ACTIVITY
-    =============
-    Pantalla principal després d'iniciar sessió.
-    Mostra un missatge de benvinguda amb el NOM REAL de l'usuari (llegit de SharedPreferences),
-    un menú desplegable (engranatge) amb opcions de perfil, idioma, tancar sessió i ajuda.
-    Aquí es centralitza la navegació del footer via BaseActivity.
-
-    @author ImperiumGym
-    @version 3.0
-*/
 public class Home extends BaseActivity {
 
     private TextView tvBenvinguda;
@@ -43,19 +32,20 @@ public class Home extends BaseActivity {
 
         // Carreguem l'usuari que ha iniciat sessió
         sharedPreferences = getSharedPreferences("Usuaris", Context.MODE_PRIVATE);
+
         usuariActiu = sharedPreferences.getString(
                 "usuari_actiu",
                 getString(R.string.usuari_default)
         );
 
         /*
-            Carreguem el NOM REAL de l'usuari.
-            Si encara no existeix nom_actiu, netegem el correu:
+            Intentem carregar el nom real.
+            Si nom_actiu està buit o és un email, netegem usuari_actiu:
             admin@imperium.com -> Admin
         */
         String nomGuardat = sharedPreferences.getString("nom_actiu", "");
 
-        if (nomGuardat != null && !nomGuardat.trim().isEmpty()) {
+        if (nomGuardat != null && !nomGuardat.trim().isEmpty() && !nomGuardat.contains("@")) {
             nomRealUsuari = nomGuardat;
         } else {
             nomRealUsuari = netejarNomUsuari(usuariActiu);
@@ -65,15 +55,13 @@ public class Home extends BaseActivity {
         tvBenvinguda = findViewById(R.id.tvBenvinguda);
         ivSettings = findViewById(R.id.ivSettings);
 
-        // Canviem el text de benvinguda amb el NOM REAL de l'usuari
+        // Text de benvinguda
         tvBenvinguda.setText(getString(R.string.benvinguda, nomRealUsuari));
 
-        // Configura el menú desplegable en clicar la icona d'engranatge
         if (ivSettings != null) {
             ivSettings.setOnClickListener(this::mostrarMenuDesplegable);
         }
 
-        // Configura el footer (herencia de BaseActivity)
         setupBottomNav();
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -83,15 +71,6 @@ public class Home extends BaseActivity {
         });
     }
 
-    /*
-        MÈTODE PER MOSTRAR EL MENÚ DESPLEGABLE
-        ======================================
-        Mostra un PopupMenu amb les opcions:
-        - Informació de Perfil
-        - Idioma (Espanyol, Català, Anglès)
-        - Tancar Sessió
-        - Ajuda
-    */
     private void mostrarMenuDesplegable(View view) {
         PopupMenu popupMenu = new PopupMenu(this, view);
         popupMenu.getMenuInflater().inflate(R.menu.menu_home, popupMenu.getMenu());
@@ -103,12 +82,19 @@ public class Home extends BaseActivity {
                 Intent intent = new Intent(this, InfoPerfilUsuari.class);
                 startActivity(intent);
                 return true;
+
             } else if (id == R.id.menu_idioma) {
                 mostrarDialogIdioma();
                 return true;
+
             } else if (id == R.id.menu_tancar_sessio) {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                editor.remove("jwt_token");
                 editor.remove("usuari_actiu");
+                editor.remove("nom_actiu");
+                editor.remove("email_actiu");
+                editor.remove("pla_actiu");
                 editor.apply();
 
                 Intent intent = new Intent(this, MainInici.class);
@@ -116,6 +102,7 @@ public class Home extends BaseActivity {
                 startActivity(intent);
                 finish();
                 return true;
+
             } else if (id == R.id.menu_ajuda) {
                 Intent intent = new Intent(this, Ajuda.class);
                 startActivity(intent);
@@ -128,31 +115,23 @@ public class Home extends BaseActivity {
         popupMenu.show();
     }
 
-    /*
-        MÈTODE PER MOSTRAR EL DIÀLEG DE CANVI D'IDIOMA
-        ==============================================
-        Mostra un AlertDialog amb tres opcions: Espanyol, Català, Anglès.
-        En confirmar, canvia l'idioma de tota l'aplicació i reinicia l'Activity.
-    */
     private void mostrarDialogIdioma() {
         String[] idiomes = {"Español", "Català", "English"};
         String[] codisIdioma = {"es", "ca", "en"};
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.selecciona_idioma);
+
         builder.setItems(idiomes, (dialog, which) -> {
             String idiomaSeleccionat = idiomes[which];
             String codiIdioma = codisIdioma[which];
 
-            // Diàleg de confirmació
             new AlertDialog.Builder(this)
                     .setTitle(R.string.confirmar_canvi_idioma)
                     .setMessage(getString(R.string.missatge_confirmar_idioma, idiomaSeleccionat))
                     .setPositiveButton(R.string.si, (dialog2, which2) -> {
-                        // Canviem l'idioma a nivell global
                         LocaleHelper.setLocale(this, codiIdioma);
 
-                        // Reiniciem l'Activity per aplicar els canvis
                         recreate();
 
                         Toast.makeText(
