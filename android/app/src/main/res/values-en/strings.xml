@@ -405,4 +405,10 @@
         <item>November</item>
         <item>December</item>
     </string-array>
+
+    <!-- ==================== PLAN ACCESS ==================== -->
+    <string name="pla_necessari_titol">Plan required</string>
+    <string name="pla_necessari_missatge">You need to buy a plan on the website to continue.</string>
+    <string name="pla_necessari_boto">OK</string>
+
 </resources>

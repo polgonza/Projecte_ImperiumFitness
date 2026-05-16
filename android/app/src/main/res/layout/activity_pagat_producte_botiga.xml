@@ -64,10 +64,11 @@
     <LinearLayout
         android:id="@+id/bottomNav"
         android:layout_width="0dp"
-        android:layout_height="38dp"
-        android:background="#D9D9D9"
-        android:gravity="center"
+        android:layout_height="72dp"
+        android:background="#D0D0D0"
         android:orientation="horizontal"
+        android:paddingStart="4dp"
+        android:paddingEnd="4dp"
         android:weightSum="6"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -82,9 +83,22 @@
             android:orientation="vertical"
             android:clickable="true"
             android:focusable="true">
-            <ImageView android:layout_width="18dp" android:layout_height="18dp" android:src="@drawable/home" android:contentDescription="@string/nav_inici" />
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="@string/nav_inici" android:textColor="#333333" android:textSize="9sp" />
+
+            <ImageView
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:src="@drawable/home"
+                android:contentDescription="@string/nav_inici" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="@string/nav_inici"
+                android:textColor="#333333"
+                android:textSize="9sp" />
         </LinearLayout>
+
         <LinearLayout
             android:id="@+id/navClasses"
             android:layout_width="0dp"
@@ -94,9 +108,22 @@
             android:orientation="vertical"
             android:clickable="true"
             android:focusable="true">
-            <ImageView android:layout_width="18dp" android:layout_height="18dp" android:src="@drawable/classes" android:contentDescription="@string/nav_classes" />
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="@string/nav_classes" android:textColor="#333333" android:textSize="9sp" />
+
+            <ImageView
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:src="@drawable/classes"
+                android:contentDescription="@string/nav_classes" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="@string/nav_classes"
+                android:textColor="#333333"
+                android:textSize="9sp" />
         </LinearLayout>
+
         <LinearLayout
             android:id="@+id/navBotiga"
             android:layout_width="0dp"
@@ -106,9 +133,22 @@
             android:orientation="vertical"
             android:clickable="true"
             android:focusable="true">
-            <ImageView android:layout_width="18dp" android:layout_height="18dp" android:src="@drawable/shop" android:contentDescription="@string/nav_botiga" />
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="@string/nav_botiga" android:textColor="#333333" android:textSize="9sp" android:textStyle="bold"/>
+
+            <ImageView
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:src="@drawable/shop"
+                android:contentDescription="@string/nav_botiga" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="@string/nav_botiga"
+                android:textColor="#333333"
+                android:textSize="9sp" />
         </LinearLayout>
+
         <LinearLayout
             android:id="@+id/navNoticies"
             android:layout_width="0dp"
@@ -118,9 +158,22 @@
             android:orientation="vertical"
             android:clickable="true"
             android:focusable="true">
-            <ImageView android:layout_width="18dp" android:layout_height="18dp" android:src="@drawable/noticies" android:contentDescription="@string/nav_noticies" />
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="@string/nav_noticies" android:textColor="#333333" android:textSize="9sp" />
+
+            <ImageView
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:src="@drawable/noticies"
+                android:contentDescription="@string/nav_noticies" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="@string/nav_noticies"
+                android:textColor="#333333"
+                android:textSize="9sp" />
         </LinearLayout>
+
         <LinearLayout
             android:id="@+id/navCalendari"
             android:layout_width="0dp"
@@ -130,9 +183,22 @@
             android:orientation="vertical"
             android:clickable="true"
             android:focusable="true">
-            <ImageView android:layout_width="18dp" android:layout_height="18dp" android:src="@drawable/calendari" android:contentDescription="@string/nav_calendari" />
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="@string/nav_calendari" android:textColor="#333333" android:textSize="9sp" />
+
+            <ImageView
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:src="@drawable/calendari"
+                android:contentDescription="@string/nav_calendari" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="@string/nav_calendari"
+                android:textColor="#333333"
+                android:textSize="9sp" />
         </LinearLayout>
+
         <LinearLayout
             android:id="@+id/navContacte"
             android:layout_width="0dp"
@@ -142,8 +208,20 @@
             android:orientation="vertical"
             android:clickable="true"
             android:focusable="true">
-            <ImageView android:layout_width="18dp" android:layout_height="18dp" android:src="@drawable/contacte" android:contentDescription="@string/nav_contacte" />
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="@string/nav_contacte" android:textColor="#333333" android:textSize="9sp" />
+
+            <ImageView
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:src="@drawable/contacte"
+                android:contentDescription="@string/nav_contacte" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="@string/nav_contacte"
+                android:textColor="#333333"
+                android:textSize="9sp" />
         </LinearLayout>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
