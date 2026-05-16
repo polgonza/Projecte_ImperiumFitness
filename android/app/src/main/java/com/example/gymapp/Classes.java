@@ -247,7 +247,9 @@ public class Classes extends BaseActivity {
 
         // Imatge
         ImageView imatge = new ImageView(this);
-        imatge.setImageResource(R.drawable.logo);
+        imatge.setImageResource(
+                ImatgeClasseHelper.obtenirImatgeClasse(this, representant.getNom())
+        );
         imatge.setScaleType(ImageView.ScaleType.CENTER_CROP);
         LinearLayout.LayoutParams paramsImg = new LinearLayout.LayoutParams(dp(100), dp(100));
         paramsImg.setMarginEnd(dp(12));
@@ -324,21 +326,33 @@ public class Classes extends BaseActivity {
     */
     private void obrirReserva(ClasseDTO representant, List<ClasseDTO> sessions) {
         Intent intent = new Intent(this, ReservarClasses.class);
+
         intent.putExtra("nom_classe", representant.getNom());
         intent.putExtra("descripcio_classe",
                 representant.getDescripcio() != null ? representant.getDescripcio() : "");
 
-        // Serialitzem totes les sessions per passar-les via Intent
+    /*
+        Imagen hardcodeada según el nombre de la clase.
+    */
+        intent.putExtra(
+                "imatge_classe",
+                ImatgeClasseHelper.obtenirImatgeClasse(this, representant.getNom())
+        );
+
         StringBuilder sb = new StringBuilder();
+
         for (ClasseDTO s : sessions) {
-            if (sb.length() > 0) sb.append(";");
+            if (sb.length() > 0) {
+                sb.append(";");
+            }
+
             sb.append(s.getId()).append("|").append(s.getHorari());
         }
+
         intent.putExtra("sessions", sb.toString());
 
         startActivity(intent);
     }
-
     private int dp(int dp) {
         float density = getResources().getDisplayMetrics().density;
         return Math.round(dp * density);
