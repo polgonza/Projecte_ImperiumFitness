@@ -81,8 +81,9 @@ public class ReservarClasses extends AppCompatActivity {
 
         String nomClasse = getIntent().getStringExtra("nom_classe");
         String sessionsSerialized = getIntent().getStringExtra("sessions");
+        int imatgeClasse = getIntent().getIntExtra("imatge_classe", R.drawable.logo);
 
-        ivClasseImatge.setImageResource(R.drawable.logo);
+        ivClasseImatge.setImageResource(imatgeClasse);
         tvClasseNom.setText(nomClasse);
         tvUsuariReserva.setText(usuariActiu + ", tria una sessió de " + nomClasse);
 
@@ -204,12 +205,6 @@ public class ReservarClasses extends AppCompatActivity {
 
         Long idClasseSeleccionada = sessionIds.get(sessioSeleccionadaIndex);
 
-        /*
-            IMPORTANTE:
-            No enviamos dataReserva.
-            El backend actual no la necesita para crear la reserva.
-            Así evitamos errores de formato de fecha después de los cambios del calendario.
-        */
         ReservaDTO reserva = new ReservaDTO(usuariId, idClasseSeleccionada);
 
         btnConfirmarReserva.setEnabled(false);
