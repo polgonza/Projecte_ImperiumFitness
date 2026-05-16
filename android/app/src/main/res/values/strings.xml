@@ -378,6 +378,7 @@
     <string name="calendari_error_cancelar">Error cancel·lant reserva: codi %1$d</string>
     <string name="calendari_selector_cancelar">Quina reserva vols cancel·lar?</string>
     <string name="calendari_tornar">Tornar</string>
+    <string name="calendari_propera_reserva_amb_classe">Propera reserva: %1$s - %2$s a les %3$sh</string>
 
     <string-array name="calendari_dies_curts">
         <item>Dl</item>

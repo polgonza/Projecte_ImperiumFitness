@@ -16,24 +16,20 @@
 -->
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- Opció 1: Informació de Perfil -->
     <item
         android:id="@+id/menu_perfil"
-        android:title="Informació de Perfil" />
+        android:title="@string/menu_perfil" />
 
-    <!-- Opció 2: Canvi d'Idioma -->
     <item
         android:id="@+id/menu_idioma"
-        android:title="Idioma" />
+        android:title="@string/menu_idioma" />
 
-    <!-- Opció 3: Tancar Sessió -->
     <item
         android:id="@+id/menu_tancar_sessio"
-        android:title="Tancar Sessió" />
+        android:title="@string/menu_tancar_sessio" />
 
-    <!-- Opció 4: Ajuda (pendent) -->
     <item
         android:id="@+id/menu_ajuda"
-        android:title="Ajuda" />
+        android:title="@string/menu_ajuda" />
 
 </menu>

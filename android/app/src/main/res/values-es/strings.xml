@@ -208,6 +208,7 @@
     <string name="calendari_sense_reserves">No hay reservas para este día</string>
     <string name="calendari_reserves_titol">Reservas del día</string>
     <string name="calendari_reserves_missatge">Reservas para el %s:\n\n</string>
+    <string name="calendari_propera_reserva_amb_classe">Próxima reserva: %1$s - %2$s a las %3$sh</string>
 
     <!-- ==================== CONTACTO ==================== -->
     <string name="contacte_titol">Contacto</string>
