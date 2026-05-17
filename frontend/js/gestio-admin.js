@@ -255,12 +255,15 @@ function obreFormProducte(id) {
               style="flex:1;min-width:180px;padding:.5rem .75rem;background:var(--bg-card);
                      border:1px solid var(--border);border-radius:8px;
                      color:var(--text);font-size:.85rem">
-            <label style="padding:.45rem .85rem;background:var(--bg-card);
+            <label title="${I18n.idioma === "ca"
+                ? "Formats: JPG, PNG, WebP · Mida recomanada: 400×300px · Màxim ~1MB"
+                : "Formats: JPG, PNG, WebP · Recommended size: 400×300px · Max ~1MB"}"
+              style="padding:.45rem .85rem;background:var(--bg-card);
                           border:1px solid var(--border);border-radius:8px;
                           font-size:.78rem;color:var(--text-muted);cursor:pointer;
                           white-space:nowrap">
               📁 ${I18n.idioma === "ca" ? "Selecciona fitxer" : "Select file"}
-              <input type="file" accept="image/*" id="fp-imatge-file"
+              <input type="file" accept=".jpg,.jpeg,.png,.webp" id="fp-imatge-file"
                 style="display:none" onchange="carregaImatgeLocal(this)">
             </label>
           </div>
@@ -301,17 +304,26 @@ function previsuImatgeUrl() {
 function carregaImatgeLocal(input) {
   const file = input.files[0];
   if (!file) return;
+
+  // Avís si la imatge és molt gran (> 1MB)
+  if (file.size > 1024 * 1024) {
+    showToast(
+      I18n.idioma === "ca"
+        ? "⚠️ La imatge és gran (+1MB). Pot afectar el rendiment."
+        : "⚠️ Large image (+1MB). This may affect performance.",
+      "error"
+    );
+  }
+
   const reader = new FileReader();
   reader.onload = function(e) {
     const base64 = e.target.result;
-    // Neteja la URL manual i mostra la previsualització
     const urlInput = document.getElementById("fp-imatge-url");
     if (urlInput) urlInput.value = "";
     const preview = document.getElementById("fp-imatge-preview");
     if (preview) {
       preview.innerHTML = `<img src="${base64}" style="height:80px;border-radius:6px;object-fit:cover">`;
     }
-    // Guardem el base64 com a data-attribute per recuperar-lo al desar
     input.setAttribute("data-base64", base64);
   };
   reader.readAsDataURL(file);
