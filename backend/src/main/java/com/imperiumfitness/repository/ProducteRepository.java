@@ -14,4 +14,7 @@ public interface ProducteRepository extends JpaRepository<Producte, Long> {
     // Productes amb estoc disponible
     List<Producte> findByEstocGreaterThan(Integer estoc);
     Optional<Producte> findTopByOrderByEstocAsc();
+    // Fragment suggerit per assistent IA - revisar i adaptar
+// Productes amb estoc baix (≤ 5 unitats)
+List<Producte> findByEstocLessThanEqualOrderByEstocAsc(Integer estoc);
 }

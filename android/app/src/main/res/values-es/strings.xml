@@ -247,6 +247,10 @@
     <string name="noticia7_desc">Hemos renovado la zona de cardio con las últimas máquinas del mercado.</string>
     <string name="noticia8_titol">Reto de verano: 30 días de entrenamiento</string>
     <string name="noticia8_desc">Participa en nuestro reto y gana premios increíbles. Comienza el 1 de junio.</string>
+    <string name="noticies_carregant">Cargando noticias...</string>
+    <string name="noticies_error_carregar">No se han podido cargar las noticias.</string>
+    <string name="noticies_error_connexio">Error de conexión: %1$s</string>
+    <string name="noticies_buides">No hay noticias disponibles.</string>
 
     <!-- ==================== AYUDAS ==================== -->
 

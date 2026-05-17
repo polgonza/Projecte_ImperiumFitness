@@ -36,11 +36,17 @@ public interface ReservaRepository extends JpaRepository<Reserva, Long> {
         @Param("ara") java.time.LocalDateTime ara
     );
     // Total reserves futures de tots els usuaris
-@Query("SELECT COUNT(r) FROM Reserva r WHERE r.dataReserva >= :ara")
-long countAllFuturesReserves(@Param("ara") LocalDateTime ara);
+// Fragment suggerit per assistent IA - revisar i adaptar
+// Reserves on la CLASSE encara no ha passat (reserves actives reals)
+@Query("SELECT COUNT(r) FROM Reserva r WHERE r.classe.horari >= :ara")
+long countReservesAmbClasseFutura(@Param("ara") LocalDateTime ara);
 
 // Classe més reservada
 @Query("SELECT c.nom, COUNT(r) as total FROM Reserva r " +
        "JOIN r.classe c GROUP BY c.nom ORDER BY total DESC")
 List<Object[]> findTopClasses();
+
+// Últimes N reserves (activitat recent)
+@Query("SELECT r FROM Reserva r ORDER BY r.dataReserva DESC")
+List<Reserva> findUltimesReserves(org.springframework.data.domain.Pageable pageable);
 }

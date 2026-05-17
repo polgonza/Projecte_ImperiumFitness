@@ -12,6 +12,7 @@ public class ProducteCistella {
     public ProducteCistella() {
     }
 
+
     public ProducteCistella(Long producteId, String nom, double preu, int imatge, String descripcio) {
         this.producteId = producteId;
         this.nom = nom;
@@ -21,6 +22,9 @@ public class ProducteCistella {
         this.descripcio = descripcio;
     }
 
+    /*
+        Constructor nuevo con imagen real del backend.
+    */
     public ProducteCistella(
             Long producteId,
             String nom,

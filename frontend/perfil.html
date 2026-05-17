@@ -127,6 +127,11 @@
                     style="display:none" data-i18n="perfil.tabGestioUsuaris">
               👥 Gestió d'usuaris
             </button>
+            <button class="profile-tab" data-tab="tab-gestio-admin"
+              id="tab-gestio-admin-btn" style="display:none"
+              data-i18n="perfil.tabGestioAdmin">
+              ⚙️ Gestió Admin
+            </button>
           </div>
 
           <!-- Tab: Reserves de classes -->
@@ -155,6 +160,10 @@
           <!-- Tab: Gestió d'usuaris (només ADMIN) -->
           <div class="tab-content" id="tab-gestio-usuaris">
             <div id="gestio-usuaris-container"></div>
+          </div>
+
+          <div class="tab-content" id="tab-gestio-admin">
+            <div id="gestio-admin-container"></div>
           </div>
 
         </div>
@@ -234,6 +243,7 @@
   <script src="js/carrito.js"></script>
   <script src="js/perfil.js"></script>
   <script src="js/gestio-usuaris.js"></script>
+  <script src="js/gestio-admin.js"></script>
 
   <script>
     document.addEventListener("DOMContentLoaded", async function () {
@@ -244,6 +254,8 @@
       if (user && user.roles && user.roles.includes("ROLE_ADMIN")) {
         const tabStats  = document.getElementById("tab-stats-btn");
         const tabGestio = document.getElementById("tab-gestio-btn");
+        const tabAdmin = document.getElementById("tab-gestio-admin-btn");
+if (tabAdmin) tabAdmin.style.display = "block";
         if (tabStats)  tabStats.style.display  = "block";
         if (tabGestio) tabGestio.style.display = "block";
       }
@@ -253,7 +265,8 @@
         renderReservationsInProfile(),
         renderOrderHistory(),
         renderStats(),
-        renderGestioUsuaris()
+        renderGestioUsuaris(),
+        renderGestioAdmin()   // ← nou
       ]);
 
       renderOldPurchases();

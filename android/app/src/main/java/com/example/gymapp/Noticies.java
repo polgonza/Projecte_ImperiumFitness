@@ -58,7 +58,7 @@ public class Noticies extends BaseActivity {
 
         Toast.makeText(
                 this,
-                "Carregant notícies...",
+                getString(R.string.noticies_carregant),
                 Toast.LENGTH_SHORT
         ).show();
 
@@ -86,11 +86,19 @@ public class Noticies extends BaseActivity {
 
                     recyclerNoticies.setAdapter(adapter);
 
+                    if (noticies.isEmpty()) {
+                        Toast.makeText(
+                                Noticies.this,
+                                getString(R.string.noticies_buides),
+                                Toast.LENGTH_LONG
+                        ).show();
+                    }
+
                 } else {
 
                     Toast.makeText(
                             Noticies.this,
-                            "No s'han trobat notícies",
+                            getString(R.string.noticies_error_carregar),
                             Toast.LENGTH_LONG
                     ).show();
                 }
@@ -106,7 +114,7 @@ public class Noticies extends BaseActivity {
 
                 Toast.makeText(
                         Noticies.this,
-                        "Error: " + t.getMessage(),
+                        getString(R.string.noticies_error_connexio, t.getMessage()),
                         Toast.LENGTH_LONG
                 ).show();
             }

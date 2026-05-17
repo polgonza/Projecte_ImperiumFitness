@@ -239,6 +239,10 @@
     <string name="noticia7_desc">Hem renovat la zona de cardio amb les últimes màquines del mercat.</string>
     <string name="noticia8_titol">Repte d\'estiu: 30 dies d\'entrenament</string>
     <string name="noticia8_desc">Participa al nostre repte i guanya premis increïbles. Comença l\'1 de juny.</string>
+    <string name="noticies_carregant">Carregant notícies...</string>
+    <string name="noticies_error_carregar">No se han pogut carregar les notícies.</string>
+    <string name="noticies_error_connexio">Error de connexió: %1$s</string>
+    <string name="noticies_buides">No hi ha notícies disponibles.</string>
 
     <!-- ==================== AJUDES ==================== -->
 

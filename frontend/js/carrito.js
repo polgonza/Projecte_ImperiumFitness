@@ -2,15 +2,21 @@
    IMPERIUM FITNESS — carrito.js
    ===================================================== */
 
-const CATEGORY_IMGS = {
-  "Roba":       "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=300&fit=crop",
-  "Suplement":  "https://images.unsplash.com/photo-1593095948071-474c5cc2989d?w=400&h=300&fit=crop",
-  "Accesoris":  "https://images.unsplash.com/photo-1517344368193-41552b6ad3f5?w=400&h=300&fit=crop",
-  "ropa":       "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=300&fit=crop",
-  "suplementos":"https://images.unsplash.com/photo-1593095948071-474c5cc2989d?w=400&h=300&fit=crop",
-  "accesorios": "https://images.unsplash.com/photo-1517344368193-41552b6ad3f5?w=400&h=300&fit=crop",
-  "default":    "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=400&h=300&fit=crop"
+// Fragment suggerit per assistent IA - revisar i adaptar
+// Fragment suggerit per assistent IA - revisar i adaptar
+// Fragment suggerit per assistent IA - revisar i adaptar
+const CATEGORY_FALLBACK = {
+  "Roba":      "https://images.unsplash.com/photo-1571902943202-507ec2618e8f?w=400&h=300&fit=crop",
+  "Suplement": "https://images.unsplash.com/photo-1593095948071-474c5cc2989d?w=400&h=300&fit=crop",
+  "Accesoris": "https://images.unsplash.com/photo-1517344368193-41552b6ad3f5?w=400&h=300&fit=crop",
+  "default":   "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=400&h=300&fit=crop"
 };
+
+// Assigna una imatge aleatòria consistent per producte (basada en l'ID)
+function getImgProducte(categoria, id) {
+  const llista = CATEGORY_IMGS[categoria] || CATEGORY_IMGS["default"];
+  return llista[id % llista.length]; // consistent per ID, variat visualment
+}
 
 let PRODUCTS_IMG = [];
 
@@ -23,7 +29,7 @@ function producteBackendToLocal(p) {
     category:      p.categoria || "default",
     badge:         p.estoc <= 5 ? (I18n.idioma === "ca" ? "Últimes unitats" : "Last units") : null,
     estoc:         p.estoc,
-    img:           CATEGORY_IMGS[p.categoria] || CATEGORY_IMGS["default"]
+    img:           p.imatgeUrl || CATEGORY_FALLBACK[p.categoria] || CATEGORY_FALLBACK["default"]
   };
 }
 
@@ -148,22 +154,28 @@ function renderProductosConImagenes(containerId, filter) {
   const lista = filter === "all" || !filter
     ? PRODUCTS_IMG
     : PRODUCTS_IMG.filter(function(p) {
-        const cat  = (p.category || "").toLowerCase();
-        const f    = (filter || "").toLowerCase();
-        const mapa = { "roba": "ropa", "suplement": "suplementos", "accesoris": "accesorios" };
-        return (mapa[cat] || cat) === f;
+        return (p.category || "").toLowerCase() === (filter || "").toLowerCase();
       });
 
-  const btnText = I18n.idioma === "ca" ? "Afegeix al carret" : "Add to cart";
-
   container.innerHTML = lista.map(function(p) {
+    const sensEstoc = p.estoc === 0;
     return `
       <div class="product-card">
-        <div class="product-img" style="padding:0;overflow:hidden">
+        <div class="product-img" style="padding:0;overflow:hidden;position:relative">
           ${p.badge ? `<span class="product-badge">${p.badge}</span>` : ""}
+          ${sensEstoc ? `
+            <div style="position:absolute;inset:0;background:rgba(0,0,0,0.55);
+                        display:flex;align-items:center;justify-content:center;z-index:1">
+              <span style="color:#ff4d4d;font-weight:700;font-size:.85rem;
+                           text-transform:uppercase;letter-spacing:.08em;
+                           text-shadow:0 1px 4px rgba(0,0,0,.8)">
+                ${I18n.idioma === "ca" ? "Sense estoc" : "Out of stock"}
+              </span>
+            </div>` : ""}
           <img src="${p.img}" alt="${p.name}"
-               style="width:100%;height:160px;object-fit:cover;display:block"
-               loading="lazy"
+               style="width:100%;height:160px;object-fit:cover;display:block;
+                      ${sensEstoc ? "filter:grayscale(60%)" : ""}"
+               loading="eager"
                onerror="this.parentElement.style.background='var(--bg-secondary)'">
         </div>
         <div class="product-info">
@@ -173,12 +185,19 @@ function renderProductosConImagenes(containerId, filter) {
             <span class="price-current">${p.price.toFixed(2)} €</span>
             ${p.originalPrice ? `<span class="price-old">${p.originalPrice.toFixed(2)} €</span>` : ""}
           </div>
-          <button
-            class="btn btn-primary"
-            style="width:100%;justify-content:center;padding:0.55rem;margin-top:0.75rem;font-size:0.78rem"
-            onclick="addToCarrito(${p.id})">
-            ${btnText}
-          </button>
+          ${sensEstoc
+            ? `<button disabled
+                 style="width:100%;padding:.55rem;margin-top:.75rem;font-size:.78rem;
+                        background:var(--bg-secondary);border:1px solid var(--border);
+                        border-radius:8px;color:var(--text-muted);cursor:not-allowed">
+                 ${I18n.idioma === "ca" ? "Sense estoc" : "Out of stock"}
+               </button>`
+            : `<button class="btn btn-primary"
+                 style="width:100%;justify-content:center;padding:.55rem;margin-top:.75rem;font-size:.78rem"
+                 onclick="addToCarrito(${p.id})">
+                 ${I18n.idioma === "ca" ? "Afegeix al carret" : "Add to cart"}
+               </button>`
+          }
         </div>
       </div>
     `;
@@ -190,16 +209,27 @@ function renderFeaturedProductsConImagenes(containerId) {
   if (!container) return;
 
   const featured = PRODUCTS_IMG.slice(0, 4);
-  const btnText  = I18n.idioma === "ca" ? "Afegeix al carret" : "Add to cart";
 
   container.innerHTML = featured.map(function(p) {
+    const sensEstoc = p.estoc === 0;
     return `
       <div class="product-card">
-        <div class="product-img" style="padding:0;overflow:hidden">
+        <div class="product-img" style="padding:0;overflow:hidden;position:relative">
           ${p.badge ? `<span class="product-badge">${p.badge}</span>` : ""}
+          ${sensEstoc ? `
+            <div style="position:absolute;inset:0;background:rgba(0,0,0,0.55);
+                        display:flex;align-items:center;justify-content:center;z-index:1">
+              <span style="color:#ff4d4d;font-weight:700;font-size:.85rem;
+                           text-transform:uppercase;letter-spacing:.08em;
+                           text-shadow:0 1px 4px rgba(0,0,0,.8)">
+                ${I18n.idioma === "ca" ? "Sense estoc" : "Out of stock"}
+              </span>
+            </div>` : ""}
           <img src="${p.img}" alt="${p.name}"
-               style="width:100%;height:160px;object-fit:cover;display:block"
-               loading="lazy">
+               style="width:100%;height:160px;object-fit:cover;display:block;
+                      ${sensEstoc ? "filter:grayscale(60%)" : ""}"
+               loading="eager"
+               onerror="this.parentElement.style.background='var(--bg-secondary)'">
         </div>
         <div class="product-info">
           <div class="product-category">${p.category}</div>
@@ -208,12 +238,19 @@ function renderFeaturedProductsConImagenes(containerId) {
             <span class="price-current">${p.price.toFixed(2)} €</span>
             ${p.originalPrice ? `<span class="price-old">${p.originalPrice.toFixed(2)} €</span>` : ""}
           </div>
-          <button
-            class="btn btn-primary"
-            style="width:100%;justify-content:center;padding:0.55rem;margin-top:0.75rem;font-size:0.78rem"
-            onclick="addToCarrito(${p.id})">
-            ${btnText}
-          </button>
+          ${sensEstoc
+            ? `<button disabled
+                 style="width:100%;padding:.55rem;margin-top:.75rem;font-size:.78rem;
+                        background:var(--bg-secondary);border:1px solid var(--border);
+                        border-radius:8px;color:var(--text-muted);cursor:not-allowed">
+                 ${I18n.idioma === "ca" ? "Sense estoc" : "Out of stock"}
+               </button>`
+            : `<button class="btn btn-primary"
+                 style="width:100%;justify-content:center;padding:.55rem;margin-top:.75rem;font-size:.78rem"
+                 onclick="addToCarrito(${p.id})">
+                 ${I18n.idioma === "ca" ? "Afegeix al carret" : "Add to cart"}
+               </button>`
+          }
         </div>
       </div>
     `;

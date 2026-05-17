@@ -79,6 +79,18 @@ const NOMBRE_MES = {
   en: ["January","February","March","April","May","June","July","August","September","October","November","December"]
 };
 
+// Caché de reserves per classe (evita crides repetides al backend)
+const _reservesCache = {};
+
+async function getReservesClasse(classeId) {
+  if (_reservesCache[classeId] !== undefined) return _reservesCache[classeId];
+  try {
+    const res = await apiFetch(`/api/reserves/classe/${classeId}/count`);
+    const count = res && res.ok ? await res.json() : 0;
+    _reservesCache[classeId] = count;
+    return count;
+  } catch (e) { return 0; }
+}
 
 /* =====================================================
    2. ESTAT DE LA PÀGINA
@@ -196,7 +208,7 @@ function updateSelectedDayInfo() {
    4. CLASSES — pintada de targetes
    ===================================================== */
 
-function renderClasesDelDia() {
+async function renderClasesDelDia() {
   const container = document.getElementById("act-classes-list");
   const titleEl   = document.getElementById("col-day-title");
   const countEl   = document.getElementById("classes-count");
@@ -243,11 +255,20 @@ function renderClasesDelDia() {
   }
 
   clases = clases.slice().sort((a, b) => a.time.localeCompare(b.time));
+  // Fragment suggerit per assistent IA - revisar i adaptar
   countEl.textContent = `${clases.length} ${t("activitats.places")}`;
-  container.innerHTML = clases.map(c => buildClassCard(c)).join("");
-}
 
-function buildClassCard(clase) {
+  // Buidem la caché per forçar dades fresques
+  Object.keys(_reservesCache).forEach(k => delete _reservesCache[k]);
+
+  const cards = await Promise.all(clases.map(async c => {
+    const reservesReals = await getReservesClasse(c.id);
+    return buildClassCard(c, reservesReals);
+  }));
+  container.innerHTML = cards.join("");
+  }
+
+function buildClassCard(clase,reservesReals) {
   const dateKey   = toDateKey(
     selectedDate.getFullYear(),
     selectedDate.getMonth(),
@@ -255,7 +276,7 @@ function buildClassCard(clase) {
   );
   const reservaId = `${dateKey}_${clase.id}`;
 
-  const reservasHoy = getReservasDelDia(dateKey, clase.id);
+ const reservasHoy = reservesReals !== undefined ? reservesReals : getReservasDelDia(dateKey, clase.id);
   const disponibles = clase.spots - reservasHoy;
   const pct         = Math.round((reservasHoy / clase.spots) * 100);
   const estaLlena   = disponibles <= 0;
@@ -465,8 +486,19 @@ function addReservacioLocal(clase, dateKey) {
 }
 
 function getReservasDelDia(dateKey, classId) {
-  const totes = loadAllReservas();
-  return totes.filter(r => r.dateKey === dateKey && String(r.classId) === String(classId)).length;
+    // Fragment suggerit per assistent IA - revisar i adaptar
+  // Caché de reserves per classe (evita crides repetides)
+  const _reservesCache = {};
+
+  async function getReservesClasse(classeId) {
+    if (_reservesCache[classeId] !== undefined) return _reservesCache[classeId];
+    try {
+      const res = await apiFetch(`/api/reserves/classe/${classeId}/count`);
+      const count = res && res.ok ? await res.json() : 0;
+      _reservesCache[classeId] = count;
+      return count;
+    } catch (e) { return 0; }
+  }
 }
 
 function userHasReservation(reservaId) {

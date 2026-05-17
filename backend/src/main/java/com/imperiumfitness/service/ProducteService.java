@@ -42,6 +42,7 @@ public class ProducteService {
         p.setPreu(dto.getPreu());
         p.setCategoria(dto.getCategoria());
         p.setEstoc(dto.getEstoc());
+        p.setImatgeUrl(dto.getImatgeUrl());
         return toDTO(repo.save(p));
     }
 
@@ -52,8 +53,8 @@ public class ProducteService {
     }
 
     private ProducteDTO toDTO(Producte p) {
-        return new ProducteDTO(p.getId(), p.getNom(), p.getDescripcio(),
-                p.getPreu(), p.getCategoria(), p.getEstoc());
+    return new ProducteDTO(p.getId(), p.getNom(), p.getDescripcio(),
+            p.getPreu(), p.getCategoria(), p.getEstoc(), p.getImatgeUrl());
     }
 
     private Producte toEntity(ProducteDTO dto) {
@@ -63,6 +64,7 @@ public class ProducteService {
         p.setPreu(dto.getPreu());
         p.setCategoria(dto.getCategoria());
         p.setEstoc(dto.getEstoc() != null ? dto.getEstoc() : 0);
+        p.setImatgeUrl(dto.getImatgeUrl());
         return p;
     }
 }

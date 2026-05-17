@@ -170,7 +170,6 @@ const I18n = (() => {
       "activitats.todesClasses":"Totes les classes",
       "activitats.filtreTotal": "Totes",
       "activitats.places":      "places",
-      "activitats.plena":       "Completa",
       "activitats.reservar":    "Reservar",
       "activitats.reservada":   "Reservada",
       "activitats.carregant":   "⏳ Carregant classes...",
@@ -181,6 +180,8 @@ const I18n = (() => {
       "activitats.cancel":      "Cancel·lar",
       "activitats.confirmar":   "Confirmar",
       "activitats.carregantMsg":"Carregant...",
+      "activitats.plena": "Sense places",
+
 
       // Perfil
       "perfil.titol":           "El meu Perfil",
@@ -202,6 +203,14 @@ const I18n = (() => {
       "perfil.confirmCancel":   "Segur que vols cancelar la subscripció?\n\nSeguiràs tenint accés fins al final del període pagat.",
       "perfil.cancelOk":        "Subscripció cancelada. Accés fins al {0}.",
       "perfil.cancelError":     "No s'ha pogut cancelar. Torna-ho a intentar.",
+      "perfil.tabGestioAdmin": "⚙️ Gestió Admin",
+
+
+      "recover.titol":    "Recuperar Contrasenya",
+      "recover.subtitol": "Introdueix el teu correu i t'enviarem instruccions per restablir la teva contrasenya",
+      "recover.enviar":   "Enviar Instruccions",
+      "recover.tornar":   "← Tornar al login",
+      "recover.exitDesc": "Rebràs un email amb instruccions per restablir la teva contrasenya.",
 
       // Gestió usuaris (admin)
       "gestioUsuaris.titol":       "Gestió d'Usuaris",
@@ -235,19 +244,32 @@ const I18n = (() => {
     "contacte.horari":            "Dl–Dv: 06:00 – 23:00 · Cap de setmana: 08:00 – 21:00",
     "contacte.centresTitle":      "Els nostres Centres",  
 
+
+      "inst.musculacio":      "Zona de Musculació",
+      "inst.musculacioDesc":  "Més de 200 màquines d'última generació, des de presses i cables fins a plataformes de levantament olímpic. Equipament renovat cada 2 anys per garantir el millor rendiment.",
+      "inst.cardio":          "Zona Cardio",
+      "inst.cardioDesc":      "Cintes, bicicletes, el·líptiques i remadores amb pantalles HD i connexió al teu mòbil. Entrena seguint les teves rutes preferides o les sessions guiades de la nostra app.",
+      "inst.sales":           "Sales de Classes Dirigides",
+      "inst.salesDesc":       "Tres sales totalment equipades amb sòl de parquet flotant, miralls de paret a paret i sistemes d'àudio professional. Capacitat de fins a 30 persones per sessió.",
+      "inst.wellness":        "Zona Wellness",
+      "inst.wellnessDesc":    "Sauna finlandesa, dutxes de contrast i zona de relaxació. Recupera't com un professional després de cada entrenament. Disponible per a membres amb tarifa Prime.",
+      "inst.vestidors":       "Vestidors Premium",
+      "inst.vestidorsDesc":   "Vestidors àmplis amb taquilles individuals de seguretat, dutxes amb aigua calenta il·limitada, assecadors de cabell i productes d'higiene inclosos.",
+      "inst.visitaSubtitol":  "Vine a visitar-nos sense compromís i et farem un tour complet de les instal·lacions.",
+
       "ocupacio.titolPagina":    "OCUPACIÓ EN TEMPS REAL",
-    "ocupacio.heroSub":        "Dades actualitzades cada 30 segons via sistema RFID de control d'accessos",
-    "ocupacio.millorHora":     "MILLOR HORA AVUI",
-    "ocupacio.menysOcupat":    "MENYS OCUPAT ARA",
-    "ocupacio.prediccio":      "PREDICCIÓ 30 MIN",
-    "ocupacio.prediccioSub":   "Reserva el teu lloc abans que s'ompli",
-    "ocupacio.calculant":      "Calculant...",
-    "ocupacio.cerca":          "Cerca gimnàs...",
-    "ocupacio.baixa":          "Baixa (<40%)",
-    "ocupacio.mitja":          "Mitja (40-70%)",
-    "ocupacio.alta":           "Alta (>70%)",
-    "ocupacio.comFunciona":    "Com funciona?",
-    "ocupacio.comFuncionaDesc":"Cada centre Imperium compta amb un sistema de control d'accessos mitjançant polseres RFID. Quan un usuari entra o surt del gimnàs, els torns registren el moviment automàticament, actualitzant l'ocupació en temps real.",
+      "ocupacio.heroSub":        "Dades actualitzades cada 30 segons via sistema RFID de control d'accessos",
+      "ocupacio.millorHora":     "MILLOR HORA AVUI",
+      "ocupacio.menysOcupat":    "MENYS OCUPAT ARA",
+      "ocupacio.prediccio":      "PREDICCIÓ 30 MIN",
+      "ocupacio.prediccioSub":   "Reserva el teu lloc abans que s'ompli",
+      "ocupacio.calculant":      "Calculant...",
+      "ocupacio.cerca":          "Cerca gimnàs...",
+      "ocupacio.baixa":          "Baixa (<40%)",
+      "ocupacio.mitja":          "Mitja (40-70%)",
+      "ocupacio.alta":           "Alta (>70%)",
+      "ocupacio.comFunciona":    "Com funciona?",
+      "ocupacio.comFuncionaDesc":"Cada centre Imperium compta amb un sistema de control d'accessos mitjançant polseres RFID. Quan un usuari entra o surt del gimnàs, els torns registren el moviment automàticament, actualitzant l'ocupació en temps real.",
   
 
       // Estadístiques
@@ -403,6 +425,18 @@ const I18n = (() => {
       "footer.descarrega":      "Download the App",
       "footer.desc":            "The premium gym chain with real-time occupancy technology. Transform your life.",
 
+      "inst.musculacio":      "Weight Room",
+      "inst.musculacioDesc":  "Over 200 state-of-the-art machines, from presses and cables to Olympic lifting platforms. Equipment renewed every 2 years to guarantee top performance.",
+      "inst.cardio":          "Cardio Zone",
+      "inst.cardioDesc":      "Treadmills, bikes, ellipticals and rowers with HD screens and mobile connectivity. Train following your favourite routes or our app's guided sessions.",
+      "inst.sales":           "Group Class Studios",
+      "inst.salesDesc":       "Three fully equipped studios with floating parquet floors, wall-to-wall mirrors and professional audio systems. Capacity up to 30 people per session.",
+      "inst.wellness":        "Wellness Zone",
+      "inst.wellnessDesc":    "Finnish sauna, contrast showers and relaxation area. Recover like a professional after every workout. Available for Prime plan members.",
+      "inst.vestidors":       "Premium Changing Rooms",
+      "inst.vestidorsDesc":   "Spacious changing rooms with individual security lockers, unlimited hot showers, hair dryers and hygiene products included.",
+      "inst.visitaSubtitol":  "Come visit us with no commitment and we'll give you a complete tour of the facilities.",
+
       // Carret
       "carret.titol":           "My cart",
       "carret.tancar":          "Close",
@@ -421,6 +455,12 @@ const I18n = (() => {
       "login.registrat":        "Sign up",
       "login.tornar":           "← Back to home",
       "login.entrant":          "Logging in...",
+
+      "recover.titol":    "Reset Password",
+      "recover.subtitol": "Enter your email and we'll send you instructions to reset your password",
+      "recover.enviar":   "Send Instructions",
+      "recover.tornar":   "← Back to login",
+      "recover.exitDesc": "You'll receive an email with instructions to reset your password.",
 
       // Registre
       "registre.titol":         "Create your account",
@@ -467,7 +507,6 @@ const I18n = (() => {
       "activitats.todesClasses":"All classes",
       "activitats.filtreTotal": "All",
       "activitats.places":      "spots",
-      "activitats.plena":       "Full",
       "activitats.reservar":    "Book",
       "activitats.reservada":   "Booked",
       "activitats.carregant":   "⏳ Loading classes...",
@@ -478,6 +517,7 @@ const I18n = (() => {
       "activitats.cancel":      "Cancel",
       "activitats.confirmar":   "Confirm",
       "activitats.carregantMsg":"Loading...",
+      "activitats.plena": "No vacancies",
 
       // Perfil
       "perfil.titol":           "My Profile",
@@ -499,6 +539,7 @@ const I18n = (() => {
       "perfil.confirmCancel":   "Are you sure you want to cancel your subscription?\n\nYou will retain access until the end of the paid period.",
       "perfil.cancelOk":        "Subscription cancelled. Access until {0}.",
       "perfil.cancelError":     "Could not cancel. Please try again.",
+      "perfil.tabGestioAdmin": "⚙️ Admin Panel",
 
       // Gestió usuaris (admin)
       "gestioUsuaris.titol":       "User Management",

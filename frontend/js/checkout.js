@@ -19,7 +19,8 @@ function updateCardPreview() {
 
   const nameDisplay = document.getElementById("cc-name-display");
   if (nameDisplay && titular) {
-    nameDisplay.textContent = titular.value.toUpperCase().trim() || "NOMBRE TITULAR";
+    nameDisplay.textContent = titular.value.toUpperCase().trim() || 
+  (I18n.idioma === "ca" ? "NOM TITULAR" : "CARDHOLDER NAME");
   }
 
   const numDisplay = document.getElementById("cc-number-display");
@@ -91,7 +92,7 @@ function saveOrder(userEmail) {
   const pedido = {
     pedidoId,
     userEmail,
-    fecha:     new Date().toLocaleDateString("es-ES"),
+    fecha: new Date().toLocaleDateString(I18n.idioma === "ca" ? "ca-ES" : "en-GB"),
     productos: carrito.map(item => ({
       id:       item.id,
       name:     item.name,
@@ -137,13 +138,13 @@ async function registrarVendesALaBD(usuariId) {
 async function processPay() {
   const user = Auth.getUser();
   if (!user) {
-    showToast("Debes iniciar sesión para pagar.", "error");
+    showToast(I18n.idioma === "ca" ? "Has d'iniciar sessió per pagar." : "You need to log in to pay.", "error");
     setTimeout(() => { window.location.href = "login.html"; }, 1500);
     return;
   }
 
   if (!validateForm()) {
-    showToast("Revisa los campos marcados en rojo.", "error");
+    showToast(I18n.idioma === "ca" ? "Revisa els camps marcats en vermell." : "Please check the fields marked in red.", "error");
     return;
   }
 
@@ -151,7 +152,7 @@ async function processPay() {
   const payBtn = document.getElementById("pay-btn");
   if (payBtn) {
     payBtn.disabled = true;
-    payBtn.textContent = "Procesando...";
+    payBtn.textContent = I18n.idioma === "ca" ? "Processant..." : "Processing...";
   }
 
   // Guardem a localStorage
@@ -166,7 +167,8 @@ async function processPay() {
   // Mostrem confirmació
   document.getElementById("checkout-form-section").style.display = "none";
   document.getElementById("checkout-success").style.display      = "block";
-  document.getElementById("success-order-id").textContent        = "Pedido " + pedidoId;
+  document.getElementById("success-order-id").textContent = 
+  (I18n.idioma === "ca" ? "Comanda " : "Order ") + pedidoId;
 
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
@@ -200,5 +202,8 @@ document.addEventListener("DOMContentLoaded", function() {
     input.addEventListener("input", function() {
       this.closest(".form-field")?.classList.remove("error");
     });
+  });
+  document.addEventListener("idioma:canvi", function() {
+    renderOrderSummary();
   });
 });

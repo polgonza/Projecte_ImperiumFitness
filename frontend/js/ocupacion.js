@@ -32,9 +32,9 @@ function nivelOcupacion(pct) {
 }
 
 function textoNivel(pct) {
-  if (pct < 40) return "Baja";
-  if (pct < 70) return "Media";
-  return "Alta";
+  if (pct < 40) return t("ocupacio.baixa").split(" ")[0];
+  if (pct < 70) return I18n.idioma === "ca" ? "Mitja" : "Medium";
+  return I18n.idioma === "ca" ? "Alta" : "High";
 }
 
 /* Índice de la hora actual en el array de 17 valores */
@@ -61,10 +61,13 @@ function actualizarReloj() {
   const el = document.getElementById("occ-time-label");
   if (!el) return;
   const now  = new Date();
-  const dias = ["Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado"];
-  const hh   = String(now.getHours()).padStart(2,"0");
-  const mm   = String(now.getMinutes()).padStart(2,"0");
-  el.textContent = `${dias[now.getDay()]} ${hh}:${mm}`;
+  const dies = {
+    ca: ["Diumenge","Dilluns","Dimarts","Dimecres","Dijous","Divendres","Dissabte"],
+    en: ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]
+  };
+  const hh = String(now.getHours()).padStart(2,"0");
+  const mm = String(now.getMinutes()).padStart(2,"0");
+  el.textContent = `${dies[I18n.idioma][now.getDay()]} ${hh}:${mm}`;
 }
 
 
@@ -88,7 +91,7 @@ function actualizarKPIs() {
   const mejorHora  = mejorIdx + 6;
   const mejorLabel = `${String(mejorHora).padStart(2,"0")}:00 - ${String(mejorHora+1).padStart(2,"0")}:00`;
   setTxt("kpi-best-hour", mejorLabel);
-  setTxt("kpi-best-sub",  `Ocupación estimada: ${Math.round(menorMedia)}%`);
+  setTxt("kpi-best-sub",  `${I18n.idioma === "ca" ? "Ocupació estimada" : "Estimated occupancy"}: ${Math.round(menorMedia)}%`);
 
   /* 2. Gimnasio menos lleno ahora */
   let minPct = 999, minIdx = 0;
@@ -97,13 +100,12 @@ function actualizarKPIs() {
     if (pct < minPct) { minPct = pct; minIdx = i; }
   });
   setTxt("kpi-least-busy", GYMS[minIdx]?.name || "—");
-  setTxt("kpi-least-sub",  `Solo al ${minPct}% de capacidad`);
+  setTxt("kpi-least-sub", `${I18n.idioma === "ca" ? "Només al" : "Only at"} ${minPct}% ${I18n.idioma === "ca" ? "de capacitat" : "capacity"}`);
 
   /* 3. Cuántos centros están subiendo */
   const subiendo = GYM_KEYS.filter(k => prediccion(k).subiendo).length;
-  setTxt("kpi-prediction", `${subiendo} centro${subiendo !== 1 ? "s" : ""} subiendo`);
+  setTxt("kpi-prediction", `${subiendo} ${I18n.idioma === "ca" ? `centre${subiendo !== 1 ? "s" : ""} pujant` : `centre${subiendo !== 1 ? "s" : ""} rising`}`);
 }
-
 function setTxt(id, txt) {
   const el = document.getElementById(id);
   if (el) el.textContent = txt;
@@ -123,11 +125,9 @@ function renderCards(filtro) {
   );
 
   if (lista.length === 0) {
-    grid.innerHTML = `
-      <p style="color:var(--text-muted);grid-column:1/-1;
-                text-align:center;padding:3rem">
-        No se encontraron gimnasios con ese nombre.
-      </p>`;
+    grid.innerHTML = `<p style="color:var(--text-muted);grid-column:1/-1;text-align:center;padding:3rem">
+      ${I18n.idioma === "ca" ? "No s'han trobat gimnasos amb aquest nom." : "No gyms found with that name."}
+    </p>`;
     return;
   }
 
@@ -164,7 +164,10 @@ function buildCard(gym, gymKey) {
   /* Barras por día */
   const hoyDiaIdx = new Date().getDay();
   const barrasDias = DIAS_SEMANA.map((dia, i) => {
-    const labels = ["Dom","Lun","Mar","Mié","Jue","Vie","Sáb"];
+    const labels = {
+  ca: ["Dg","Dl","Dt","Dc","Dj","Dv","Ds"],
+  en: ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"]
+};
     if (dia === "domingo") {
       return `<div class="occ-day-col">
         <div class="occ-day-bar other" style="height:4%"></div>
@@ -208,15 +211,15 @@ function buildCard(gym, gymKey) {
           <!-- Stats -->
           <div class="occ-card-stats">
             <div class="occ-stat-row">
-              <span class="occ-stat-label">👤 Personas</span>
+              <span class="occ-stat-label">👤 ${I18n.idioma === "ca" ? "Persones" : "People"}</span>
               <span class="occ-stat-value">${personas}</span>
             </div>
             <div class="occ-stat-row">
-              <span class="occ-stat-label">⚡ Capacidad</span>
+              <span class="occ-stat-label">⚡ ${I18n.idioma === "ca" ? "Capacitat" : "Capacity"}</span>
               <span class="occ-stat-value">${gym.capacity}</span>
             </div>
             <div class="occ-stat-row">
-              <span class="occ-stat-label">🕐 En 30 min</span>
+              <span class="occ-stat-label">🕐 ${I18n.idioma === "ca" ? "En 30 min" : "In 30 min"}</span>
               <span class="occ-stat-value ${predCls}">${predIcon} ~${pred.pct}%</span>
             </div>
           </div>
@@ -231,14 +234,19 @@ function buildCard(gym, gymKey) {
 
       <!-- Botón expandir -->
       <button class="occ-card-toggle" onclick="toggleCharts('${gymKey}', this)">
-        📊 Ver gráficas ∨
-      </button>
+  📊 ${I18n.idioma === "ca" ? "Veure gràfiques ∨" : "View charts ∨"}
+</button>
 
       <!-- Panel gráficas -->
       <div class="occ-charts-panel" id="charts-${gymKey}">
-        <div class="occ-chart-title">OCUPACIÓN HOY POR HORAS</div>
+        <div class="occ-chart-title">
+  ${I18n.idioma === "ca" ? "OCUPACIÓ AVUI PER HORES" : "TODAY'S OCCUPANCY BY HOUR"}
+</div>
         <div class="occ-bar-chart">${barrasHorarias}</div>
-        <div class="occ-chart-title">MEDIA ÚLTIMOS 7 DÍAS</div>
+        <div class="occ-chart-title">
+  ${I18n.idioma === "ca" ? "MITJANA ÚLTIMS 7 DIES" : "AVERAGE LAST 7 DAYS"}
+</div>
+
         <div class="occ-day-chart">${barrasDias}</div>
       </div>
     </div>
@@ -249,7 +257,9 @@ function toggleCharts(gymKey, btn) {
   const panel = document.getElementById(`charts-${gymKey}`);
   if (!panel) return;
   const isOpen = panel.classList.toggle("open");
-  btn.textContent = isOpen ? "📊 Ocultar gráficas ∧" : "📊 Ver gráficas ∨";
+  btn.textContent = isOpen 
+  ? `📊 ${I18n.idioma === "ca" ? "Ocultar gràfiques ∧" : "Hide charts ∧"}` 
+  : `📊 ${I18n.idioma === "ca" ? "Veure gràfiques ∨" : "View charts ∨"}`;
 }
 
 
@@ -312,4 +322,7 @@ document.addEventListener("DOMContentLoaded", function() {
   actualizarTodo();
   setInterval(actualizarTodo, 30000);  /* refresco cada 30 s */
   setInterval(actualizarReloj, 60000); /* reloj cada minuto  */
+  document.addEventListener("idioma:canvi", function() {
+    actualizarTodo();
+  });
 });
