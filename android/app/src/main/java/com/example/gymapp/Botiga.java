@@ -2,9 +2,12 @@ package com.example.gymapp;
 
 import android.content.Intent;
 import android.content.res.ColorStateList;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.Gravity;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -140,7 +143,13 @@ public class Botiga extends BaseActivity {
 
         imagen.setLayoutParams(imgParams);
         imagen.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        imagen.setImageResource(imatgePerProducte(producte));
+
+        /*
+            Nueva lógica:
+            1. Si el producto viene con imatgeUrl desde backend, usamos esa imagen.
+            2. Si no viene o falla, usamos la imagen hardcodeada antigua.
+        */
+        pintarImatgeProducte(imagen, producte);
 
         LinearLayout info = new LinearLayout(this);
         info.setOrientation(LinearLayout.VERTICAL);
@@ -222,15 +231,71 @@ public class Botiga extends BaseActivity {
         intent.putExtra("descripcio_producte", producte.getDescripcio());
 
         /*
-            Imagen hardcodeada según el nombre/categoría del producto.
-            ProductesBotiga la recibe y la reutiliza en carrito/pago.
+            Imagen antigua local como fallback.
         */
         intent.putExtra("imatge_producte", imatgePerProducte(producte));
+
+        /*
+            Nueva imagen real del backend.
+            ProductesBotiga la podrá usar en la pantalla de detalle.
+        */
+        intent.putExtra("imatge_url_producte", producte.getImatgeUrl());
 
         startActivity(intent);
     }
 
+    private void pintarImatgeProducte(ImageView imageView, ProducteDTO producte) {
+        if (producte != null) {
+            String imatgeUrl = producte.getImatgeUrl();
+
+            if (imatgeUrl != null && !imatgeUrl.trim().isEmpty()) {
+                Bitmap bitmap = convertirBase64ABitmap(imatgeUrl);
+
+                if (bitmap != null) {
+                    imageView.setImageBitmap(bitmap);
+                    return;
+                }
+            }
+        }
+
+        imageView.setImageResource(imatgePerProducte(producte));
+    }
+
+    private Bitmap convertirBase64ABitmap(String imatgeBase64) {
+        try {
+            if (imatgeBase64 == null || imatgeBase64.trim().isEmpty()) {
+                return null;
+            }
+
+            String base64Net = imatgeBase64.trim();
+
+            /*
+                El backend lo devuelve así:
+                data:image/jpeg;base64,/9j/4AAQ...
+                Quitamos la parte inicial antes de la coma.
+            */
+            if (base64Net.contains(",")) {
+                base64Net = base64Net.substring(base64Net.indexOf(",") + 1);
+            }
+
+            byte[] decodedBytes = Base64.decode(base64Net, Base64.DEFAULT);
+
+            return BitmapFactory.decodeByteArray(
+                    decodedBytes,
+                    0,
+                    decodedBytes.length
+            );
+
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
     private int imatgePerProducte(ProducteDTO producte) {
+        if (producte == null) {
+            return R.drawable.producto_2;
+        }
+
         String nom = producte.getNom() != null
                 ? normalitzar(producte.getNom())
                 : "";
@@ -241,19 +306,6 @@ public class Botiga extends BaseActivity {
 
         String nomDrawable = "producto_2";
 
-        /*
-            Productos actuales:
-            - Proteïna Whey 1kg / 2kg       -> proteina
-            - Samarreta Imperium            -> samarreta
-            - Creatina 300g                 -> creatina
-            - Barra de proteïna             -> barra_proteina
-            - Guants gimnàs                 -> guants
-            - Bossa de gimnàs               -> bossa
-            - Samarreta tècnica home/dona   -> samarreta
-            - Malla esportiva               -> malla
-            - Ampolla 750ml                 -> ampolla
-            - Omega-3                       -> omega3
-        */
 
         if (nom.contains("creatina")) {
             nomDrawable = "creatina";

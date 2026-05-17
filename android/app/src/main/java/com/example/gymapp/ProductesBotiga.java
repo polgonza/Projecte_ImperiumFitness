@@ -3,7 +3,10 @@ package com.example.gymapp;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Base64;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -11,7 +14,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -21,6 +23,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Locale;
 
 /*
     PRODUCTES BOTIGA ACTIVITY
@@ -42,6 +45,7 @@ public class ProductesBotiga extends BaseActivity {
     private String nomProducte;
     private double preuProducte;
     private int idImatge;
+    private String imatgeUrlProducte;
     private String descripcio;
 
     private SharedPreferences sharedPreferences;
@@ -74,12 +78,14 @@ public class ProductesBotiga extends BaseActivity {
         nomProducte = getIntent().getStringExtra("nom_producte");
         preuProducte = getIntent().getDoubleExtra("preu_producte", 0.0);
         idImatge = getIntent().getIntExtra("imatge_producte", R.drawable.producto_2);
+        imatgeUrlProducte = getIntent().getStringExtra("imatge_url_producte");
         descripcio = getIntent().getStringExtra("descripcio_producte");
 
-        ivProducte.setImageResource(idImatge);
-        tvNom.setText(nomProducte);
-        tvDescripcio.setText(descripcio);
-        tvPreu.setText(String.format("%.2f€", preuProducte));
+        pintarImatgeProducte();
+
+        tvNom.setText(nomProducte != null ? nomProducte : "");
+        tvDescripcio.setText(descripcio != null ? descripcio : "");
+        tvPreu.setText(String.format(Locale.getDefault(), "%.2f€", preuProducte));
 
         sharedPreferences = getSharedPreferences("Usuaris", Context.MODE_PRIVATE);
 
@@ -87,14 +93,54 @@ public class ProductesBotiga extends BaseActivity {
         btnPagarAra.setOnClickListener(v -> pagarAra());
     }
 
+    private void pintarImatgeProducte() {
+        if (imatgeUrlProducte != null && !imatgeUrlProducte.trim().isEmpty()) {
+            Bitmap bitmap = convertirBase64ABitmap(imatgeUrlProducte);
+
+            if (bitmap != null) {
+                ivProducte.setImageBitmap(bitmap);
+                return;
+            }
+        }
+
+        ivProducte.setImageResource(idImatge);
+    }
+
+    private Bitmap convertirBase64ABitmap(String imatgeBase64) {
+        try {
+            if (imatgeBase64 == null || imatgeBase64.trim().isEmpty()) {
+                return null;
+            }
+
+            String base64Net = imatgeBase64.trim();
+
+            if (base64Net.contains(",")) {
+                base64Net = base64Net.substring(base64Net.indexOf(",") + 1);
+            }
+
+            byte[] decodedBytes = Base64.decode(base64Net, Base64.DEFAULT);
+
+            return BitmapFactory.decodeByteArray(
+                    decodedBytes,
+                    0,
+                    decodedBytes.length
+            );
+
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
     private int obtenirQuantitat() {
         int quantitat;
 
         try {
             quantitat = Integer.parseInt(etQuantitat.getText().toString());
+
             if (quantitat < 1) {
                 quantitat = 1;
             }
+
         } catch (NumberFormatException e) {
             quantitat = 1;
         }
@@ -104,7 +150,11 @@ public class ProductesBotiga extends BaseActivity {
 
     private void afegirACesta() {
         if (idProducte == null) {
-            Toast.makeText(this, "Error: no s'ha trobat l'ID del producte", Toast.LENGTH_LONG).show();
+            Toast.makeText(
+                    this,
+                    getString(R.string.pagament_producte_error_id),
+                    Toast.LENGTH_LONG
+            ).show();
             return;
         }
 
@@ -124,6 +174,7 @@ public class ProductesBotiga extends BaseActivity {
                     nomProducte,
                     preuProducte,
                     idImatge,
+                    imatgeUrlProducte,
                     descripcio
             ));
         }
@@ -140,7 +191,11 @@ public class ProductesBotiga extends BaseActivity {
 
     private void pagarAra() {
         if (idProducte == null) {
-            Toast.makeText(this, "Error: no s'ha trobat l'ID del producte", Toast.LENGTH_LONG).show();
+            Toast.makeText(
+                    this,
+                    getString(R.string.pagament_producte_error_id),
+                    Toast.LENGTH_LONG
+            ).show();
             return;
         }
 
@@ -151,6 +206,7 @@ public class ProductesBotiga extends BaseActivity {
         editor.putString("producte_directe_nom", nomProducte);
         editor.putFloat("producte_directe_preu", (float) preuProducte);
         editor.putInt("producte_directe_imatge", idImatge);
+        editor.putString("producte_directe_imatge_url", imatgeUrlProducte);
         editor.putInt("producte_directe_quantitat", quantitat);
         editor.putString("producte_directe_descripcio", descripcio);
         editor.apply();

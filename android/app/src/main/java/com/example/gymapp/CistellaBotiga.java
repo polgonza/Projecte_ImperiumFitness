@@ -3,7 +3,10 @@ package com.example.gymapp;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +29,7 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.text.Normalizer;
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class CistellaBotiga extends BaseActivity {
 
@@ -155,6 +159,47 @@ public class CistellaBotiga extends BaseActivity {
         ).show();
     }
 
+    private void pintarImatgeProducte(ImageView imageView, ProducteCistella producte) {
+        if (producte != null
+                && producte.imatgeUrl != null
+                && !producte.imatgeUrl.trim().isEmpty()) {
+
+            Bitmap bitmap = convertirBase64ABitmap(producte.imatgeUrl);
+
+            if (bitmap != null) {
+                imageView.setImageBitmap(bitmap);
+                return;
+            }
+        }
+
+        imageView.setImageResource(imatgePerProducte(producte));
+    }
+
+    private Bitmap convertirBase64ABitmap(String imatgeBase64) {
+        try {
+            if (imatgeBase64 == null || imatgeBase64.trim().isEmpty()) {
+                return null;
+            }
+
+            String base64Net = imatgeBase64.trim();
+
+            if (base64Net.contains(",")) {
+                base64Net = base64Net.substring(base64Net.indexOf(",") + 1);
+            }
+
+            byte[] decodedBytes = Base64.decode(base64Net, Base64.DEFAULT);
+
+            return BitmapFactory.decodeByteArray(
+                    decodedBytes,
+                    0,
+                    decodedBytes.length
+            );
+
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
     private int imatgePerProducte(ProducteCistella producte) {
         if (producte == null) {
             return R.drawable.producto_2;
@@ -229,9 +274,10 @@ public class CistellaBotiga extends BaseActivity {
         public void onBindViewHolder(ViewHolder holder, int position) {
             ProducteCistella producte = cistella.get(position);
 
-            holder.ivImatge.setImageResource(imatgePerProducte(producte));
+            pintarImatgeProducte(holder.ivImatge, producte);
+
             holder.tvNom.setText(producte.nom != null ? producte.nom : "");
-            holder.tvPreu.setText(String.format("%.2f€", producte.preu));
+            holder.tvPreu.setText(String.format(Locale.getDefault(), "%.2f€", producte.preu));
 
             holder.btnEliminar.setOnClickListener(v -> {
                 int posicioActual = holder.getBindingAdapterPosition();

@@ -1,5 +1,7 @@
 package com.example.gymapp;
 
+import com.google.gson.annotations.SerializedName;
+
 public class ProducteDTO {
 
     private Long id;
@@ -8,6 +10,9 @@ public class ProducteDTO {
     private Double preu;
     private String categoria;
     private Integer estoc;
+
+    @SerializedName(value = "imatgeUrl", alternate = {"imatge_url", "imagen_url", "imagenUrl"})
+    private String imatgeUrl;
 
     public ProducteDTO() {
     }
@@ -34,5 +39,13 @@ public class ProducteDTO {
 
     public Integer getEstoc() {
         return estoc;
+    }
+
+    public String getImatgeUrl() {
+        return imatgeUrl;
+    }
+
+    public String getImagenUrl() {
+        return imatgeUrl;
     }
 }
