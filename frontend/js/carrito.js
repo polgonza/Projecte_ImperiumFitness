@@ -2,15 +2,21 @@
    IMPERIUM FITNESS — carrito.js
    ===================================================== */
 
-const CATEGORY_IMGS = {
-  "Roba":       "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=300&fit=crop",
-  "Suplement":  "https://images.unsplash.com/photo-1593095948071-474c5cc2989d?w=400&h=300&fit=crop",
-  "Accesoris":  "https://images.unsplash.com/photo-1517344368193-41552b6ad3f5?w=400&h=300&fit=crop",
-  "ropa":       "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=300&fit=crop",
-  "suplementos":"https://images.unsplash.com/photo-1593095948071-474c5cc2989d?w=400&h=300&fit=crop",
-  "accesorios": "https://images.unsplash.com/photo-1517344368193-41552b6ad3f5?w=400&h=300&fit=crop",
-  "default":    "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=400&h=300&fit=crop"
+// Fragment suggerit per assistent IA - revisar i adaptar
+// Fragment suggerit per assistent IA - revisar i adaptar
+// Fragment suggerit per assistent IA - revisar i adaptar
+const CATEGORY_FALLBACK = {
+  "Roba":      "https://images.unsplash.com/photo-1571902943202-507ec2618e8f?w=400&h=300&fit=crop",
+  "Suplement": "https://images.unsplash.com/photo-1593095948071-474c5cc2989d?w=400&h=300&fit=crop",
+  "Accesoris": "https://images.unsplash.com/photo-1517344368193-41552b6ad3f5?w=400&h=300&fit=crop",
+  "default":   "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=400&h=300&fit=crop"
 };
+
+// Assigna una imatge aleatòria consistent per producte (basada en l'ID)
+function getImgProducte(categoria, id) {
+  const llista = CATEGORY_IMGS[categoria] || CATEGORY_IMGS["default"];
+  return llista[id % llista.length]; // consistent per ID, variat visualment
+}
 
 let PRODUCTS_IMG = [];
 
@@ -23,7 +29,7 @@ function producteBackendToLocal(p) {
     category:      p.categoria || "default",
     badge:         p.estoc <= 5 ? (I18n.idioma === "ca" ? "Últimes unitats" : "Last units") : null,
     estoc:         p.estoc,
-    img:           CATEGORY_IMGS[p.categoria] || CATEGORY_IMGS["default"]
+    img:           p.imatgeUrl || CATEGORY_FALLBACK[p.categoria] || CATEGORY_FALLBACK["default"]
   };
 }
 
@@ -146,13 +152,10 @@ function renderProductosConImagenes(containerId, filter) {
   if (!container) return;
 
   const lista = filter === "all" || !filter
-    ? PRODUCTS_IMG
-    : PRODUCTS_IMG.filter(function(p) {
-        const cat  = (p.category || "").toLowerCase();
-        const f    = (filter || "").toLowerCase();
-        const mapa = { "roba": "ropa", "suplement": "suplementos", "accesoris": "accesorios" };
-        return (mapa[cat] || cat) === f;
-      });
+  ? PRODUCTS_IMG
+  : PRODUCTS_IMG.filter(function(p) {
+      return (p.category || "").toLowerCase() === (filter || "").toLowerCase();
+    });
 
   const btnText = I18n.idioma === "ca" ? "Afegeix al carret" : "Add to cart";
 

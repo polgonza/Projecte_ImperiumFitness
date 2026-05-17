@@ -9,17 +9,20 @@ public class ProducteDTO {
     private BigDecimal preu;
     private String categoria;
     private Integer estoc;
+    private String imatgeUrl;
 
     public ProducteDTO() {}
 
     public ProducteDTO(Long id, String nom, String descripcio,
-                       BigDecimal preu, String categoria, Integer estoc) {
-        this.id = id;
-        this.nom = nom;
-        this.descripcio = descripcio;
-        this.preu = preu;
-        this.categoria = categoria;
-        this.estoc = estoc;
+                    BigDecimal preu, String categoria, Integer estoc) {
+        this.id = id; this.nom = nom; this.descripcio = descripcio;
+        this.preu = preu; this.categoria = categoria; this.estoc = estoc;
+    }
+
+    public ProducteDTO(Long id, String nom, String descripcio,
+                    BigDecimal preu, String categoria, Integer estoc, String imatgeUrl) {
+        this(id, nom, descripcio, preu, categoria, estoc);
+        this.imatgeUrl = imatgeUrl;
     }
 
     public Long getId() { return id; }
@@ -39,4 +42,7 @@ public class ProducteDTO {
 
     public Integer getEstoc() { return estoc; }
     public void setEstoc(Integer estoc) { this.estoc = estoc; }
+
+    public String getImatgeUrl() { return imatgeUrl; }
+    public void setImatgeUrl(String imatgeUrl) { this.imatgeUrl = imatgeUrl; }
 }

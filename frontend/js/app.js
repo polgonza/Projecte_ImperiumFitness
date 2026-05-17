@@ -248,7 +248,7 @@ function renderPlans(containerId) {
 // Añade el plan elegido al carrito como producto especial y va al checkout
 function buyPlan(planName, planPrice) {
   if (!Auth.getUser()) {
-    showToast("Debes iniciar sesión para contratar un plan.", "error");
+    showToast(I18n.idioma === "ca" ? "Has d'iniciar sessió per contractar un pla." : "You need to log in to subscribe.", "error");
     setTimeout(() => window.location.href = "login.html", 1500);
     return;
   }
@@ -280,7 +280,7 @@ function renderClasses(containerId, filter = "all") {
 function reserveClass(name) {
   const user = Auth.getUser();
   if (!user) {
-    showToast("Debes iniciar sesión para reservar clases.", "error");
+    showToast(t("toast.sessionExp"), "error");
     setTimeout(() => window.location.href = "login.html", 1500);
     return;
   }
@@ -290,7 +290,7 @@ function reserveClass(name) {
     showNoPlantAlert();
     return;
   }
-  showToast(`¡Reserva de "${name}" confirmada! 🎉`, "success");
+  showToast(t("toast.reservaOk", [name]), "success");
 }
 
 // Muestra un mensaje de aviso cuando no hay tarifa activa — HTML en render.js
@@ -304,7 +304,7 @@ function renderProducts(containerId, filter = "all") {
 }
 
 function addToCart(name) {
-  showToast(`"${name}" añadido al carrito 🛒`, "success");
+  showToast(t("toast.afegitCarret", [name]), "success");
 }
 
 // Renderiza el blog — HTML generado en render.js
@@ -551,7 +551,7 @@ function initContactForm() {
 
   form.addEventListener("submit", function(e) {
     e.preventDefault();
-    showToast("¡Mensaje enviado! Te responderemos en menos de 24h 📩", "success");
+    showToast(t("toast.missatgeEnviat"), "success");
     form.reset();
   });
 }
@@ -575,7 +575,7 @@ function initNewsletter() {
       const inputId = this.dataset.input;
       const input = inputId ? document.getElementById(inputId) : this.previousElementSibling;
       if (input && input.value) {
-        showToast("¡Suscrito correctamente! 📬", "success");
+        showToast(t("toast.subscrit"), "success");
         input.value = "";
       } else {
         showToast("Introduce un email válido.", "error");

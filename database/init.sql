@@ -1,9 +1,9 @@
 /*M!999999\- enable the sandbox mode */ 
 -- MariaDB dump 10.19-11.7.2-MariaDB, for Win64 (AMD64)
 --
--- Host: localhost    Database: imperium_fitness
+-- Host: 10.147.17.250    Database: imperium_fitness
 -- ------------------------------------------------------
--- Server version	12.2.2-MariaDB
+-- Server version	11.8.6-MariaDB-ubu2404
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -353,6 +353,7 @@ CREATE TABLE `producte` (
   `preu` decimal(10,2) DEFAULT NULL,
   `categoria` varchar(255) DEFAULT NULL,
   `estoc` int(11) DEFAULT 0,
+  `imatge_url` mediumtext DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -364,18 +365,18 @@ CREATE TABLE `producte` (
 LOCK TABLES `producte` WRITE;
 /*!40000 ALTER TABLE `producte` DISABLE KEYS */;
 INSERT INTO `producte` VALUES
-(1,'Proteïna Whey 1kg','Proteïna de sèrum de llet sabor xocolata',29.99,'Suplement',50),
-(2,'Samarreta Imperium','Samarreta tècnica oficial del gimnàs',19.99,'Roba',29),
-(3,'Creatina 300g','Creatina monohidrat pura',19.99,'Suplement',40),
-(4,'Barra de proteïna','Snack proteic sabor xocolata',2.99,'Suplement',100),
-(5,'Guants gimnàs','Guants de training amb palmell reforçat',14.99,'Accesoris',25),
-(6,'Bossa de gimnàs','Bossa esportiva 30L',29.99,'Accesoris',20),
-(7,'Samarreta tècnica home','Samarreta dry-fit transpirable',24.99,'Roba',35),
-(8,'Samarreta tècnica dona','Samarreta dry-fit transpirable',24.99,'Roba',35),
-(9,'Malla esportiva','Malla compressió negra',34.99,'Roba',20),
-(10,'Ampolla 750ml','Ampolla esportiva amb filtre',12.99,'Accesoris',50),
-(11,'Proteïna Whey 2kg','Proteïna de sèrum sabor vainilla',49.99,'Suplement',30),
-(12,'Omega-3','Àcids grassos essencials 90 càpsules',16.99,'Suplement',45);
+(1,'Proteïna Whey 1kg','Proteïna de sèrum de llet sabor xocolata',29.99,'Suplement',42,NULL),
+(2,'Samarreta Imperium','Samarreta tècnica oficial del gimnàs',19.99,'Roba',25,NULL),
+(3,'Creatina 300g','Creatina monohidrat pura',19.99,'Suplement',32,NULL),
+(4,'Barra de proteïna','Snack proteic sabor xocolata',2.99,'Suplement',92,NULL),
+(5,'Guants gimnàs','Guants de training amb palmell reforçat',14.99,'Accesoris',25,NULL),
+(6,'Bossa de gimnàs','Bossa esportiva 30L',29.99,'Accesoris',20,NULL),
+(7,'Samarreta tècnica home','Samarreta dry-fit transpirable',24.99,'Roba',35,NULL),
+(8,'Samarreta tècnica dona','Samarreta dry-fit transpirable',24.99,'Roba',35,NULL),
+(9,'Malla esportiva','Malla compressió negra',34.99,'Roba',19,NULL),
+(10,'Ampolla 750ml','Ampolla esportiva amb filtre',12.99,'Accesoris',50,NULL),
+(11,'Proteïna Whey 2kg','Proteïna de sèrum sabor vainilla',49.99,'Suplement',30,NULL),
+(12,'Omega-3','Àcids grassos essencials 90 càpsules',16.99,'Suplement',39,NULL);
 /*!40000 ALTER TABLE `producte` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -396,7 +397,7 @@ CREATE TABLE `reserva` (
   KEY `fk_reserva_classe` (`classe_id`),
   CONSTRAINT `fk_reserva_classe` FOREIGN KEY (`classe_id`) REFERENCES `classe` (`id`),
   CONSTRAINT `fk_reserva_usuari` FOREIGN KEY (`usuari_id`) REFERENCES `usuari` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=49 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=94 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -432,7 +433,24 @@ INSERT INTO `reserva` VALUES
 (43,5,31,'2026-05-11 13:14:11'),
 (44,5,41,'2026-05-11 13:15:22'),
 (45,5,36,'2026-05-11 13:24:01'),
-(46,5,40,'2026-05-11 13:25:49');
+(46,5,40,'2026-05-11 13:25:49'),
+(53,1,29,'2026-05-11 17:45:18'),
+(63,2,34,'2026-05-14 17:07:56'),
+(64,2,70,'2026-05-14 17:12:45'),
+(65,2,67,'2026-05-14 17:12:54'),
+(66,2,79,'2026-05-14 17:12:58'),
+(67,2,91,'2026-05-14 17:13:03'),
+(68,2,103,'2026-05-14 17:13:07'),
+(69,2,115,'2026-05-14 17:13:11'),
+(70,2,94,'2026-05-14 17:13:15'),
+(71,2,82,'2026-05-14 17:13:19'),
+(72,2,95,'2026-05-14 17:14:59'),
+(73,2,96,'2026-05-14 17:15:04'),
+(74,2,97,'2026-05-14 17:15:06'),
+(75,2,107,'2026-05-14 17:15:10'),
+(76,2,108,'2026-05-14 17:15:13'),
+(77,2,109,'2026-05-14 17:15:16'),
+(90,1,54,'2026-05-16 15:30:05');
 /*!40000 ALTER TABLE `reserva` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -489,7 +507,7 @@ CREATE TABLE `usuari` (
   UNIQUE KEY `email` (`email`),
   KEY `fk_usuari_tarifa` (`tarifa_id`),
   CONSTRAINT `fk_usuari_tarifa` FOREIGN KEY (`tarifa_id`) REFERENCES `tarifa` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -499,11 +517,14 @@ CREATE TABLE `usuari` (
 LOCK TABLES `usuari` WRITE;
 /*!40000 ALTER TABLE `usuari` DISABLE KEYS */;
 INSERT INTO `usuari` VALUES
-(1,'Admin','admin@imperium.com','$2a$10$ru5ykaDgdlEaK26H/xAknuW3V/92RRszOFkof0aL8GcdInQk/uNa6','2026-04-16 18:24:35','ADMIN',3,NULL,NULL,0,0),
-(2,'Joan Garcia','joan@gmail.com','$2a$10$CpPuIpBsxRDkhyyKyAfcg.VMsNqH4yPBUTWYoGBUOGWyHvE8vklpW','2026-04-16 18:24:35','USER',NULL,NULL,NULL,0,0),
-(3,'Maria López','maria@gmail.com','$2a$10$ommhLP6snGAotlvt5L3Li.1vfKo5MQUhcPe/8Xv5BO3u8edSTDsvm','2026-04-20 13:10:06','USER',NULL,NULL,NULL,0,0),
-(4,'paco paquito','paco@gmail.com','$2a$10$aA5R/KsWBkwzrNNd/B5IVOt7ItQD7cjgBsby7l2byLj.8YXTqbPcq','2026-04-28 13:22:49','USER',NULL,NULL,NULL,0,0),
-(5,'Joan Garcio','joan7@test.com','$2a$10$ls4jNPxpeaBmagwUmT6YBOwXD9lwgVepnMAwLAxQjFEMVsL56k0YS','2026-05-06 16:57:02','USER',NULL,NULL,NULL,0,0);
+(1,'Admin','admin@imperium.com','$2a$10$ru5ykaDgdlEaK26H/xAknuW3V/92RRszOFkof0aL8GcdInQk/uNa6','2026-04-16 18:24:35','ADMIN',2,'2026-05-16 20:38:37','2026-06-16 20:38:37',0),
+(2,'Joan Garcia','joan@gmail.com','$2a$10$CpPuIpBsxRDkhyyKyAfcg.VMsNqH4yPBUTWYoGBUOGWyHvE8vklpW','2026-04-16 18:24:35','USER',2,'2026-05-14 17:07:38','2026-06-14 17:07:38',0),
+(3,'Maria López','maria@gmail.com','$2a$10$ommhLP6snGAotlvt5L3Li.1vfKo5MQUhcPe/8Xv5BO3u8edSTDsvm','2026-04-20 13:10:06','USER',NULL,NULL,NULL,0),
+(4,'paco paquito','paco@gmail.com','$2a$10$aA5R/KsWBkwzrNNd/B5IVOt7ItQD7cjgBsby7l2byLj.8YXTqbPcq','2026-04-28 13:22:49','USER',NULL,NULL,NULL,0),
+(5,'Joan Garcio','joan7@test.com','$2a$10$ls4jNPxpeaBmagwUmT6YBOwXD9lwgVepnMAwLAxQjFEMVsL56k0YS','2026-05-06 16:57:02','USER',NULL,NULL,NULL,0),
+(6,'Les','les@test.com','$2a$10$Bzt226iGiefgDLf2o2F6COA6SSL/A3qoNbK92e/8GWu5X3bb5xTEe','2026-05-11 16:57:14','USER',NULL,NULL,NULL,0),
+(7,'les77','les77@test.com','$2a$10$pFsk6t.ET1Gl5XrQFCMEauLWXTXPGnyX80XykCxFoMmUAfR/Knu1S','2026-05-11 17:11:01','USER',NULL,NULL,NULL,0),
+(8,'pablo','pablo19@imperium.com','$2a$10$BVhjX667LBB9OpP.MPq.eu5IKqIgUdWQQySRrvW7kwCQQ8.Ie8ggW','2026-05-16 15:20:18','USER',NULL,NULL,NULL,0);
 /*!40000 ALTER TABLE `usuari` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -525,7 +546,7 @@ CREATE TABLE `venda` (
   KEY `fk_venda_usuari` (`usuari_id`),
   CONSTRAINT `fk_venda_producte` FOREIGN KEY (`producte_id`) REFERENCES `producte` (`id`),
   CONSTRAINT `fk_venda_usuari` FOREIGN KEY (`usuari_id`) REFERENCES `usuari` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -535,7 +556,26 @@ CREATE TABLE `venda` (
 LOCK TABLES `venda` WRITE;
 /*!40000 ALTER TABLE `venda` DISABLE KEYS */;
 INSERT INTO `venda` VALUES
-(1,2,1,1,'2026-05-07 14:23:18');
+(1,2,1,1,'2026-05-07 14:23:18'),
+(2,9,1,1,'2026-05-14 13:20:16'),
+(3,1,1,1,'2026-05-16 09:13:14'),
+(4,3,1,1,'2026-05-16 09:14:04'),
+(5,4,1,1,'2026-05-16 09:14:04'),
+(6,3,1,2,'2026-05-16 10:51:20'),
+(7,4,1,2,'2026-05-16 10:51:20'),
+(8,2,1,1,'2026-05-16 11:57:16'),
+(9,3,1,1,'2026-05-16 11:58:45'),
+(10,4,1,4,'2026-05-16 11:58:45'),
+(11,3,1,1,'2026-05-16 15:30:24'),
+(12,3,1,1,'2026-05-16 15:30:57'),
+(13,4,1,1,'2026-05-16 15:31:23'),
+(14,12,1,6,'2026-05-16 15:34:38'),
+(15,1,1,5,'2026-05-16 16:41:33'),
+(16,2,1,1,'2026-05-16 17:06:47'),
+(17,1,1,2,'2026-05-16 17:07:24'),
+(18,3,8,1,'2026-05-16 19:19:17'),
+(19,2,8,2,'2026-05-16 19:20:19'),
+(20,3,8,1,'2026-05-16 19:29:48');
 /*!40000 ALTER TABLE `venda` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -552,4 +592,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
 
--- Dump completed on 2026-05-11 16:53:49
+-- Dump completed on 2026-05-17 18:27:29
