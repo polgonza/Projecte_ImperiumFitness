@@ -79,6 +79,18 @@ const NOMBRE_MES = {
   en: ["January","February","March","April","May","June","July","August","September","October","November","December"]
 };
 
+// Caché de reserves per classe (evita crides repetides al backend)
+const _reservesCache = {};
+
+async function getReservesClasse(classeId) {
+  if (_reservesCache[classeId] !== undefined) return _reservesCache[classeId];
+  try {
+    const res = await apiFetch(`/api/reserves/classe/${classeId}/count`);
+    const count = res && res.ok ? await res.json() : 0;
+    _reservesCache[classeId] = count;
+    return count;
+  } catch (e) { return 0; }
+}
 
 /* =====================================================
    2. ESTAT DE LA PÀGINA
