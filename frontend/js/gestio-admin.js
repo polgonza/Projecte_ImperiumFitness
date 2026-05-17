@@ -167,9 +167,13 @@ function obreFormProducte(id) {
             </label>
           </div>
           <div id="fp-imatge-preview" style="margin-top:.5rem">
-            ${p?.imatgeUrl?`<img src="${p.imatgeUrl}" style="height:80px;border-radius:6px;object-fit:cover">`:""}
+            ${p?.imatgeUrl
+              ? `<img src="${p.imatgeUrl}" style="height:80px;border-radius:6px;object-fit:cover">
+                 <p style="font-size:.72rem;color:var(--text-muted);margin-top:.3rem">
+                   ${I18n.idioma==="ca"?"Imatge actual — deixa els camps buits per conservar-la":"Current image — leave fields empty to keep it"}
+                 </p>`
+              : ""}
           </div>
-        </div>
 
       </div>
       <div style="display:flex;gap:.75rem;justify-content:flex-end;margin-top:1rem">
@@ -223,7 +227,9 @@ async function desaProducte() {
 
   if (!nom || isNaN(preu) || isNaN(estoc)) { showToast(t("toast.campsBuits"),"error"); return; }
 
-  const dto = { nom, descripcio, preu, categoria, estoc, imatgeUrl: base64||urlInput||null };
+  // Fragment suggerit per assistent IA - revisar i adaptar
+const imatgeUrl = base64 || urlInput || (_editProducte?.imatgeUrl ?? null);
+const dto = { nom, descripcio, preu, categoria, estoc, imatgeUrl };
   const resultat = _editProducte ? await ApiProductes.actualitzar(_editProducte.id,dto) : await ApiProductes.crear(dto);
 
   if (resultat) {

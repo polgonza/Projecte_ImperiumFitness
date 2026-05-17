@@ -372,7 +372,22 @@ const ApiUsuari = {
    ══════════════════════════════════════════════════════ */
 
 const ApiStats = {
-
+    // Fragment suggerit per assistent IA - revisar i adaptar
+  async getVendesMensuals() {
+    try { const res = await apiFetch("/api/stats/vendes-mensuals"); return res && res.ok ? await res.json() : []; } catch(e) { return []; }
+  },
+  async getUsuarisMensuals() {
+    try { const res = await apiFetch("/api/stats/usuaris-mensuals"); return res && res.ok ? await res.json() : []; } catch(e) { return []; }
+  },
+  async getDistribucioTarifes() {
+    try { const res = await apiFetch("/api/stats/distribucio-tarifes"); return res && res.ok ? await res.json() : []; } catch(e) { return []; }
+  },
+  async getEstocBaix() {
+    try { const res = await apiFetch("/api/stats/estoc-baix"); return res && res.ok ? await res.json() : []; } catch(e) { return []; }
+  },
+  async getActivitatRecent() {
+    try { const res = await apiFetch("/api/stats/activitat-recent"); return res && res.ok ? await res.json() : null; } catch(e) { return null; }
+  },
   async getResum() {
     try {
       const res = await apiFetch("/api/stats/resum");
