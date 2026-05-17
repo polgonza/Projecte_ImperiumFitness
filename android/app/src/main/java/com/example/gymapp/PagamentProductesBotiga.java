@@ -3,8 +3,11 @@ package com.example.gymapp;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -42,6 +45,8 @@ public class PagamentProductesBotiga extends BaseActivity {
 
     private Long producteId;
     private int quantitat;
+    private int imatge;
+    private String imatgeUrlProducte;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,15 +85,60 @@ public class PagamentProductesBotiga extends BaseActivity {
 
         String nom = sharedPreferences.getString("producte_directe_nom", "");
         float preu = sharedPreferences.getFloat("producte_directe_preu", 0f);
-        int imatge = sharedPreferences.getInt("producte_directe_imatge", R.drawable.producto_2);
+        imatge = sharedPreferences.getInt("producte_directe_imatge", R.drawable.producto_2);
+        imatgeUrlProducte = sharedPreferences.getString("producte_directe_imatge_url", "");
         quantitat = sharedPreferences.getInt("producte_directe_quantitat", 1);
 
-        imgProducte.setImageResource(imatge);
+        pintarImatgeProducte();
+
         tvNom.setText(nom);
         tvPreu.setText(String.format(Locale.getDefault(), "%.2f€", preu));
         tvQuantitat.setText(getString(R.string.pagament_quantitat_producte, quantitat));
 
         btnPagar.setOnClickListener(v -> ferPagament());
+    }
+
+    private void pintarImatgeProducte() {
+        if (imatgeUrlProducte != null && !imatgeUrlProducte.trim().isEmpty()) {
+            Bitmap bitmap = convertirBase64ABitmap(imatgeUrlProducte);
+
+            if (bitmap != null) {
+                imgProducte.setImageBitmap(bitmap);
+                return;
+            }
+        }
+
+        imgProducte.setImageResource(imatge);
+    }
+
+    private Bitmap convertirBase64ABitmap(String imatgeBase64) {
+        try {
+            if (imatgeBase64 == null || imatgeBase64.trim().isEmpty()) {
+                return null;
+            }
+
+            String base64Net = imatgeBase64.trim();
+
+            /*
+                El backend devuelve:
+                data:image/jpeg;base64,/9j/4AAQ...
+                Quitamos todo lo que hay antes de la coma.
+            */
+            if (base64Net.contains(",")) {
+                base64Net = base64Net.substring(base64Net.indexOf(",") + 1);
+            }
+
+            byte[] decodedBytes = Base64.decode(base64Net, Base64.DEFAULT);
+
+            return BitmapFactory.decodeByteArray(
+                    decodedBytes,
+                    0,
+                    decodedBytes.length
+            );
+
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     private void ferPagament() {
@@ -221,7 +271,7 @@ public class PagamentProductesBotiga extends BaseActivity {
                     startActivity(intent);
                     finish();
 
-                }  else {
+                } else {
                     String errorBackend = llegirError(response);
 
                     if (esErrorEstocInsuficient(response, errorBackend)) {
@@ -290,6 +340,7 @@ public class PagamentProductesBotiga extends BaseActivity {
                 .remove("producte_directe_nom")
                 .remove("producte_directe_preu")
                 .remove("producte_directe_imatge")
+                .remove("producte_directe_imatge_url")
                 .remove("producte_directe_quantitat")
                 .remove("producte_directe_descripcio")
                 .apply();

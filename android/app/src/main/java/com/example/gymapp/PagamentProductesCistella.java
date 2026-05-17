@@ -3,8 +3,11 @@ package com.example.gymapp;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -362,6 +365,51 @@ public class PagamentProductesCistella extends BaseActivity {
         return getString(R.string.pagament_error_codi, response.code());
     }
 
+    private void pintarImatgeProducte(ImageView imageView, ProducteCistella producte) {
+        if (producte != null
+                && producte.imatgeUrl != null
+                && !producte.imatgeUrl.trim().isEmpty()) {
+
+            Bitmap bitmap = convertirBase64ABitmap(producte.imatgeUrl);
+
+            if (bitmap != null) {
+                imageView.setImageBitmap(bitmap);
+                return;
+            }
+        }
+
+        if (producte != null && producte.imatge != 0) {
+            imageView.setImageResource(producte.imatge);
+        } else {
+            imageView.setImageResource(R.drawable.producto_2);
+        }
+    }
+
+    private Bitmap convertirBase64ABitmap(String imatgeBase64) {
+        try {
+            if (imatgeBase64 == null || imatgeBase64.trim().isEmpty()) {
+                return null;
+            }
+
+            String base64Net = imatgeBase64.trim();
+
+            if (base64Net.contains(",")) {
+                base64Net = base64Net.substring(base64Net.indexOf(",") + 1);
+            }
+
+            byte[] decodedBytes = Base64.decode(base64Net, Base64.DEFAULT);
+
+            return BitmapFactory.decodeByteArray(
+                    decodedBytes,
+                    0,
+                    decodedBytes.length
+            );
+
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
     private class ResumAdapter extends RecyclerView.Adapter<ResumAdapter.ViewHolder> {
 
         @Override
@@ -376,7 +424,8 @@ public class PagamentProductesCistella extends BaseActivity {
         public void onBindViewHolder(ViewHolder holder, int position) {
             ProducteCistella p = cistella.get(position);
 
-            holder.ivImatge.setImageResource(p.imatge);
+            pintarImatgeProducte(holder.ivImatge, p);
+
             holder.tvNom.setText(p.nom);
             holder.tvPreu.setText(String.format(Locale.getDefault(), "%.2f€", p.preu));
         }

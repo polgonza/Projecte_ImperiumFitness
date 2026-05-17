@@ -245,6 +245,10 @@
     <string name="noticia7_desc">We have renovated the cardio area with the latest machines on the market.</string>
     <string name="noticia8_titol">Summer Challenge: 30 days of training</string>
     <string name="noticia8_desc">Join our challenge and win amazing prizes. Starts June 1st.</string>
+    <string name="noticies_carregant">Loading news...</string>
+    <string name="noticies_error_carregar">The news could not be loaded.</string>
+    <string name="noticies_error_connexio">Connection error: %1$s</string>
+    <string name="noticies_buides">No news available.</string>
 
     <!-- ==================== HELP ==================== -->
 
