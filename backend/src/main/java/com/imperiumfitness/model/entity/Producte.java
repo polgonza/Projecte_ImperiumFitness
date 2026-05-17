@@ -21,6 +21,9 @@ public class Producte {
 
     private String categoria;
 
+    @Column(name = "imatge_url")
+    private String imatgeUrl;
+
     private Integer estoc;
 
     public Producte() {}
@@ -42,4 +45,7 @@ public class Producte {
 
     public Integer getEstoc() { return estoc; }
     public void setEstoc(Integer estoc) { this.estoc = estoc; }
+
+    public String getImatgeUrl() { return imatgeUrl; }
+    public void setImatgeUrl(String imatgeUrl) { this.imatgeUrl = imatgeUrl; }
 }

@@ -13,10 +13,7 @@ const API_BASE = IS_LOCAL_BACKEND
   ? "http://localhost:8084"
   : "http://10.147.17.250:8086";
 
-/* ── Utilitat: capçaleres amb JWT ───────────────────────
-   Totes les peticions autenticades necessiten enviar
-   el token JWT a la capçalera Authorization.
-   El token es guarda al localStorage després del login. */
+/* ── Utilitat: capçaleres amb JWT ─────────────────────── */
 function authHeaders() {
   const token = localStorage.getItem("imperium_token");
   return {
@@ -34,11 +31,8 @@ async function apiFetch(url, options = {}) {
     headers: authHeaders()
   });
 
-  // Token expirat → logout amb missatge elegant
   if (res.status === 401) {
-    SessionManager.logoutWithMessage(
-      "Tu sesión ha expirado. Por favor, inicia sesión de nuevo."
-    );
+    SessionManager.logoutWithMessage(t("toast.sessionExp"));
     return null;
   }
 
@@ -51,7 +45,6 @@ async function apiFetch(url, options = {}) {
 
 const ApiAuth = {
 
-  /* Login: retorna { ok, token, error } */
   async login(email, password) {
     try {
       const res = await fetch(API_BASE + "/api/auth/login", {
@@ -62,32 +55,34 @@ const ApiAuth = {
 
       if (res.ok) {
         const data = await res.json();
-        // Guardem el token al localStorage
         localStorage.setItem("imperium_token", data.token);
         return { ok: true, token: data.token };
       }
 
-      // Error 401: credencials incorrectes
-      return { ok: false, error: "Email o contraseña incorrectos." };
+      return { ok: false, error: t("toast.errorLogin") };
 
     } catch (e) {
-      return { ok: false, error: "No se puede conectar con el servidor." };
+      return { ok: false, error: I18n.idioma === "ca"
+        ? "No es pot connectar amb el servidor."
+        : "Cannot connect to the server." };
     }
   },
-  // Dins de ApiAuth, afegeix aquest mètode:
-async recover(email) {
-  try {
-    const res = await fetch(API_BASE + "/api/auth/recover", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email })
-    });
-    return { ok: true };
-  } catch (e) {
-    return { ok: false, error: "No se puede conectar con el servidor." };
-  }
-},
-  /* Registre: retorna { ok, token, error } */
+
+  async recover(email) {
+    try {
+      await fetch(API_BASE + "/api/auth/recover", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email })
+      });
+      return { ok: true };
+    } catch (e) {
+      return { ok: false, error: I18n.idioma === "ca"
+        ? "No es pot connectar amb el servidor."
+        : "Cannot connect to the server." };
+    }
+  },
+
   async register(nom, email, password) {
     try {
       const res = await fetch(API_BASE + "/api/auth/registre", {
@@ -103,24 +98,28 @@ async recover(email) {
       }
 
       if (res.status === 409) {
-        return { ok: false, error: "Este email ya está registrado." };
+        return { ok: false, error: I18n.idioma === "ca"
+          ? "Aquest email ja està registrat."
+          : "This email is already registered." };
       }
 
-      return { ok: false, error: "Error al crear la cuenta." };
+      return { ok: false, error: I18n.idioma === "ca"
+        ? "Error en crear el compte."
+        : "Error creating account." };
 
     } catch (e) {
-      return { ok: false, error: "No se puede conectar con el servidor." };
+      return { ok: false, error: I18n.idioma === "ca"
+        ? "No es pot connectar amb el servidor."
+        : "Cannot connect to the server." };
     }
   },
 
-  /* Logout: neteja el localStorage */
   logout() {
     localStorage.removeItem("imperium_token");
     localStorage.removeItem("imperium_user");
     window.location.href = "index.html";
   },
 
-  /* Comprova si hi ha sessió activa */
   isLoggedIn() {
     return !!localStorage.getItem("imperium_token");
   }
@@ -132,7 +131,6 @@ async recover(email) {
 
 const ApiClasses = {
 
-  /* Llista totes les classes */
   async getAll() {
     try {
       const res = await apiFetch("/api/classes");
@@ -142,31 +140,34 @@ const ApiClasses = {
   },
 
   async reservar(usuariId, classeId) {
-  try {
-    const res = await apiFetch("/api/reserves", {
-      method: "POST",
-      body: JSON.stringify({ usuariId, classeId })
-    });
+    try {
+      const res = await apiFetch("/api/reserves", {
+        method: "POST",
+        body: JSON.stringify({ usuariId, classeId })
+      });
 
-    if (res && res.status === 201) return { ok: true };
-    if (res && res.status === 409) {
-      // Llegim el missatge d'error del backend
-      const data = await res.json().catch(() => ({}));
-      const msg  = data.detail || data.message || "No se pudo completar la reserva.";
-      // Traduïm els missatges del backend
-      if (msg.includes("límit") || msg.includes("limit")) {
-        return { ok: false, error: "Has alcanzado el límite de 5 reservas activas." };
+      if (res && res.status === 201) return { ok: true };
+      if (res && res.status === 409) {
+        const data = await res.json().catch(() => ({}));
+        const msg  = data.detail || data.message || "";
+        if (msg.includes("límit") || msg.includes("limit")) {
+          return { ok: false, error: I18n.idioma === "ca"
+            ? "Has assolit el límit de 5 reserves actives."
+            : "You have reached the limit of 5 active bookings." };
+        }
+        return { ok: false, error: I18n.idioma === "ca"
+          ? "Ja tens una reserva per a aquesta classe."
+          : "You already have a booking for this class." };
       }
-      return { ok: false, error: "Ya tienes una reserva para esta clase." };
+      return { ok: false, error: t("toast.reservaError") };
+
+    } catch (e) {
+      return { ok: false, error: I18n.idioma === "ca"
+        ? "Error de connexió."
+        : "Connection error." };
     }
-    return { ok: false, error: "No se pudo completar la reserva." };
+  },
 
-  } catch (e) {
-    return { ok: false, error: "Error de conexión." };
-  }
-},
-
-  /* Obtenir les reserves d'un usuari */
   async getReservesUsuari(usuariId) {
     try {
       const res = await apiFetch(`/api/reserves/usuari/${usuariId}`);
@@ -174,16 +175,15 @@ const ApiClasses = {
       return [];
     } catch (e) { return []; }
   },
+
   async cancelarReserva(usuariId, classeId) {
-  try {
-    const res = await apiFetch(
-      `/api/reserves/usuari/${usuariId}/classe/${classeId}`,
-      { method: "DELETE" }
-    );
-    return res && (res.status === 204 || res.status === 200);
-  } catch (e) {
-    return false;
-  }
+    try {
+      const res = await apiFetch(
+        `/api/reserves/usuari/${usuariId}/classe/${classeId}`,
+        { method: "DELETE" }
+      );
+      return res && (res.status === 204 || res.status === 200);
+    } catch (e) { return false; }
   }
 };
 
@@ -193,13 +193,79 @@ const ApiClasses = {
 
 const ApiProductes = {
 
-  /* Llista tots els productes */
   async getAll() {
     try {
       const res = await apiFetch("/api/productes");
       if (res && res.ok) return await res.json();
       return [];
     } catch (e) { return []; }
+  },
+
+  // Fragment suggerit per assistent IA - revisar i adaptar
+  async crear(producte) {
+    try {
+      const res = await apiFetch("/api/productes", {
+        method: "POST",
+        body: JSON.stringify(producte)
+      });
+      if (res && res.ok) return await res.json();
+      return null;
+    } catch (e) { return null; }
+  },
+
+  async actualitzar(id, producte) {
+    try {
+      const res = await apiFetch(`/api/productes/${id}`, {
+        method: "PUT",
+        body: JSON.stringify(producte)
+      });
+      if (res && res.ok) return await res.json();
+      return null;
+    } catch (e) { return null; }
+  },
+
+  async eliminar(id) {
+    try {
+      const res = await apiFetch(`/api/productes/${id}`, { method: "DELETE" });
+      return res && (res.status === 204 || res.status === 200);
+    } catch (e) { return false; }
+  }
+};
+
+/* ══════════════════════════════════════════════════════
+   CLASSES ADMIN (crear / editar / eliminar)
+   ══════════════════════════════════════════════════════ */
+
+// Fragment suggerit per assistent IA - revisar i adaptar
+const ApiClassesAdmin = {
+
+  async crear(classe) {
+    try {
+      const res = await apiFetch("/api/classes", {
+        method: "POST",
+        body: JSON.stringify(classe)
+      });
+      if (res && res.ok) return await res.json();
+      return null;
+    } catch (e) { return null; }
+  },
+
+  async actualitzar(id, classe) {
+    try {
+      const res = await apiFetch(`/api/classes/${id}`, {
+        method: "PUT",
+        body: JSON.stringify(classe)
+      });
+      if (res && res.ok) return await res.json();
+      return null;
+    } catch (e) { return null; }
+  },
+
+  async eliminar(id) {
+    try {
+      const res = await apiFetch(`/api/classes/${id}`, { method: "DELETE" });
+      return res && (res.status === 204 || res.status === 200);
+    } catch (e) { return false; }
   }
 };
 
@@ -209,7 +275,6 @@ const ApiProductes = {
 
 const ApiNoticies = {
 
-  /* Llista totes les notícies (endpoint públic, sense token) */
   async getAll() {
     try {
       const res = await fetch(API_BASE + "/api/noticies");
@@ -225,7 +290,6 @@ const ApiNoticies = {
 
 const ApiContacte = {
 
-  /* Envia un missatge de contacte (endpoint públic) */
   async enviar(nom, email, missatge) {
     try {
       const res = await fetch(API_BASE + "/api/contactes", {
@@ -237,6 +301,7 @@ const ApiContacte = {
     } catch (e) { return false; }
   }
 };
+
 /* ══════════════════════════════════════════════════════
    USUARI — perfil
    ══════════════════════════════════════════════════════ */
@@ -245,7 +310,6 @@ const ApiUsuari = {
 
   async getPerfil(usuariId) {
     try {
-      // Usem el nou endpoint específic de perfil
       const res = await apiFetch(`/api/usuaris/perfil/${usuariId}`);
       if (res && res.ok) return await res.json();
       return null;
@@ -267,43 +331,42 @@ const ApiUsuari = {
       return [];
     } catch (e) { return []; }
   },
+
   async assignarTarifa(usuariId, tarifaId) {
     try {
       const res = await apiFetch(`/api/usuaris/${usuariId}/tarifa`, {
         method: "PUT",
         body: JSON.stringify({ tarifaId })
-    });
-    if (res && res.ok) return await res.json();
-    return null;
-  } catch (e) { return null; }
-},
-async getTarifaActiva() {
-  const user = Auth.getUser();
-  if (!user) return null;
-  try {
-    const perfil = await this.getPerfil(user.id);
-    if (perfil && perfil.tarifaId) {
-      // Actualitzem el localStorage amb la tarifa real
-      Auth.setUser({
-        ...user,
-        tarifaId:  perfil.tarifaId,
-        tarifaNom: perfil.tarifaNom
       });
-      return perfil.tarifaNom;
-    }
-    return null;
-  } catch (e) { return null; }
-},
-async cancelarTarifa(usuariId) {
-  try {
-    const res = await apiFetch(`/api/usuaris/${usuariId}/cancel-tarifa`, {
-      method: "PUT"
-    });
-    if (res && res.ok) return await res.json();
-    return null;
-  } catch (e) { return null; }
-}
+      if (res && res.ok) return await res.json();
+      return null;
+    } catch (e) { return null; }
+  },
+
+  async getTarifaActiva() {
+    const user = Auth.getUser();
+    if (!user) return null;
+    try {
+      const perfil = await this.getPerfil(user.id);
+      if (perfil && perfil.tarifaId) {
+        Auth.setUser({ ...user, tarifaId: perfil.tarifaId, tarifaNom: perfil.tarifaNom });
+        return perfil.tarifaNom;
+      }
+      return null;
+    } catch (e) { return null; }
+  },
+
+  async cancelarTarifa(usuariId) {
+    try {
+      const res = await apiFetch(`/api/usuaris/${usuariId}/cancel-tarifa`, {
+        method: "PUT"
+      });
+      if (res && res.ok) return await res.json();
+      return null;
+    } catch (e) { return null; }
+  }
 };
+
 /* ══════════════════════════════════════════════════════
    ESTADÍSTIQUES — només ADMIN
    ══════════════════════════════════════════════════════ */
@@ -326,133 +389,102 @@ const ApiStats = {
     } catch (e) { return null; }
   }
 };
+
 /* ══════════════════════════════════════════════════════
    GESTIÓ DE SESSIÓ — expiració del token JWT
    ══════════════════════════════════════════════════════ */
 
 const SessionManager = {
 
-  /* Comprova si el token expirarà aviat o ja ha expirat */
   checkToken() {
     const token = localStorage.getItem("imperium_token");
     if (!token) return "no_token";
 
     try {
-      // Descodifiquem el payload del JWT (part central)
       const payload = JSON.parse(atob(token.split(".")[1]));
-      const ara     = Math.floor(Date.now() / 1000); // temps actual en segons
-      const expira  = payload.exp;
-      const restant = expira - ara;                   // segons que queden
+      const ara     = Math.floor(Date.now() / 1000);
+      const restant = payload.exp - ara;
 
-      if (restant <= 0)   return "expired";           // ja ha expirat
-      if (restant <= 300) return "expiring_soon";     // expira en < 5 minuts
+      if (restant <= 0)   return "expired";
+      if (restant <= 300) return "expiring_soon";
       return "valid";
-
     } catch (e) {
       return "invalid";
     }
   },
 
-  /* Tanca la sessió mostrant un missatge al login */
   logoutWithMessage(msg) {
     localStorage.removeItem("imperium_token");
     localStorage.removeItem("imperium_user");
-    // Guardem el missatge per mostrar-lo a la pàgina de login
     sessionStorage.setItem("session_msg", msg);
     window.location.href = "login.html";
   },
 
-  /* Comprova la sessió en carregar qualsevol pàgina protegida */
   init(requiresAuth = false) {
-  const status = this.checkToken();
-  const page   = window.location.pathname.split("/").pop();
-  const publicPages = ["login.html", "register.html", "index.html", "recover.html", ""];
+    const status = this.checkToken();
+    const page   = window.location.pathname.split("/").pop();
+    const publicPages = ["login.html", "register.html", "index.html", "recover.html", ""];
 
-  if (status === "expired" || status === "invalid" || status === "no_token") {
-    if (requiresAuth || !publicPages.includes(page)) {
-      this.logoutWithMessage("Tu sesión ha expirado. Por favor, inicia sesión de nuevo.");
-      return false;
+    if (status === "expired" || status === "invalid" || status === "no_token") {
+      if (requiresAuth || !publicPages.includes(page)) {
+        this.logoutWithMessage(t("toast.sessionExp"));
+        return false;
+      }
     }
-  }
 
-  if (status === "expiring_soon") {
-    this.showExpirationWarning();
-  }
+    if (status === "expiring_soon") {
+      this.showExpirationWarning();
+    }
 
-  // ← AFEGEIX AQUESTA LÍNIA
-  this.startTokenCheck();
+    this.startTokenCheck();
+    return true;
+  },
 
-  return true;
-},
-
-  /* Mostra un banner d'avís quan queden menys de 5 minuts */
   showExpirationWarning() {
-    // Evitem mostrar-lo dues vegades
     if (document.getElementById("session-warning")) return;
 
     const banner = document.createElement("div");
     banner.id = "session-warning";
     banner.style.cssText = `
-      position: fixed;
-      top: 70px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: var(--bg-card);
-      border: 1px solid var(--primary);
-      border-radius: 12px;
-      padding: 1rem 1.5rem;
-      max-width: 420px;
-      width: 90%;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
-      z-index: 9999;
-      text-align: center;
-      font-size: 0.875rem;
+      position:fixed;top:70px;left:50%;transform:translateX(-50%);
+      background:var(--bg-card);border:1px solid var(--primary);
+      border-radius:12px;padding:1rem 1.5rem;max-width:420px;width:90%;
+      box-shadow:0 8px 32px rgba(0,0,0,0.4);z-index:9999;
+      text-align:center;font-size:0.875rem;
     `;
     banner.innerHTML = `
       <p style="margin:0 0 0.75rem;color:var(--text-primary)">
-        ⚠️ Tu sesión expirará en menos de 5 minutos.
+        ${t("toast.sessionAviat")}
       </p>
       <div style="display:flex;gap:0.75rem;justify-content:center">
-        <button
-          onclick="SessionManager.renovarSessio()"
-          class="btn btn-primary"
-          style="padding:0.4rem 1rem;font-size:0.8rem">
-          Renovar sesión
+        <button onclick="SessionManager.renovarSessio()"
+          class="btn btn-primary" style="padding:0.4rem 1rem;font-size:0.8rem">
+          ${t("toast.renovarSessio")}
         </button>
-        <button
-          onclick="document.getElementById('session-warning').remove()"
-          class="btn btn-secondary"
-          style="padding:0.4rem 1rem;font-size:0.8rem">
-          Ignorar
+        <button onclick="document.getElementById('session-warning').remove()"
+          class="btn btn-secondary" style="padding:0.4rem 1rem;font-size:0.8rem">
+          ${t("toast.ignorar")}
         </button>
       </div>
     `;
     document.body.appendChild(banner);
-
-    // S'elimina sol als 30 segons
     setTimeout(() => banner?.remove(), 30000);
   },
 
-  /* Renova la sessió fent login automàtic si tenim les dades */
   async renovarSessio() {
     document.getElementById("session-warning")?.remove();
-
-    // Redirigim al login amb un missatge per renovar
-    sessionStorage.setItem("session_msg",
-      "Por favor, inicia sesión de nuevo para renovar tu sesión.");
+    sessionStorage.setItem("session_msg", t("toast.sessionExp"));
     window.location.href = "login.html";
   },
-  /* Comprova el token cada minut i avisa si expira aviat */
-startTokenCheck() {
-  setInterval(() => {
-    const status = this.checkToken();
-    if (status === "expired" || status === "invalid") {
-      this.logoutWithMessage(
-        "Tu sesión ha expirado. Por favor, inicia sesión de nuevo."
-      );
-    } else if (status === "expiring_soon") {
-      this.showExpirationWarning();
-    }
-  }, 60000); // cada 60 segons
-}
+
+  startTokenCheck() {
+    setInterval(() => {
+      const status = this.checkToken();
+      if (status === "expired" || status === "invalid") {
+        this.logoutWithMessage(t("toast.sessionExp"));
+      } else if (status === "expiring_soon") {
+        this.showExpirationWarning();
+      }
+    }, 60000);
+  }
 };

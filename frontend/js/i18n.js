@@ -202,6 +202,14 @@ const I18n = (() => {
       "perfil.confirmCancel":   "Segur que vols cancelar la subscripció?\n\nSeguiràs tenint accés fins al final del període pagat.",
       "perfil.cancelOk":        "Subscripció cancelada. Accés fins al {0}.",
       "perfil.cancelError":     "No s'ha pogut cancelar. Torna-ho a intentar.",
+      "perfil.tabGestioAdmin": "⚙️ Gestió Admin",
+
+
+      "recover.titol":    "Recuperar Contrasenya",
+      "recover.subtitol": "Introdueix el teu correu i t'enviarem instruccions per restablir la teva contrasenya",
+      "recover.enviar":   "Enviar Instruccions",
+      "recover.tornar":   "← Tornar al login",
+      "recover.exitDesc": "Rebràs un email amb instruccions per restablir la teva contrasenya.",
 
       // Gestió usuaris (admin)
       "gestioUsuaris.titol":       "Gestió d'Usuaris",
@@ -422,6 +430,12 @@ const I18n = (() => {
       "login.tornar":           "← Back to home",
       "login.entrant":          "Logging in...",
 
+      "recover.titol":    "Reset Password",
+      "recover.subtitol": "Enter your email and we'll send you instructions to reset your password",
+      "recover.enviar":   "Send Instructions",
+      "recover.tornar":   "← Back to login",
+      "recover.exitDesc": "You'll receive an email with instructions to reset your password.",
+
       // Registre
       "registre.titol":         "Create your account",
       "registre.subtitol":      "Join Imperium Fitness",
@@ -499,6 +513,7 @@ const I18n = (() => {
       "perfil.confirmCancel":   "Are you sure you want to cancel your subscription?\n\nYou will retain access until the end of the paid period.",
       "perfil.cancelOk":        "Subscription cancelled. Access until {0}.",
       "perfil.cancelError":     "Could not cancel. Please try again.",
+      "perfil.tabGestioAdmin": "⚙️ Admin Panel",
 
       // Gestió usuaris (admin)
       "gestioUsuaris.titol":       "User Management",

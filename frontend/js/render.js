@@ -509,12 +509,12 @@ function renderReservasPerfil(reserves) {
   const lista = document.getElementById("reservations-list");
   if (!lista) return;
 
-  if (reserves.length === 0) {
+    if (reserves.length === 0) {
     lista.innerHTML = `
       <p style="color:var(--text-muted);text-align:center;padding:2rem">
-        No tienes reservas de clases.<br>
+        ${I18n.idioma === "ca" ? "No tens reserves de classes." : "You have no class bookings."}<br>
         <a href="actividades.html" style="color:var(--primary)">
-          Ver clases disponibles
+          ${I18n.idioma === "ca" ? "Veure classes disponibles" : "View available classes"}
         </a>
       </p>`;
     return;
@@ -527,9 +527,10 @@ function renderReservasPerfil(reserves) {
         <p>${r.dataReserva || r.date || "—"}</p>
       </div>
       <div style="display:flex;align-items:center;gap:0.75rem">
-        <span class="status-badge confirmed">Confirmada</span>
-        <button
-          onclick="cancelarReservaPerfil(${r.classeId}, '${r.nomClasse}')"
+        <span class="status-badge confirmed">
+          ${I18n.idioma === "ca" ? "Confirmada" : "Confirmed"}
+        </span>
+        <button onclick="cancelarReservaPerfil(${r.classeId}, '${r.nomClasse}')"
           style="
             background:rgba(239,68,68,0.1);
             border:1px solid rgba(239,68,68,0.3);
@@ -545,7 +546,7 @@ function renderReservasPerfil(reserves) {
           onmouseover="this.style.background='rgba(239,68,68,0.25)'"
           onmouseout="this.style.background='rgba(239,68,68,0.1)'"
         >
-          Cancelar
+          ${I18n.idioma === "ca" ? "Cancel·lar" : "Cancel"}
         </button>
       </div>
     </div>
@@ -565,9 +566,9 @@ function renderPedidosPerfil(vendes) {
   if (vendes.length === 0) {
     container.innerHTML = `
       <div style="color:var(--text-muted);text-align:center;padding:2rem">
-        No has realizado ningún pedido aún.<br>
+        ${I18n.idioma === "ca" ? "Encara no has fet cap comanda." : "You haven't placed any orders yet."}<br>
         <a href="tienda.html" style="color:var(--primary)">
-          Ir a la tienda
+          ${I18n.idioma === "ca" ? "Anar a la botiga" : "Go to the shop"}
         </a>
       </div>`;
     return;
@@ -577,14 +578,14 @@ function renderPedidosPerfil(vendes) {
     <div class="order-card">
       <div class="order-card-header">
         <div>
-          <div class="order-id">Pedido #${v.id}</div>
+          <div class="order-id">${I18n.idioma === "ca" ? "Comanda" : "Order"} #${v.id}</div>
           <div class="order-date">${v.dataVenda || "—"}</div>
         </div>
-        <span class="order-status">Completado</span>
+        <span class="order-status">${I18n.idioma === "ca" ? "Completat" : "Completed"}</span>
       </div>
       <ul class="order-products">
         <li>
-          <span class="p-name">${v.nomProducte || `Producto #${v.producteId}`} x${v.quantitat}</span>
+          <span class="p-name">${v.nomProducte || `${I18n.idioma === "ca" ? "Producte" : "Product"} #${v.producteId}`} x${v.quantitat}</span>
         </li>
       </ul>
     </div>
@@ -604,7 +605,7 @@ function renderHistorialLocal(misPedidos) {
   if (misPedidos.length === 0) {
     lista.innerHTML = `
       <p style="color:var(--text-muted);text-align:center;padding:2rem">
-        No tienes compras en el historial.
+        ${I18n.idioma === "ca" ? "No tens compres a l'historial." : "No purchases in your history."}
       </p>`;
     return;
   }
@@ -624,11 +625,11 @@ function renderHistorialLocal(misPedidos) {
             <div class="order-id">${pedido.pedidoId}</div>
             <div class="order-date">${pedido.fecha}</div>
           </div>
-          <span class="order-status">Completado</span>
+          <span class="order-status">${I18n.idioma === "ca" ? "Completat" : "Completed"}</span>
         </div>
         <ul class="order-products">${productesHTML}</ul>
         <div class="order-card-footer">
-          <span class="order-total-label">Total:</span>
+          <span class="order-total-label">${I18n.idioma === "ca" ? "Total:" : "Total:"}</span>
           <span class="order-total-amount">${pedido.total.toFixed(2)} €</span>
         </div>
       </div>
@@ -659,12 +660,12 @@ function renderAlertaSinPlan() {
   `;
   alertEl.innerHTML = `
     <p style="margin:0 0 1rem;color:var(--text-primary);font-size:0.9rem">
-      ⚠️ <strong>Necesitas tener una tarifa activa</strong> para reservar clases.
+      ⚠️ <strong>${t("toast.sensePlanReserva")}</strong>
     </p>
     <div style="display:flex;gap:0.75rem;justify-content:center">
       <a href="tarifas.html" class="btn btn-primary"
          style="padding:0.5rem 1.25rem;font-size:0.8rem">
-        Ver Tarifas
+        ${I18n.idioma === "ca" ? "Veure Tarifes" : "View Plans"}
       </a>
       <button onclick="document.getElementById('no-plan-alert').remove()"
               class="btn btn-secondary" style="padding:0.5rem 1rem;font-size:0.8rem">

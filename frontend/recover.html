@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Recuperar Contraseña - Imperium Fitness</title>
+  <title>Recuperar Contrasenya - Imperium Fitness</title>
   <link rel="stylesheet" href="css/styles.css">
 </head>
 
@@ -20,10 +20,8 @@
 
       <!-- Pas 1: formulari d'email -->
       <div id="step-form">
-        <h2>Recuperar Contraseña</h2>
-        <p class="subtitle">
-          Introduce tu email y te enviaremos instrucciones para restablecer tu contraseña
-        </p>
+        <h2 data-i18n="recover.titol">Recuperar Contrasenya</h2>
+        <p data-i18n="recover.subtitol">Introdueix el teu correu i t'enviarem instruccions per restablir la teva contrasenya</p>
 
         <div id="recover-alert" class="alert"></div>
 
@@ -39,18 +37,13 @@
             >
           </div>
 
-          <button
-            type="button"
-            class="btn btn-primary"
-            style="width:100%;justify-content:center;padding:0.85rem;margin-top:0.5rem"
-            id="recover-btn"
-          >
-            Enviar Instrucciones
-          </button>
+          <button type="submit" id="recover-btn" class="btn btn-primary"
+        style="width:100%;justify-content:center"
+        data-i18n="recover.enviar">Enviar Instruccions</button>
         </form>
 
         <div class="auth-links" style="margin-top:1rem">
-          <a href="login.html">← Volver al login</a>
+         <a href="login.html" data-i18n="recover.tornar">← Tornar al login</a>
         </div>
       </div>
 
@@ -72,11 +65,7 @@
 
         <h2 style="margin-bottom:0.75rem">¡Email Enviado!</h2>
 
-        <p style="color:var(--text-muted);font-size:0.88rem;line-height:1.6;margin-bottom:1.5rem">
-          Si existe una cuenta asociada a
-          <strong id="success-email" style="color:var(--primary)"></strong>,
-          recibirás un email con instrucciones para restablecer tu contraseña.
-        </p>
+        <p data-i18n="recover.exitDesc">Rebràs un email amb instruccions per restablir la teva contrasenya.</p>
 
         <p style="color:var(--text-muted);font-size:0.8rem;margin-bottom:2rem">
           ¿No has recibido nada? Revisa tu carpeta de spam o
@@ -88,9 +77,7 @@
           </button>
         </p>
 
-        <a href="login.html" class="btn btn-primary" style="justify-content:center">
-          Volver al Login
-        </a>
+        <a href="login.html" class="btn btn-primary" data-i18n="recover.tornar">Tornar al Login</a>
 
       </div>
 
@@ -138,7 +125,7 @@
     document.getElementById("step-form").style.display = "block";
     document.getElementById("step-success").style.display = "none";
     document.getElementById("recover-btn").disabled = false;
-    document.getElementById("recover-btn").textContent = "Enviar Instrucciones";
+    document.getElementById("recover-btn").textContent = t("recover.enviar");
     document.getElementById("recover-email").value = "";
     document.getElementById("recover-alert").className = "alert";
   }
