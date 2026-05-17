@@ -358,6 +358,7 @@
     <string name="classe_desc_default">Classe dirigida de Imperium Fitness.</string>
     <string name="reserva_ja_existeix">Ja tens aquesta classe reservada.</string>
 
+
     <string-array name="dies_setmana_llargs">
         <item>Diumenge</item>
         <item>Dilluns</item>
