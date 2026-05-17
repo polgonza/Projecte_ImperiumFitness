@@ -170,7 +170,6 @@ const I18n = (() => {
       "activitats.todesClasses":"Totes les classes",
       "activitats.filtreTotal": "Totes",
       "activitats.places":      "places",
-      "activitats.plena":       "Completa",
       "activitats.reservar":    "Reservar",
       "activitats.reservada":   "Reservada",
       "activitats.carregant":   "⏳ Carregant classes...",
@@ -181,6 +180,8 @@ const I18n = (() => {
       "activitats.cancel":      "Cancel·lar",
       "activitats.confirmar":   "Confirmar",
       "activitats.carregantMsg":"Carregant...",
+      "activitats.plena": "Sense places",
+
 
       // Perfil
       "perfil.titol":           "El meu Perfil",
@@ -481,7 +482,6 @@ const I18n = (() => {
       "activitats.todesClasses":"All classes",
       "activitats.filtreTotal": "All",
       "activitats.places":      "spots",
-      "activitats.plena":       "Full",
       "activitats.reservar":    "Book",
       "activitats.reservada":   "Booked",
       "activitats.carregant":   "⏳ Loading classes...",
@@ -492,6 +492,7 @@ const I18n = (() => {
       "activitats.cancel":      "Cancel",
       "activitats.confirmar":   "Confirm",
       "activitats.carregantMsg":"Loading...",
+      "activitats.plena": "No vacancies",
 
       // Perfil
       "perfil.titol":           "My Profile",

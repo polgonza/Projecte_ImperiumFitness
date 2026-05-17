@@ -380,6 +380,14 @@ const ApiStats = {
       return null;
     } catch (e) { return null; }
   },
+    // Fragment suggerit per assistent IA - revisar i adaptar
+  async getClasses() {
+    try {
+      const res = await apiFetch("/api/stats/classes");
+      if (res && res.ok) return await res.json();
+      return [];
+    } catch (e) { return []; }
+  },
 
   async getProductes() {
     try {

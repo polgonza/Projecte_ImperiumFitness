@@ -270,6 +270,7 @@ async function cancelarReservaPerfil(classeId, nomClasse) {
    // Fragment suggerit per assistent IA - revisar i adaptar
    ===================================================== */
 
+// Fragment suggerit per assistent IA - revisar i adaptar
 async function renderStats() {
   const container = document.getElementById("stats-container");
   if (!container) return;
@@ -282,27 +283,29 @@ async function renderStats() {
   }
   if (tabBtn) tabBtn.style.display = "block";
 
-  const [resum, productes] = await Promise.all([
+  const [resum, productes, classesTop] = await Promise.all([
     ApiStats.getResum(),
-    ApiStats.getProductes()
+    ApiStats.getProductes(),
+    ApiStats.getClasses()
   ]);
 
   if (!resum && !productes) {
-    container.innerHTML = `<p style="color:var(--text-muted);text-align:center;padding:2rem">
-      ${t("stats.error")}</p>`;
+    container.innerHTML = `<p style="color:var(--text-muted);text-align:center;padding:2rem">${t("stats.error")}</p>`;
     return;
   }
 
   container.innerHTML = `
+
+    <!-- Bloc 1: KPIs principals -->
     <div style="margin-bottom:2rem">
-      <h3 style="font-size:0.85rem;font-weight:700;text-transform:uppercase;
-                 letter-spacing:0.1em;color:var(--primary);margin-bottom:1rem">
+      <h3 style="font-size:.85rem;font-weight:700;text-transform:uppercase;
+                 letter-spacing:.1em;color:var(--primary);margin-bottom:1rem">
         ${t("stats.resum")}
       </h3>
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1rem">
-        ${statCard("👥", t("stats.totalUsuaris"),  resum?.totalUsuaris         ?? "—")}
-        ${statCard("🆕", t("stats.nousM"),         resum?.usuarisNousMes       ?? "—")}
-        ${statCard("📅", t("stats.reservesActives"),resum?.totalReservesActives ?? "—")}
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:1rem">
+        ${statCard("👥", t("stats.totalUsuaris"),   resum?.totalUsuaris         ?? "—")}
+        ${statCard("🆕", t("stats.nousM"),          resum?.usuarisNousMes       ?? "—")}
+        ${statCard("📅", t("stats.reservesActives"), resum?.totalReservesActives ?? "—")}
         ${statCard("🏆", t("stats.classeMes"),
           resum?.classeMesReservada
             ? `${resum.classeMesReservada} (${resum.classeMesReservadaCount})`
@@ -310,12 +313,42 @@ async function renderStats() {
         )}
       </div>
     </div>
+
+    <!-- Bloc 2: Rànquing visual de classes -->
+    ${classesTop && classesTop.length > 0 ? `
+    <div style="margin-bottom:2rem">
+      <h3 style="font-size:.85rem;font-weight:700;text-transform:uppercase;
+                 letter-spacing:.1em;color:var(--primary);margin-bottom:1rem">
+        📊 ${I18n.idioma === "ca" ? "Ocupació per Classe" : "Class Occupancy"}
+      </h3>
+      <div style="background:var(--bg-secondary);border:1px solid var(--border);
+                  border-radius:12px;padding:1.25rem">
+        ${classesTop.slice(0,8).map(c => {
+          const pct   = Math.min(100, c.pct || 0);
+          const color = pct >= 80 ? "var(--danger)" : pct >= 50 ? "var(--primary)" : "var(--success, #22c55e)";
+          return `
+            <div style="margin-bottom:.85rem">
+              <div style="display:flex;justify-content:space-between;
+                          font-size:.8rem;margin-bottom:.3rem">
+                <span style="font-weight:500;color:var(--text)">${c.nom}</span>
+                <span style="color:var(--text-muted)">${c.reserves} / ${c.capacitat} · <strong style="color:${color}">${pct}%</strong></span>
+              </div>
+              <div style="height:6px;background:var(--bg-card);border-radius:3px;overflow:hidden">
+                <div style="height:100%;width:${pct}%;background:${color};
+                            border-radius:3px;transition:width .4s ease"></div>
+              </div>
+            </div>`;
+        }).join("")}
+      </div>
+    </div>` : ""}
+
+    <!-- Bloc 3: Botiga -->
     <div>
-      <h3 style="font-size:0.85rem;font-weight:700;text-transform:uppercase;
-                 letter-spacing:0.1em;color:var(--primary);margin-bottom:1rem">
+      <h3 style="font-size:.85rem;font-weight:700;text-transform:uppercase;
+                 letter-spacing:.1em;color:var(--primary);margin-bottom:1rem">
         ${t("stats.botiga")}
       </h3>
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1rem">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:1rem">
         ${statCard("📦", t("stats.topMes"),
           productes?.topProducteMes
             ? `${productes.topProducteMes} (${productes.topProducteMesUnitats} uds)`
