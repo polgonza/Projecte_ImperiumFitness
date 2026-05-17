@@ -48,8 +48,7 @@ public class StatsController {
 
         // Total reserves actives (futures)
         stats.put("totalReservesActives",
-                reservaRepo.countReservesFuturesByUsuari(0L, LocalDateTime.now()) +
-                reservaRepo.countAllFuturesReserves(LocalDateTime.now()));
+        reservaRepo.countAllFuturesReserves(LocalDateTime.now()));
 
         // Classe més reservada
         List<Object[]> classesTop = reservaRepo.findTopClasses();
@@ -95,5 +94,31 @@ public class StatsController {
         stats.put("totalVendesMes", vendaRepo.countVendesByMes(iniciMes));
 
         return ResponseEntity.ok(stats);
+    }
+    // Fragment suggerit per assistent IA - revisar i adaptar
+    @GetMapping("/classes")
+    public ResponseEntity<List<Map<String, Object>>> getClasses() {
+        List<Object[]> top = reservaRepo.findTopClasses();
+        List<Map<String, Object>> resultat = new java.util.ArrayList<>();
+
+        for (Object[] fila : top) {
+            String nom   = (String) fila[0];
+            long reserves = ((Number) fila[1]).longValue();
+
+            // Busquem la capacitat de la classe
+            long capacitat = classeRepo.findAll().stream()
+                .filter(c -> nom.equals(c.getNom()))
+                .mapToLong(c -> c.getCapacitat() != null ? c.getCapacitat() : 1)
+                .findFirst().orElse(1);
+
+            Map<String, Object> item = new HashMap<>();
+            item.put("nom", nom);
+            item.put("reserves", reserves);
+            item.put("capacitat", capacitat);
+            item.put("pct", Math.min(100, Math.round(reserves * 100.0 / capacitat)));
+            resultat.add(item);
+        }
+
+        return ResponseEntity.ok(resultat);
     }
 }

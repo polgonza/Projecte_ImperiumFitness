@@ -302,9 +302,10 @@ function pintaClasses(container) {
 function obreFormClasse(id) {
   _editClasse = id ? _classes.find(c => c.id === id) : null;
   const c = _editClasse;
-  const titol = !c ? (I18n.idioma==="ca"?"Nova classe":"New class") : (I18n.idioma==="ca"?"Editar classe":"Edit class");
+  const titol = !c
+    ? (I18n.idioma === "ca" ? "Nova classe" : "New class")
+    : (I18n.idioma === "ca" ? "Editar classe" : "Edit class");
 
-  // Detectem el tipus (primera paraula) i el nom descriptiu (la resta)
   const tipusActual   = c?.nom ? c.nom.split(" ")[0] : TIPUS_CLASSE[0];
   const nomDescriptiu = c?.nom ? c.nom.substring(tipusActual.length).trim() : "";
 
@@ -319,64 +320,129 @@ function obreFormClasse(id) {
   if (!container) return;
 
   container.innerHTML = `
-    <div style="background:var(--bg-secondary);border:1px solid var(--border);border-radius:12px;padding:1.25rem;margin-bottom:1.5rem">
+    <div style="background:var(--bg-secondary);border:1px solid var(--border);
+                border-radius:12px;padding:1.25rem;margin-bottom:1.5rem">
       <h4 style="font-size:.9rem;font-weight:600;margin-bottom:1rem">${titol}</h4>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem">
 
         <div>
-          <label style="font-size:.78rem;color:var(--text-muted);display:block;margin-bottom:.3rem">${I18n.idioma==="ca"?"Tipus *":"Type *"}</label>
-          <select id="fc-tipus" style="width:100%;padding:.5rem .75rem;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:.85rem">
-            ${TIPUS_CLASSE.map(t=>`<option value="${t}" ${tipusActual===t?"selected":""}>${t}</option>`).join("")}
+          <label style="font-size:.78rem;color:var(--text-muted);display:block;margin-bottom:.3rem">
+            ${I18n.idioma === "ca" ? "Tipus *" : "Type *"}
+          </label>
+          <select id="fc-tipus"
+            style="width:100%;padding:.5rem .75rem;background:var(--bg-card);
+                   border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:.85rem">
+            ${TIPUS_CLASSE.map(t =>
+              `<option value="${t}" ${tipusActual === t ? "selected" : ""}>${t}</option>`
+            ).join("")}
           </select>
         </div>
 
         <div>
-          <label style="font-size:.78rem;color:var(--text-muted);display:block;margin-bottom:.3rem">${I18n.idioma==="ca"?"Nom descriptiu (opcional)":"Descriptive name (optional)"}</label>
+          <label style="font-size:.78rem;color:var(--text-muted);display:block;margin-bottom:.3rem">
+            ${I18n.idioma === "ca" ? "Nom descriptiu (opcional)" : "Descriptive name (optional)"}
+          </label>
           <input id="fc-nom" type="text" value="${_esc(nomDescriptiu)}"
-            placeholder="${I18n.idioma==="ca"?"ex: matinal, avançat...":"e.g. morning, advanced..."}"
-            style="width:100%;padding:.5rem .75rem;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:.85rem">
+            placeholder="${I18n.idioma === "ca" ? "ex: matinal, avançat..." : "e.g. morning, advanced..."}"
+            style="width:100%;padding:.5rem .75rem;background:var(--bg-card);
+                   border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:.85rem">
         </div>
 
         <div>
-          <label style="font-size:.78rem;color:var(--text-muted);display:block;margin-bottom:.3rem">${I18n.idioma==="ca"?"Data i hora *":"Date & time *"}</label>
+          <label style="font-size:.78rem;color:var(--text-muted);display:block;margin-bottom:.3rem">
+            ${I18n.idioma === "ca" ? "Primera data i hora *" : "First date & time *"}
+          </label>
           <input id="fc-horari" type="datetime-local" value="${horariVal}"
-            style="width:100%;padding:.5rem .75rem;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:.85rem">
+            style="width:100%;padding:.5rem .75rem;background:var(--bg-card);
+                   border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:.85rem">
         </div>
 
         <div>
-          <label style="font-size:.78rem;color:var(--text-muted);display:block;margin-bottom:.3rem">${I18n.idioma==="ca"?"Capacitat *":"Capacity *"}</label>
-          <input id="fc-capacitat" type="number" min="1" value="${c?.capacitat||""}"
-            style="width:100%;padding:.5rem .75rem;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:.85rem">
+          <label style="font-size:.78rem;color:var(--text-muted);display:block;margin-bottom:.3rem">
+            ${I18n.idioma === "ca" ? "Capacitat *" : "Capacity *"}
+          </label>
+          <input id="fc-capacitat" type="number" min="1" value="${c?.capacitat || ""}"
+            style="width:100%;padding:.5rem .75rem;background:var(--bg-card);
+                   border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:.85rem">
         </div>
 
-        <div>
-          <label style="font-size:.78rem;color:var(--text-muted);display:block;margin-bottom:.3rem">${I18n.idioma==="ca"?"Gimnas *":"Gym *"}</label>
-          <select id="fc-gimnas" style="width:100%;padding:.5rem .75rem;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:.85rem">
-            ${GIMNASOS.map(g=>`<option value="${g.id}" ${c?.gimnasId===g.id?"selected":""}>${g.nom}</option>`).join("")}
-          </select>
-        </div>
+        ${!c ? `
+        <div style="grid-column:1/-1">
+          <label style="font-size:.78rem;color:var(--text-muted);display:block;margin-bottom:.3rem">
+            ${I18n.idioma === "ca" ? "Repetició setmanal" : "Weekly repetition"}
+          </label>
+          <div style="display:flex;align-items:center;gap:.75rem;flex-wrap:wrap">
+            <select id="fc-repeticions"
+              style="padding:.5rem .75rem;background:var(--bg-card);border:1px solid var(--border);
+                     border-radius:8px;color:var(--text);font-size:.85rem">
+              <option value="1">${I18n.idioma === "ca" ? "Sense repetició (1 cop)" : "No repetition (1 time)"}</option>
+              <option value="4">${I18n.idioma === "ca" ? "4 setmanes (1 mes)" : "4 weeks (1 month)"}</option>
+              <option value="8">${I18n.idioma === "ca" ? "8 setmanes (2 mesos)" : "8 weeks (2 months)"}</option>
+              <option value="12">${I18n.idioma === "ca" ? "12 setmanes (3 mesos)" : "12 weeks (3 months)"}</option>
+              <option value="custom">${I18n.idioma === "ca" ? "Personalitzat..." : "Custom..."}</option>
+            </select>
+            <input id="fc-repeticions-custom" type="number" min="1" max="52"
+              placeholder="${I18n.idioma === "ca" ? "Nº setmanes" : "No. of weeks"}"
+              style="display:none;width:120px;padding:.5rem .75rem;background:var(--bg-card);
+                     border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:.85rem">
+          </div>
+          <p id="fc-repeticions-preview" style="font-size:.75rem;color:var(--text-muted);margin-top:.4rem"></p>
+        </div>` : ""}
 
-        <div>
-          <label style="font-size:.78rem;color:var(--text-muted);display:block;margin-bottom:.3rem">${I18n.idioma==="ca"?"Descripció":"Description"}</label>
-          <input id="fc-descripcio" type="text" value="${_esc(c?.descripcio||"")}"
-            style="width:100%;padding:.5rem .75rem;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:.85rem">
+        <div style="grid-column:1/-1">
+          <label style="font-size:.78rem;color:var(--text-muted);display:block;margin-bottom:.3rem">
+            ${I18n.idioma === "ca" ? "Descripció" : "Description"}
+          </label>
+          <input id="fc-descripcio" type="text" value="${_esc(c?.descripcio || "")}"
+            style="width:100%;padding:.5rem .75rem;background:var(--bg-card);
+                   border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:.85rem">
         </div>
 
       </div>
 
       <p style="font-size:.75rem;color:var(--text-muted);margin-top:.75rem">
-        💡 ${I18n.idioma==="ca"
-          ? 'El nom final serà "Tipus + Nom descriptiu". Ex: "Spinning matinal"'
-          : 'Final name will be "Type + Descriptive name". E.g. "Spinning morning"'}
+        💡 ${I18n.idioma === "ca"
+          ? 'Nom final: "Tipus + Nom descriptiu". Ex: "Spinning matinal"'
+          : 'Final name: "Type + Descriptive name". E.g. "Spinning morning"'}
       </p>
 
       <div style="display:flex;gap:.75rem;justify-content:flex-end;margin-top:1rem">
-        <button onclick="tancaFormClasse()" class="btn btn-secondary" style="font-size:.82rem;padding:.45rem 1rem">${I18n.idioma==="ca"?"Cancel·lar":"Cancel"}</button>
-        <button onclick="desaClasse()" class="btn btn-primary" style="font-size:.82rem;padding:.45rem 1rem">${I18n.idioma==="ca"?"Desar":"Save"}</button>
+        <button onclick="tancaFormClasse()" class="btn btn-secondary"
+                style="font-size:.82rem;padding:.45rem 1rem">
+          ${I18n.idioma === "ca" ? "Cancel·lar" : "Cancel"}
+        </button>
+        <button onclick="desaClasse()" class="btn btn-primary"
+                style="font-size:.82rem;padding:.45rem 1rem">
+          ${I18n.idioma === "ca" ? "Desar" : "Save"}
+        </button>
       </div>
-    </div>`;
+    </div>
+  `;
 
-  container.scrollIntoView({ behavior:"smooth", block:"nearest" });
+  // Listener per mostrar/amagar el camp personalitzat de repeticions
+  const selectRep = document.getElementById("fc-repeticions");
+  const inputCustom = document.getElementById("fc-repeticions-custom");
+  const preview = document.getElementById("fc-repeticions-preview");
+
+  if (selectRep) {
+    const actualitzaPreview = () => {
+      const val = selectRep.value === "custom"
+        ? parseInt(inputCustom?.value) || 1
+        : parseInt(selectRep.value);
+      if (inputCustom) inputCustom.style.display = selectRep.value === "custom" ? "block" : "none";
+      if (preview && val > 1) {
+        preview.textContent = I18n.idioma === "ca"
+          ? `Es crearan ${val} classes setmanals`
+          : `${val} weekly classes will be created`;
+      } else if (preview) {
+        preview.textContent = "";
+      }
+    };
+    selectRep.addEventListener("change", actualitzaPreview);
+    if (inputCustom) inputCustom.addEventListener("input", actualitzaPreview);
+  }
+
+  container.scrollIntoView({ behavior: "smooth", block: "nearest" });
 }
 
 function tancaFormClasse() {
@@ -385,30 +451,79 @@ function tancaFormClasse() {
   _editClasse = null;
 }
 
+// Fragment suggerit per assistent IA - revisar i adaptar
 async function desaClasse() {
   const tipus      = document.getElementById("fc-tipus")?.value;
   const nomExtra   = document.getElementById("fc-nom")?.value.trim();
   const horariRaw  = document.getElementById("fc-horari")?.value;
   const capacitat  = parseInt(document.getElementById("fc-capacitat")?.value);
-  const gimnasId   = parseInt(document.getElementById("fc-gimnas")?.value);
   const descripcio = document.getElementById("fc-descripcio")?.value.trim();
+  const selectRep  = document.getElementById("fc-repeticions");
+  const inputCustom= document.getElementById("fc-repeticions-custom");
 
-  if (!tipus || !horariRaw || isNaN(capacitat)) { showToast(t("toast.campsBuits"),"error"); return; }
+  if (!tipus || !horariRaw || isNaN(capacitat)) {
+    showToast(t("toast.campsBuits"), "error");
+    return;
+  }
 
-  // Nom final = Tipus + nom descriptiu (si n'hi ha)
   const nom = nomExtra ? `${tipus} ${nomExtra}` : tipus;
-  const dto = { nom, descripcio, horari: horariRaw, capacitat, gimnasId };
 
-  const resultat = _editClasse
-    ? await ApiClassesAdmin.actualitzar(_editClasse.id, dto)
-    : await ApiClassesAdmin.crear(dto);
+  // Nombre de repeticions
+  let repeticions = 1;
+  if (selectRep) {
+    repeticions = selectRep.value === "custom"
+      ? Math.max(1, parseInt(inputCustom?.value) || 1)
+      : parseInt(selectRep.value);
+  }
 
-  if (resultat) {
-    showToast(I18n.idioma==="ca"?"Classe desada correctament.":"Class saved successfully.","success");
+  if (_editClasse) {
+    // Edició — sempre 1 sola classe
+    const dto = { nom, descripcio, horari: horariRaw, capacitat, gimnasId: 1 };
+    const resultat = await ApiClassesAdmin.actualitzar(_editClasse.id, dto);
+    if (resultat) {
+      showToast(I18n.idioma === "ca" ? "Classe actualitzada." : "Class updated.", "success");
+      tancaFormClasse();
+      await carregaClasses();
+    } else {
+      showToast(I18n.idioma === "ca" ? "Error en desar la classe." : "Error saving class.", "error");
+    }
+    return;
+  }
+
+  // Creació — genera les N classes setmanals
+  const dataBase = new Date(horariRaw);
+  let errors = 0;
+
+  for (let i = 0; i < repeticions; i++) {
+    const dataIteracio = new Date(dataBase);
+    dataIteracio.setDate(dataBase.getDate() + i * 7);
+
+    // Format ISO sense zona horària per evitar desfasaments
+    const pad = n => String(n).padStart(2, "0");
+    const horariIso = `${dataIteracio.getFullYear()}-${pad(dataIteracio.getMonth()+1)}-${pad(dataIteracio.getDate())}T${pad(dataIteracio.getHours())}:${pad(dataIteracio.getMinutes())}`;
+
+    const dto = { nom, descripcio, horari: horariIso, capacitat, gimnasId: 1 };
+    const resultat = await ApiClassesAdmin.crear(dto);
+    if (!resultat) errors++;
+  }
+
+  if (errors === 0) {
+    showToast(
+      repeticions > 1
+        ? (I18n.idioma === "ca" ? `${repeticions} classes creades correctament! 🎉` : `${repeticions} classes created successfully! 🎉`)
+        : (I18n.idioma === "ca" ? "Classe creada correctament." : "Class created successfully."),
+      "success"
+    );
     tancaFormClasse();
     await carregaClasses();
   } else {
-    showToast(I18n.idioma==="ca"?"Error en desar la classe.":"Error saving class.","error");
+    showToast(
+      I18n.idioma === "ca"
+        ? `${errors} de ${repeticions} classes no s'han pogut crear.`
+        : `${errors} of ${repeticions} classes could not be created.`,
+      "error"
+    );
+    await carregaClasses();
   }
 }
 
