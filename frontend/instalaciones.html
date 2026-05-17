@@ -1,17 +1,14 @@
 <!DOCTYPE html>
-<html lang="es">
-
+<html lang="ca">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Instal·lacions - Imperium Fitness</title>
   <link rel="stylesheet" href="css/styles.css">
 </head>
-
 <body>
 
-  <!-- ========== NAVBAR ========== -->
-  <nav class="navbar" id="navbar">
+  <nav class="navbar scrolled" id="navbar">
     <div class="container">
       <a href="index.html" class="navbar-brand">
         <img src="assets/logo.png" alt="Imperium Fitness">
@@ -36,6 +33,7 @@
       </button>
     </div>
   </nav>
+
   <div class="nav-mobile" id="nav-mobile">
     <a href="instalaciones.html" data-i18n="nav.instalacions">Instal·lacions</a>
     <a href="actividades.html"   data-i18n="nav.classes">Classes</a>
@@ -47,23 +45,141 @@
     <div id="nav-mobile-user"></div>
   </div>
 
-  <section class="page-section">
+  <section class="page-section" style="padding-top:6rem;padding-bottom:3rem">
     <div class="container">
 
       <div class="section-header">
         <h2 data-i18n="nav.instalacions">Instal·lacions</h2>
         <p data-i18n="instalacions.subtitol">Espais d'elit dissenyats per portar el teu entrenament al màxim nivell</p>
-
-      <!-- Grid de instalaciones - generado por JS -->
-      <div class="facilities-grid" id="facilities-grid"></div>
-
-      <!-- CTA final -->
-      <div style="text-align:center;margin-top:3rem">
-        <p style="color:var(--text-muted);margin-bottom:1.5rem"
-           data-i18n="instalacions.visitaDesc">Vols conèixer els nostres centres en persona?</p>
-        <a href="contacto.html" class="btn btn-primary"
-           data-i18n="instalacions.visitaCta">Sol·licitar Visita Gratuïta</a>
       </div>
+
+      <div style="display:grid;gap:4rem">
+
+        <!-- 01 Zona Musculació -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:2.5rem;align-items:center">
+          <div style="border-radius:16px;overflow:hidden;aspect-ratio:4/3">
+            <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=700&h=500&fit=crop"
+                 alt="Zona musculació" style="width:100%;height:100%;object-fit:cover" loading="eager"
+                 onerror="this.parentElement.style.background='var(--bg-secondary)'">
+          </div>
+          <div>
+            <span style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--primary)">01</span>
+            <h3 style="font-size:1.5rem;font-weight:800;margin:.5rem 0 1rem" data-i18n="inst.musculacio">Zona de Musculació</h3>
+            <p style="color:var(--text-muted);line-height:1.7;margin-bottom:1.25rem" data-i18n="inst.musculacioDesc">
+              Més de 200 màquines d'última generació, des de presses i cables fins a plataformes de levantament olímpic.
+            </p>
+            <div style="display:flex;flex-wrap:wrap;gap:.5rem" id="badges-01">
+              <span class="inst-badge" data-key="b01a">200+ màquines</span>
+              <span class="inst-badge" data-key="b01b">Pes lliure</span>
+              <span class="inst-badge" data-key="b01c">Plataformes olímpiques</span>
+              <span class="inst-badge" data-key="b01d">Cardio integrat</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 02 Zona Cardio -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:2.5rem;align-items:center">
+          <div style="order:2">
+            <span style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--primary)">02</span>
+            <h3 style="font-size:1.5rem;font-weight:800;margin:.5rem 0 1rem" data-i18n="inst.cardio">Zona Cardio</h3>
+            <p style="color:var(--text-muted);line-height:1.7;margin-bottom:1.25rem" data-i18n="inst.cardioDesc">
+              Cintes, bicicletes, el·líptiques i remadores amb pantalles HD i connexió al teu mòbil.
+            </p>
+            <div style="display:flex;flex-wrap:wrap;gap:.5rem">
+              <span class="inst-badge" data-key="b02a">50+ màquines cardio</span>
+              <span class="inst-badge" data-key="b02b">Pantalles HD</span>
+              <span class="inst-badge" data-key="b02c">Connexió app</span>
+              <span class="inst-badge" data-key="b02d">Sessions guiades</span>
+            </div>
+          </div>
+          <div style="border-radius:16px;overflow:hidden;aspect-ratio:4/3;order:1">
+            <img src="https://images.unsplash.com/photo-1571902943202-507ec2618e8f?w=700&h=500&fit=crop"
+                 alt="Zona cardio" style="width:100%;height:100%;object-fit:cover" loading="eager"
+                 onerror="this.parentElement.style.background='var(--bg-secondary)'">
+          </div>
+        </div>
+
+        <!-- 03 Sales Classes -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:2.5rem;align-items:center">
+          <div style="border-radius:16px;overflow:hidden;aspect-ratio:4/3">
+            <img src="https://images.unsplash.com/photo-1518611012118-696072aa579a?w=700&h=500&fit=crop"
+                 alt="Sales classes" style="width:100%;height:100%;object-fit:cover" loading="eager"
+                 onerror="this.parentElement.style.background='var(--bg-secondary)'">
+          </div>
+          <div>
+            <span style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--primary)">03</span>
+            <h3 style="font-size:1.5rem;font-weight:800;margin:.5rem 0 1rem" data-i18n="inst.sales">Sales de Classes Dirigides</h3>
+            <p style="color:var(--text-muted);line-height:1.7;margin-bottom:1.25rem" data-i18n="inst.salesDesc">
+              Tres sales totalment equipades amb sòl de parquet flotant, miralls de paret a paret i àudio professional.
+            </p>
+            <div style="display:flex;flex-wrap:wrap;gap:.5rem">
+              <span class="inst-badge" data-key="b03a">3 sales</span>
+              <span class="inst-badge" data-key="b03b">Parquet flotant</span>
+              <span class="inst-badge" data-key="b03c">Àudio professional</span>
+              <span class="inst-badge" data-key="b03d">30 places/sala</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 04 Wellness -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:2.5rem;align-items:center">
+          <div style="order:2">
+            <span style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--primary)">04</span>
+            <h3 style="font-size:1.5rem;font-weight:800;margin:.5rem 0 1rem" data-i18n="inst.wellness">Zona Wellness</h3>
+            <p style="color:var(--text-muted);line-height:1.7;margin-bottom:1.25rem" data-i18n="inst.wellnessDesc">
+              Sauna finlandesa, dutxes de contrast i zona de relaxació. Disponible per a membres amb tarifa Prime.
+            </p>
+            <div style="display:flex;flex-wrap:wrap;gap:.5rem">
+              <span class="inst-badge" data-key="b04a">Sauna finlandesa</span>
+              <span class="inst-badge" data-key="b04b">Dutxes contrast</span>
+              <span class="inst-badge" data-key="b04c">Zona relaxació</span>
+              <span class="inst-badge" data-key="b04d">Tarifa Prime</span>
+            </div>
+          </div>
+          <div style="border-radius:16px;overflow:hidden;aspect-ratio:4/3;order:1">
+            <img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=700&h=500&fit=crop"
+                 alt="Wellness" style="width:100%;height:100%;object-fit:cover" loading="eager"
+                 onerror="this.parentElement.style.background='var(--bg-secondary)'">
+          </div>
+        </div>
+
+        <!-- 05 Vestidors -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:2.5rem;align-items:center">
+          <div style="border-radius:16px;overflow:hidden;aspect-ratio:4/3">
+            <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=700&h=500&fit=crop"
+                 alt="Vestidors" style="width:100%;height:100%;object-fit:cover" loading="eager"
+                 onerror="this.parentElement.style.background='var(--bg-secondary)'">
+          </div>
+          <div>
+            <span style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--primary)">05</span>
+            <h3 style="font-size:1.5rem;font-weight:800;margin:.5rem 0 1rem" data-i18n="inst.vestidors">Vestidors Premium</h3>
+            <p style="color:var(--text-muted);line-height:1.7;margin-bottom:1.25rem" data-i18n="inst.vestidorsDesc">
+              Vestidors àmplis amb taquilles individuals de seguretat, dutxes il·limitades i productes d'higiene inclosos.
+            </p>
+            <div style="display:flex;flex-wrap:wrap;gap:.5rem">
+              <span class="inst-badge" data-key="b05a">Taquilles segures</span>
+              <span class="inst-badge" data-key="b05b">Dutxes il·limitades</span>
+              <span class="inst-badge" data-key="b05c">Assecadors</span>
+              <span class="inst-badge" data-key="b05d">Productes higiene</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- CTA -->
+      <div style="text-align:center;margin-top:4rem;padding:3rem;background:var(--bg-secondary);border-radius:16px;border:1px solid var(--border)">
+        <h3 style="font-size:1.4rem;font-weight:800;margin-bottom:.75rem" data-i18n="instalacions.visitaDesc">
+          Vols conèixer els nostres centres en persona?
+        </h3>
+        <p style="color:var(--text-muted);margin-bottom:1.5rem;font-size:.95rem" data-i18n="inst.visitaSubtitol">
+          Vine a visitar-nos sense compromís i et farem un tour complet de les instal·lacions.
+        </p>
+        <a href="contacto.html" class="btn btn-primary" data-i18n="instalacions.visitaCta">
+          Sol·licitar Visita Gratuïta
+        </a>
+      </div>
+
     </div>
   </section>
 
@@ -71,17 +187,8 @@
     <div class="container">
       <div class="footer-grid">
         <div class="footer-brand">
-          <div class="logo-row">
-            <img src="assets/logo.png" alt="Logo">
-            <span class="text-gold">IMPERIUM FITNESS</span>
-          </div>
-          <p data-i18n="footer.desc">La cadena de gimnasos premium amb tecnologia d'ocupació en temps real. Transforma la teva vida.</p>
-          <div class="social-links">
-            <a href="#" class="social-btn"><i class="fab fa-instagram"></i></a>
-            <a href="#" class="social-btn"><i class="fab fa-facebook-f"></i></a>
-            <a href="#" class="social-btn"><i class="fab fa-twitter"></i></a>
-            <a href="#" class="social-btn"><i class="fab fa-youtube"></i></a>
-          </div>
+          <div class="logo-row"><img src="assets/logo.png" alt="Logo"><span class="text-gold">IMPERIUM FITNESS</span></div>
+          <p data-i18n="footer.desc">La cadena de gimnasos premium.</p>
         </div>
         <div class="footer-col">
           <h4 data-i18n="footer.explorar">Explorar</h4>
@@ -90,7 +197,6 @@
             <li><a href="actividades.html"   data-i18n="nav.classes">Classes</a></li>
             <li><a href="tarifas.html"       data-i18n="nav.tarifes">Tarifes</a></li>
             <li><a href="tienda.html"        data-i18n="nav.botiga">Botiga</a></li>
-            <li><a href="blog.html"          data-i18n="nav.novetats">Novetats</a></li>
             <li><a href="contacto.html"      data-i18n="nav.contacte">Contacte</a></li>
           </ul>
         </div>
@@ -100,8 +206,6 @@
             <li><a href="legal/politica-privacidad.html"  data-i18n="footer.privacitat">Política de Privacitat</a></li>
             <li><a href="legal/terminos-condiciones.html" data-i18n="footer.termes">Termes i Condicions</a></li>
             <li><a href="legal/politica-cookies.html"     data-i18n="footer.cookies">Política de Cookies</a></li>
-            <li><a href="legal/normativa-clubes.html"     data-i18n="footer.normativa">Normativa de Clubs</a></li>
-            <li><a href="faq.html">FAQ</a></li>
           </ul>
         </div>
       </div>
@@ -110,7 +214,6 @@
           <a href="legal/politica-privacidad.html"  data-i18n="footer.privacitat">Política de Privacitat</a>
           <a href="legal/politica-cookies.html"     data-i18n="footer.cookies">Política de Cookies</a>
           <a href="legal/terminos-condiciones.html" data-i18n="footer.termes">Termes i Condicions</a>
-          <a href="legal/normativa-clubes.html"     data-i18n="footer.normativa">Normativa de Clubs</a>
           <a href="legal/canal-etico.html"          data-i18n="footer.canal">Canal Ètic</a>
         </div>
         <span class="footer-copy" data-i18n="footer.drets">© 2026 Imperium Fitness. Tots els drets reservats.</span>
@@ -118,38 +221,83 @@
     </div>
   </footer>
 
-  <script src="js/render.js"></script>
-  <script src="js/app.js"></script>
-  <!-- PANEL CARRITO -->
   <div class="cart-backdrop" id="cart-backdrop"></div>
   <div class="cart-drawer" id="cart-drawer">
     <div class="cart-header">
-      <h3>Mi Carrito</h3>
-      <button class="cart-close-btn" id="cart-close-btn" title="Cerrar">&#x2715;</button>
+      <h3 data-i18n="carret.titol">El meu carret</h3>
+      <button class="cart-close-btn" id="cart-close-btn" title="Tancar">&#x2715;</button>
     </div>
     <div class="cart-items" id="cart-items"></div>
     <div class="cart-footer">
       <div class="cart-total-row">
-        <span class="cart-total-label">Total</span>
+        <span class="cart-total-label" data-i18n="carret.total">Total</span>
         <span class="cart-total-amount" id="cart-total">0.00 &euro;</span>
       </div>
-      <button class="btn btn-primary" style="width:100%;justify-content:center" id="cart-checkout-btn">Finalizar
-        Compra</button>
+      <button class="btn btn-primary" style="width:100%;justify-content:center"
+              id="cart-checkout-btn" data-i18n="carret.finalitzar">Finalitzar compra</button>
     </div>
   </div>
 
+  <style>
+    .inst-badge {
+      font-size: .75rem;
+      padding: .3rem .75rem;
+      background: rgba(212,175,55,.1);
+      color: var(--primary);
+      border-radius: 20px;
+      border: 1px solid rgba(212,175,55,.2);
+    }
+    @media (max-width: 768px) {
+      [style*="grid-template-columns:1fr 1fr"] {
+        grid-template-columns: 1fr !important;
+      }
+      [style*="order:1"], [style*="order:2"] {
+        order: unset !important;
+      }
+    }
+  </style>
+
   <script src="js/i18n.js"></script>
-  <script src="js/api.js"></script>   ← AFEGEIX
+  <script src="js/api.js"></script>
+  <script src="js/render.js"></script>
   <script src="js/app.js"></script>
   <script src="js/carrito.js"></script>
 
   <script>
+    // Fragment suggerit per assistent IA - revisar i adaptar
+    const BADGES_I18N = {
+      ca: {
+        b01a:"200+ màquines", b01b:"Pes lliure", b01c:"Plataformes olímpiques", b01d:"Cardio integrat",
+        b02a:"50+ màquines cardio", b02b:"Pantalles HD", b02c:"Connexió app", b02d:"Sessions guiades",
+        b03a:"3 sales", b03b:"Parquet flotant", b03c:"Àudio professional", b03d:"30 places/sala",
+        b04a:"Sauna finlandesa", b04b:"Dutxes contrast", b04c:"Zona relaxació", b04d:"Tarifa Prime",
+        b05a:"Taquilles segures", b05b:"Dutxes il·limitades", b05c:"Assecadors", b05d:"Productes higiene"
+      },
+      en: {
+        b01a:"200+ machines", b01b:"Free weights", b01c:"Olympic platforms", b01d:"Integrated cardio",
+        b02a:"50+ cardio machines", b02b:"HD screens", b02c:"App connection", b02d:"Guided sessions",
+        b03a:"3 studios", b03b:"Floating parquet", b03c:"Pro audio", b03d:"30 spots/studio",
+        b04a:"Finnish sauna", b04b:"Contrast showers", b04c:"Relaxation area", b04d:"Prime plan",
+        b05a:"Secure lockers", b05b:"Unlimited showers", b05c:"Hair dryers", b05d:"Hygiene products"
+      }
+    };
+
+    function aplicaBadges() {
+      const lang = I18n.idioma;
+      document.querySelectorAll(".inst-badge[data-key]").forEach(el => {
+        const text = BADGES_I18N[lang]?.[el.dataset.key];
+        if (text) el.textContent = text;
+      });
+    }
+
     document.addEventListener("DOMContentLoaded", function () {
       I18n.init();
       SessionManager.init(false);
+      aplicaBadges();
     });
+
+    document.addEventListener("idioma:canvi", aplicaBadges);
   </script>
 
 </body>
-
 </html>
