@@ -24,4 +24,17 @@ List<Object[]> findTopProductesByMes(@Param("des") LocalDateTime des);
 // Total vendes del mes
 @Query("SELECT COUNT(v) FROM Venda v WHERE v.dataVenda >= :des")
 long countVendesByMes(@Param("des") LocalDateTime des);
+
+// Fragment suggerit per assistent IA - revisar i adaptar
+// Vendes agrupades per mes (últims 6 mesos)
+@Query("SELECT FUNCTION('YEAR', v.dataVenda), FUNCTION('MONTH', v.dataVenda), " +
+       "COUNT(v), SUM(v.quantitat * v.producte.preu) " +
+       "FROM Venda v WHERE v.dataVenda >= :des " +
+       "GROUP BY FUNCTION('YEAR', v.dataVenda), FUNCTION('MONTH', v.dataVenda) " +
+       "ORDER BY FUNCTION('YEAR', v.dataVenda), FUNCTION('MONTH', v.dataVenda)")
+List<Object[]> findVendesMensuals(@Param("des") LocalDateTime des);
+
+// Últimes N vendes (activitat recent)
+@Query("SELECT v FROM Venda v ORDER BY v.dataVenda DESC")
+List<Venda> findUltimesVendes(org.springframework.data.domain.Pageable pageable);
 }
