@@ -257,15 +257,75 @@ public class ReservarClasses extends BaseActivity {
 
         Long idClasseSeleccionada = sessionIds.get(sessioSeleccionadaIndex);
 
+        btnConfirmarReserva.setEnabled(false);
+
+        ApiService api = ApiClient.getClient(this).create(ApiService.class);
+
+        /*
+            Antes de crear la reserva, miramos si este usuario ya tiene
+            reservada esta misma sesión/clase.
+        */
+        comprovarReservaDuplicadaAbansDeCrear(api, idClasseSeleccionada);
+    }
+
+    private void comprovarReservaDuplicadaAbansDeCrear(ApiService api, Long idClasseSeleccionada) {
+        api.getReservesUsuari(usuariId).enqueue(new Callback<List<ReservaDTO>>() {
+            @Override
+            public void onResponse(Call<List<ReservaDTO>> call, Response<List<ReservaDTO>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    if (usuariJaTeAquestaClasse(response.body(), idClasseSeleccionada)) {
+                        btnConfirmarReserva.setEnabled(true);
+
+                        Toast.makeText(
+                                ReservarClasses.this,
+                                getString(R.string.reserva_ja_existeix),
+                                Toast.LENGTH_LONG
+                        ).show();
+                        return;
+                    }
+                }
+
+                crearReservaBackend(api, idClasseSeleccionada);
+            }
+
+            @Override
+            public void onFailure(Call<List<ReservaDTO>> call, Throwable t) {
+                /*
+                    Si falla la comprobación previa, no hacemos la reserva a ciegas.
+                    Así evitamos duplicados si no hemos podido comprobarlos.
+                */
+                btnConfirmarReserva.setEnabled(true);
+
+                Toast.makeText(
+                        ReservarClasses.this,
+                        getString(R.string.reserva_error_connexio, t.getMessage()),
+                        Toast.LENGTH_LONG
+                ).show();
+            }
+        });
+    }
+
+    private boolean usuariJaTeAquestaClasse(List<ReservaDTO> reservesUsuari, Long idClasseSeleccionada) {
+        if (reservesUsuari == null || idClasseSeleccionada == null) {
+            return false;
+        }
+
+        for (ReservaDTO reserva : reservesUsuari) {
+            if (reserva.getClasseId() != null
+                    && reserva.getClasseId().longValue() == idClasseSeleccionada.longValue()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private void crearReservaBackend(ApiService api, Long idClasseSeleccionada) {
         /*
             No enviamos dataReserva.
             El backend actual crea la reserva con usuariId + classeId.
         */
         ReservaDTO reserva = new ReservaDTO(usuariId, idClasseSeleccionada);
-
-        btnConfirmarReserva.setEnabled(false);
-
-        ApiService api = ApiClient.getClient(this).create(ApiService.class);
 
         api.crearReserva(reserva).enqueue(new Callback<ReservaDTO>() {
             @Override
@@ -346,10 +406,6 @@ public class ReservarClasses extends BaseActivity {
             }
         }
 
-        /*
-            Si el backend devuelve 409 Conflict, normalmente significa:
-            esta reserva ya existe.
-        */
         return response != null && response.code() == 409;
     }
 
