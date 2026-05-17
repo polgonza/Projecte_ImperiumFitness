@@ -45,5 +45,11 @@ public class ReservaController {
         @PathVariable Long classeId) {
         service.cancelarReserva(usuariId, classeId);
         return ResponseEntity.noContent().build();
-}
+    }
+    // Fragment suggerit per assistent IA - revisar i adaptar
+    // Retorna el nombre de reserves d'una classe (per calcular places disponibles)
+    @GetMapping("/classe/{classeId}/count")
+    public ResponseEntity<Long> countByClasse(@PathVariable Long classeId) {
+        return ResponseEntity.ok((long) service.getByClasse(classeId).size());
+    }
 }

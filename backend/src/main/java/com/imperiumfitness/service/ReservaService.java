@@ -70,12 +70,26 @@ public class ReservaService {
                 HttpStatus.CONFLICT,
                 "L'usuari ja té una reserva per aquesta classe");
     }
+        // Fragment suggerit per assistent IA - revisar i adaptar
+    // Comprova places disponibles a la classe
+    Classe classe = classeRepo.findById(dto.getClasseId())
+            .orElseThrow(() -> new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Classe no trobada"));
 
+    long reservesClasse = repo.findByClasseId(dto.getClasseId()).size();
+    if (reservesClasse >= classe.getCapacitat()) {
+        throw new ResponseStatusException(
+                HttpStatus.CONFLICT,
+                "La classe no té places disponibles");
+    }
     Reserva r = toEntity(dto);
     r.setDataReserva(LocalDateTime.now());
     return toDTO(repo.save(r));
 }
-
+        // Fragment suggerit per assistent IA - revisar i adaptar
+    public List<ReservaDTO> getByClasse(Long classeId) {
+        return repo.findByClasseId(classeId).stream().map(this::toDTO).collect(Collectors.toList());
+    }
     public void delete(Long id) {
         if (!repo.existsById(id))
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Reserva no trobada");
