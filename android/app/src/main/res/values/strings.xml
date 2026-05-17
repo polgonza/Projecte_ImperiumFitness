@@ -352,6 +352,7 @@
     <string name="classe_desc_crossfit">Entrenament funcional de alta intensitat amb exercicis variats.</string>
     <string name="classe_desc_hiit">Intervals de alta intensitat per cremar calories en poc temps.</string>
     <string name="classe_desc_default">Classe dirigida de Imperium Fitness.</string>
+    <string name="reserva_ja_existeix">Ja tens aquesta classe reservada.</string>
 
     <string-array name="dies_setmana_llargs">
         <item>Diumenge</item>

@@ -104,6 +104,7 @@
     <string name="reserva_boto_confirmar">Confirmar Reserva</string>
     <string name="reserva_confirmada">¡Reserva realizada!</string>
     <string name="reserva_exit">Reserva guardada correctamente</string>
+    <string name="reserva_ja_existeix">Ya tienes esta clase reservada.</string>
 
     <!-- Horaris -->
     <string-array name="horaris_classes">
