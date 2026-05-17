@@ -119,11 +119,6 @@ public class PagamentProductesBotiga extends BaseActivity {
 
             String base64Net = imatgeBase64.trim();
 
-            /*
-                El backend devuelve:
-                data:image/jpeg;base64,/9j/4AAQ...
-                Quitamos todo lo que hay antes de la coma.
-            */
             if (base64Net.contains(",")) {
                 base64Net = base64Net.substring(base64Net.indexOf(",") + 1);
             }

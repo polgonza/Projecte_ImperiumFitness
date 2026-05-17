@@ -306,19 +306,6 @@ public class Botiga extends BaseActivity {
 
         String nomDrawable = "producto_2";
 
-        /*
-            Productos actuales:
-            - Proteïna Whey 1kg / 2kg       -> proteina
-            - Samarreta Imperium            -> samarreta
-            - Creatina 300g                 -> creatina
-            - Barra de proteïna             -> barra_proteina
-            - Guants gimnàs                 -> guants
-            - Bossa de gimnàs               -> bossa
-            - Samarreta tècnica home/dona   -> samarreta
-            - Malla esportiva               -> malla
-            - Ampolla 750ml                 -> ampolla
-            - Omega-3                       -> omega3
-        */
 
         if (nom.contains("creatina")) {
             nomDrawable = "creatina";

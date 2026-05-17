@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -288,8 +289,16 @@ public class ReservarClasses extends BaseActivity {
                 } else {
                     String errorBackend = llegirError(response);
 
-                    if (PlaHelper.esErrorDePla(response, errorBackend)) {
+                    if (esErrorReservaDuplicada(response, errorBackend)) {
+                        Toast.makeText(
+                                ReservarClasses.this,
+                                getString(R.string.reserva_ja_existeix),
+                                Toast.LENGTH_LONG
+                        ).show();
+
+                    } else if (PlaHelper.esErrorDePla(response, errorBackend)) {
                         PlaHelper.mostrarPopupNecessitaPla(ReservarClasses.this);
+
                     } else {
                         Toast.makeText(
                                 ReservarClasses.this,
@@ -299,7 +308,6 @@ public class ReservarClasses extends BaseActivity {
                     }
                 }
             }
-
 
             @Override
             public void onFailure(Call<ReservaDTO> call, Throwable t) {
@@ -312,6 +320,37 @@ public class ReservarClasses extends BaseActivity {
                 ).show();
             }
         });
+    }
+
+    private boolean esErrorReservaDuplicada(Response<?> response, String errorBackend) {
+        if (errorBackend != null) {
+            String error = errorBackend.toLowerCase(Locale.ROOT);
+
+            if (error.contains("ja tens")
+                    || error.contains("ja té")
+                    || error.contains("ja te")
+                    || error.contains("ja existeix")
+                    || error.contains("ya tienes")
+                    || error.contains("ya tiene")
+                    || error.contains("ya existe")
+                    || error.contains("already booked")
+                    || error.contains("already reserved")
+                    || error.contains("duplic")
+                    || error.contains("reserva per aquesta classe")
+                    || error.contains("reserva para esta clase")
+                    || error.contains("classe reservada")
+                    || error.contains("clase reservada")
+                    || error.contains("aquesta classe")
+                    || error.contains("esta clase")) {
+                return true;
+            }
+        }
+
+        /*
+            Si el backend devuelve 409 Conflict, normalmente significa:
+            esta reserva ya existe.
+        */
+        return response != null && response.code() == 409;
     }
 
     private String obtenirDescripcioClasse(String nomClasse) {
@@ -371,6 +410,7 @@ public class ReservarClasses extends BaseActivity {
             return null;
         }
     }
+
     private String netejarNomUsuari(String usuari) {
         if (usuari == null || usuari.trim().isEmpty()) {
             return getString(R.string.usuari_default);

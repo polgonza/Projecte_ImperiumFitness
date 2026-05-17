@@ -11,17 +11,7 @@ public class ProducteDTO {
     private String categoria;
     private Integer estoc;
 
-    /*
-        Imagen del producto recibida desde backend.
-
-        Puede llegar como:
-        - imatgeUrl
-        - imatge_url
-        - imagen_url
-
-
-    */
-    @SerializedName(value = "imatgeUrl", alternate = {"imatge_url", "imagen_url"})
+    @SerializedName(value = "imatgeUrl", alternate = {"imatge_url", "imagen_url", "imagenUrl"})
     private String imatgeUrl;
 
     public ProducteDTO() {
