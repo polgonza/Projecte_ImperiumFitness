@@ -9,18 +9,17 @@
 /* ── Estat del mòdul ─────────────────────────────── */
 let _productes    = [];
 let _classes      = [];
-let _editProducte = null; // producte en edició (null = nou)
-let _editClasse   = null; // classe en edició (null = nova)
+let _editProducte = null;
+let _editClasse   = null;
 
-/* ── Gimnasos disponibles (de la BD) ──────────────── */
 const GIMNASOS = [
   { id: 1, nom: "Imperium Fitness" },
   { id: 2, nom: "Imperium Fitness Nord" },
   { id: 3, nom: "Imperium Fitness Sud" }
 ];
 
-/* ── Categories disponibles ───────────────────────── */
-const CATEGORIES = ["Roba", "Suplement", "Accesoris"];
+const CATEGORIES   = ["Roba", "Suplement", "Accesoris"];
+const TIPUS_CLASSE = ["CrossFit","Yoga","Spinning","HIIT","Pilates","Funcional","Boxeo"];
 
 /* =====================================================
    RENDER PRINCIPAL
@@ -38,15 +37,13 @@ async function renderGestioAdmin() {
 
   container.innerHTML = `
     <div style="display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:1.5rem">
-      <button id="admin-tab-productes"
-        onclick="canviaSubTab('productes')"
+      <button id="admin-tab-productes" onclick="canviaSubTab('productes')"
         style="padding:.6rem 1.25rem;background:transparent;border:none;
                border-bottom:2px solid var(--primary);color:var(--primary);
                font-size:.85rem;font-weight:600;cursor:pointer">
         📦 ${I18n.idioma === "ca" ? "Productes" : "Products"}
       </button>
-      <button id="admin-tab-classes"
-        onclick="canviaSubTab('classes')"
+      <button id="admin-tab-classes" onclick="canviaSubTab('classes')"
         style="padding:.6rem 1.25rem;background:transparent;border:none;
                border-bottom:2px solid transparent;color:var(--text-muted);
                font-size:.85rem;font-weight:600;cursor:pointer">
@@ -61,15 +58,11 @@ async function renderGestioAdmin() {
 }
 
 function canviaSubTab(tab) {
-  const tabs = ["productes", "classes"];
-  tabs.forEach(t => {
+  ["productes","classes"].forEach(t => {
     const btn = document.getElementById(`admin-tab-${t}`);
     const div = document.getElementById(`admin-subtab-${t}`);
     const actiu = t === tab;
-    if (btn) {
-      btn.style.borderBottomColor = actiu ? "var(--primary)" : "transparent";
-      btn.style.color = actiu ? "var(--primary)" : "var(--text-muted)";
-    }
+    if (btn) { btn.style.borderBottomColor = actiu ? "var(--primary)" : "transparent"; btn.style.color = actiu ? "var(--primary)" : "var(--text-muted)"; }
     if (div) div.style.display = actiu ? "block" : "none";
   });
 }
@@ -81,322 +74,172 @@ function canviaSubTab(tab) {
 async function carregaProductes() {
   const container = document.getElementById("admin-subtab-productes");
   if (!container) return;
-
-  container.innerHTML = `<p style="color:var(--text-muted);text-align:center;padding:2rem">
-    ⏳ ${I18n.idioma === "ca" ? "Carregant productes..." : "Loading products..."}</p>`;
-
-  try {
-    const res = await apiFetch("/api/productes");
-    _productes = res && res.ok ? await res.json() : [];
-  } catch (e) { _productes = []; }
-
+  container.innerHTML = `<p style="color:var(--text-muted);text-align:center;padding:2rem">⏳ ${I18n.idioma === "ca" ? "Carregant productes..." : "Loading products..."}</p>`;
+  try { const res = await apiFetch("/api/productes"); _productes = res && res.ok ? await res.json() : []; } catch (e) { _productes = []; }
   pintaProductes(container);
 }
 
 function pintaProductes(container) {
-  const btnText = I18n.idioma === "ca" ? "Nou producte" : "New product";
-
   container.innerHTML = `
     <div style="display:flex;justify-content:flex-end;margin-bottom:1rem">
-      <button onclick="obreFormProducte(null)"
-        class="btn btn-primary" style="font-size:.82rem;padding:.45rem 1rem">
-        + ${btnText}
+      <button onclick="obreFormProducte(null)" class="btn btn-primary" style="font-size:.82rem;padding:.45rem 1rem">
+        + ${I18n.idioma === "ca" ? "Nou producte" : "New product"}
       </button>
     </div>
-
     <div id="form-producte-container"></div>
-
     <div style="overflow-x:auto">
       <table style="width:100%;border-collapse:collapse;font-size:.85rem">
-        <thead>
-          <tr style="border-bottom:1px solid var(--border)">
-            <th style="text-align:left;padding:.5rem .75rem;color:var(--text-muted);
-                       font-size:.72rem;text-transform:uppercase;letter-spacing:.06em">
-              ${I18n.idioma === "ca" ? "Nom" : "Name"}
-            </th>
-            <th style="text-align:left;padding:.5rem .75rem;color:var(--text-muted);
-                       font-size:.72rem;text-transform:uppercase;letter-spacing:.06em">
-              ${I18n.idioma === "ca" ? "Categoria" : "Category"}
-            </th>
-            <th style="text-align:right;padding:.5rem .75rem;color:var(--text-muted);
-                       font-size:.72rem;text-transform:uppercase;letter-spacing:.06em">
-              ${I18n.idioma === "ca" ? "Preu" : "Price"}
-            </th>
-            <th style="text-align:right;padding:.5rem .75rem;color:var(--text-muted);
-                       font-size:.72rem;text-transform:uppercase;letter-spacing:.06em">
-              ${I18n.idioma === "ca" ? "Estoc" : "Stock"}
-            </th>
-            <th style="text-align:center;padding:.5rem .75rem;color:var(--text-muted);
-                       font-size:.72rem;text-transform:uppercase;letter-spacing:.06em">
-              ${I18n.idioma === "ca" ? "Accions" : "Actions"}
-            </th>
-          </tr>
-        </thead>
+        <thead><tr style="border-bottom:1px solid var(--border)">
+          ${["Nom/Name","Categoria/Category","Preu/Price","Estoc/Stock","Accions/Actions"].map((h,i) => {
+            const [ca,en] = h.split("/");
+            return `<th style="text-align:${i>=2&&i<=3?"right":i===4?"center":"left"};padding:.5rem .75rem;color:var(--text-muted);font-size:.72rem;text-transform:uppercase;letter-spacing:.06em">${I18n.idioma==="ca"?ca:en}</th>`;
+          }).join("")}
+        </tr></thead>
         <tbody>
           ${_productes.length === 0
-            ? `<tr><td colspan="5" style="text-align:center;padding:2rem;color:var(--text-muted)">
-                ${I18n.idioma === "ca" ? "No hi ha productes." : "No products found."}
-               </td></tr>`
+            ? `<tr><td colspan="5" style="text-align:center;padding:2rem;color:var(--text-muted)">${I18n.idioma==="ca"?"No hi ha productes.":"No products found."}</td></tr>`
             : _productes.map(p => `
               <tr style="border-bottom:.5px solid var(--border)">
                 <td style="padding:.6rem .75rem;font-weight:500">${_esc(p.nom)}</td>
-                <td style="padding:.6rem .75rem;color:var(--text-muted)">${_esc(p.categoria || "—")}</td>
+                <td style="padding:.6rem .75rem;color:var(--text-muted)">${_esc(p.categoria||"—")}</td>
                 <td style="padding:.6rem .75rem;text-align:right">${parseFloat(p.preu).toFixed(2)} €</td>
-                <td style="padding:.6rem .75rem;text-align:right">
-                  <span style="color:${p.estoc <= 5 ? "var(--danger)" : "var(--text)"}">
-                    ${p.estoc}
-                  </span>
-                </td>
+                <td style="padding:.6rem .75rem;text-align:right"><span style="color:${p.estoc<=5?"var(--danger)":"var(--text)"}">${p.estoc}</span></td>
                 <td style="padding:.6rem .75rem;text-align:center;display:flex;gap:.5rem;justify-content:center">
-                  <button onclick="obreFormProducte(${p.id})"
-                    style="padding:.3rem .65rem;border:1px solid var(--border);border-radius:6px;
-                           background:transparent;color:var(--text-muted);cursor:pointer;font-size:.75rem">
-                    ✏️
-                  </button>
-                  <button onclick="eliminaProducte(${p.id}, '${_escAttr(p.nom)}')"
-                    style="padding:.3rem .65rem;border:1px solid var(--danger);border-radius:6px;
-                           background:transparent;color:var(--danger);cursor:pointer;font-size:.75rem">
-                    🗑️
-                  </button>
+                  <button onclick="obreFormProducte(${p.id})" style="padding:.3rem .65rem;border:1px solid var(--border);border-radius:6px;background:transparent;color:var(--text-muted);cursor:pointer;font-size:.75rem">✏️</button>
+                  <button onclick="eliminaProducte(${p.id},'${_escAttr(p.nom)}')" style="padding:.3rem .65rem;border:1px solid var(--danger);border-radius:6px;background:transparent;color:var(--danger);cursor:pointer;font-size:.75rem">🗑️</button>
                 </td>
-              </tr>`).join("")
-          }
+              </tr>`).join("")}
         </tbody>
       </table>
-    </div>
-  `;
+    </div>`;
 }
 
 function obreFormProducte(id) {
   _editProducte = id ? _productes.find(p => p.id === id) : null;
   const p = _editProducte;
-  const isNou = !p;
-  const titol = isNou
-    ? (I18n.idioma === "ca" ? "Nou producte" : "New product")
-    : (I18n.idioma === "ca" ? "Editar producte" : "Edit product");
-
+  const titol = !p ? (I18n.idioma==="ca"?"Nou producte":"New product") : (I18n.idioma==="ca"?"Editar producte":"Edit product");
   const container = document.getElementById("form-producte-container");
   if (!container) return;
 
-  const catsOptions = CATEGORIES.map(c =>
-    `<option value="${c}" ${p?.categoria === c ? "selected" : ""}>${c}</option>`
-  ).join("");
-
   container.innerHTML = `
-    <div style="background:var(--bg-secondary);border:1px solid var(--border);
-                border-radius:12px;padding:1.25rem;margin-bottom:1.5rem">
+    <div style="background:var(--bg-secondary);border:1px solid var(--border);border-radius:12px;padding:1.25rem;margin-bottom:1.5rem">
       <h4 style="font-size:.9rem;font-weight:600;margin-bottom:1rem">${titol}</h4>
-
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem">
 
         <div style="grid-column:1/-1">
-          <label style="font-size:.78rem;color:var(--text-muted);display:block;margin-bottom:.3rem">
-            ${I18n.idioma === "ca" ? "Nom *" : "Name *"}
-          </label>
-          <input id="fp-nom" type="text" value="${_esc(p?.nom || "")}"
-            style="width:100%;padding:.5rem .75rem;background:var(--bg-card);
-                   border:1px solid var(--border);border-radius:8px;
-                   color:var(--text);font-size:.85rem">
+          <label style="font-size:.78rem;color:var(--text-muted);display:block;margin-bottom:.3rem">${I18n.idioma==="ca"?"Nom *":"Name *"}</label>
+          <input id="fp-nom" type="text" value="${_esc(p?.nom||"")}" style="width:100%;padding:.5rem .75rem;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:.85rem">
         </div>
 
         <div>
-          <label style="font-size:.78rem;color:var(--text-muted);display:block;margin-bottom:.3rem">
-            ${I18n.idioma === "ca" ? "Preu (€) *" : "Price (€) *"}
-          </label>
-          <input id="fp-preu" type="number" step="0.01" min="0"
-            value="${p?.preu || ""}"
-            style="width:100%;padding:.5rem .75rem;background:var(--bg-card);
-                   border:1px solid var(--border);border-radius:8px;
-                   color:var(--text);font-size:.85rem">
+          <label style="font-size:.78rem;color:var(--text-muted);display:block;margin-bottom:.3rem">${I18n.idioma==="ca"?"Preu (€) *":"Price (€) *"}</label>
+          <input id="fp-preu" type="number" step="0.01" min="0" value="${p?.preu||""}" style="width:100%;padding:.5rem .75rem;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:.85rem">
         </div>
 
         <div>
-          <label style="font-size:.78rem;color:var(--text-muted);display:block;margin-bottom:.3rem">
-            ${I18n.idioma === "ca" ? "Estoc *" : "Stock *"}
-          </label>
-          <input id="fp-estoc" type="number" min="0"
-            value="${p?.estoc ?? ""}"
-            style="width:100%;padding:.5rem .75rem;background:var(--bg-card);
-                   border:1px solid var(--border);border-radius:8px;
-                   color:var(--text);font-size:.85rem">
+          <label style="font-size:.78rem;color:var(--text-muted);display:block;margin-bottom:.3rem">${I18n.idioma==="ca"?"Estoc *":"Stock *"}</label>
+          <input id="fp-estoc" type="number" min="0" value="${p?.estoc??""}" style="width:100%;padding:.5rem .75rem;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:.85rem">
         </div>
 
         <div>
-          <label style="font-size:.78rem;color:var(--text-muted);display:block;margin-bottom:.3rem">
-            ${I18n.idioma === "ca" ? "Categoria *" : "Category *"}
-          </label>
-          <select id="fp-categoria"
-            style="width:100%;padding:.5rem .75rem;background:var(--bg-card);
-                   border:1px solid var(--border);border-radius:8px;
-                   color:var(--text);font-size:.85rem">
-            ${catsOptions}
+          <label style="font-size:.78rem;color:var(--text-muted);display:block;margin-bottom:.3rem">${I18n.idioma==="ca"?"Categoria *":"Category *"}</label>
+          <select id="fp-categoria" style="width:100%;padding:.5rem .75rem;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:.85rem">
+            ${CATEGORIES.map(c=>`<option value="${c}" ${p?.categoria===c?"selected":""}>${c}</option>`).join("")}
           </select>
         </div>
 
         <div style="grid-column:1/-1">
-          <label style="font-size:.78rem;color:var(--text-muted);display:block;margin-bottom:.3rem">
-            ${I18n.idioma === "ca" ? "Descripció" : "Description"}
-          </label>
-          <input id="fp-descripcio" type="text" value="${_esc(p?.descripcio || "")}"
-            style="width:100%;padding:.5rem .75rem;background:var(--bg-card);
-                   border:1px solid var(--border);border-radius:8px;
-                   color:var(--text);font-size:.85rem">
+          <label style="font-size:.78rem;color:var(--text-muted);display:block;margin-bottom:.3rem">${I18n.idioma==="ca"?"Descripció":"Description"}</label>
+          <input id="fp-descripcio" type="text" value="${_esc(p?.descripcio||"")}" style="width:100%;padding:.5rem .75rem;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:.85rem">
         </div>
 
         <div style="grid-column:1/-1">
-          <label style="font-size:.78rem;color:var(--text-muted);display:block;margin-bottom:.3rem">
-            ${I18n.idioma === "ca" ? "Imatge — URL o fitxer local" : "Image — URL or local file"}
-          </label>
+          <label style="font-size:.78rem;color:var(--text-muted);display:block;margin-bottom:.3rem">${I18n.idioma==="ca"?"Imatge — URL o fitxer local":"Image — URL or local file"}</label>
           <div style="display:flex;gap:.5rem;align-items:center;flex-wrap:wrap">
-            <input id="fp-imatge-url" type="text"
-              placeholder="${I18n.idioma === "ca" ? "https://..." : "https://..."}"
-              value="${p?.imatgeUrl && !p.imatgeUrl.startsWith("data:") ? _esc(p.imatgeUrl) : ""}"
+            <input id="fp-imatge-url" type="text" placeholder="https://..."
+              value="${p?.imatgeUrl&&!p.imatgeUrl.startsWith("data:")?_esc(p.imatgeUrl):""}"
               oninput="previsuImatgeUrl()"
-              style="flex:1;min-width:180px;padding:.5rem .75rem;background:var(--bg-card);
-                     border:1px solid var(--border);border-radius:8px;
-                     color:var(--text);font-size:.85rem">
-            <label title="${I18n.idioma === "ca"
-                ? "Formats: JPG, PNG, WebP · Mida recomanada: 400×300px · Màxim ~1MB"
-                : "Formats: JPG, PNG, WebP · Recommended size: 400×300px · Max ~1MB"}"
-              style="padding:.45rem .85rem;background:var(--bg-card);
-                          border:1px solid var(--border);border-radius:8px;
-                          font-size:.78rem;color:var(--text-muted);cursor:pointer;
-                          white-space:nowrap">
-              📁 ${I18n.idioma === "ca" ? "Selecciona fitxer" : "Select file"}
-              <input type="file" accept=".jpg,.jpeg,.png,.webp" id="fp-imatge-file"
-                style="display:none" onchange="carregaImatgeLocal(this)">
+              style="flex:1;min-width:180px;padding:.5rem .75rem;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:.85rem">
+            <label title="${I18n.idioma==="ca"?"Formats: JPG, PNG, WebP · Mida recomanada: 400×300px · Màxim ~1MB":"Formats: JPG, PNG, WebP · Recommended size: 400×300px · Max ~1MB"}"
+              style="padding:.45rem .85rem;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;font-size:.78rem;color:var(--text-muted);cursor:pointer;white-space:nowrap">
+              📁 ${I18n.idioma==="ca"?"Selecciona fitxer":"Select file"}
+              <input type="file" accept=".jpg,.jpeg,.png,.webp" id="fp-imatge-file" style="display:none" onchange="carregaImatgeLocal(this)">
             </label>
           </div>
           <div id="fp-imatge-preview" style="margin-top:.5rem">
-            ${p?.imatgeUrl ? `<img src="${p.imatgeUrl}" style="height:80px;border-radius:6px;object-fit:cover">` : ""}
+            ${p?.imatgeUrl?`<img src="${p.imatgeUrl}" style="height:80px;border-radius:6px;object-fit:cover">`:""}
           </div>
         </div>
 
       </div>
-
       <div style="display:flex;gap:.75rem;justify-content:flex-end;margin-top:1rem">
-        <button onclick="tancaFormProducte()"
-          class="btn btn-secondary" style="font-size:.82rem;padding:.45rem 1rem">
-          ${I18n.idioma === "ca" ? "Cancel·lar" : "Cancel"}
-        </button>
-        <button onclick="desaProducte()"
-          class="btn btn-primary" style="font-size:.82rem;padding:.45rem 1rem">
-          ${I18n.idioma === "ca" ? "Desar" : "Save"}
-        </button>
+        <button onclick="tancaFormProducte()" class="btn btn-secondary" style="font-size:.82rem;padding:.45rem 1rem">${I18n.idioma==="ca"?"Cancel·lar":"Cancel"}</button>
+        <button onclick="desaProducte()" class="btn btn-primary" style="font-size:.82rem;padding:.45rem 1rem">${I18n.idioma==="ca"?"Desar":"Save"}</button>
       </div>
-    </div>
-  `;
+    </div>`;
 
-  container.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  container.scrollIntoView({ behavior:"smooth", block:"nearest" });
 }
 
 function previsuImatgeUrl() {
   const url = document.getElementById("fp-imatge-url")?.value.trim();
   const preview = document.getElementById("fp-imatge-preview");
   if (!preview) return;
-  preview.innerHTML = url
-    ? `<img src="${url}" style="height:80px;border-radius:6px;object-fit:cover"
-            onerror="this.style.display='none'">`
-    : "";
+  preview.innerHTML = url ? `<img src="${url}" style="height:80px;border-radius:6px;object-fit:cover" onerror="this.style.display='none'">` : "";
 }
 
 // Fragment suggerit per assistent IA - revisar i adaptar
 function carregaImatgeLocal(input) {
   const file = input.files[0];
   if (!file) return;
-
-  // Avís si la imatge és molt gran (> 1MB)
-  if (file.size > 1024 * 1024) {
-    showToast(
-      I18n.idioma === "ca"
-        ? "⚠️ La imatge és gran (+1MB). Pot afectar el rendiment."
-        : "⚠️ Large image (+1MB). This may affect performance.",
-      "error"
-    );
-  }
-
+  if (file.size > 1024*1024) showToast(I18n.idioma==="ca"?"⚠️ La imatge és gran (+1MB). Pot afectar el rendiment.":"⚠️ Large image (+1MB). This may affect performance.","error");
   const reader = new FileReader();
   reader.onload = function(e) {
     const base64 = e.target.result;
     const urlInput = document.getElementById("fp-imatge-url");
     if (urlInput) urlInput.value = "";
     const preview = document.getElementById("fp-imatge-preview");
-    if (preview) {
-      preview.innerHTML = `<img src="${base64}" style="height:80px;border-radius:6px;object-fit:cover">`;
-    }
+    if (preview) preview.innerHTML = `<img src="${base64}" style="height:80px;border-radius:6px;object-fit:cover">`;
     input.setAttribute("data-base64", base64);
   };
   reader.readAsDataURL(file);
 }
 
 function tancaFormProducte() {
-  const container = document.getElementById("form-producte-container");
-  if (container) container.innerHTML = "";
+  const c = document.getElementById("form-producte-container");
+  if (c) c.innerHTML = "";
   _editProducte = null;
 }
 
 async function desaProducte() {
-  const nom       = document.getElementById("fp-nom")?.value.trim();
-  const preu      = parseFloat(document.getElementById("fp-preu")?.value);
-  const estoc     = parseInt(document.getElementById("fp-estoc")?.value);
-  const categoria = document.getElementById("fp-categoria")?.value;
-  const descripcio= document.getElementById("fp-descripcio")?.value.trim();
-  const urlInput  = document.getElementById("fp-imatge-url")?.value.trim();
-  const fileInput = document.getElementById("fp-imatge-file");
-  const base64    = fileInput?.getAttribute("data-base64") || null;
+  const nom        = document.getElementById("fp-nom")?.value.trim();
+  const preu       = parseFloat(document.getElementById("fp-preu")?.value);
+  const estoc      = parseInt(document.getElementById("fp-estoc")?.value);
+  const categoria  = document.getElementById("fp-categoria")?.value;
+  const descripcio = document.getElementById("fp-descripcio")?.value.trim();
+  const urlInput   = document.getElementById("fp-imatge-url")?.value.trim();
+  const fileInput  = document.getElementById("fp-imatge-file");
+  const base64     = fileInput?.getAttribute("data-base64") || null;
 
-  if (!nom || isNaN(preu) || isNaN(estoc)) {
-    showToast(t("toast.campsBuits"), "error");
-    return;
-  }
+  if (!nom || isNaN(preu) || isNaN(estoc)) { showToast(t("toast.campsBuits"),"error"); return; }
 
-  const imatgeUrl = base64 || urlInput || null;
-
-  const dto = { nom, descripcio, preu, categoria, estoc, imatgeUrl };
-
-  let resultat;
-  if (_editProducte) {
-    resultat = await ApiProductes.actualitzar(_editProducte.id, dto);
-  } else {
-    resultat = await ApiProductes.crear(dto);
-  }
+  const dto = { nom, descripcio, preu, categoria, estoc, imatgeUrl: base64||urlInput||null };
+  const resultat = _editProducte ? await ApiProductes.actualitzar(_editProducte.id,dto) : await ApiProductes.crear(dto);
 
   if (resultat) {
-    showToast(
-      I18n.idioma === "ca" ? "Producte desat correctament." : "Product saved successfully.",
-      "success"
-    );
+    showToast(I18n.idioma==="ca"?"Producte desat correctament.":"Product saved successfully.","success");
     tancaFormProducte();
     await carregaProductes();
   } else {
-    showToast(
-      I18n.idioma === "ca" ? "Error en desar el producte." : "Error saving product.",
-      "error"
-    );
+    showToast(I18n.idioma==="ca"?"Error en desar el producte.":"Error saving product.","error");
   }
 }
 
 async function eliminaProducte(id, nom) {
-  const confirmat = confirm(
-    I18n.idioma === "ca"
-      ? `Segur que vols eliminar "${nom}"?`
-      : `Are you sure you want to delete "${nom}"?`
-  );
-  if (!confirmat) return;
-
+  if (!confirm(I18n.idioma==="ca"?`Segur que vols eliminar "${nom}"?`:`Are you sure you want to delete "${nom}"?`)) return;
   const ok = await ApiProductes.eliminar(id);
-  if (ok) {
-    showToast(
-      I18n.idioma === "ca" ? `"${nom}" eliminat.` : `"${nom}" deleted.`,
-      "success"
-    );
-    await carregaProductes();
-  } else {
-    showToast(
-      I18n.idioma === "ca" ? "No s'ha pogut eliminar." : "Could not delete.",
-      "error"
-    );
-  }
+  if (ok) { showToast(I18n.idioma==="ca"?`"${nom}" eliminat.`:`"${nom}" deleted.`,"success"); await carregaProductes(); }
+  else showToast(I18n.idioma==="ca"?"No s'ha pogut eliminar.":"Could not delete.","error");
 }
 
 /* =====================================================
@@ -406,101 +249,65 @@ async function eliminaProducte(id, nom) {
 async function carregaClasses() {
   const container = document.getElementById("admin-subtab-classes");
   if (!container) return;
-
-  try {
-    const res = await apiFetch("/api/classes");
-    _classes = res && res.ok ? await res.json() : [];
-  } catch (e) { _classes = []; }
-
+  try { const res = await apiFetch("/api/classes"); _classes = res && res.ok ? await res.json() : []; } catch (e) { _classes = []; }
   pintaClasses(container);
 }
 
 function pintaClasses(container) {
-  const btnText = I18n.idioma === "ca" ? "Nova classe" : "New class";
-
   container.innerHTML = `
     <div style="display:flex;justify-content:flex-end;margin-bottom:1rem">
-      <button onclick="obreFormClasse(null)"
-        class="btn btn-primary" style="font-size:.82rem;padding:.45rem 1rem">
-        + ${btnText}
+      <button onclick="obreFormClasse(null)" class="btn btn-primary" style="font-size:.82rem;padding:.45rem 1rem">
+        + ${I18n.idioma==="ca"?"Nova classe":"New class"}
       </button>
     </div>
-
     <div id="form-classe-container"></div>
-
     <div style="overflow-x:auto">
       <table style="width:100%;border-collapse:collapse;font-size:.85rem">
-        <thead>
-          <tr style="border-bottom:1px solid var(--border)">
-            <th style="text-align:left;padding:.5rem .75rem;color:var(--text-muted);
-                       font-size:.72rem;text-transform:uppercase;letter-spacing:.06em">
-              ${I18n.idioma === "ca" ? "Nom" : "Name"}
-            </th>
-            <th style="text-align:left;padding:.5rem .75rem;color:var(--text-muted);
-                       font-size:.72rem;text-transform:uppercase;letter-spacing:.06em">
-              ${I18n.idioma === "ca" ? "Horari" : "Schedule"}
-            </th>
-            <th style="text-align:right;padding:.5rem .75rem;color:var(--text-muted);
-                       font-size:.72rem;text-transform:uppercase;letter-spacing:.06em">
-              ${I18n.idioma === "ca" ? "Capacitat" : "Capacity"}
-            </th>
-            <th style="text-align:left;padding:.5rem .75rem;color:var(--text-muted);
-                       font-size:.72rem;text-transform:uppercase;letter-spacing:.06em">
-              ${I18n.idioma === "ca" ? "Gimnas" : "Gym"}
-            </th>
-            <th style="text-align:center;padding:.5rem .75rem;color:var(--text-muted);
-                       font-size:.72rem;text-transform:uppercase;letter-spacing:.06em">
-              ${I18n.idioma === "ca" ? "Accions" : "Actions"}
-            </th>
-          </tr>
-        </thead>
+        <thead><tr style="border-bottom:1px solid var(--border)">
+          <th style="text-align:left;padding:.5rem .75rem;color:var(--text-muted);font-size:.72rem;text-transform:uppercase;letter-spacing:.06em">${I18n.idioma==="ca"?"Nom":"Name"}</th>
+          <th style="text-align:left;padding:.5rem .75rem;color:var(--text-muted);font-size:.72rem;text-transform:uppercase;letter-spacing:.06em">${I18n.idioma==="ca"?"Tipus":"Type"}</th>
+          <th style="text-align:left;padding:.5rem .75rem;color:var(--text-muted);font-size:.72rem;text-transform:uppercase;letter-spacing:.06em">${I18n.idioma==="ca"?"Horari":"Schedule"}</th>
+          <th style="text-align:right;padding:.5rem .75rem;color:var(--text-muted);font-size:.72rem;text-transform:uppercase;letter-spacing:.06em">${I18n.idioma==="ca"?"Capacitat":"Capacity"}</th>
+          <th style="text-align:left;padding:.5rem .75rem;color:var(--text-muted);font-size:.72rem;text-transform:uppercase;letter-spacing:.06em">${I18n.idioma==="ca"?"Gimnas":"Gym"}</th>
+          <th style="text-align:center;padding:.5rem .75rem;color:var(--text-muted);font-size:.72rem;text-transform:uppercase;letter-spacing:.06em">${I18n.idioma==="ca"?"Accions":"Actions"}</th>
+        </tr></thead>
         <tbody>
-          ${_classes.length === 0
-            ? `<tr><td colspan="5" style="text-align:center;padding:2rem;color:var(--text-muted)">
-                ${I18n.idioma === "ca" ? "No hi ha classes." : "No classes found."}
-               </td></tr>`
+          ${_classes.length===0
+            ? `<tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--text-muted)">${I18n.idioma==="ca"?"No hi ha classes.":"No classes found."}</td></tr>`
             : _classes.map(c => {
-                const horari = c.horari
-                  ? new Date(c.horari).toLocaleString(I18n.idioma === "ca" ? "ca-ES" : "en-GB",
-                      { day:"2-digit", month:"2-digit", year:"numeric", hour:"2-digit", minute:"2-digit" })
-                  : "—";
-                const gimnasNom = GIMNASOS.find(g => g.id === c.gimnasId)?.nom || "—";
+                const horari = c.horari ? new Date(c.horari).toLocaleString(I18n.idioma==="ca"?"ca-ES":"en-GB",{day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit"}) : "—";
+                const gimnasNom = GIMNASOS.find(g=>g.id===c.gimnasId)?.nom||"—";
+                const tipus = c.nom ? c.nom.split(" ")[0] : "—";
                 return `
                   <tr style="border-bottom:.5px solid var(--border)">
                     <td style="padding:.6rem .75rem;font-weight:500">${_esc(c.nom)}</td>
+                    <td style="padding:.6rem .75rem">
+                      <span style="font-size:.72rem;padding:.2rem .5rem;border-radius:4px;background:rgba(212,175,55,.12);color:var(--primary)">${_esc(tipus)}</span>
+                    </td>
                     <td style="padding:.6rem .75rem;color:var(--text-muted);font-size:.8rem">${horari}</td>
                     <td style="padding:.6rem .75rem;text-align:right">${c.capacitat}</td>
                     <td style="padding:.6rem .75rem;color:var(--text-muted);font-size:.8rem">${gimnasNom}</td>
                     <td style="padding:.6rem .75rem;text-align:center;display:flex;gap:.5rem;justify-content:center">
-                      <button onclick="obreFormClasse(${c.id})"
-                        style="padding:.3rem .65rem;border:1px solid var(--border);border-radius:6px;
-                               background:transparent;color:var(--text-muted);cursor:pointer;font-size:.75rem">
-                        ✏️
-                      </button>
-                      <button onclick="eliminaClasse(${c.id}, '${_escAttr(c.nom)}')"
-                        style="padding:.3rem .65rem;border:1px solid var(--danger);border-radius:6px;
-                               background:transparent;color:var(--danger);cursor:pointer;font-size:.75rem">
-                        🗑️
-                      </button>
+                      <button onclick="obreFormClasse(${c.id})" style="padding:.3rem .65rem;border:1px solid var(--border);border-radius:6px;background:transparent;color:var(--text-muted);cursor:pointer;font-size:.75rem">✏️</button>
+                      <button onclick="eliminaClasse(${c.id},'${_escAttr(c.nom)}')" style="padding:.3rem .65rem;border:1px solid var(--danger);border-radius:6px;background:transparent;color:var(--danger);cursor:pointer;font-size:.75rem">🗑️</button>
                     </td>
                   </tr>`;
-              }).join("")
-          }
+              }).join("")}
         </tbody>
       </table>
-    </div>
-  `;
+    </div>`;
 }
 
+// Fragment suggerit per assistent IA - revisar i adaptar
 function obreFormClasse(id) {
   _editClasse = id ? _classes.find(c => c.id === id) : null;
   const c = _editClasse;
-  const isNou = !c;
-  const titol = isNou
-    ? (I18n.idioma === "ca" ? "Nova classe" : "New class")
-    : (I18n.idioma === "ca" ? "Editar classe" : "Edit class");
+  const titol = !c ? (I18n.idioma==="ca"?"Nova classe":"New class") : (I18n.idioma==="ca"?"Editar classe":"Edit class");
 
-  // Formatem el datetime-local
+  // Detectem el tipus (primera paraula) i el nom descriptiu (la resta)
+  const tipusActual   = c?.nom ? c.nom.split(" ")[0] : TIPUS_CLASSE[0];
+  const nomDescriptiu = c?.nom ? c.nom.substring(tipusActual.length).trim() : "";
+
   let horariVal = "";
   if (c?.horari) {
     const d = new Date(c.horari);
@@ -508,167 +315,116 @@ function obreFormClasse(id) {
     horariVal = `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
   }
 
-  const gimnasOptions = GIMNASOS.map(g =>
-    `<option value="${g.id}" ${c?.gimnasId === g.id ? "selected" : ""}>${g.nom}</option>`
-  ).join("");
-
   const container = document.getElementById("form-classe-container");
   if (!container) return;
 
   container.innerHTML = `
-    <div style="background:var(--bg-secondary);border:1px solid var(--border);
-                border-radius:12px;padding:1.25rem;margin-bottom:1.5rem">
+    <div style="background:var(--bg-secondary);border:1px solid var(--border);border-radius:12px;padding:1.25rem;margin-bottom:1.5rem">
       <h4 style="font-size:.9rem;font-weight:600;margin-bottom:1rem">${titol}</h4>
-
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem">
 
-        <div style="grid-column:1/-1">
-          <label style="font-size:.78rem;color:var(--text-muted);display:block;margin-bottom:.3rem">
-            ${I18n.idioma === "ca" ? "Nom *" : "Name *"}
-          </label>
-          <input id="fc-nom" type="text" value="${_esc(c?.nom || "")}"
-            placeholder="${I18n.idioma === "ca" ? "ex: Spinning matinal" : "e.g. Morning Spinning"}"
-            style="width:100%;padding:.5rem .75rem;background:var(--bg-card);
-                   border:1px solid var(--border);border-radius:8px;
-                   color:var(--text);font-size:.85rem">
-        </div>
-
         <div>
-          <label style="font-size:.78rem;color:var(--text-muted);display:block;margin-bottom:.3rem">
-            ${I18n.idioma === "ca" ? "Data i hora *" : "Date & time *"}
-          </label>
-          <input id="fc-horari" type="datetime-local" value="${horariVal}"
-            style="width:100%;padding:.5rem .75rem;background:var(--bg-card);
-                   border:1px solid var(--border);border-radius:8px;
-                   color:var(--text);font-size:.85rem">
-        </div>
-
-        <div>
-          <label style="font-size:.78rem;color:var(--text-muted);display:block;margin-bottom:.3rem">
-            ${I18n.idioma === "ca" ? "Capacitat *" : "Capacity *"}
-          </label>
-          <input id="fc-capacitat" type="number" min="1" value="${c?.capacitat || ""}"
-            style="width:100%;padding:.5rem .75rem;background:var(--bg-card);
-                   border:1px solid var(--border);border-radius:8px;
-                   color:var(--text);font-size:.85rem">
-        </div>
-
-        <div>
-          <label style="font-size:.78rem;color:var(--text-muted);display:block;margin-bottom:.3rem">
-            ${I18n.idioma === "ca" ? "Gimnas *" : "Gym *"}
-          </label>
-          <select id="fc-gimnas"
-            style="width:100%;padding:.5rem .75rem;background:var(--bg-card);
-                   border:1px solid var(--border);border-radius:8px;
-                   color:var(--text);font-size:.85rem">
-            ${gimnasOptions}
+          <label style="font-size:.78rem;color:var(--text-muted);display:block;margin-bottom:.3rem">${I18n.idioma==="ca"?"Tipus *":"Type *"}</label>
+          <select id="fc-tipus" style="width:100%;padding:.5rem .75rem;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:.85rem">
+            ${TIPUS_CLASSE.map(t=>`<option value="${t}" ${tipusActual===t?"selected":""}>${t}</option>`).join("")}
           </select>
         </div>
 
-        <div style="grid-column:1/-1">
-          <label style="font-size:.78rem;color:var(--text-muted);display:block;margin-bottom:.3rem">
-            ${I18n.idioma === "ca" ? "Descripció" : "Description"}
-          </label>
-          <input id="fc-descripcio" type="text" value="${_esc(c?.descripcio || "")}"
-            style="width:100%;padding:.5rem .75rem;background:var(--bg-card);
-                   border:1px solid var(--border);border-radius:8px;
-                   color:var(--text);font-size:.85rem">
+        <div>
+          <label style="font-size:.78rem;color:var(--text-muted);display:block;margin-bottom:.3rem">${I18n.idioma==="ca"?"Nom descriptiu (opcional)":"Descriptive name (optional)"}</label>
+          <input id="fc-nom" type="text" value="${_esc(nomDescriptiu)}"
+            placeholder="${I18n.idioma==="ca"?"ex: matinal, avançat...":"e.g. morning, advanced..."}"
+            style="width:100%;padding:.5rem .75rem;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:.85rem">
+        </div>
+
+        <div>
+          <label style="font-size:.78rem;color:var(--text-muted);display:block;margin-bottom:.3rem">${I18n.idioma==="ca"?"Data i hora *":"Date & time *"}</label>
+          <input id="fc-horari" type="datetime-local" value="${horariVal}"
+            style="width:100%;padding:.5rem .75rem;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:.85rem">
+        </div>
+
+        <div>
+          <label style="font-size:.78rem;color:var(--text-muted);display:block;margin-bottom:.3rem">${I18n.idioma==="ca"?"Capacitat *":"Capacity *"}</label>
+          <input id="fc-capacitat" type="number" min="1" value="${c?.capacitat||""}"
+            style="width:100%;padding:.5rem .75rem;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:.85rem">
+        </div>
+
+        <div>
+          <label style="font-size:.78rem;color:var(--text-muted);display:block;margin-bottom:.3rem">${I18n.idioma==="ca"?"Gimnas *":"Gym *"}</label>
+          <select id="fc-gimnas" style="width:100%;padding:.5rem .75rem;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:.85rem">
+            ${GIMNASOS.map(g=>`<option value="${g.id}" ${c?.gimnasId===g.id?"selected":""}>${g.nom}</option>`).join("")}
+          </select>
+        </div>
+
+        <div>
+          <label style="font-size:.78rem;color:var(--text-muted);display:block;margin-bottom:.3rem">${I18n.idioma==="ca"?"Descripció":"Description"}</label>
+          <input id="fc-descripcio" type="text" value="${_esc(c?.descripcio||"")}"
+            style="width:100%;padding:.5rem .75rem;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:.85rem">
         </div>
 
       </div>
 
-      <div style="display:flex;gap:.75rem;justify-content:flex-end;margin-top:1rem">
-        <button onclick="tancaFormClasse()"
-          class="btn btn-secondary" style="font-size:.82rem;padding:.45rem 1rem">
-          ${I18n.idioma === "ca" ? "Cancel·lar" : "Cancel"}
-        </button>
-        <button onclick="desaClasse()"
-          class="btn btn-primary" style="font-size:.82rem;padding:.45rem 1rem">
-          ${I18n.idioma === "ca" ? "Desar" : "Save"}
-        </button>
-      </div>
-    </div>
-  `;
+      <p style="font-size:.75rem;color:var(--text-muted);margin-top:.75rem">
+        💡 ${I18n.idioma==="ca"
+          ? 'El nom final serà "Tipus + Nom descriptiu". Ex: "Spinning matinal"'
+          : 'Final name will be "Type + Descriptive name". E.g. "Spinning morning"'}
+      </p>
 
-  container.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      <div style="display:flex;gap:.75rem;justify-content:flex-end;margin-top:1rem">
+        <button onclick="tancaFormClasse()" class="btn btn-secondary" style="font-size:.82rem;padding:.45rem 1rem">${I18n.idioma==="ca"?"Cancel·lar":"Cancel"}</button>
+        <button onclick="desaClasse()" class="btn btn-primary" style="font-size:.82rem;padding:.45rem 1rem">${I18n.idioma==="ca"?"Desar":"Save"}</button>
+      </div>
+    </div>`;
+
+  container.scrollIntoView({ behavior:"smooth", block:"nearest" });
 }
 
 function tancaFormClasse() {
-  const container = document.getElementById("form-classe-container");
-  if (container) container.innerHTML = "";
+  const c = document.getElementById("form-classe-container");
+  if (c) c.innerHTML = "";
   _editClasse = null;
 }
 
 async function desaClasse() {
-  const nom       = document.getElementById("fc-nom")?.value.trim();
-  const horariRaw = document.getElementById("fc-horari")?.value;
-  const capacitat = parseInt(document.getElementById("fc-capacitat")?.value);
-  const gimnasId  = parseInt(document.getElementById("fc-gimnas")?.value);
-  const descripcio= document.getElementById("fc-descripcio")?.value.trim();
+  const tipus      = document.getElementById("fc-tipus")?.value;
+  const nomExtra   = document.getElementById("fc-nom")?.value.trim();
+  const horariRaw  = document.getElementById("fc-horari")?.value;
+  const capacitat  = parseInt(document.getElementById("fc-capacitat")?.value);
+  const gimnasId   = parseInt(document.getElementById("fc-gimnas")?.value);
+  const descripcio = document.getElementById("fc-descripcio")?.value.trim();
 
-  if (!nom || !horariRaw || isNaN(capacitat)) {
-    showToast(t("toast.campsBuits"), "error");
-    return;
-  }
+  if (!tipus || !horariRaw || isNaN(capacitat)) { showToast(t("toast.campsBuits"),"error"); return; }
 
+  // Nom final = Tipus + nom descriptiu (si n'hi ha)
+  const nom = nomExtra ? `${tipus} ${nomExtra}` : tipus;
   const dto = { nom, descripcio, horari: horariRaw, capacitat, gimnasId };
 
-  let resultat;
-  if (_editClasse) {
-    resultat = await ApiClassesAdmin.actualitzar(_editClasse.id, dto);
-  } else {
-    resultat = await ApiClassesAdmin.crear(dto);
-  }
+  const resultat = _editClasse
+    ? await ApiClassesAdmin.actualitzar(_editClasse.id, dto)
+    : await ApiClassesAdmin.crear(dto);
 
   if (resultat) {
-    showToast(
-      I18n.idioma === "ca" ? "Classe desada correctament." : "Class saved successfully.",
-      "success"
-    );
+    showToast(I18n.idioma==="ca"?"Classe desada correctament.":"Class saved successfully.","success");
     tancaFormClasse();
     await carregaClasses();
   } else {
-    showToast(
-      I18n.idioma === "ca" ? "Error en desar la classe." : "Error saving class.",
-      "error"
-    );
+    showToast(I18n.idioma==="ca"?"Error en desar la classe.":"Error saving class.","error");
   }
 }
 
 async function eliminaClasse(id, nom) {
-  const confirmat = confirm(
-    I18n.idioma === "ca"
-      ? `Segur que vols eliminar la classe "${nom}"?\nS'eliminaran totes les reserves associades.`
-      : `Are you sure you want to delete "${nom}"?\nAll associated bookings will be removed.`
-  );
-  if (!confirmat) return;
-
+  if (!confirm(I18n.idioma==="ca"
+    ? `Segur que vols eliminar la classe "${nom}"?\nS'eliminaran totes les reserves associades.`
+    : `Are you sure you want to delete "${nom}"?\nAll associated bookings will be removed.`)) return;
   const ok = await ApiClassesAdmin.eliminar(id);
-  if (ok) {
-    showToast(
-      I18n.idioma === "ca" ? `Classe "${nom}" eliminada.` : `Class "${nom}" deleted.`,
-      "success"
-    );
-    await carregaClasses();
-  } else {
-    showToast(
-      I18n.idioma === "ca" ? "No s'ha pogut eliminar." : "Could not delete.",
-      "error"
-    );
-  }
+  if (ok) { showToast(I18n.idioma==="ca"?`Classe "${nom}" eliminada.`:`Class "${nom}" deleted.`,"success"); await carregaClasses(); }
+  else showToast(I18n.idioma==="ca"?"No s'ha pogut eliminar.":"Could not delete.","error");
 }
 
 /* ── Utilitats ───────────────────────────────────── */
 function _esc(str) {
-  return String(str || "")
-    .replace(/&/g,"&amp;").replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+  return String(str||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
 }
-function _escAttr(str) {
-  return String(str || "").replace(/'/g,"\\'");
-}
+function _escAttr(str) { return String(str||"").replace(/'/g,"\\'"); }
 
-/* Re-renderitza quan canvia l'idioma */
-document.addEventListener("idioma:canvi", function() {
-  renderGestioAdmin();
-});
+document.addEventListener("idioma:canvi", function() { renderGestioAdmin(); });
