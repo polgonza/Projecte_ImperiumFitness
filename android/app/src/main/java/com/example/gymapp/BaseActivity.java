@@ -86,7 +86,7 @@ public class BaseActivity extends AppCompatActivity {
             });
         }
 
-        /*
+
         // 4. NOTÍCIES -> Noticies
         LinearLayout noticies = findViewById(R.id.navNoticies);
         if (noticies != null) {
@@ -96,7 +96,7 @@ public class BaseActivity extends AppCompatActivity {
                 }
             });
         }
-        */
+
 
         // 5. CALENDARI -> Calendari
         LinearLayout calendari = findViewById(R.id.navCalendari);

@@ -52,6 +52,10 @@ dependencies {
     // RecyclerView
     implementation("androidx.recyclerview:recyclerview:1.3.2")
 
+    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
+    // Integración OkHttp + Glide (necesaria para MyAppGlideModule)
+    implementation("com.github.bumptech.glide:okhttp3-integration:4.16.0")
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
