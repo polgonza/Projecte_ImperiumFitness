@@ -83,29 +83,52 @@ public class UsuariService {
         return u;
     }
 
+        // Fragment suggerit per assistent IA - revisar i adaptar
     public UsuariDTO assignarTarifa(Long usuariId, Long tarifaId) {
-    Usuari u = repo.findById(usuariId)
-            .orElseThrow(() -> new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Usuari no trobat"));
+        Usuari u = repo.findById(usuariId)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Usuari no trobat"));
 
-    if (tarifaId == null) {
-        u.setTarifa(null);
-        u.setTarifaDataInici(null);
-        u.setTarifaDataFi(null);
-        u.setTarifaCancellada(false);
-    } else {
-        Tarifa t = tarifaRepo.findById(tarifaId)
+        if (tarifaId == null) {
+            u.setTarifa(null);
+            u.setTarifaDataInici(null);
+            u.setTarifaDataFi(null);
+            u.setTarifaCancellada(false);
+            return toDTO(repo.save(u));
+        }
+
+        Tarifa novaTarifa = tarifaRepo.findById(tarifaId)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND, "Tarifa no trobada"));
-        u.setTarifa(t);
-        u.setTarifaDataInici(LocalDateTime.now());
-        // La subscripció dura 1 mes
-        u.setTarifaDataFi(LocalDateTime.now().plusMonths(1));
-        u.setTarifaCancellada(false);
-    }
 
-    return toDTO(repo.save(u));
-}
+        LocalDateTime ara = LocalDateTime.now();
+
+        // Si ja té una tarifa activa i vigent (no caducada)
+        boolean teActivaVigent = u.getTarifa() != null
+                && u.getTarifaDataFi() != null
+                && u.getTarifaDataFi().isAfter(ara)
+                && !Boolean.TRUE.equals(u.getTarifaCancellada());
+
+        if (teActivaVigent) {
+            // Programem el canvi: la nova comença quan acabi l'actual
+            // Per ara simplement cancel·lem l'actual i assignem la nova
+            // des de la data fi de l'anterior (mantenint els dies pagats)
+            LocalDateTime iniciNova = u.getTarifaDataFi(); // comença quan acaba l'actual
+            u.setTarifa(novaTarifa);
+            u.setTarifaDataInici(iniciNova);
+            u.setTarifaDataFi(iniciNova.plusMonths(1));
+            u.setTarifaCancellada(false);
+        } else {
+            // No té tarifa activa → assignem directament
+            u.setTarifa(novaTarifa);
+            u.setTarifaDataInici(ara);
+            u.setTarifaDataFi(ara.plusMonths(1));
+            u.setTarifaCancellada(false);
+        }
+
+        return toDTO(repo.save(u));
+    }
+    
 public UsuariDTO cancelarTarifa(Long usuariId) {
     Usuari u = repo.findById(usuariId)
             .orElseThrow(() -> new ResponseStatusException(

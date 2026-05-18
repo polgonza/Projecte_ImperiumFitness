@@ -494,12 +494,16 @@ const SessionManager = {
     setTimeout(() => banner?.remove(), 30000);
   },
 
-  async renovarSessio() {
-    document.getElementById("session-warning")?.remove();
-    sessionStorage.setItem("session_msg", t("toast.sessionExp"));
-    window.location.href = "login.html";
-  },
-
+async renovarSessio() {
+  document.getElementById("session-warning")?.remove();
+  // Fragment suggerit per assistent IA - revisar i adaptar
+  // Com no tenim endpoint de refresc, cal fer login de nou
+  sessionStorage.setItem("session_msg",
+    I18n.idioma === "ca"
+      ? "Per seguretat, cal que tornis a iniciar sessió per renovar-la."
+      : "For security, please log in again to renew your session.");
+  window.location.href = "login.html";
+},
   startTokenCheck() {
     setInterval(() => {
       const status = this.checkToken();

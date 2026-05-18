@@ -58,10 +58,15 @@ function getCarritoDescuento() {
   const user = typeof Auth !== "undefined" ? Auth.getUser() : null;
   if (!user) return 0;
   const subtotal  = getCarritoTotal();
+    // Fragment suggerit per assistent IA - revisar i adaptar
+  // Aplicar descompte si la tarifa és vigent (activa o cancel·lada però no caducada)
+  const ara = new Date();
+  const vigent = user.tarifaId && (
+    !user.tarifaCancellada ||
+    (user.tarifaDataFi && new Date(user.tarifaDataFi) > ara)
+  );
+  if (!vigent) return 0;
   const tarifaNom = (user.tarifaNom || "").toLowerCase();
-  if (tarifaNom.includes("prime")) return Math.round(subtotal * 0.10 * 100) / 100;
-  if (tarifaNom.includes("flex"))  return Math.round(subtotal * 0.05 * 100) / 100;
-  return 0;
 }
 
 function getCarritoTotalFinal() {

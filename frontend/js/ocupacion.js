@@ -1,29 +1,22 @@
 /* =====================================================
-   ocupacion.js — Lógica de la página de ocupación
-   IMPERIUM FITNESS
-
-   Depende de:
-     - ocupacion_data.js  (OCUPACION_STATS, HORAS_LABELS,
-                           DIAS_SEMANA, getOcupacionHoy,
-                           getOcupacionAhora)
-     - app.js             (GYMS — datos de nombre y capacidad)
-     - api.js             (SessionManager)
+   IMPERIUM FITNESS — ocupacion.js
+   Lògica de la pàgina d'ocupació en temps real
+   Depèn de: ocupacion_data.js, app.js (GYMS), api.js
    ===================================================== */
 
-/*
-  Vincula cada gymKey con el objeto GYMS de app.js.
-  El orden sigue el mismo orden del array GYMS.
-*/
+// Fragment suggerit per assistent IA - revisar i adaptar
+
 const GYM_KEYS = ["gym1","gym2","gym3","gym4","gym5"];
 
-/* Estado de la página */
-let vistaActual  = "cards";
+// Labels dels dies fora del map per evitar undefined
+const LABELS_DIES = {
+  ca: ["Dg","Dl","Dt","Dc","Dj","Dv","Ds"],
+  en: ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"]
+};
+
 let filtroActual = "";
 
-
-/* ─────────────────────────────────────────
-   UTILIDADES
-   ───────────────────────────────────────── */
+/* ── Utilitats ────────────────────────────────────── */
 
 function nivelOcupacion(pct) {
   if (pct < 40) return "low";
@@ -32,18 +25,16 @@ function nivelOcupacion(pct) {
 }
 
 function textoNivel(pct) {
-  if (pct < 40) return t("ocupacio.baixa").split(" ")[0];
+  if (pct < 40) return I18n.idioma === "ca" ? "Baixa" : "Low";
   if (pct < 70) return I18n.idioma === "ca" ? "Mitja" : "Medium";
   return I18n.idioma === "ca" ? "Alta" : "High";
 }
 
-/* Índice de la hora actual en el array de 17 valores */
 function horaIdx() {
   const h = new Date().getHours();
   return Math.max(0, Math.min(16, h - 6));
 }
 
-/* Predicción: valor de la próxima hora */
 function prediccion(gymKey) {
   const arr  = getOcupacionHoy(gymKey);
   const idx  = horaIdx();
@@ -52,10 +43,12 @@ function prediccion(gymKey) {
   return { pct: next, subiendo: next > curr };
 }
 
+function setTxt(id, txt) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = txt;
+}
 
-/* ─────────────────────────────────────────
-   RELOJ
-   ───────────────────────────────────────── */
+/* ── Rellotge ─────────────────────────────────────── */
 
 function actualizarReloj() {
   const el = document.getElementById("occ-time-label");
@@ -70,16 +63,12 @@ function actualizarReloj() {
   el.textContent = `${dies[I18n.idioma][now.getDay()]} ${hh}:${mm}`;
 }
 
-
-/* ─────────────────────────────────────────
-   KPIs DEL HERO
-   ───────────────────────────────────────── */
+/* ── KPIs ─────────────────────────────────────────── */
 
 function actualizarKPIs() {
   const hoy = DIAS_SEMANA[new Date().getDay()];
-  const idx = horaIdx();
 
-  /* 1. Mejor hora hoy: menor media de ocupación */
+  // 1. Millor hora avui
   let menorMedia = 999, mejorIdx = 0;
   for (let i = 0; i < 17; i++) {
     const media = GYM_KEYS.reduce((sum, key) => {
@@ -88,12 +77,11 @@ function actualizarKPIs() {
     }, 0) / GYM_KEYS.length;
     if (media < menorMedia) { menorMedia = media; mejorIdx = i; }
   }
-  const mejorHora  = mejorIdx + 6;
-  const mejorLabel = `${String(mejorHora).padStart(2,"0")}:00 - ${String(mejorHora+1).padStart(2,"0")}:00`;
-  setTxt("kpi-best-hour", mejorLabel);
+  const mejorHora = mejorIdx + 6;
+  setTxt("kpi-best-hour", `${String(mejorHora).padStart(2,"0")}:00 - ${String(mejorHora+1).padStart(2,"0")}:00`);
   setTxt("kpi-best-sub",  `${I18n.idioma === "ca" ? "Ocupació estimada" : "Estimated occupancy"}: ${Math.round(menorMedia)}%`);
 
-  /* 2. Gimnasio menos lleno ahora */
+  // 2. Gimnàs menys ple ara
   let minPct = 999, minIdx = 0;
   GYM_KEYS.forEach((key, i) => {
     const pct = getOcupacionAhora(key);
@@ -102,19 +90,14 @@ function actualizarKPIs() {
   setTxt("kpi-least-busy", GYMS[minIdx]?.name || "—");
   setTxt("kpi-least-sub", `${I18n.idioma === "ca" ? "Només al" : "Only at"} ${minPct}% ${I18n.idioma === "ca" ? "de capacitat" : "capacity"}`);
 
-  /* 3. Cuántos centros están subiendo */
+  // 3. Centres pujant
   const subiendo = GYM_KEYS.filter(k => prediccion(k).subiendo).length;
-  setTxt("kpi-prediction", `${subiendo} ${I18n.idioma === "ca" ? `centre${subiendo !== 1 ? "s" : ""} pujant` : `centre${subiendo !== 1 ? "s" : ""} rising`}`);
-}
-function setTxt(id, txt) {
-  const el = document.getElementById(id);
-  if (el) el.textContent = txt;
+  setTxt("kpi-prediction", `${subiendo} ${I18n.idioma === "ca"
+    ? `centre${subiendo !== 1 ? "s" : ""} pujant`
+    : `centre${subiendo !== 1 ? "s" : ""} rising`}`);
 }
 
-
-/* ─────────────────────────────────────────
-   RENDER DE CARDS
-   ───────────────────────────────────────── */
+/* ── Cards ────────────────────────────────────────── */
 
 function renderCards(filtro) {
   const grid = document.getElementById("occ-cards-grid");
@@ -142,12 +125,10 @@ function buildCard(gym, gymKey) {
   const predIcon = pred.subiendo ? "↑" : "↓";
   const predCls  = pred.subiendo ? "pred-up" : "pred-down";
 
-  /* Donut SVG */
   const r      = 30;
   const c      = 2 * Math.PI * r;
   const offset = c - (pct / 100) * c;
 
-  /* Barras horarias */
   const arrHoy    = getOcupacionHoy(gymKey);
   const idxActual = horaIdx();
 
@@ -161,27 +142,25 @@ function buildCard(gym, gymKey) {
       </div>`;
   }).join("");
 
-  /* Barras por día */
   const hoyDiaIdx = new Date().getDay();
-  const barrasDias = DIAS_SEMANA.map((dia, i) => {
-    const labels = {
-  ca: ["Dg","Dl","Dt","Dc","Dj","Dv","Ds"],
-  en: ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"]
-};
-    if (dia === "domingo") {
-      return `<div class="occ-day-col">
-        <div class="occ-day-bar other" style="height:4%"></div>
-        <span class="occ-day-label">${labels[i]}</span>
-      </div>`;
-    }
+  const mitjanesPerDia = DIAS_SEMANA.map(dia => {
+    if (dia === "domingo") return 0;
     const arr = OCUPACION_STATS[gymKey]?.horario[dia] || [];
-    const med = arr.length ? Math.round(arr.reduce((a,b) => a+b,0) / arr.length) : 0;
-    const esHoy = i === hoyDiaIdx;
+    return arr.length ? Math.round(arr.reduce((a,b) => a+b,0) / arr.length) : 0;
+  });
+
+  const maxMitjana = Math.max(...mitjanesPerDia, 1);
+
+  const barrasDias = DIAS_SEMANA.map((dia, i) => {
+    const labelDia = LABELS_DIES[I18n.idioma][i];
+    const mitjana  = mitjanesPerDia[i];
+    const altPct   = dia === "domingo" ? 3 : Math.max(3, Math.round((mitjana / maxMitjana) * 90));
+    const esHoy    = i === hoyDiaIdx;
     return `
       <div class="occ-day-col">
         <div class="occ-day-bar ${esHoy ? "today" : "other"}"
-             style="height:${Math.max(5, med)}%"></div>
-        <span class="occ-day-label">${labels[i]}</span>
+            style="height:${altPct}%"></div>
+        <span class="occ-day-label">${labelDia}</span>
       </div>`;
   }).join("");
 
@@ -197,18 +176,16 @@ function buildCard(gym, gymKey) {
         <div class="occ-card-address">📍 ${gym.location}</div>
 
         <div class="occ-card-main">
-          <!-- Donut -->
           <div class="occ-donut-wrap">
             <svg class="occ-donut-svg" viewBox="0 0 80 80">
-              <circle class="occ-donut-bg"              cx="40" cy="40" r="${r}"/>
-              <circle class="occ-donut-fill ${nivel}"   cx="40" cy="40" r="${r}"
+              <circle class="occ-donut-bg"            cx="40" cy="40" r="${r}"/>
+              <circle class="occ-donut-fill ${nivel}" cx="40" cy="40" r="${r}"
                 stroke-dasharray="${c.toFixed(1)}"
                 stroke-dashoffset="${offset.toFixed(1)}"/>
             </svg>
             <div class="occ-donut-label ${nivel}">${pct}%</div>
           </div>
 
-          <!-- Stats -->
           <div class="occ-card-stats">
             <div class="occ-stat-row">
               <span class="occ-stat-label">👤 ${I18n.idioma === "ca" ? "Persones" : "People"}</span>
@@ -227,26 +204,22 @@ function buildCard(gym, gymKey) {
 
       </div>
 
-      <!-- Barra base -->
       <div class="occ-card-bar">
         <div class="occ-card-bar-fill ${nivel}" style="width:${pct}%"></div>
       </div>
 
-      <!-- Botón expandir -->
       <button class="occ-card-toggle" onclick="toggleCharts('${gymKey}', this)">
-  📊 ${I18n.idioma === "ca" ? "Veure gràfiques ∨" : "View charts ∨"}
-</button>
+        📊 ${I18n.idioma === "ca" ? "Veure gràfiques ∨" : "View charts ∨"}
+      </button>
 
-      <!-- Panel gráficas -->
       <div class="occ-charts-panel" id="charts-${gymKey}">
         <div class="occ-chart-title">
-  ${I18n.idioma === "ca" ? "OCUPACIÓ AVUI PER HORES" : "TODAY'S OCCUPANCY BY HOUR"}
-</div>
+          ${I18n.idioma === "ca" ? "OCUPACIÓ AVUI PER HORES" : "TODAY'S OCCUPANCY BY HOUR"}
+        </div>
         <div class="occ-bar-chart">${barrasHorarias}</div>
         <div class="occ-chart-title">
-  ${I18n.idioma === "ca" ? "MITJANA ÚLTIMS 7 DIES" : "AVERAGE LAST 7 DAYS"}
-</div>
-
+          ${I18n.idioma === "ca" ? "MITJANA ÚLTIMS 7 DIES" : "AVERAGE LAST 7 DAYS"}
+        </div>
         <div class="occ-day-chart">${barrasDias}</div>
       </div>
     </div>
@@ -257,71 +230,35 @@ function toggleCharts(gymKey, btn) {
   const panel = document.getElementById(`charts-${gymKey}`);
   if (!panel) return;
   const isOpen = panel.classList.toggle("open");
-  btn.textContent = isOpen 
-  ? `📊 ${I18n.idioma === "ca" ? "Ocultar gràfiques ∧" : "Hide charts ∧"}` 
-  : `📊 ${I18n.idioma === "ca" ? "Veure gràfiques ∨" : "View charts ∨"}`;
+  btn.textContent = isOpen
+    ? `📊 ${I18n.idioma === "ca" ? "Ocultar gràfiques ∧" : "Hide charts ∧"}`
+    : `📊 ${I18n.idioma === "ca" ? "Veure gràfiques ∨" : "View charts ∨"}`;
 }
 
-
-/* ─────────────────────────────────────────
-   FILTRO Y VISTA
-   ───────────────────────────────────────── */
+/* ── Filtre ───────────────────────────────────────── */
 
 function filtrarGimnasios(valor) {
   filtroActual = valor;
   renderCards(valor);
 }
 
-function setVista(vista) {
-  vistaActual = vista;
-  const gridEl = document.getElementById("occ-cards-grid");
-  const mapaEl = document.getElementById("occ-map-view");
-  if (gridEl) gridEl.style.display = vista === "cards" ? "" : "none";
-  if (mapaEl) mapaEl.style.display = vista === "mapa"  ? "" : "none";
-  document.getElementById("btn-cards")?.classList.toggle("active", vista === "cards");
-  document.getElementById("btn-mapa")?.classList.toggle("active",  vista === "mapa");
-  if (vista === "mapa") renderMapa();
-}
-
-function renderMapa() {
-  const container = document.getElementById("occ-map-pins");
-  if (!container) return;
-  container.innerHTML = GYMS.map((gym, i) => {
-    const pct   = getOcupacionAhora(GYM_KEYS[i]);
-    const nivel = nivelOcupacion(pct);
-    return `
-      <div class="occ-map-pin">
-        <span class="occ-map-pin-dot ${nivel}"></span>
-        <span>${gym.name} — <strong>${pct}%</strong></span>
-      </div>`;
-  }).join("");
-}
-
-
-/* ─────────────────────────────────────────
-   REFRESCO AUTOMÁTICO
-   ───────────────────────────────────────── */
+/* ── Refresc automàtic ───────────────────────────── */
 
 function actualizarTodo() {
   actualizarReloj();
   actualizarKPIs();
-  if (vistaActual === "cards") renderCards(filtroActual);
-  if (vistaActual === "mapa")  renderMapa();
+  renderCards(filtroActual);
 }
 
-
-/* ─────────────────────────────────────────
-   ARRANQUE
-   ───────────────────────────────────────── */
+/* ── Arrencada ───────────────────────────────────── */
 
 document.addEventListener("DOMContentLoaded", function() {
   if (!document.getElementById("occ-cards-grid")) return;
 
-  SessionManager.init(false);
-
   actualizarTodo();
-  setInterval(actualizarTodo, 30000);  /* refresco cada 30 s */
-  setInterval(actualizarReloj, 60000); /* reloj cada minuto  */
+  setInterval(actualizarTodo, 30000);
+  setInterval(actualizarReloj, 60000);
+
   document.addEventListener("idioma:canvi", function() {
     actualizarTodo();
   });

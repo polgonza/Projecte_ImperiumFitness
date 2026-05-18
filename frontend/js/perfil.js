@@ -46,7 +46,8 @@ async function initPerfil() {
     }
   }
 
-  Auth.setUser({ ...user, name: perfil.nom, email: perfil.email, tarifaId: perfil.tarifaId, tarifaNom: perfil.tarifaNom });
+  Auth.setUser({ ...user, name: perfil.nom, email: perfil.email, tarifaId: perfil.tarifaId, tarifaNom: perfil.tarifaNom,tarifaCancellada: perfil.tarifaCancellada,
+  tarifaDataFi: perfil.tarifaDataFi });
 
   const noPlanMsg = document.getElementById("no-plan-msg");
   if (noPlanMsg) noPlanMsg.style.display = perfil.tarifaId ? "none" : "block";

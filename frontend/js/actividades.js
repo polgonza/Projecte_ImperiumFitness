@@ -407,9 +407,18 @@ async function confirmReservation() {
   }
 
   if (!user.tarifaId) {
-    showToast(t("toast.sensePlanReserva"), "error");
-    setTimeout(() => window.location.href = "tarifas.html", 2000);
-    return;
+        // Fragment suggerit per assistent IA - revisar i adaptar
+    // Permetre reserves si té tarifa activa O si té tarifa cancel·lada però encara vigent
+    const ara = new Date();
+    const tarifaVigent = user.tarifaId && (
+      !user.tarifaCancellada ||
+      (user.tarifaDataFi && new Date(user.tarifaDataFi) > ara)
+    );
+    if (!tarifaVigent) {
+      showToast(t("toast.sensePlanReserva"), "error");
+      setTimeout(() => window.location.href = "tarifas.html", 2000);
+      return;
+    }
   }
 
   const btnConfirm = document.getElementById("modal-confirm-btn");

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="ca">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,7 +8,6 @@
 </head>
 <body>
 
-  <!-- ========== NAVBAR ========== -->
   <nav class="navbar" id="navbar">
     <div class="container">
       <a href="index.html" class="navbar-brand">
@@ -34,6 +33,7 @@
       </button>
     </div>
   </nav>
+
   <div class="nav-mobile" id="nav-mobile">
     <a href="instalaciones.html" data-i18n="nav.instalacions">Instal·lacions</a>
     <a href="actividades.html"   data-i18n="nav.classes">Classes</a>
@@ -53,9 +53,9 @@
         Dades actualitzades cada 30 segons via sistema RFID de control d'accessos
       </p>
 
-      <!-- Barra de estado -->
       <div class="occ-status-bar">
         <div class="occ-live-pill">
+          <span class="occ-live-dot"></span>
           <span data-i18n="ocupacio.enviu">EN DIRECTE</span>
         </div>
         <div class="occ-clock">
@@ -64,87 +64,82 @@
         </div>
       </div>
 
-      <!-- 3 tarjetas KPI -->
-      <div class="occ-kpi-card">
+      <div class="occ-kpis">
+        <div class="occ-kpi-card">
           <div class="occ-kpi-icon">💡</div>
           <div class="occ-kpi-label" data-i18n="ocupacio.millorHora">MILLOR HORA AVUI</div>
           <div class="occ-kpi-value" id="kpi-best-hour">--:--</div>
-          <div class="occ-kpi-sub"   id="kpi-best-sub" data-i18n="ocupacio.calculant">Calculant...</div>
+          <div class="occ-kpi-sub" id="kpi-best-sub" data-i18n="ocupacio.calculant">Calculant...</div>
         </div>
         <div class="occ-kpi-card">
           <div class="occ-kpi-icon">📍</div>
           <div class="occ-kpi-label" data-i18n="ocupacio.menysOcupat">MENYS OCUPAT ARA</div>
           <div class="occ-kpi-value" id="kpi-least-busy">—</div>
-          <div class="occ-kpi-sub"   id="kpi-least-sub" data-i18n="ocupacio.calculant">Calculant...</div>
+          <div class="occ-kpi-sub" id="kpi-least-sub" data-i18n="ocupacio.calculant">Calculant...</div>
         </div>
         <div class="occ-kpi-card">
           <div class="occ-kpi-icon trend-icon">↗</div>
           <div class="occ-kpi-label" data-i18n="ocupacio.prediccio">PREDICCIÓ 30 MIN</div>
           <div class="occ-kpi-value" id="kpi-prediction">—</div>
-          <div class="occ-kpi-sub"   data-i18n="ocupacio.prediccioSub">Reserva el teu lloc abans que s'ompli</div>
+          <div class="occ-kpi-sub" data-i18n="ocupacio.prediccioSub">Reserva el teu lloc abans que s'ompli</div>
         </div>
       </div>
+
     </div>
   </section>
 
-  <!-- CONTROLES: buscador + toggle vista -->
+  <!-- BUSCADOR -->
   <section class="occ-controls-section">
     <div class="container">
       <div class="occ-controls">
         <input type="text" class="occ-search" id="occ-search"
                data-i18n="ocupacio.cerca" placeholder="Cerca gimnàs..."
                oninput="filtrarGimnasios(this.value)">
-        <div class="occ-view-toggle">
-          <button class="occ-view-btn active" id="btn-cards"
-                  onclick="setVista('cards')">CARDS</button>
-          <button class="occ-view-btn"        id="btn-mapa"
-                  onclick="setVista('mapa')">MAPA</button>
-        </div>
       </div>
     </div>
   </section>
 
-  <!-- CARDS DE GIMNASIOS -->
+  <!-- CARDS -->
   <section class="occ-gyms-section">
     <div class="container">
-
-      <!-- Vista cards (por defecto) -->
-      <div class="occ-cards-grid" id="occ-cards-grid">
-        <!-- generado por ocupacion.js -->
-      </div>
-
-      <!-- Vista mapa -->
-      <div class="occ-map-view" id="occ-map-view" style="display:none">
-        <div class="occ-map-placeholder">
-          <div class="occ-map-pins" id="occ-map-pins"></div>
-          <p style="color:var(--text-muted);font-size:0.85rem;margin-top:1.5rem">
-            🗺️ Integración con Google Maps disponible próximamente.
-          </p>
-        </div>
-      </div>
-
+      <div class="occ-cards-grid" id="occ-cards-grid"></div>
     </div>
   </section>
 
-  <!-- LEYENDA + INFO -->
+  <!-- LLEGENDA + INFO -->
   <section class="occ-legend-section">
     <div class="container">
 
       <div class="occ-legend">
-        <span class="occ-legend-item"><span class="occ-legend-dot low"></span><span data-i18n="ocupacio.baixa">Baixa (&lt;40%)</span></span>
-        <span class="occ-legend-item"><span class="occ-legend-dot medium"></span><span data-i18n="ocupacio.mitja">Mitja (40-70%)</span></span>
-        <span class="occ-legend-item"><span class="occ-legend-dot high"></span><span data-i18n="ocupacio.alta">Alta (&gt;70%)</span></span>
+        <span class="occ-legend-item">
+          <span class="occ-legend-dot low"></span>
+          <span data-i18n="ocupacio.baixa">Baixa (&lt;40%)</span>
+        </span>
+        <span class="occ-legend-item">
+          <span class="occ-legend-dot medium"></span>
+          <span data-i18n="ocupacio.mitja">Mitja (40-70%)</span>
+        </span>
+        <span class="occ-legend-item">
+          <span class="occ-legend-dot high"></span>
+          <span data-i18n="ocupacio.alta">Alta (&gt;70%)</span>
+        </span>
       </div>
 
       <div class="occ-info-box">
-         <div class="occ-info-title"><span>⚡</span> <span data-i18n="ocupacio.comFunciona">Com funciona?</span></div>
-          <p data-i18n="ocupacio.comFuncionaDesc">Cada centre Imperium compta amb un sistema de control d'accessos mitjançant polseres RFID. Quan un usuari entra o surt del gimnàs, els torns registren el moviment automàticament, actualitzant l'ocupació en temps real.</p>
+        <div class="occ-info-title">
+          <span>⚡</span>
+          <span data-i18n="ocupacio.comFunciona">Com funciona?</span>
+        </div>
+        <p data-i18n="ocupacio.comFuncionaDesc">
+          Cada centre Imperium compta amb un sistema de control d'accessos mitjançant polseres RFID.
+          Quan un usuari entra o surt del gimnàs, els torns registren el moviment automàticament,
+          actualitzant l'ocupació en temps real.
+        </p>
       </div>
 
     </div>
   </section>
 
-  <!-- FOOTER -->
   <footer>
     <div class="container">
       <div class="footer-grid">
@@ -196,33 +191,7 @@
     </div>
   </footer>
 
-  <!-- PANEL CARRITO -->
-  <div class="cart-backdrop" id="cart-backdrop"></div>
-  <div class="cart-drawer" id="cart-drawer">
-    <div class="cart-header">
-      <h3>Mi Carrito</h3>
-      <button class="cart-close-btn" id="cart-close-btn" title="Cerrar">&#x2715;</button>
-    </div>
-    <div class="cart-items" id="cart-items"></div>
-    <div class="cart-footer">
-      <div class="cart-total-row">
-        <span class="cart-total-label">Total</span>
-        <span class="cart-total-amount" id="cart-total">0.00 &euro;</span>
-      </div>
-      <button class="btn btn-primary" style="width:100%;justify-content:center"
-              id="cart-checkout-btn">Finalizar Compra</button>
-    </div>
-  </div>
-
-  <!-- SCRIPTS — orden importante -->
-  <script src="js/i18n.js"></script>
-  <script src="js/api.js"></script>
-  <script src="js/render.js"></script>
-  <script src="js/app.js"></script>
-  <script src="js/carrito.js"></script>
-  <script src="js/ocupacion_data.js"></script>
-  <script src="js/ocupacion.js"></script>
-
+  <!-- CARRET (una sola còpia) -->
   <div class="cart-backdrop" id="cart-backdrop"></div>
   <div class="cart-drawer" id="cart-drawer">
     <div class="cart-header">
@@ -239,11 +208,21 @@
               id="cart-checkout-btn" data-i18n="carret.finalitzar">Finalitzar compra</button>
     </div>
   </div>
+
+  <script src="js/i18n.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/render.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/carrito.js"></script>
+  <script src="js/ocupacion_data.js"></script>
+  <script src="js/ocupacion.js"></script>
+
   <script>
     document.addEventListener("DOMContentLoaded", function () {
       I18n.init();
       SessionManager.init(false);
     });
   </script>
+
 </body>
 </html>

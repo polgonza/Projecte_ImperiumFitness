@@ -293,27 +293,54 @@
       return valid;
     }
 
+        // Fragment suggerit per assistent IA - revisar i adaptar
     async function processarPagamentTarifa() {
       if (!validateFormTarifa()) {
-        showToast(I18n.idioma==="ca"?"Revisa els camps marcats en vermell.":"Please check the fields in red.", "error");
+        showToast(I18n.idioma === "ca" ? "Revisa els camps marcats en vermell." : "Please check the fields in red.", "error");
         return;
       }
 
-      const btn = document.getElementById("pay-tarifa-btn");
-      if (btn) { btn.disabled = true; btn.textContent = I18n.idioma==="ca"?"Processant...":"Processing..."; }
-
       const user = Auth.getUser();
+      const btn  = document.getElementById("pay-tarifa-btn");
+
+      // Si ja té una tarifa activa, avisem
+      if (user.tarifaId && user.tarifaId !== plaId) {
+        const dataFiActual = user.tarifaDataFi
+          ? new Date(user.tarifaDataFi).toLocaleDateString(I18n.idioma === "ca" ? "ca-ES" : "en-GB")
+          : "—";
+
+        const confirmat = confirm(
+          I18n.idioma === "ca"
+            ? `Ja tens una subscripció activa fins al ${dataFiActual}.\n\nSi continues, la nova tarifa "${plaNom}" s'activarà automàticament quan acabi l'actual.\n\nVols continuar?`
+            : `You already have an active subscription until ${dataFiActual}.\n\nIf you continue, the new plan "${plaNom}" will activate automatically when the current one ends.\n\nDo you want to continue?`
+        );
+        if (!confirmat) return;
+      }
+
+      if (btn) { btn.disabled = true; btn.textContent = I18n.idioma === "ca" ? "Processant..." : "Processing..."; }
+
       const perfil = await ApiUsuari.assignarTarifa(user.id, plaId);
 
       if (perfil) {
         Auth.setUser({ ...user, tarifaId: plaId, tarifaNom: plaNom });
         document.getElementById("checkout-tarifa-form").style.display    = "none";
         document.getElementById("checkout-tarifa-success").style.display = "block";
-        document.getElementById("success-pla-nom").textContent           = plaNom;
+        document.getElementById("success-pla-nom").textContent = plaNom;
+
+        // Missatge d'èxit adaptat si era un canvi programat
+        if (user.tarifaId && user.tarifaId !== plaId) {
+          const exitDesc = document.querySelector("[data-i18n='checkoutTarifa.exitDesc']");
+          if (exitDesc) {
+            exitDesc.textContent = I18n.idioma === "ca"
+              ? "El teu nou pla s'activarà automàticament quan acabi el teu període actual. No perds cap dia pagat."
+              : "Your new plan will activate automatically when your current period ends. You won't lose any paid days.";
+          }
+        }
+
         window.scrollTo({ top: 0, behavior: "smooth" });
       } else {
         showToast(t("tarifes.errorActivar"), "error");
-        if (btn) { btn.disabled = false; btn.textContent = I18n.idioma==="ca"?"🔒 Activar subscripció":"🔒 Activate subscription"; }
+        if (btn) { btn.disabled = false; btn.textContent = I18n.idioma === "ca" ? "🔒 Activar subscripció" : "🔒 Activate subscription"; }
       }
     }
 
