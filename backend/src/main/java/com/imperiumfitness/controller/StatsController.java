@@ -45,12 +45,16 @@ public class StatsController {
                 .withDayOfMonth(1).withHour(0).withMinute(0).withSecond(0).withNano(0);
         stats.put("usuarisNousMes", usuariRepo.countByDataRegistreAfter(iniciMes));
 
-        // Fix: compta reserves on la CLASSE és futura, no la data de reserva
+        // Fragment suggerit per assistent IA - revisar i adaptar
+        // Compta reserves on la classe és avui o posterior (inclou el dia actual complet)
+        // Usem l'inici del dia actual en lloc de now() per no perdre reserves del mateix dia
+        LocalDateTime iniciDia = LocalDateTime.now()
+                .withHour(0).withMinute(0).withSecond(0).withNano(0);
         stats.put("totalReservesActives",
-                reservaRepo.countReservesAmbClasseFutura(LocalDateTime.now()));
+                reservaRepo.countReservesAmbClasseFutura(iniciDia));
 
-        // Línia ~52 (dins getResum)
-        List<Object[]> classesTop = reservaRepo.findTopClasses(LocalDateTime.now());
+        // Popularitat histórica: sense filtre de data per mostrar totes les reserves
+        List<Object[]> classesTop = reservaRepo.findTopClasses();
         if (!classesTop.isEmpty()) {
             Object[] top = classesTop.get(0);
             stats.put("classeMesReservada", top[0]);
@@ -93,31 +97,32 @@ public class StatsController {
 
     /* ── Top classes per reserves ─────────────────────── */
     // Fragment suggerit per assistent IA - revisar i adaptar
-   // Fragment suggerit per assistent IA - revisar i adaptar
-@GetMapping("/classes")
-public ResponseEntity<List<Map<String, Object>>> getClasses() {
-    List<Object[]> top = reservaRepo.findTopClasses(LocalDateTime.now());
+    // Popularitat histórica: % de cada classe sobre el total de reserves (sense filtre de data)
+    // Així una classe amb 1 reserva sobre 1 total surt com 100%, no com 5%
+    @GetMapping("/classes")
+    public ResponseEntity<List<Map<String, Object>>> getClasses() {
+        List<Object[]> top = reservaRepo.findTopClasses();
 
-    long totalReserves = top.stream()
-        .mapToLong(f -> ((Number) f[1]).longValue())
-        .sum();
+        long totalReserves = top.stream()
+            .mapToLong(f -> ((Number) f[1]).longValue())
+            .sum();
 
-    if (totalReserves == 0) return ResponseEntity.ok(List.of());
+        if (totalReserves == 0) return ResponseEntity.ok(List.of());
 
-    List<Map<String, Object>> resultat = new ArrayList<>();
-    for (Object[] fila : top) {
-        String nom      = (String) fila[0];
-        long   reserves = ((Number) fila[1]).longValue();
-        long   pct      = Math.round(reserves * 100.0 / totalReserves);
+        List<Map<String, Object>> resultat = new ArrayList<>();
+        for (Object[] fila : top) {
+            String nom      = (String) fila[0];
+            long   reserves = ((Number) fila[1]).longValue();
+            long   pct      = Math.round(reserves * 100.0 / totalReserves);
 
-        Map<String, Object> item = new HashMap<>();
-        item.put("nom",      nom);
-        item.put("reserves", reserves);
-        item.put("pct",      pct);
-        resultat.add(item);
+            Map<String, Object> item = new HashMap<>();
+            item.put("nom",      nom);
+            item.put("reserves", reserves);
+            item.put("pct",      pct);
+            resultat.add(item);
+        }
+        return ResponseEntity.ok(resultat);
     }
-    return ResponseEntity.ok(resultat);
-}
 
     /* ── Vendes mensuals (últims 6 mesos) ────────────── */
     @GetMapping("/vendes-mensuals")
@@ -216,19 +221,17 @@ public ResponseEntity<List<Map<String, Object>>> getClasses() {
     public ResponseEntity<Map<String, Object>> getActivitatRecent() {
         Map<String, Object> resultat = new HashMap<>();
 
-        // Últimes 5 reserves
         List<Reserva> reserves = reservaRepo.findUltimesReserves(PageRequest.of(0, 5));
         List<Map<String, Object>> reservesDTO = new ArrayList<>();
         for (Reserva r : reserves) {
             Map<String, Object> item = new HashMap<>();
-            item.put("usuari",     r.getUsuari() != null ? r.getUsuari().getNom() : "—");
-            item.put("classe",     r.getClasse()  != null ? r.getClasse().getNom()  : "—");
+            item.put("usuari",      r.getUsuari() != null ? r.getUsuari().getNom() : "—");
+            item.put("classe",      r.getClasse()  != null ? r.getClasse().getNom()  : "—");
             item.put("dataReserva", r.getDataReserva() != null ? r.getDataReserva().toString() : "—");
             reservesDTO.add(item);
         }
         resultat.put("reserves", reservesDTO);
 
-        // Últimes 5 vendes
         List<Venda> vendes = vendaRepo.findUltimesVendes(PageRequest.of(0, 5));
         List<Map<String, Object>> vendesDTO = new ArrayList<>();
         for (Venda v : vendes) {
