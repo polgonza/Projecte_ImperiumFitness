@@ -39,15 +39,14 @@ public interface ReservaRepository extends JpaRepository<Reserva, Long> {
     // Total reserves futures de tots els usuaris
 // Fragment suggerit per assistent IA - revisar i adaptar
 // Reserves on la CLASSE encara no ha passat (reserves actives reals)
-@Query("SELECT COUNT(r) FROM Reserva r WHERE r.classe.horari >= :ara")
-long countReservesAmbClasseFutura(@Param("ara") LocalDateTime ara);
+@Query("SELECT COUNT(r) FROM Reserva r WHERE r.classe.horari >= :iniciDia")
+long countReservesAmbClasseFutura(@Param("iniciDia") LocalDateTime iniciDia);
 
 // Fragment suggerit per assistent IA - revisar i adaptar
-// Agrupa per nom de classe i filtra només reserves de classes futures
+// Popularitat histórica: totes les reserves, sense filtre de data
 @Query("SELECT c.nom, COUNT(r) as total FROM Reserva r " +
-       "JOIN r.classe c WHERE c.horari >= :ara " +
-       "GROUP BY c.nom ORDER BY total DESC")
-List<Object[]> findTopClasses(@Param("ara") LocalDateTime ara);
+       "JOIN r.classe c GROUP BY c.nom ORDER BY total DESC")
+List<Object[]> findTopClasses();
 
 // Últimes N reserves (activitat recent)
 @Query("SELECT r FROM Reserva r ORDER BY r.dataReserva DESC")
