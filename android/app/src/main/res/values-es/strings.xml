@@ -57,6 +57,7 @@
     <string name="menu_idioma">Idioma</string>
     <string name="menu_tancar_sessio">Cerrar Sesión</string>
     <string name="menu_ajuda">Ayuda</string>
+    <string name="menu_documentacio">Documentation</string>
 
     <!-- ==================== DIÁLOGO IDIOMA ==================== -->
     <string name="selecciona_idioma">Selecciona un idioma</string>

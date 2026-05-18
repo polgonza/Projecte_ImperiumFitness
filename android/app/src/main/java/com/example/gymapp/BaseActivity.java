@@ -1,9 +1,13 @@
 package com.example.gymapp;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -14,6 +18,12 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 
 /*
     BASE ACTIVITY - CLASSE BASE PER A TOTES LES PANTALLES AMB FOOTER
@@ -27,6 +37,9 @@ import androidx.appcompat.app.AppCompatActivity;
     - Accés a ajuda
 */
 public class BaseActivity extends AppCompatActivity {
+
+    // Codi de sol·licitud de permís d'escriptura per a la descàrrega del PDF
+    private static final int REQUEST_WRITE_STORAGE = 112;
 
     /*
         MÈTODE ATTACH BASECONTEXT
@@ -86,7 +99,6 @@ public class BaseActivity extends AppCompatActivity {
             });
         }
 
-
         // 4. NOTÍCIES -> Noticies
         LinearLayout noticies = findViewById(R.id.navNoticies);
         if (noticies != null) {
@@ -96,7 +108,6 @@ public class BaseActivity extends AppCompatActivity {
                 }
             });
         }
-
 
         // 5. CALENDARI -> Calendari
         LinearLayout calendari = findViewById(R.id.navCalendari);
@@ -147,7 +158,7 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
-    private void mostrarMenuLogo(View view) {
+    protected void mostrarMenuLogo(View view) {
         PopupMenu popupMenu = new PopupMenu(this, view);
         popupMenu.getMenuInflater().inflate(R.menu.menu_home, popupMenu.getMenu());
 
@@ -165,6 +176,11 @@ public class BaseActivity extends AppCompatActivity {
 
             } else if (id == R.id.menu_tancar_sessio) {
                 tancarSessio();
+                return true;
+
+            } else if (id == R.id.menu_documentacio) {
+                // Opció de descàrrega del PDF de documentació de l'aplicació
+                mostrarDialogDocumentacio();
                 return true;
 
             } else if (id == R.id.menu_ajuda) {
@@ -209,6 +225,95 @@ public class BaseActivity extends AppCompatActivity {
         });
 
         builder.show();
+    }
+
+    /*
+        MÈTODE PER MOSTRAR EL DIÀLEG DE CONFIRMACIÓ DE DESCÀRREGA
+        ==========================================================
+        Mostra un AlertDialog per confirmar si l'usuari vol descarregar
+        el document PDF de documentació de l'aplicació.
+        Si accepta, comprova els permisos necessaris abans de continuar.
+    */
+    private void mostrarDialogDocumentacio() {
+        new AlertDialog.Builder(this)
+                .setTitle("Descarregar documentació")
+                .setMessage("Estàs segur que vols descarregar la documentació d'ImperiumGym?")
+                .setPositiveButton("Sí", (dialog, which) -> {
+                    // Per a Android 10 o inferior cal comprovar el permís d'escriptura manualment
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+                        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                                != PackageManager.PERMISSION_GRANTED) {
+                            ActivityCompat.requestPermissions(this,
+                                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                    REQUEST_WRITE_STORAGE);
+                        } else {
+                            descarregarDocumentacio();
+                        }
+                    } else {
+                        // Android 11+ no necessita permís per escriure a Downloads
+                        descarregarDocumentacio();
+                    }
+                })
+                .setNegativeButton("No", null)
+                .show();
+    }
+
+    /*
+        MÈTODE PER DESCARREGAR EL FITXER PDF
+        =====================================
+        Copia el fitxer PDF des de la carpeta res/raw del projecte
+        a la carpeta Downloads del dispositiu de l'usuari.
+        Nom del fitxer resultant: Documentacio_ImperiumGym.pdf
+    */
+    private void descarregarDocumentacio() {
+        try {
+            // Obtenim el fitxer PDF des de la carpeta res/raw
+            InputStream inputStream = getResources().openRawResource(R.raw.documentacio_imperiumgym);
+
+            // Carpeta Downloads del dispositiu (accessible per l'usuari)
+            File downloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+            if (!downloadsDir.exists()) {
+                downloadsDir.mkdirs();
+            }
+
+            // Fitxer de destinació dins de Downloads
+            File outputFile = new File(downloadsDir, "Documentacio_ImperiumGym.pdf");
+
+            // Copiem el contingut byte a byte
+            FileOutputStream outputStream = new FileOutputStream(outputFile);
+            byte[] buffer = new byte[1024];
+            int length;
+            while ((length = inputStream.read(buffer)) > 0) {
+                outputStream.write(buffer, 0, length);
+            }
+
+            outputStream.close();
+            inputStream.close();
+
+            Toast.makeText(this, "Documentació descarregada a: " + outputFile.getAbsolutePath(), Toast.LENGTH_LONG).show();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Error en la descàrrega: " + e.getMessage(), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    /*
+        MÈTODE PER GESTIONAR LA RESPOSTA DELS PERMISOS
+        ===============================================
+        S'executa quan l'usuari respon a la sol·licitud de permís d'escriptura.
+        Si es concedeix, s'inicia la descàrrega del PDF. Si es denega, es mostra un avís.
+    */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_WRITE_STORAGE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                descarregarDocumentacio();
+            } else {
+                Toast.makeText(this, "Permís denegat. No es pot descarregar la documentació.", Toast.LENGTH_LONG).show();
+            }
+        }
     }
 
     private void tancarSessio() {

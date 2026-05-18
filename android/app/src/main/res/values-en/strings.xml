@@ -56,6 +56,7 @@
     <string name="menu_idioma">Language</string>
     <string name="menu_tancar_sessio">Log out</string>
     <string name="menu_ajuda">Help</string>
+    <string name="menu_documentacio">Documentación</string>
 
     <!-- ==================== LANGUAGE DIALOG ==================== -->
     <string name="selecciona_idioma">Select a language</string>

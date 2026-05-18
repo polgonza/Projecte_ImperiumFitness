@@ -8,10 +8,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ApiClient {
 
     //todo Para usar en CLASE + zeroTier
-    //private static final String BASE_URL = "http://172.21.90.3:8086/";
+    private static final String BASE_URL = "http://172.21.90.3:8086/";
 
     //todo Para usar en CASA
-    private static final String BASE_URL = "http://10.147.17.250:8086/";
+    //private static final String BASE_URL = "http://10.147.17.250:8086/";
 
     // Ara guardem una instància per context, no global
     private static Retrofit retrofit = null;

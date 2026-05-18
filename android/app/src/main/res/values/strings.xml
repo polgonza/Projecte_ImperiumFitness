@@ -58,6 +58,8 @@
     <string name="menu_idioma">Idioma</string>
     <string name="menu_tancar_sessio">Tancar Sessió</string>
     <string name="menu_ajuda">Ajuda</string>
+    <string name="menu_documentacio">Documentació</string>
+
 
     <!-- ==================== DIÀLEG IDIOMA ==================== -->
     <string name="selecciona_idioma">Selecciona un idioma</string>

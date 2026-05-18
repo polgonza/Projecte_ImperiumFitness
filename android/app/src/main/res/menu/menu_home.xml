@@ -32,4 +32,8 @@
         android:id="@+id/menu_ajuda"
         android:title="@string/menu_ajuda" />
 
+    <item
+        android:id="@+id/menu_documentacio"
+        android:title="Documentació" />
+
 </menu>
