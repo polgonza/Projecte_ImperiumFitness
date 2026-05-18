@@ -49,7 +49,8 @@ public class StatsController {
         stats.put("totalReservesActives",
                 reservaRepo.countReservesAmbClasseFutura(LocalDateTime.now()));
 
-        List<Object[]> classesTop = reservaRepo.findTopClasses();
+        // Línia ~52 (dins getResum)
+        List<Object[]> classesTop = reservaRepo.findTopClasses(LocalDateTime.now());
         if (!classesTop.isEmpty()) {
             Object[] top = classesTop.get(0);
             stats.put("classeMesReservada", top[0]);
@@ -91,29 +92,32 @@ public class StatsController {
     }
 
     /* ── Top classes per reserves ─────────────────────── */
-    @GetMapping("/classes")
-    public ResponseEntity<List<Map<String, Object>>> getClasses() {
-        List<Object[]> top = reservaRepo.findTopClasses();
-        List<Map<String, Object>> resultat = new ArrayList<>();
+    // Fragment suggerit per assistent IA - revisar i adaptar
+   // Fragment suggerit per assistent IA - revisar i adaptar
+@GetMapping("/classes")
+public ResponseEntity<List<Map<String, Object>>> getClasses() {
+    List<Object[]> top = reservaRepo.findTopClasses(LocalDateTime.now());
 
-        for (Object[] fila : top) {
-            String nom     = (String) fila[0];
-            long   reserves = ((Number) fila[1]).longValue();
-            long   capacitat = classeRepo.findAll().stream()
-                .filter(c -> nom.equals(c.getNom()))
-                .mapToLong(c -> c.getCapacitat() != null ? c.getCapacitat() : 1)
-                .findFirst().orElse(1);
+    long totalReserves = top.stream()
+        .mapToLong(f -> ((Number) f[1]).longValue())
+        .sum();
 
-            Map<String, Object> item = new HashMap<>();
-            item.put("nom",      nom);
-            item.put("reserves", reserves);
-            item.put("capacitat", capacitat);
-            item.put("pct",      Math.min(100, Math.round(reserves * 100.0 / capacitat)));
-            resultat.add(item);
-        }
+    if (totalReserves == 0) return ResponseEntity.ok(List.of());
 
-        return ResponseEntity.ok(resultat);
+    List<Map<String, Object>> resultat = new ArrayList<>();
+    for (Object[] fila : top) {
+        String nom      = (String) fila[0];
+        long   reserves = ((Number) fila[1]).longValue();
+        long   pct      = Math.round(reserves * 100.0 / totalReserves);
+
+        Map<String, Object> item = new HashMap<>();
+        item.put("nom",      nom);
+        item.put("reserves", reserves);
+        item.put("pct",      pct);
+        resultat.add(item);
     }
+    return ResponseEntity.ok(resultat);
+}
 
     /* ── Vendes mensuals (últims 6 mesos) ────────────── */
     @GetMapping("/vendes-mensuals")

@@ -46,7 +46,7 @@ async function initPerfil() {
     }
   }
 
-  Auth.setUser({ ...user, name: perfil.nom, email: perfil.email, tarifaId: perfil.tarifaId, tarifaNom: perfil.tarifaNom,tarifaCancellada: perfil.tarifaCancellada,
+  Auth.setUser({ ...user, name: perfil.nom, email: perfil.email, tarifaId: perfil.tarifaId, tarifaNom: perfil.tarifaNom, tarifaCancellada: perfil.tarifaCancellada,
   tarifaDataFi: perfil.tarifaDataFi });
 
   const noPlanMsg = document.getElementById("no-plan-msg");
@@ -218,17 +218,23 @@ function renderOldPurchases() {
    5. SISTEMA DE TABS
    ===================================================== */
 
+// Fragment suggerit per assistent IA - revisar i adaptar
+// Canvi: el listener és ara async i recarrega renderStats() cada cop
+// que s'obre la pestanya d'estadístiques, garantint dades sempre fresques.
 function initProfileTabs() {
   const tabs     = document.querySelectorAll(".profile-tab");
   const contents = document.querySelectorAll(".tab-content");
 
   tabs.forEach(tab => {
-    tab.addEventListener("click", function () {
+    tab.addEventListener("click", async function () {
       tabs.forEach(t     => t.classList.remove("active"));
       contents.forEach(c => c.classList.remove("active"));
       tab.classList.add("active");
       const target = document.getElementById(tab.dataset.tab);
       if (target) target.classList.add("active");
+      // Recarrega les estadístiques cada cop que s'obre la pestanya
+      // Així les reserves actives i totes les dades sempre estan actualitzades
+      if (tab.dataset.tab === "tab-stats") await renderStats();
     });
   });
 }
@@ -268,10 +274,8 @@ async function cancelarReservaPerfil(classeId, nomClasse) {
 
 /* =====================================================
    7. ESTADÍSTIQUES (només ADMIN)
-   // Fragment suggerit per assistent IA - revisar i adaptar
    ===================================================== */
 
-// Fragment suggerit per assistent IA - revisar i adaptar
 // Fragment suggerit per assistent IA - revisar i adaptar
 async function renderStats() {
   const container = document.getElementById("stats-container");
@@ -324,7 +328,7 @@ async function renderStats() {
 
     </div>
 
-    <!-- Fila 2: Donut tarifes + Ocupació classes -->
+    <!-- Fila 2: Donut tarifes + Classes més populars -->
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:2rem">
 
       <!-- Distribució tarifes -->
@@ -335,26 +339,34 @@ async function renderStats() {
         ${graficDonut(distribucio)}
       </div>
 
-      <!-- Ocupació classes -->
+      <!-- Fragment suggerit per assistent IA - revisar i adaptar -->
+      <!-- Canvi: substituïm "Ocupació per classe" (reserves/capacitat, incorrecte quan -->
+      <!-- hi ha múltiples instàncies del mateix tipus) per "Classes més populars"       -->
+      <!-- que mostra el % de reserves de cada classe sobre el total de reserves.        -->
       <div style="background:var(--bg-secondary);border:1px solid var(--border);border-radius:12px;padding:1.25rem">
         <h4 style="font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--primary);margin-bottom:1rem">
-          📊 ${I18n.idioma==="ca"?"Ocupació per classe":"Class occupancy"}
+          📊 ${I18n.idioma==="ca"?"Classes més populars":"Most popular classes"}
         </h4>
         ${classesTop?.length > 0
-          ? classesTop.slice(0,6).map(c => {
-              const pct = Math.min(100, c.pct||0);
-              const col = pct>=80?"var(--danger)":pct>=50?"var(--primary)":"#22c55e";
+          ? classesTop.slice(0, 6).map(c => {
+              const pct = c.pct || 0;
+              const col = pct >= 30 ? "var(--primary)" : pct >= 15 ? "#f59e0b" : "#22c55e";
               return `<div style="margin-bottom:.75rem">
                 <div style="display:flex;justify-content:space-between;font-size:.78rem;margin-bottom:.25rem">
                   <span style="font-weight:500">${c.nom}</span>
-                  <span style="color:var(--text-muted)">${c.reserves}/${c.capacitat} · <strong style="color:${col}">${pct}%</strong></span>
+                  <span style="color:var(--text-muted)">
+                    ${c.reserves} ${I18n.idioma==="ca" ? "reserves" : "bookings"}
+                    · <strong style="color:${col}">${pct}%</strong>
+                  </span>
                 </div>
                 <div style="height:5px;background:var(--bg-card);border-radius:3px;overflow:hidden">
                   <div style="height:100%;width:${pct}%;background:${col};border-radius:3px"></div>
                 </div>
               </div>`;
             }).join("")
-          : `<p style="color:var(--text-muted);text-align:center;padding:1rem">${I18n.idioma==="ca"?"Sense dades":"No data"}</p>`
+          : `<p style="color:var(--text-muted);text-align:center;padding:1rem">
+              ${I18n.idioma==="ca"?"Sense dades":"No data"}
+             </p>`
         }
       </div>
 
@@ -435,7 +447,6 @@ function graficBarres(dades, camp, nomMesos) {
     return `<p style="color:var(--text-muted);text-align:center;padding:1rem">${I18n.idioma==="ca"?"Sense dades":"No data"}</p>`;
 
   const maxVal = Math.max(...dades.map(d => d[camp] || 0), 1);
-  const barWidth = 100 / Math.max(dades.length, 1);
 
   return `
     <div style="display:flex;align-items:flex-end;gap:4px;height:100px;padding-bottom:20px;position:relative">

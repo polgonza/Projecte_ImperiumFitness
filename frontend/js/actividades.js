@@ -268,17 +268,16 @@ async function renderClasesDelDia() {
   container.innerHTML = cards.join("");
   }
 
-function buildClassCard(clase,reservesReals) {
-  const dateKey   = toDateKey(
+function buildClassCard(clase, reservesReals) {
+  const dateKey     = toDateKey(
     selectedDate.getFullYear(),
     selectedDate.getMonth(),
     selectedDate.getDate()
   );
-  const reservaId = `${dateKey}_${clase.id}`;
-
- const reservasHoy = reservesReals !== undefined ? reservesReals : getReservasDelDia(dateKey, clase.id);
+  const reservaId   = `${dateKey}_${clase.id}`;
+  const reservasHoy = (typeof reservesReals === "number") ? reservesReals : 0; // ← fix NaN
   const disponibles = clase.spots - reservasHoy;
-  const pct         = Math.round((reservasHoy / clase.spots) * 100);
+  const pct         = clase.spots > 0 ? Math.round((reservasHoy / clase.spots) * 100) : 0;
   const estaLlena   = disponibles <= 0;
   const yaReservada = userHasReservation(reservaId);
   const imgSrc      = CATEGORY_IMAGES[clase.category] || "";
@@ -439,13 +438,16 @@ async function confirmReservation() {
     closeModal();
 
     if (result.ok) {
-      addReservacioLocal(claseAReservar, dateKeyReserva);
-      renderClasesDelDia();
-      renderMisReservas();
-      showToast(t("toast.reservaOk", [claseAReservar.name]), "success");
-    } else {
-      showToast(result.error || t("toast.reservaError"), "error");
-    }
+    // Invalida la caché d'aquesta classe perquè el recompte es torna a demanar al backend
+    delete _reservesCache[claseAReservar.id];
+
+    // Re-sincronitza reserves des de la BD (font de veritat)
+    await sincronitzaReserves();
+
+    renderClasesDelDia();
+    renderMisReservas();
+    showToast(t("toast.reservaOk", [claseAReservar.name]), "success");
+  }
 
   } catch (e) {
     console.error("Error confirmReservation:", e);
@@ -499,15 +501,17 @@ function getReservasDelDia(dateKey, classId) {
   // Caché de reserves per classe (evita crides repetides)
   const _reservesCache = {};
 
-  async function getReservesClasse(classeId) {
-    if (_reservesCache[classeId] !== undefined) return _reservesCache[classeId];
-    try {
-      const res = await apiFetch(`/api/reserves/classe/${classeId}/count`);
-      const count = res && res.ok ? await res.json() : 0;
-      _reservesCache[classeId] = count;
-      return count;
-    } catch (e) { return 0; }
+ async function getReservasDelDia(dateKey, classId) {
+  if (_reservesCache[classId] !== undefined) return _reservesCache[classId];
+  try {
+    const res = await apiFetch(`/api/reserves/classe/${classId}/count`);
+    const count = (res && res.ok) ? await res.json() : 0;
+    _reservesCache[classId] = count;
+    return count;
+  } catch (e) {
+    return 0;
   }
+}
 }
 
 function userHasReservation(reservaId) {
@@ -587,37 +591,50 @@ function renderMisReservas() {
 
 /* ── Sincronització BD → localStorage ── */
 
+// Fragment suggerit per assistent IA - revisar i adaptar
+// Sincronitza reserves: la BD és la font de veritat.
+// Sobreescriu el localStorage completament en cada càrrega.
 async function sincronitzaReserves() {
   const user = Auth.getUser();
-  if (!user || !Auth.isLoggedIn()) return;
+  if (!user || !Auth.isLoggedIn()) {
+    saveAllReservas([]); // usuari no loguejat → neteja
+    return;
+  }
 
   try {
     const reserves = await ApiUsuari.getReserves(user.id);
-    if (!reserves || reserves.length === 0) return;
 
-    const totes = loadAllReservas();
+    // Si la BD no retorna res, netegem el localStorage
+    if (!reserves || reserves.length === 0) {
+      saveAllReservas([]);
+      return;
+    }
 
-    reserves.forEach(r => {
-      const reservaId = `bd_${r.classeId}`;
-      if (!totes.find(x => x.reservaId === reservaId)) {
-        const classe = TOTES_LES_CLASSES.find(c => String(c.id) === String(r.classeId));
-        totes.push({
-          reservaId,
-          classId:    String(r.classeId),
-          dateKey:    "9999-12-31",
-          className:  classe ? classe.name     : `Classe #${r.classeId}`,
-          category:   classe ? classe.category : "funcional",
-          time:       classe ? classe.time     : "—",
-          instructor: "—",
-          userEmail:  user.email
-        });
-      }
-    });
+    // Construïm la llista EXCLUSIVAMENT des de la BD (no afegim res del localStorage)
+    const reservesNoves = reserves.map(r => {
+    const classe = TOTES_LES_CLASSES.find(c => String(c.id) === String(r.classeId));
+    // Si no trobem la classe a TOTES_LES_CLASSES, usem la dataReserva com a fallback
+    const dateKey = classe
+      ? classe.dateKey
+      : (r.dataReserva ? r.dataReserva.substring(0, 10).replace(/-/g, "") : "99991231");
+    return {
+      reservaId:  `bd_${r.classeId}`,
+      classId:    String(r.classeId),
+      dateKey,
+      className:  classe ? classe.name     : `Classe #${r.classeId}`,
+      category:   classe ? classe.category : "funcional",
+      time:       classe ? classe.time     : "—",
+      instructor: "—",
+      userEmail:  user.email
+    };
+  });
 
-    saveAllReservas(totes);
+    // Sobreescrivim completament — elimina automàticament reserves obsoletes
+    saveAllReservas(reservesNoves);
 
   } catch (e) {
     console.error("Error sincronitzant reserves:", e);
+    // En cas d'error de xarxa, NO toquem el localStorage per no perdre dades
   }
 }
 
