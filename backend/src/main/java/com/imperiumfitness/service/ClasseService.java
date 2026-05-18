@@ -1,3 +1,4 @@
+// Fragment suggerit per assistent IA - revisar i adaptar
 package com.imperiumfitness.service;
 
 import com.imperiumfitness.dto.ClasseDTO;
@@ -5,10 +6,13 @@ import com.imperiumfitness.model.entity.Classe;
 import com.imperiumfitness.model.entity.Gimnas;
 import com.imperiumfitness.repository.ClasseRepository;
 import com.imperiumfitness.repository.GimnasRepository;
+import com.imperiumfitness.repository.ReservaRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,15 +20,22 @@ import java.util.stream.Collectors;
 public class ClasseService {
 
     private final ClasseRepository repo;
-    private final GimnasRepository gimnasRepo; // necessitem el gimnas per les relacions
+    private final GimnasRepository gimnasRepo;
+    private final ReservaRepository reservaRepo;
 
-    public ClasseService(ClasseRepository repo, GimnasRepository gimnasRepo) {
+    public ClasseService(ClasseRepository repo,
+                         GimnasRepository gimnasRepo,
+                         ReservaRepository reservaRepo) {
         this.repo = repo;
         this.gimnasRepo = gimnasRepo;
+        this.reservaRepo = reservaRepo;
     }
 
-    public List<ClasseDTO> getAll() {
-        return repo.findAll().stream().map(this::toDTO).collect(Collectors.toList());
+    public List<ClasseDTO> getAll(boolean nomesFuturas) {
+        List<Classe> classes = nomesFuturas
+            ? repo.findByHorariAfterOrderByHorariAsc(LocalDateTime.now())
+            : repo.findAll();
+        return classes.stream().map(this::toDTO).collect(Collectors.toList());
     }
 
     public ClasseDTO getById(Long id) {
@@ -54,13 +65,15 @@ public class ClasseService {
         return toDTO(repo.save(c));
     }
 
+    // Elimina la classe i totes les seves reserves (evita FK constraint)
+    @Transactional
     public void delete(Long id) {
         if (!repo.existsById(id))
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Classe no trobada");
+        reservaRepo.deleteByClasseId(id);
         repo.deleteById(id);
     }
 
-    // Convertim Entity → DTO aplanant la relació a gimnasId
     private ClasseDTO toDTO(Classe c) {
         return new ClasseDTO(
                 c.getId(), c.getNom(), c.getDescripcio(), c.getHorari(),
@@ -69,7 +82,6 @@ public class ClasseService {
         );
     }
 
-    // Convertim DTO → Entity resolent la relació al gimnas
     private Classe toEntity(ClasseDTO dto) {
         Classe c = new Classe();
         c.setNom(dto.getNom());

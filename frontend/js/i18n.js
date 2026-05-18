@@ -105,6 +105,7 @@ const I18n = (() => {
       "footer.equip":           "Equip",
       "footer.descarrega":      "Descarrega l'App",
       "footer.desc":            "La cadena de gimnasos premium amb tecnologia d'ocupació en temps real. Transforma la teva vida.",
+      "footer.guia":            "Guia d'usuari",
 
       // Carret
       "carret.titol":           "El meu carret",
@@ -451,6 +452,7 @@ const I18n = (() => {
       "footer.equip":           "Team",
       "footer.descarrega":      "Download the App",
       "footer.desc":            "The premium gym chain with real-time occupancy technology. Transform your life.",
+      "footer.guia":            "User guide",
 
       "inst.musculacio":      "Weight Room",
       "inst.musculacioDesc":  "Over 200 state-of-the-art machines, from presses and cables to Olympic lifting platforms. Equipment renewed every 2 years to guarantee top performance.",

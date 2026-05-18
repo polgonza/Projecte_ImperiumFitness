@@ -17,9 +17,10 @@ public class ClasseController {
         this.service = service;
     }
 
-    @GetMapping // qualsevol usuari autenticat pot veure les classes
-    public ResponseEntity<List<ClasseDTO>> getAll() {
-        return ResponseEntity.ok(service.getAll());
+    @GetMapping
+    public ResponseEntity<List<ClasseDTO>> getAll(
+            @RequestParam(defaultValue = "false") boolean nomesFuturas) {
+        return ResponseEntity.ok(service.getAll(nomesFuturas));
     }
 
     @GetMapping("/{id}")
