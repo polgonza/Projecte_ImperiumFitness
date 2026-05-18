@@ -265,7 +265,7 @@ function renderProductos(containerId, filter = "all") {
                 style="width:100%;justify-content:center;
                        padding:0.5rem;margin-top:0.75rem;font-size:0.75rem"
                 onclick="addToCart('${p.name}')">
-          Añadir al carrito
+          ${I18n.idioma === "ca" ? "Afegeix al carret" : "Add to cart"}
         </button>
       </div>
     </div>
@@ -378,7 +378,7 @@ function renderCarrito() {
     itemsEl.innerHTML = `
       <div class="cart-empty">
         <span class="cart-empty-icon">&#128722;</span>
-        <p>Tu carrito está vacío.<br>Añade productos desde la tienda.</p>
+        <p>${I18n.idioma === "ca" ? "El carret és buit.<br>Afegeix productes des de la botiga." : "Your cart is empty.<br>Add products from the shop."}</p>
       </div>`;
   } else {
     itemsEl.innerHTML = carrito.map(item => `
@@ -395,7 +395,7 @@ function renderCarrito() {
           <button class="qty-btn" onclick="changeQuantity(${item.id}, +1)">+</button>
         </div>
         <button class="cart-item-remove" onclick="removeFromCarrito(${item.id})"
-                title="Eliminar">&#x2715;</button>
+                title="${I18n.idioma === "ca" ? "Eliminar" : "Remove"}"</button>
       </div>
     `).join("");
   }
@@ -413,7 +413,7 @@ function renderCarrito() {
           ${subtotal.toFixed(2)} €
         </div>
         <div style="font-size:0.78rem;color:var(--success);text-align:right">
-          − ${descuento.toFixed(2)} € (5% socio)
+         − ${descuento.toFixed(2)} € (5% ${I18n.idioma === "ca" ? "soci" : "member"})
         </div>
         <div>${totalFinal.toFixed(2)} €</div>
       `;
@@ -445,7 +445,7 @@ function renderResumenPedido() {
   const carrito = getCarrito();
 
   if (carrito.length === 0) {
-    showToast("Tu carrito está vacío. Añade productos primero.", "error");
+    showToast(I18n.idioma === "ca" ? "El carret és buit. Afegeix productes primer." : "Your cart is empty. Add products first.", "error");
     setTimeout(() => { window.location.href = "tienda.html"; }, 1500);
     return;
   }
@@ -669,7 +669,7 @@ function renderAlertaSinPlan() {
       </a>
       <button onclick="document.getElementById('no-plan-alert').remove()"
               class="btn btn-secondary" style="padding:0.5rem 1rem;font-size:0.8rem">
-        Cerrar
+        ${I18n.idioma === "ca" ? "Tancar" : "Close"}
       </button>
     </div>
   `;
