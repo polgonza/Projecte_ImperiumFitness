@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -49,4 +50,8 @@ List<Object[]> findTopClasses();
 // Últimes N reserves (activitat recent)
 @Query("SELECT r FROM Reserva r ORDER BY r.dataReserva DESC")
 List<Reserva> findUltimesReserves(org.springframework.data.domain.Pageable pageable);
+
+@Transactional
+void deleteByClasseId(Long classeId);
+
 }
