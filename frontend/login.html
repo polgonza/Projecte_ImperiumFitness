@@ -72,15 +72,16 @@
   I18n.init();  
   SessionManager.init(false);
     
-    const msg = sessionStorage.getItem("session_msg");
-    if (msg) {
-        const alertEl = document.getElementById("login-alert");
-        if (alertEl) {
-            alertEl.textContent = msg;
-            alertEl.className = "alert alert-error show";
-        }
-        sessionStorage.removeItem("session_msg");
+    // Fragment suggerit per assistent IA - revisar i adaptar
+  const sessionMsg = sessionStorage.getItem("session_msg");
+  if (sessionMsg) {
+    const alertEl = document.getElementById("login-alert");
+    if (alertEl) {
+      alertEl.textContent = sessionMsg;
+      alertEl.className = "alert error show";
     }
+    sessionStorage.removeItem("session_msg");
+  }
 });
 </script>
 </body>
