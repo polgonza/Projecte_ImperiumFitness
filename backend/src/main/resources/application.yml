@@ -1,6 +1,3 @@
-server:
-  port: 8080
-
 # Fragment suggerit per assistent IA - revisar i adaptar
 app:
   jwt:
