@@ -21,6 +21,7 @@ public class ReservaService {
     private final ReservaRepository repo;
     private final UsuariRepository usuariRepo;
     private final ClasseRepository classeRepo;
+    
 
     public ReservaService(ReservaRepository repo,
                           UsuariRepository usuariRepo,
@@ -76,6 +77,11 @@ public class ReservaService {
             .orElseThrow(() -> new ResponseStatusException(
                     HttpStatus.NOT_FOUND, "Classe no trobada"));
 
+    // Fragment suggerit per assistent IA - revisar i adaptar
+    if (classe.getHorari().isBefore(LocalDateTime.now())) {
+        throw new ResponseStatusException(
+            HttpStatus.CONFLICT, "No es pot reservar una classe que ja ha passat");
+    }
     long reservesClasse = repo.findByClasseId(dto.getClasseId()).size();
     if (reservesClasse >= classe.getCapacitat()) {
         throw new ResponseStatusException(

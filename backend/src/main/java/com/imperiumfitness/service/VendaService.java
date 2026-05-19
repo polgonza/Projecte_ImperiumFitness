@@ -9,6 +9,7 @@ import com.imperiumfitness.repository.UsuariRepository;
 import com.imperiumfitness.repository.VendaRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
@@ -38,6 +39,7 @@ public class VendaService {
         return repo.findByUsuariId(usuariId).stream().map(this::toDTO).collect(Collectors.toList());
     }
 
+    @Transactional
     public VendaDTO save(VendaDTO dto) {
         // Regla de negoci: comprovem que hi ha estoc suficient
         Producte p = producteRepo.findById(dto.getProducteId())
