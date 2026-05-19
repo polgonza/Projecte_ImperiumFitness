@@ -6,15 +6,22 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import com.imperiumfitness.model.entity.Usuari;
+import com.imperiumfitness.repository.UsuariRepository;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/api/reserves")
 public class ReservaController {
 
     private final ReservaService service;
+    private final UsuariRepository usuariRepo;
 
-    public ReservaController(ReservaService service) {
-        this.service = service;
+    public ReservaController(ReservaService service, UsuariRepository usuariRepo) {
+        this.service    = service;
+        this.usuariRepo = usuariRepo;
     }
 
     @GetMapping
@@ -39,10 +46,21 @@ public class ReservaController {
         return ResponseEntity.status(201).body(service.save(dto));
     }
 
+    // Fragment suggerit per assistent IA - revisar i adaptar
     @DeleteMapping("/usuari/{usuariId}/classe/{classeId}")
     public ResponseEntity<Void> cancelar(
-        @PathVariable Long usuariId,
-        @PathVariable Long classeId) {
+            @PathVariable Long usuariId,
+            @PathVariable Long classeId,
+            Authentication auth) {
+        String emailToken = auth.getName();
+        Usuari usuariToken = usuariRepo.findByEmail(emailToken)
+            .orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.UNAUTHORIZED, "No autoritzat"));
+        boolean esAdmin = "ADMIN".equalsIgnoreCase(usuariToken.getRol());
+        if (!esAdmin && !usuariToken.getId().equals(usuariId)) {
+            throw new ResponseStatusException(
+                HttpStatus.FORBIDDEN, "No pots cancel·lar reserves d'altres usuaris");
+        }
         service.cancelarReserva(usuariId, classeId);
         return ResponseEntity.noContent().build();
     }
