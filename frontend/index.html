@@ -7,6 +7,7 @@
   <title>Imperium Fitness - La cadena de gimnasios premium</title>
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </head>
 <body>
 
@@ -22,7 +23,7 @@
         <li><a href="actividades.html"   data-i18n="nav.classes">Classes</a></li>
         <li><a href="tarifas.html"       data-i18n="nav.tarifes">Tarifes</a></li>
         <li><a href="tienda.html"        data-i18n="nav.botiga">Botiga</a></li>
-        <li><a href="blog.html"          data-i18n="nav.novetats">Novetats</a></li>
+        <li><a href="ocupacion.html" data-i18n="nav.ocupacio">Ocupació</a></li>
         <li><a href="contacto.html"      data-i18n="nav.contacte">Contacte</a></li>
       </ul>
       <div class="nav-actions" id="nav-user-area"></div>
@@ -41,7 +42,7 @@
     <a href="actividades.html"   data-i18n="nav.classes">Classes</a>
     <a href="tarifas.html"       data-i18n="nav.tarifes">Tarifes</a>
     <a href="tienda.html"        data-i18n="nav.botiga">Botiga</a>
-    <a href="blog.html"          data-i18n="nav.novetats">Novetats</a>
+    <a href="ocupacion.html" data-i18n="nav.ocupacio">Ocupació</a>
     <a href="contacto.html"      data-i18n="nav.contacte">Contacte</a>
     <div class="nav-divider"></div>
     <div id="nav-mobile-user"></div>
@@ -183,13 +184,41 @@
             </button>
           </div>
         </div>
+        <!-- Fragment suggerit per assistent IA - revisar i adaptar -->
+        <!-- Mockup de mòbil amb QR de descàrrega de l'APK -->
         <div class="phone-mockup">
           <div class="phone-screen">
-            <span style="font-size:2.5rem">📱</span>
-            <span class="phone-logo text-gold">IMPERIUM</span>
-            <span class="phone-label">Ocupación · Reservas · Tienda · Plan</span>
+            <span class="phone-logo text-gold" style="font-size:.85rem;margin-bottom:.25rem">IMPERIUM FITNESS</span>
+            <div id="qr-apk"
+                style="background:#fff;border-radius:8px;padding:6px;width:120px;height:120px;
+                        display:flex;align-items:center;justify-content:center"></div>
+            <span class="phone-label" style="font-size:.6rem;margin-top:.4rem;text-align:center"
+                  data-i18n="app.escaneja">Escaneja per descarregar</span>
+            <a href="downloads/ImperiumFitness.apk"
+              download
+              class="btn btn-primary"
+              style="font-size:.65rem;padding:.35rem .75rem;margin-top:.4rem;text-decoration:none">
+              ⬇ APK directa
+            </a>
           </div>
         </div>
+
+        <script>
+        (function() {
+          const apkUrl = window.location.origin +
+            window.location.pathname.replace(/\/[^/]*$/, '') +
+            '/downloads/ImperiumFitness.apk';
+
+          new QRCode(document.getElementById('qr-apk'), {
+            text: apkUrl,
+            width: 108,
+            height: 108,
+            colorDark: '#1a1a1a',
+            colorLight: '#ffffff',
+            correctLevel: QRCode.CorrectLevel.M
+          });
+        })();
+        </script>
       </div>
     </div>
   </section>
@@ -229,7 +258,7 @@
             <li><a href="actividades.html"   data-i18n="nav.classes">Classes</a></li>
             <li><a href="tarifas.html"       data-i18n="nav.tarifes">Tarifes</a></li>
             <li><a href="tienda.html"        data-i18n="nav.botiga">Botiga</a></li>
-            <li><a href="blog.html"          data-i18n="nav.novetats">Novetats</a></li>
+            <li><a href="ocupacion.html" data-i18n="nav.ocupacio">Ocupació</a></li>
             <li><a href="contacto.html"      data-i18n="nav.contacte">Contacte</a></li>
             <li><a href="guia_usuari_imperium_fitness.html"  data-i18n="footer.guia">Guia d'usuari</a></li>
           </ul>

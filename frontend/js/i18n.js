@@ -35,6 +35,7 @@ const I18n = (() => {
       "nav.registrat":          "Registra't",
       "nav.selector.ca":        "CA",
       "nav.selector.en":        "EN",
+      "nav.ocupacio": "Ocupació",
 
       // Index — Hero
       "hero.badge":             "La cadena de gimnasos premium",
@@ -82,6 +83,7 @@ const I18n = (() => {
       "app.googlePlay":         "Google Play",
       "app.disponibleA":        "Disponible a",
       "app.proximament":        "Aviat disponible",
+      "app.escaneja": "Escaneja per descarregar",
 
       // Index — CTA final
       "cta.titol":              "Llest per al canvi?",
@@ -382,6 +384,7 @@ const I18n = (() => {
       "nav.registrat":          "Sign up",
       "nav.selector.ca":        "CA",
       "nav.selector.en":        "EN",
+      "nav.ocupacio": "Occupancy",
 
       // Index — Hero
       "hero.badge":             "The premium gym chain",
@@ -429,6 +432,7 @@ const I18n = (() => {
       "app.googlePlay":         "Google Play",
       "app.disponibleA":        "Available on",
       "app.proximament":        "Coming soon",
+      "app.escaneja": "Scan to download",
 
       // Index — CTA final
       "cta.titol":              "Ready for a change?",
