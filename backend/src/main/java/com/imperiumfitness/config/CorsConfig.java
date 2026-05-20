@@ -20,6 +20,7 @@ public class CorsConfig implements WebMvcConfigurer {
                         "http://172.21.90.3:5500",      // ← servidor institut amb port
                         "http://10.147.17.250",         // ← ZeroTier
                         "http://10.147.17.250:5500",    // ← ZeroTier amb port
+                        "http://10.147.17.250:8085",
                         "http://10.147.17.250:8086",    // ← ZeroTier backend
                         "capacitor://localhost",    // Para Android (WebView nativo)
                         "http://localhost"          // Para emuladores Android antiguos

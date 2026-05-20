@@ -2,7 +2,7 @@ const IS_LOCAL_BACKEND = false;
 
 const API_BASE = IS_LOCAL_BACKEND
   ? "http://localhost:8084"
-  : "http://10.147.17.250:8086";
+  : "http://10.147.17.250:8086'";
 
 function authHeaders() {
   const token = localStorage.getItem("imperium_token");

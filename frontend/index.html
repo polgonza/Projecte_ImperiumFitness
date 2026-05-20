@@ -205,9 +205,7 @@
 
         <script>
         (function() {
-          const apkUrl = window.location.origin +
-            window.location.pathname.replace(/\/[^/]*$/, '') +
-            '/downloads/ImperiumFitness.apk';
+          const apkUrl = "http://10.147.17.250:8085/downloads/ImperiumFitness.apk";
 
           new QRCode(document.getElementById('qr-apk'), {
             text: apkUrl,
