@@ -1,32 +1,19 @@
-/* =====================================================
-   calendario.css — Calendario y tarjetas de clase
-   Se carga SOLO en: actividades.html
-   ===================================================== */
-
-/* =====================================================
-   CALENDARIO DE ACTIVIDADES
-   Estilos añadidos para la nueva sección de clases
-   ===================================================== */
-
-/* --- Layout principal de la página de actividades --- */
 .actividades-layout {
   display: grid;
-  grid-template-columns: 390px 1fr;   /* calendario más ancho */
+  grid-template-columns: 390px 1fr; 
   gap: 2rem;
   align-items: start;
 }
 
-/* --- Bloque del calendario --- */
 .calendar-block {
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: 14px;
   padding: 1.5rem;
-  position: sticky;     /* Se queda fijo al hacer scroll */
+  position: sticky; 
   top: 90px;
 }
 
-/* Cabecera del calendario: mes + botones prev/next */
 .calendar-header {
   display: flex;
   align-items: center;
@@ -41,7 +28,6 @@
   letter-spacing: 0.08em;
 }
 
-/* Botones de navegación (mes anterior / siguiente) */
 .cal-nav-btn {
   width: 32px;
   height: 32px;
@@ -61,7 +47,6 @@
   color: var(--primary);
 }
 
-/* Fila con los nombres de días (L M X J V S D) */
 .calendar-days-header {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
@@ -79,16 +64,14 @@
   padding: 0.4rem 0;
 }
 
-/* La cuadrícula de días del mes */
 .calendar-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   gap: 4px;
 }
 
-/* Cada celda de día */
 .cal-day {
-  aspect-ratio: 1;           /* Celdas cuadradas */
+  aspect-ratio: 1;   
   display: flex;
   align-items: center;
   justify-content: center;
@@ -101,20 +84,17 @@
   position: relative;
 }
 
-/* Día normal: hover */
 .cal-day:not(.disabled):not(.empty):hover {
   background: var(--bg-secondary);
   border-color: var(--border);
 }
 
-/* Día de hoy */
 .cal-day.today {
   border-color: var(--primary);
   color: var(--primary);
   font-weight: 700;
 }
 
-/* Día seleccionado */
 .cal-day.selected {
   background: linear-gradient(135deg, var(--primary), var(--primary-light));
   color: #000;
@@ -122,22 +102,19 @@
   border-color: transparent;
 }
 .cal-day.selected.today {
-  color: #000;   /* Override: mantiene negro sobre fondo dorado */
+  color: #000; 
 }
 
-/* Día pasado o domingo: bloqueado */
 .cal-day.disabled {
   color: var(--text-muted);
   opacity: 0.35;
   cursor: not-allowed;
 }
 
-/* Celda vacía (relleno de inicio de mes) */
 .cal-day.empty {
   cursor: default;
 }
 
-/* Punto indicador de que hay clases ese día */
 .cal-day .dot {
   position: absolute;
   bottom: 3px;
@@ -153,7 +130,6 @@
   display: none;
 }
 
-/* --- Info del día seleccionado (debajo del calendario) --- */
 .selected-day-info {
   margin-top: 1.25rem;
   padding-top: 1.25rem;
@@ -170,7 +146,6 @@
   margin-bottom: 0.25rem;
 }
 
-/* --- Sección "Mis Reservas" dentro del bloque lateral --- */
 .my-reservations-block {
   margin-top: 1.5rem;
   padding-top: 1.5rem;
@@ -186,14 +161,12 @@
   margin-bottom: 1rem;
 }
 
-/* Lista de reservas del usuario */
 .my-reservations-list {
   display: flex;
   flex-direction: column;
   gap: 0.6rem;
 }
 
-/* Cada item de reserva */
 .my-res-item {
   background: var(--bg-secondary);
   border: 1px solid var(--border);
@@ -224,7 +197,6 @@
   color: var(--text-muted);
 }
 
-/* Botón cancelar reserva (X rojo pequeño) */
 .btn-cancel-res {
   width: 26px;
   height: 26px;
@@ -245,7 +217,6 @@
   background: rgba(239,68,68,0.25);
 }
 
-/* Mensaje cuando no hay reservas */
 .no-reservations {
   font-size: 0.8rem;
   color: var(--text-muted);
@@ -253,9 +224,8 @@
   padding: 1rem 0;
 }
 
-/* --- Columna derecha: cabecera + filtros + cards --- */
 .classes-column {
-  min-width: 0;       /* Evita desbordamiento en grid */
+  min-width: 0;
 }
 
 .classes-column-header {
@@ -279,17 +249,16 @@
   color: var(--text-muted);
 }
 
-/* --- Tarjeta de clase (rediseñada) --- */
 .act-card {
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: 12px;
-  padding: 0.85rem 1.1rem;    /* menos padding vertical */
+  padding: 0.85rem 1.1rem; 
   display: flex;
   gap: 1rem;
   align-items: flex-start;
   transition: border-color 0.25s, transform 0.25s;
-  margin-bottom: 0.5rem;      /* menos separación entre tarjetas */
+  margin-bottom: 0.5rem;  
 }
 
 .act-card:hover {
@@ -297,7 +266,6 @@
   transform: translateY(-2px);
 }
 
-/* Banda de color según categoría (borde izquierdo) */
 .act-card-color {
   width: 4px;
   border-radius: 4px;
@@ -305,7 +273,6 @@
   flex-shrink: 0;
 }
 
-/* Colores por categoría */
 .act-card-color.crossfit  { background: #ef4444; }
 .act-card-color.yoga      { background: #a78bfa; }
 .act-card-color.spinning  { background: #f59e0b; }
@@ -314,7 +281,6 @@
 .act-card-color.funcional { background: #38bdf8; }
 .act-card-color.boxeo     { background: #fb7185; }
 
-/* Imagen de la categoría */
 .act-card-img {
   width: 48px;
   height: 48px;
@@ -324,7 +290,6 @@
   background: var(--bg-secondary);
 }
 
-/* Contenido principal de la tarjeta */
 .act-card-body {
   flex: 1;
   min-width: 0;
@@ -344,7 +309,6 @@
   font-weight: 700;
 }
 
-/* Hora en negrita dorada */
 .act-card-time {
   font-size: 1rem;
   font-weight: 700;
@@ -367,7 +331,6 @@
   gap: 0.3rem;
 }
 
-/* Barra de plazas */
 .act-spots-row {
   display: flex;
   align-items: center;
@@ -390,7 +353,6 @@
   transition: width 0.4s;
 }
 
-/* Cuando está casi lleno, la barra se vuelve roja */
 .act-spots-bar-fill.full { background: var(--danger); }
 
 .act-spots-text {
@@ -401,7 +363,6 @@
   text-align: right;
 }
 
-/* Pie de la tarjeta: tag + botón */
 .act-card-footer {
   display: flex;
   align-items: center;
@@ -421,7 +382,6 @@
   color: var(--text-muted);
 }
 
-/* Colores de tag por categoría */
 .act-category-tag.crossfit  { border-color: rgba(239,68,68,0.4);  color: #ef4444; }
 .act-category-tag.yoga      { border-color: rgba(167,139,250,0.4); color: #a78bfa; }
 .act-category-tag.spinning  { border-color: rgba(245,158,11,0.4);  color: #f59e0b; }
@@ -430,7 +390,6 @@
 .act-category-tag.funcional { border-color: rgba(56,189,248,0.4);  color: #38bdf8; }
 .act-category-tag.boxeo     { border-color: rgba(251,113,133,0.4); color: #fb7185; }
 
-/* --- Botón Reservar / Reservada / Completo --- */
 .btn-reservar {
   padding: 0.5rem 1.25rem;
   border-radius: 8px;
@@ -446,14 +405,12 @@
 }
 .btn-reservar:active { transform: scale(0.97); }
 
-/* Estado: disponible → amarillo */
 .btn-reservar.disponible {
   background: var(--primary);
   color: #000;
 }
 .btn-reservar.disponible:hover { opacity: 0.88; }
 
-/* Estado: ya reservada → verde */
 .btn-reservar.reservada {
   background: rgba(34,197,94,0.12);
   border: 1px solid rgba(34,197,94,0.4);
@@ -461,7 +418,6 @@
   cursor: default;
 }
 
-/* Estado: completo → gris */
 .btn-reservar.completo {
   background: var(--bg-secondary);
   border: 1px solid var(--border);
@@ -469,7 +425,6 @@
   cursor: not-allowed;
 }
 
-/* --- Mensaje vacío (no hay clases ese día/filtro) --- */
 .no-classes-msg {
   text-align: center;
   padding: 3rem 1rem;
@@ -486,7 +441,6 @@
   margin-bottom: 0.5rem;
 }
 
-/* --- Modal de confirmación de reserva --- */
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -497,14 +451,11 @@
   align-items: center;
   justify-content: center;
   padding: 1rem;
-
-  /* Empieza oculto */
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.25s;
 }
 
-/* Clase que lo hace visible */
 .modal-overlay.open {
   opacity: 1;
   pointer-events: auto;
@@ -518,7 +469,6 @@
   max-width: 420px;
   width: 100%;
   position: relative;
-  /* Línea dorada superior */
   overflow: hidden;
 
   transform: translateY(20px);
@@ -566,14 +516,13 @@
   font-size: 0.82rem;
 }
 
-/* --- Responsive para la página de actividades --- */
 @media (max-width: 900px) {
   .actividades-layout {
     grid-template-columns: 1fr;
   }
 
   .calendar-block {
-    position: static;    /* En móvil el calendario no es sticky */
+    position: static; 
   }
 }
 

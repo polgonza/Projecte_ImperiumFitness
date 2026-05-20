@@ -1,30 +1,16 @@
-/* =====================================================
-   componentes.css — Tarjetas y componentes reutilizables
-   service-card, products, plans, blog, perfil, etc.
-   Se carga en: index, tarifas, tienda, actividades,
-                instalaciones, blog, perfil, ocupacion.
-   ===================================================== */
-
-/* --- Cards de servicios (index) --- */
-/* --- Cards de servicios (con imagen de fondo + overlay) --- */
 .services-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 1.5rem;
 }
 
-/*
-  La tarjeta es un bloque con imagen de fondo.
-  La imagen se pone con style="background-image:url(...)" en el HTML.
-  Encima va un overlay oscuro con rgba para que el texto sea legible.
-*/
 .service-card {
   position: relative;
   border-radius: 14px;
-  overflow: hidden;           /* La imagen no se sale del borde */
-  height: 260px;              /* Altura fija para todas las tarjetas */
+  overflow: hidden;           
+  height: 260px;              
   display: flex;
-  align-items: flex-end;      /* El texto queda en la parte inferior */
+  align-items: flex-end;      
   transition: transform 0.35s, box-shadow 0.35s;
   cursor: default;
 }
@@ -34,21 +20,17 @@
   box-shadow: 0 16px 40px rgba(0,0,0,0.5);
 }
 
-/* Imagen de fondo: ocupa toda la tarjeta */
 .service-card-bg {
   position: absolute;
   inset: 0;
   background-size: cover;
   background-position: center;
-  transition: transform 0.5s;   /* Zoom suave al hacer hover */
+  transition: transform 0.5s; 
 }
 .service-card:hover .service-card-bg {
   transform: scale(1.07);
 }
 
-/* Overlay oscuro con gradiente de abajo hacia arriba:
-   - Arriba: semitransparente
-   - Abajo: casi negro (para leer el texto) */
 .service-card-overlay {
   position: absolute;
   inset: 0;
@@ -69,15 +51,13 @@
   );
 }
 
-/* Texto sobre el overlay */
 .service-card-text {
-  position: relative;   /* z-index > overlay */
+  position: relative;  
   z-index: 1;
   padding: 1.5rem;
   width: 100%;
 }
 
-/* Línea dorada pequeña encima del título */
 .service-card-text::before {
   content: '';
   display: block;
@@ -103,9 +83,6 @@
   line-height: 1.5;
 }
 
-
-/* --- Ocupación CTA banner (index) --- */
-/* --- Ocupación CTA banner --- */
 .occupancy-banner {
   background: var(--bg-card);
   border: 1px solid var(--border);
@@ -165,9 +142,6 @@
   margin-right: auto;
 }
 
-
-/* --- Productos grid --- */
-/* --- Productos grid --- */
 .products-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
@@ -190,7 +164,6 @@
   box-shadow: 0 12px 32px rgba(201, 162, 39, 0.12);
 }
 
-/* Contenedor de imagen: proporción 4/3 */
 .product-img {
   aspect-ratio: 3 / 4;
   height: auto;
@@ -203,7 +176,6 @@
   overflow: hidden;
 }
 
-/* Imagen real: ocupa todo el contenedor sin deformarse */
 .product-img img {
   position: absolute;
   inset: 0;
@@ -236,7 +208,7 @@
   padding: 1.1rem 1.1rem 1.25rem;
   display: flex;
   flex-direction: column;
-  flex: 1;                /* ocupa el espacio restante de la card */
+  flex: 1;  
 }
 
 .product-category {
@@ -273,9 +245,6 @@
   text-decoration: line-through;
 }
 
-
-/* --- Formulario de contacto --- */
-/* --- Formulario de contacto rápido --- */
 .contact-form-box {
   background: var(--bg-card);
   border: 1px solid var(--border);
@@ -313,7 +282,6 @@
 
 .textarea-field { resize: none; }
 
-/* Grupo de input con label */
 .field-group {
   margin-bottom: 1rem;
 }
@@ -328,7 +296,6 @@
   margin-bottom: 0;
 }
 
-/* Mensaje de error en formularios */
 .field-error {
   font-size: 0.75rem;
   color: var(--danger);
@@ -341,9 +308,6 @@
   border-color: var(--danger);
 }
 
-
-/* --- Sección App Download (index) --- */
-/* --- Sección App Download --- */
 .app-section {
   display: flex;
   align-items: center;
@@ -403,7 +367,6 @@
   color: var(--text);
 }
 
-/* Mockup de teléfono */
 .phone-mockup {
   width: 220px;
   height: 420px;
@@ -439,9 +402,6 @@
   text-align: center;
 }
 
-
-/* --- CTA dorado final (index) --- */
-/* --- CTA dorado final --- */
 .cta-gold {
   background: linear-gradient(135deg, var(--primary), var(--primary-light));
   border-radius: 16px;
@@ -475,9 +435,6 @@
   color: var(--text);
 }
 
-
-/* --- Tarifas / Planes --- */
-/* --- Tarifas --- */
 .plans-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -490,12 +447,12 @@
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: 16px;
-  overflow: visible;       /* permite que el badge sobresalga */
+  overflow: visible;   
   display: flex;
   flex-direction: column;
   transition: transform 0.3s;
   position: relative;
-  margin-top: 1.2rem;      /* espacio para el badge superior */
+  margin-top: 1.2rem;  
 }
 
 .plan-card:hover { transform: translateY(-4px); }
@@ -601,9 +558,6 @@
   padding: 1rem 2rem 2rem;
 }
 
-
-/* --- Contacto página --- */
-/* --- Contacto página --- */
 .contact-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -662,9 +616,6 @@
   color: var(--text-muted);
 }
 
-
-/* --- Ocupación (página) --- */
-/* --- Ocupación (página) --- */
 .gym-cards-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -725,9 +676,6 @@
 .pct.medium { color: var(--warning); }
 .pct.high   { color: var(--danger); }
 
-
-/* --- Actividades: filtros y cards de clase --- */
-/* --- Actividades (página) --- */
 .filter-tabs {
   display: flex;
   flex-wrap: wrap;
@@ -835,22 +783,12 @@
   border-radius: 2px;
 }
 
-
-/* --- Instalaciones --- */
-/* --- Instalaciones --- */
 .facilities-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 1.5rem;
 }
 
-/* --- Instalaciones --- */
-
-/*
-  Cada facility-card tiene imagen de fondo.
-  La imagen se asigna por JS o por clase CSS (ver abajo).
-  Overlay oscuro garantiza legibilidad del texto.
-*/
 .facility-card {
   position: relative;
   border-radius: 16px;
@@ -858,7 +796,7 @@
   min-height: 280px;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;  /* texto en la parte baja */
+  justify-content: flex-end; 
   border: 1px solid var(--border);
   transition: transform 0.35s, box-shadow 0.35s;
   cursor: default;
@@ -869,7 +807,6 @@
   box-shadow: 0 16px 40px rgba(0, 0, 0, 0.55);
 }
 
-/* Imagen de fondo: zoom suave en hover */
 .facility-card-bg {
   position: absolute;
   inset: 0;
@@ -883,7 +820,6 @@
   transform: scale(1.07);
 }
 
-/* Overlay: degradado de abajo hacia arriba para leer el texto */
 .facility-card-overlay {
   position: absolute;
   inset: 0;
@@ -906,14 +842,12 @@
   );
 }
 
-/* Texto encima del overlay */
 .facility-card-text {
   position: relative;
   z-index: 2;
   padding: 1.5rem;
 }
 
-/* Línea dorada decorativa encima del título */
 .facility-card-text::before {
   content: '';
   display: block;
@@ -939,79 +873,10 @@
   line-height: 1.55;
 }
 
-/* Oculta el emoji antiguo (.facility-icon) — JS lo sigue generando
-   pero lo escondemos con CSS sin tocar el JS */
 .facility-icon {
   display: none;
 }
 
-
-/* --- Blog --- */
-/* --- Blog --- */
-.blog-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 1.5rem;
-}
-
-.blog-card {
-  background: var(--bg-secondary);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  overflow: hidden;
-  transition: transform .2s;
-}
-.blog-card:hover { transform: translateY(-4px); }
-.blog-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1.5rem;
-}
-
-.blog-img {
-  height: 140px;
-  background: var(--bg-secondary);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 3rem;
-}
-
-.blog-body { padding: 1.5rem; }
-
-.blog-category {
-  font-size: 0.65rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-  color: var(--primary);
-  margin-bottom: 0.5rem;
-}
-
-.blog-card h3 {
-  font-size: 0.95rem;
-  font-weight: 700;
-  margin-bottom: 0.5rem;
-  line-height: 1.4;
-}
-
-.blog-card p {
-  font-size: 0.8rem;
-  color: var(--text-muted);
-  margin-bottom: 1rem;
-  line-height: 1.5;
-}
-
-.blog-meta {
-  display: flex;
-  gap: 1rem;
-  font-size: 0.75rem;
-  color: var(--text-muted);
-}
-
-
-/* --- Tienda --- */
-/* --- Tienda --- */
 .shop-filter {
   display: flex;
   gap: 0.5rem;
@@ -1019,9 +884,6 @@
   margin-bottom: 2rem;
 }
 
-
-/* --- Perfil de usuario --- */
-/* --- Perfil de usuario --- */
 .profile-grid {
   display: grid;
   grid-template-columns: 280px 1fr;
@@ -1159,6 +1021,5 @@
   color: var(--success);
 }
 
-/* Sección bg-secondary alterna */
 .bg-alt { background: rgba(17,17,17,0.5); }
 

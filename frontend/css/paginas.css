@@ -1,19 +1,8 @@
-/* =====================================================
-   paginas.css — Estilos exclusivos de páginas internas
-   auth (login, register, recover), page-section
-   Se carga en: login, register, recover y legales.
-   ===================================================== */
-
-/* --- PÁGINAS INTERNAS: padding superior (navbar fijo) --- */
-/* --- PÁGINAS INTERNAS --- */
 .page-section {
-  padding-top: 6rem; /* deja espacio al navbar */
+  padding-top: 6rem; 
   min-height: 100vh;
 }
 
-
-/* --- Login / Registro / Recuperar pages --- */
-/* --- Login / Registro / Recuperar pages --- */
 .auth-page {
   min-height: 100vh;
   display: flex;
@@ -34,7 +23,6 @@
   overflow: hidden;
 }
 
-/* Línea dorada superior */
 .auth-card::before {
   content: '';
   position: absolute;
@@ -78,7 +66,6 @@
   margin-bottom: 1.75rem;
 }
 
-/* Botones de login social */
 .social-btns {
   display: flex;
   flex-direction: column;
@@ -105,7 +92,6 @@
 .btn-social:hover { border-color: var(--primary); }
 .btn-social img { width: 20px; height: 20px; }
 
-/* Separador "o con email" */
 .or-divider {
   display: flex;
   align-items: center;
@@ -121,7 +107,6 @@
   background: var(--border);
 }
 
-/* Campo de contraseña con toggle */
 .password-wrapper {
   position: relative;
 }

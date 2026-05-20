@@ -1,14 +1,3 @@
-/* =====================================================
-   carrito.css — Carrito, checkout, pedidos
-   Se carga en: tienda, checkout, perfil.
-   ===================================================== */
-
-/* =====================================================
-   CARRITO, CHECKOUT Y PEDIDOS
-   Estilos añadidos para la tienda mejorada
-   ===================================================== */
-
-/* --- Icono del carrito en el navbar --- */
 .cart-icon-btn {
   position: relative;
   background: none;
@@ -26,7 +15,6 @@
 }
 .cart-icon-btn:hover { color: var(--primary); }
 
-/* Burbuja con el número de items */
 .cart-badge {
   position: absolute;
   top: -4px;
@@ -41,7 +29,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  /* Oculto cuando está vacío */
   opacity: 0;
   transform: scale(0);
   transition: opacity 0.2s, transform 0.2s;
@@ -51,11 +38,6 @@
   transform: scale(1);
 }
 
-/* --- Panel lateral del carrito (drawer) --- */
-/*
-  El carrito aparece como un panel que desliza desde la derecha.
-  Empieza fuera de pantalla (translateX 100%) y entra al añadir .open.
-*/
 .cart-drawer {
   position: fixed;
   top: 0;
@@ -76,7 +58,6 @@
   transform: translateX(0);
 }
 
-/* Fondo oscuro detrás del panel */
 .cart-backdrop {
   position: fixed;
   inset: 0;
@@ -91,7 +72,6 @@
   pointer-events: auto;
 }
 
-/* Cabecera del panel */
 .cart-header {
   display: flex;
   align-items: center;
@@ -122,19 +102,16 @@
 }
 .cart-close-btn:hover { border-color: var(--primary); color: var(--primary); }
 
-/* Lista de productos del carrito (área con scroll) */
 .cart-items {
   flex: 1;
   overflow-y: auto;
   padding: 1rem 1.5rem;
 }
 
-/* Scrollbar personalizado */
 .cart-items::-webkit-scrollbar { width: 4px; }
 .cart-items::-webkit-scrollbar-track { background: transparent; }
 .cart-items::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
 
-/* Un producto en el carrito */
 .cart-item {
   display: flex;
   align-items: center;
@@ -144,7 +121,6 @@
 }
 .cart-item:last-child { border-bottom: none; }
 
-/* Imagen/icono del producto en el carrito */
 .cart-item-img {
   width: 56px;
   height: 56px;
@@ -173,7 +149,6 @@
   font-weight: 700;
 }
 
-/* Controles de cantidad */
 .cart-item-controls {
   display: flex;
   align-items: center;
@@ -202,7 +177,6 @@
   text-align: center;
 }
 
-/* Botón eliminar (X) */
 .cart-item-remove {
   width: 28px;
   height: 28px;
@@ -221,7 +195,6 @@
 }
 .cart-item-remove:hover { background: rgba(239,68,68,0.2); }
 
-/* Pie del carrito: total + botón checkout */
 .cart-footer {
   padding: 1.25rem 1.5rem;
   border-top: 1px solid var(--border);
@@ -241,7 +214,6 @@
   color: var(--primary);
 }
 
-/* Carrito vacío */
 .cart-empty {
   text-align: center;
   padding: 3rem 1rem;
@@ -255,7 +227,6 @@
 }
 .cart-empty p { font-size: 0.9rem; }
 
-/* --- Página de Checkout --- */
 .checkout-layout {
   display: grid;
   grid-template-columns: 1fr 380px;
@@ -265,7 +236,6 @@
   margin: 0 auto;
 }
 
-/* Tarjeta de sección del formulario */
 .checkout-card {
   background: var(--bg-card);
   border: 1px solid var(--border);
@@ -284,18 +254,15 @@
   border-bottom: 1px solid var(--border);
 }
 
-/* Grid de campos del formulario de pago */
 .checkout-form-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
 }
-/* Campos que ocupan toda la fila */
 .checkout-form-grid .full-width {
   grid-column: 1 / -1;
 }
 
-/* --- Resumen del pedido (columna derecha) --- */
 .order-summary {
   background: var(--bg-card);
   border: 1px solid var(--border);
@@ -315,7 +282,6 @@
   border-bottom: 1px solid var(--border);
 }
 
-/* Línea de producto en el resumen */
 .summary-item {
   display: flex;
   justify-content: space-between;
@@ -330,7 +296,6 @@
 .summary-item .s-qty  { color: var(--text-muted); font-size: 0.78rem; }
 .summary-item .s-price { font-weight: 700; color: var(--primary); white-space: nowrap; }
 
-/* Totales */
 .summary-totals { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border); }
 .summary-row {
   display: flex;
@@ -349,7 +314,6 @@
 }
 .summary-row.total span:last-child { color: var(--primary); }
 
-/* --- Pantalla de éxito post-pago --- */
 .checkout-success {
   text-align: center;
   padding: 4rem 2rem;
@@ -393,7 +357,6 @@
   letter-spacing: 0.08em;
 }
 
-/* --- Tarjeta de crédito simulada (decorativa) --- */
 .credit-card-preview {
   background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
   border-radius: 14px;
@@ -452,7 +415,6 @@
   font-family: monospace;
 }
 
-/* --- Historial de pedidos en el perfil --- */
 .order-card {
   background: var(--bg-secondary);
   border: 1px solid var(--border);
@@ -494,7 +456,6 @@
   border: 1px solid rgba(34,197,94,0.3);
 }
 
-/* Lista de productos del pedido */
 .order-products {
   list-style: none;
   margin-bottom: 0.75rem;
@@ -523,7 +484,6 @@
 .order-total-label { color: var(--text-muted); margin-right: 0.5rem; }
 .order-total-amount { font-weight: 800; font-size: 1rem; color: var(--primary); }
 
-/* Sin pedidos */
 .no-orders {
   text-align: center;
   padding: 2.5rem 1rem;
@@ -532,7 +492,6 @@
 }
 .no-orders a { color: var(--primary); }
 
-/* --- Aviso login requerido para checkout --- */
 .login-required-box {
   background: rgba(201,162,39,0.06);
   border: 1px solid rgba(201,162,39,0.25);
@@ -548,7 +507,6 @@
 }
 .login-required-box strong { color: var(--text); }
 
-/* --- Campos de formulario: variante label encima --- */
 .form-field {
   display: flex;
   flex-direction: column;
@@ -575,7 +533,6 @@
 }
 .form-field input:focus { border-color: var(--primary); }
 .form-field input::placeholder { color: var(--text-muted); }
-/* Estado de error */
 .form-field.error input { border-color: var(--danger); }
 .form-field .field-err {
   font-size: 0.72rem;
@@ -584,7 +541,6 @@
 }
 .form-field.error .field-err { display: block; }
 
-/* --- Imágenes de productos (Unsplash) en la tienda --- */
 .product-img img {
   width: 100%;
   height: 100%;
@@ -592,14 +548,13 @@
   display: block;
 }
 
-/* --- Responsive checkout --- */
 @media (max-width: 768px) {
   .checkout-layout {
     grid-template-columns: 1fr;
   }
   .order-summary {
     position: static;
-    order: -1;   /* El resumen aparece arriba en móvil */
+    order: -1; 
   }
   .checkout-form-grid {
     grid-template-columns: 1fr;
@@ -609,11 +564,6 @@
   }
   .cart-drawer { width: 100vw; }
 }
-
-
-/* =====================================================
-   PÁGINAS LEGALES
-   ===================================================== */
 
 .legal-content {
   max-width: 760px;
@@ -670,7 +620,6 @@
   font-weight: 700;
 }
 
-/* Textarea en canal ético */
 .legal-content textarea.input-field {
   font-family: inherit;
   font-size: 0.88rem;

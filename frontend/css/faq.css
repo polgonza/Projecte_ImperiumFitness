@@ -1,12 +1,3 @@
-/* =====================================================
-   faq.css — Página de Preguntas Frecuentes
-   IMPERIUM FITNESS
-   Importado desde styles.css al final.
-   ===================================================== */
-
-
-/* ── HERO ─────────────────────────────────────────── */
-
 .faq-hero {
   padding: 8rem 0 4rem;
   text-align: center;
@@ -16,7 +7,6 @@
   overflow: hidden;
 }
 
-/* Línea decorativa dorada bajo el título */
 .faq-hero::after {
   content: '';
   display: block;
@@ -58,9 +48,6 @@
   line-height: 1.7;
 }
 
-
-/* ── BUSCADOR ─────────────────────────────────────── */
-
 .faq-search-wrap {
   max-width: 560px;
   margin: 3rem auto 0;
@@ -97,7 +84,6 @@
 
 .faq-search::placeholder { color: var(--text-muted); }
 
-/* Contador de resultados */
 .faq-search-count {
   text-align: center;
   font-size: 0.78rem;
@@ -107,8 +93,6 @@
   transition: opacity 0.2s;
 }
 
-
-/* ── SECCIÓN PRINCIPAL ────────────────────────────── */
 
 .faq-section {
   padding: 3rem 0 5rem;
@@ -121,9 +105,6 @@
   flex-direction: column;
   gap: 0.75rem;
 }
-
-
-/* ── ITEM ACORDEÓN ────────────────────────────────── */
 
 .faq-item {
   background: var(--bg-card);
@@ -142,7 +123,6 @@
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
 }
 
-/* Botón pregunta */
 .faq-question {
   width: 100%;
   display: flex;
@@ -165,13 +145,11 @@
 
 .faq-item.open .faq-question { color: var(--primary); }
 
-/* Texto de la pregunta */
 .faq-question-text {
   flex: 1;
   line-height: 1.4;
 }
 
-/* Icono + / × */
 .faq-icon {
   width: 30px;
   height: 30px;
@@ -195,7 +173,6 @@
   border-color: rgba(201, 162, 39, 0.4);
 }
 
-/* Respuesta — animación suave con max-height */
 .faq-answer {
   max-height: 0;
   overflow: hidden;
@@ -216,14 +193,12 @@
   line-height: 1.8;
 }
 
-/* Links dentro de respuestas */
 .faq-answer-inner a {
   color: var(--primary);
   text-decoration: underline;
   text-underline-offset: 3px;
 }
 
-/* Elemento no encontrado */
 .faq-no-results {
   text-align: center;
   padding: 3rem 1rem;
@@ -237,9 +212,6 @@
   margin-bottom: 1rem;
   display: block;
 }
-
-
-/* ── CATEGORÍAS ───────────────────────────────────── */
 
 .faq-category-label {
   font-size: 0.65rem;
@@ -261,9 +233,6 @@
   height: 1px;
   background: var(--border);
 }
-
-
-/* ── CTA INFERIOR ─────────────────────────────────── */
 
 .faq-cta {
   max-width: 760px;
@@ -289,9 +258,6 @@
   font-size: 0.83rem;
   color: var(--text-muted);
 }
-
-
-/* ── RESPONSIVE ───────────────────────────────────── */
 
 @media (max-width: 640px) {
   .faq-hero  { padding: 7rem 0 3rem; }

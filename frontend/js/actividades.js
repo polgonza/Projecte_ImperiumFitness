@@ -1,14 +1,3 @@
-/* =====================================================
-   IMPERIUM FITNESS — actividades.js
-   Sistema de Calendario + Reservas de Clases
-   ===================================================== */
-
-
-/* =====================================================
-   1. DADES — carregades des del backend
-   ===================================================== */
-
-// Totes les classes del backend (sense agrupar)
 let TOTES_LES_CLASSES = [];
 
 function classeBackendToLocal(c) {
@@ -68,7 +57,6 @@ const CATEGORY_IMAGES = {
   boxeo:     "https://images.unsplash.com/photo-1555597673-b21d5c935865?w=120&h=120&fit=crop"
 };
 
-// Fragment suggerit per assistent IA - revisar i adaptar
 const NOMBRE_DIA = {
   ca: ["Diumenge","Dilluns","Dimarts","Dimecres","Dijous","Divendres","Dissabte"],
   en: ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]
@@ -79,7 +67,6 @@ const NOMBRE_MES = {
   en: ["January","February","March","April","May","June","July","August","September","October","November","December"]
 };
 
-// Caché de reserves per classe (evita crides repetides al backend)
 const _reservesCache = {};
 
 async function getReservesClasse(classeId) {
@@ -92,21 +79,12 @@ async function getReservesClasse(classeId) {
   } catch (e) { return 0; }
 }
 
-/* =====================================================
-   2. ESTAT DE LA PÀGINA
-   ===================================================== */
-
 let calYear       = new Date().getFullYear();
 let calMonth      = new Date().getMonth();
 let selectedDate  = new Date();
 let activeFilter  = "all";
 let pendingClass  = null;
 let pendingDateKey = null;
-
-
-/* =====================================================
-   3. CALENDARI
-   ===================================================== */
 
 function toDateKey(year, month, day) {
   const mm = String(month + 1).padStart(2, "0");
@@ -128,7 +106,6 @@ function renderCalendar() {
   const selKey   = toDateKey(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate());
   const maxKey   = getMaxDateKey();
 
-  // Fragment suggerit per assistent IA - revisar i adaptar
   label.textContent = `${NOMBRE_MES[I18n.idioma][calMonth]} ${calYear}`;
 
   const firstDayRaw = new Date(calYear, calMonth, 1).getDay();
@@ -178,7 +155,6 @@ function selectDay(year, month, day) {
   renderClasesDelDia();
 }
 
-// Fragment suggerit per assistent IA - revisar i adaptar
 function updateSelectedDayInfo() {
   const info     = document.getElementById("selected-day-info");
   const dayIndex = selectedDate.getDay();
@@ -202,11 +178,6 @@ function updateSelectedDayInfo() {
     `;
   }
 }
-
-
-/* =====================================================
-   4. CLASSES — pintada de targetes
-   ===================================================== */
 
 async function renderClasesDelDia() {
   const container = document.getElementById("act-classes-list");
@@ -255,10 +226,7 @@ async function renderClasesDelDia() {
   }
 
   clases = clases.slice().sort((a, b) => a.time.localeCompare(b.time));
-  // Fragment suggerit per assistent IA - revisar i adaptar
   countEl.textContent = `${clases.length} ${t("activitats.places")}`;
-
-  // Buidem la caché per forçar dades fresques
   Object.keys(_reservesCache).forEach(k => delete _reservesCache[k]);
 
   const cards = await Promise.all(clases.map(async c => {
@@ -339,11 +307,6 @@ function buildClassCard(clase, reservesReals) {
   `;
 }
 
-
-/* =====================================================
-   5. MODAL DE CONFIRMACIÓ
-   ===================================================== */
-
 function openReservationModal(classId, dateKey) {
   if (!Auth.isLoggedIn()) {
     showToast(t("toast.sessionExp"), "error");
@@ -390,11 +353,6 @@ function formatDateKey(dateKey) {
   return `${d}/${m}/${y}`;
 }
 
-
-/* =====================================================
-   6. SISTEMA DE RESERVES — connectat al backend real
-   ===================================================== */
-
 async function confirmReservation() {
   if (!pendingClass || !pendingDateKey) return;
 
@@ -406,8 +364,6 @@ async function confirmReservation() {
   }
 
   if (!user.tarifaId) {
-        // Fragment suggerit per assistent IA - revisar i adaptar
-    // Permetre reserves si té tarifa activa O si té tarifa cancel·lada però encara vigent
     const ara = new Date();
     const tarifaVigent = user.tarifaId && (
       !user.tarifaCancellada ||
@@ -438,10 +394,7 @@ async function confirmReservation() {
     closeModal();
 
     if (result.ok) {
-    // Invalida la caché d'aquesta classe perquè el recompte es torna a demanar al backend
     delete _reservesCache[claseAReservar.id];
-
-    // Re-sincronitza reserves des de la BD (font de veritat)
     await sincronitzaReserves();
 
     renderClasesDelDia();
@@ -460,8 +413,6 @@ async function confirmReservation() {
     }
   }
 }
-
-/* ── localStorage ── */
 
 function loadAllReservas() {
   const user = Auth.getUser();
@@ -497,8 +448,6 @@ function addReservacioLocal(clase, dateKey) {
 }
 
 function getReservasDelDia(dateKey, classId) {
-    // Fragment suggerit per assistent IA - revisar i adaptar
-  // Caché de reserves per classe (evita crides repetides)
   const _reservesCache = {};
 
  async function getReservasDelDia(dateKey, classId) {
@@ -530,11 +479,6 @@ async function cancelReservation(reservaId) {
   showToast(t("toast.cancelReservaOk", [""]), "success");
 }
 
-/* =====================================================
-   RENDER — Llista "Les meves reserves"
-   ===================================================== */
-
-// Fragment suggerit per assistent IA - revisar i adaptar
 function renderMisReservas() {
   const lista = document.getElementById("my-reservations-list");
   if (!lista) return;
@@ -589,31 +533,23 @@ function renderMisReservas() {
   `).join("");
 }
 
-/* ── Sincronització BD → localStorage ── */
-
-// Fragment suggerit per assistent IA - revisar i adaptar
-// Sincronitza reserves: la BD és la font de veritat.
-// Sobreescriu el localStorage completament en cada càrrega.
 async function sincronitzaReserves() {
   const user = Auth.getUser();
   if (!user || !Auth.isLoggedIn()) {
-    saveAllReservas([]); // usuari no loguejat → neteja
+    saveAllReservas([]); 
     return;
   }
 
   try {
     const reserves = await ApiUsuari.getReserves(user.id);
 
-    // Si la BD no retorna res, netegem el localStorage
     if (!reserves || reserves.length === 0) {
       saveAllReservas([]);
       return;
     }
 
-    // Construïm la llista EXCLUSIVAMENT des de la BD (no afegim res del localStorage)
     const reservesNoves = reserves.map(r => {
     const classe = TOTES_LES_CLASSES.find(c => String(c.id) === String(r.classeId));
-    // Si no trobem la classe a TOTES_LES_CLASSES, usem la dataReserva com a fallback
     const dateKey = classe
       ? classe.dateKey
       : (r.dataReserva ? r.dataReserva.substring(0, 10).replace(/-/g, "") : "99991231");
@@ -629,19 +565,12 @@ async function sincronitzaReserves() {
     };
   });
 
-    // Sobreescrivim completament — elimina automàticament reserves obsoletes
     saveAllReservas(reservesNoves);
 
   } catch (e) {
     console.error("Error sincronitzant reserves:", e);
-    // En cas d'error de xarxa, NO toquem el localStorage per no perdre dades
   }
 }
-
-
-/* =====================================================
-   7. ARRENCADA — càrrega asíncrona des del backend
-   ===================================================== */
 
 document.addEventListener("DOMContentLoaded", async function () {
 
@@ -665,14 +594,12 @@ document.addEventListener("DOMContentLoaded", async function () {
   renderClasesDelDia();
   renderMisReservas();
 
-  // Delegació d'esdeveniments pels botons de reserva
   document.getElementById("act-classes-list").addEventListener("click", function(e) {
     const btn = e.target.closest(".btn-reservar.disponible");
     if (!btn) return;
     openReservationModal(btn.dataset.classId, btn.dataset.dateKey);
   });
 
-  // Navegació del calendari
   document.getElementById("cal-prev").addEventListener("click", function () {
     calMonth--;
     if (calMonth < 0) { calMonth = 11; calYear--; }
@@ -699,7 +626,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     renderCalendar();
   });
 
-  // Filtres de categoria
   document.querySelectorAll("#act-filters .filter-tab").forEach(function (btn) {
     btn.addEventListener("click", function () {
       document.querySelectorAll("#act-filters .filter-tab").forEach(b => b.classList.remove("active"));
@@ -709,7 +635,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     });
   });
 
-  // Modal
   document.getElementById("modal-cancel-btn").addEventListener("click", closeModal);
   document.getElementById("modal-confirm-btn").addEventListener("click", async function() {
     await confirmReservation();
@@ -721,8 +646,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     if (e.key === "Escape") closeModal();
   });
 
-  // Re-renderitza quan canvia l'idioma
-  // Fragment suggerit per assistent IA - revisar i adaptar
   document.addEventListener("idioma:canvi", function () {
     renderCalendar();
     updateSelectedDayInfo();
