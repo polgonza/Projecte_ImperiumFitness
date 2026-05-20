@@ -16,15 +16,13 @@ public interface UsuariRepository extends JpaRepository<Usuari, Long> {
     boolean existsByEmail(String email);
     long countByDataRegistreAfter(LocalDateTime data);
 
-   // Fragment suggerit per assistent IA - revisar i adaptar
-// Usuaris nous per mes (últims 6 mesos)
 @Query("SELECT FUNCTION('YEAR', u.dataRegistre), FUNCTION('MONTH', u.dataRegistre), COUNT(u) " +
        "FROM Usuari u WHERE u.dataRegistre >= :des " +
        "GROUP BY FUNCTION('YEAR', u.dataRegistre), FUNCTION('MONTH', u.dataRegistre) " +
        "ORDER BY FUNCTION('YEAR', u.dataRegistre), FUNCTION('MONTH', u.dataRegistre)")
 List<Object[]> findUsuarisMensuals(@Param("des") LocalDateTime des);
 
-// Distribució de tarifes
+
 @Query("SELECT COALESCE(t.nom, 'Sense tarifa'), COUNT(u) " +
        "FROM Usuari u LEFT JOIN u.tarifa t GROUP BY t.nom")
 List<Object[]> findDistribucioTarifes(); 

@@ -16,7 +16,6 @@ public class Producte {
 
     private String descripcio;
 
-    // BigDecimal per a valors monetaris: evita errors d'arrodoniment de float/double
     private BigDecimal preu;
 
     private String categoria;

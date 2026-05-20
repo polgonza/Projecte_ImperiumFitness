@@ -25,7 +25,7 @@ public class NoticiaService {
     }
 
     public List<NoticiaDTO> getAll() {
-        // Retornem ordenades de més nova a més antiga
+
         return repo.findAllByOrderByDataPublicacioDesc()
                 .stream().map(this::toDTO).collect(Collectors.toList());
     }

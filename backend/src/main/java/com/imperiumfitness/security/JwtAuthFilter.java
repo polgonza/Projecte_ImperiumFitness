@@ -34,7 +34,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
             String token = extractBearer(request);
 
-            // Solo si NO hay Bearer y la request es /admin.html, buscamos cookie
             if ((token == null || token.isBlank()) && isAdminPage(request)) {
                 token = extractCookie(request, "ADMIN_AUTH");
             }
@@ -43,13 +42,13 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 try {
                     Claims claims = jwtService.parse(token);
 
-                    String username = claims.getSubject(); // en tu diseño: subject = username
+                    String username = claims.getSubject();
                     @SuppressWarnings("unchecked")
                     List<String> roles = (List<String>) claims.get("roles");
                     if (roles == null) roles = List.of();
 
                     var authorities = roles.stream()
-                            .map(SimpleGrantedAuthority::new) // ya vienen como ROLE_ADMIN/ROLE_USER
+                            .map(SimpleGrantedAuthority::new) 
                             .toList();
 
                     var authentication =

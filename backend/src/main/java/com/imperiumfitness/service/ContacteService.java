@@ -23,7 +23,6 @@ public class ContacteService {
         return repo.findAll().stream().map(this::toDTO).collect(Collectors.toList());
     }
 
-    // Qualsevol pot enviar un contacte (endpoint públic)
     public ContacteDTO save(ContacteDTO dto) {
         Contacte c = toEntity(dto);
         c.setDataEnviament(LocalDateTime.now());

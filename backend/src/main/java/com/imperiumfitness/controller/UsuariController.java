@@ -24,7 +24,6 @@ public class UsuariController {
 
     private final UsuariService service;
 
-    // ✅ Injecció per constructor (millor pràctica)
     public UsuariController(UsuariService service) {
         this.service = service;
     }
@@ -67,7 +66,7 @@ public class UsuariController {
     public ResponseEntity<UsuariDTO> cancelarTarifa(@PathVariable Long id) {
     return ResponseEntity.ok(service.cancelarTarifa(id));
 }
-// Fragment suggerit per assistent IA - revisar i adaptar
+
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}/rol")
     public ResponseEntity<UsuariDTO> canviarRol(

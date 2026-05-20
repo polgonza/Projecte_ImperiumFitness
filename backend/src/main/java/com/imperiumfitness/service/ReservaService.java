@@ -46,7 +46,6 @@ public class ReservaService {
     }
 
     public ReservaDTO save(ReservaDTO dto) {
-    // Comprova si l'usuari té subscripció activa
     Usuari u = usuariRepo.findById(dto.getUsuariId())
             .orElseThrow(() -> new ResponseStatusException(
                     HttpStatus.NOT_FOUND, "Usuari no trobat"));
@@ -71,13 +70,11 @@ public class ReservaService {
                 HttpStatus.CONFLICT,
                 "L'usuari ja té una reserva per aquesta classe");
     }
-        // Fragment suggerit per assistent IA - revisar i adaptar
-    // Comprova places disponibles a la classe
+
     Classe classe = classeRepo.findById(dto.getClasseId())
             .orElseThrow(() -> new ResponseStatusException(
                     HttpStatus.NOT_FOUND, "Classe no trobada"));
 
-    // Fragment suggerit per assistent IA - revisar i adaptar
     if (classe.getHorari().isBefore(LocalDateTime.now())) {
         throw new ResponseStatusException(
             HttpStatus.CONFLICT, "No es pot reservar una classe que ja ha passat");
@@ -92,7 +89,6 @@ public class ReservaService {
     r.setDataReserva(LocalDateTime.now());
     return toDTO(repo.save(r));
 }
-        // Fragment suggerit per assistent IA - revisar i adaptar
     public List<ReservaDTO> getByClasse(Long classeId) {
         return repo.findByClasseId(classeId).stream().map(this::toDTO).collect(Collectors.toList());
     }

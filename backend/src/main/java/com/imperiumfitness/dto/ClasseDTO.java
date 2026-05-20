@@ -8,7 +8,7 @@ public class ClasseDTO {
     private String descripcio;
     private LocalDateTime horari;
     private Integer capacitat;
-    private Long gimnasId; // aplanem la relació a un simple ID
+    private Long gimnasId; 
 
     public ClasseDTO() {}
 

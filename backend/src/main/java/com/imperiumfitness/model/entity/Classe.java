@@ -16,8 +16,6 @@ public class Classe {
     private LocalDateTime horari;
     private Integer capacitat;
 
-    // @ManyToOne: moltes classes pertanyen a un gimnas
-    // @JoinColumn indica quina columna de la taula "classe" fa de clau forana
     @ManyToOne
     @JoinColumn(name = "gimnas_id")
     private Gimnas gimnas;

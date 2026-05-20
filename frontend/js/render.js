@@ -447,7 +447,7 @@ function renderHistorialLocal(misPedidos) {
     const productesHTML = pedido.productos.map(p => `
       <li>
         <span class="p-name">${p.name} x${p.quantity}</span>
-        <span class="p-price">${(p.price * p.quantity).toFixed(2)} €</span>
+        <span class="p-price">${((p.price ?? 0) * (p.quantity ?? 1)).toFixed(2)} €</span>
       </li>
     `).join("");
 
@@ -463,7 +463,7 @@ function renderHistorialLocal(misPedidos) {
         <ul class="order-products">${productesHTML}</ul>
         <div class="order-card-footer">
           <span class="order-total-label">${I18n.idioma === "ca" ? "Total:" : "Total:"}</span>
-          <span class="order-total-amount">${pedido.total.toFixed(2)} €</span>
+          <span class="order-total-amount">${(pedido.total ?? 0).toFixed(2)} €</span>
         </div>
       </div>
     `;

@@ -11,12 +11,10 @@ public class Venda {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // @ManyToOne: moltes vendes fan referència a un producte
     @ManyToOne
     @JoinColumn(name = "producte_id")
     private Producte producte;
 
-    // @ManyToOne: moltes vendes pertanyen a un usuari
     @ManyToOne
     @JoinColumn(name = "usuari_id")
     private Usuari usuari;

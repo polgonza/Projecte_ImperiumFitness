@@ -11,12 +11,10 @@ public class Reserva {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // @ManyToOne: moltes reserves pertanyen a un usuari
     @ManyToOne
     @JoinColumn(name = "usuari_id")
     private Usuari usuari;
 
-    // @ManyToOne: moltes reserves pertanyen a una classe
     @ManyToOne
     @JoinColumn(name = "classe_id")
     private Classe classe;

@@ -12,7 +12,6 @@ public class Pagament {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // @ManyToOne: molts pagaments pertanyen a un usuari
     @ManyToOne
     @JoinColumn(name = "usuari_id")
     private Usuari usuari;
