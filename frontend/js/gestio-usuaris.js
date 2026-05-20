@@ -1,16 +1,5 @@
-// Fragment suggerit per assistent IA - revisar i adaptar
-/* =====================================================
-   IMPERIUM FITNESS — gestio-usuaris.js
-   Pestanya d'administració: llistat + cerca + canvi de rol
-   Depèn de: api.js (apiFetch), app.js (Auth, showToast), i18n.js (t)
-   ===================================================== */
-
-
-/* ── Extensió d'ApiUsuari per a les funcions admin ── */
-// Fragment suggerit per assistent IA - revisar i adaptar
 const ApiAdmin = {
 
-  /** GET /api/usuaris — llista tots els usuaris (requereix ADMIN) */
   async getTots() {
     try {
       const res = await apiFetch("/api/usuaris");
@@ -19,7 +8,6 @@ const ApiAdmin = {
     } catch (e) { return []; }
   },
 
-  /** PUT /api/usuaris/{id}/rol — canvia el rol d'un usuari (requereix ADMIN) */
   async canviarRol(usuariId, nouRol) {
     try {
       const res = await apiFetch(`/api/usuaris/${usuariId}/rol`, {
@@ -32,26 +20,18 @@ const ApiAdmin = {
   }
 };
 
-
-/* ── Estat del mòdul ─────────────────────────────── */
-let _totsElsUsuaris = [];   // caché dels usuaris carregats
-let _filtre = "";           // text de cerca actiu
-
-
-/* ── Renderitzat principal ───────────────────────── */
-// Fragment suggerit per assistent IA - revisar i adaptar
+let _totsElsUsuaris = [];  
+let _filtre = "";         
 async function renderGestioUsuaris() {
   const container = document.getElementById("gestio-usuaris-container");
   if (!container) return;
 
-  // Comprovació de seguretat: només ADMIN
   const user = Auth.getUser();
   if (!user || !user.roles || !user.roles.includes("ROLE_ADMIN")) {
     container.innerHTML = "";
     return;
   }
 
-  // Estat de càrrega
   container.innerHTML = `
     <p style="color:var(--text-muted);text-align:center;padding:2rem">
       ${t("gestioUsuaris.carregant")}
@@ -69,8 +49,6 @@ async function renderGestioUsuaris() {
 
   _totsElsUsuaris = usuaris;
   _pintaUsuaris(container, usuaris);
-
-  // Reactiva el camp de cerca si ja tenia text
   const inputCerca = document.getElementById("gestio-cerca");
   if (inputCerca && _filtre) {
     inputCerca.value = _filtre;
@@ -78,8 +56,6 @@ async function renderGestioUsuaris() {
   }
 }
 
-
-/* ── Pintada de la taula ─────────────────────────── */
 function _pintaUsuaris(container, usuaris) {
   const total = usuaris.length;
 
@@ -129,12 +105,9 @@ function _pintaUsuaris(container, usuaris) {
     </div>
   `;
 
-  // Re-aplicar filtre si n'hi havia un
   if (_filtre) _aplicaFiltre(_filtre, false);
 }
 
-
-/* ── Generació de files HTML ─────────────────────── */
 function _fileresHTML(usuaris) {
   if (usuaris.length === 0) {
     return `<tr><td colspan="5" style="text-align:center;padding:2rem;color:var(--text-muted)">
@@ -184,9 +157,6 @@ function _fileresHTML(usuaris) {
   }).join("");
 }
 
-
-/* ── Filtre de cerca ─────────────────────────────── */
-// Fragment suggerit per assistent IA - revisar i adaptar
 function _aplicaFiltre(text, actualitzaComptador = true) {
   _filtre = text.toLowerCase().trim();
   const files = document.querySelectorAll("#gestio-tbody tr[data-nom]");
@@ -208,9 +178,6 @@ function _aplicaFiltre(text, actualitzaComptador = true) {
   }
 }
 
-
-/* ── Canvi de rol ────────────────────────────────── */
-// Fragment suggerit per assistent IA - revisar i adaptar
 async function canviarRolUsuari(usuariId, nouRol, nomUsuari) {
   const nouRolText = nouRol === "ADMIN"
     ? t("gestioUsuaris.admin")
@@ -222,13 +189,11 @@ async function canviarRolUsuari(usuariId, nouRol, nomUsuari) {
   const resultat = await ApiAdmin.canviarRol(usuariId, nouRol);
 
   if (resultat) {
-    // Actualitza la caché local
     const idx = _totsElsUsuaris.findIndex(u => u.id === usuariId);
     if (idx !== -1) _totsElsUsuaris[idx].rol = nouRol;
 
     showToast(t("gestioUsuaris.ok", [nomUsuari, nouRolText]), "success");
 
-    // Re-renderitza la taula (manté el filtre actiu)
     const container = document.getElementById("gestio-usuaris-container");
     if (container) _pintaUsuaris(container, _totsElsUsuaris);
     if (_filtre) _aplicaFiltre(_filtre);
@@ -237,8 +202,6 @@ async function canviarRolUsuari(usuariId, nouRol, nomUsuari) {
   }
 }
 
-
-/* ── Utilitats ───────────────────────────────────── */
 function _escapa(str) {
   return String(str || "")
     .replace(/&/g, "&amp;")

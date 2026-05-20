@@ -52,7 +52,6 @@
         <p data-i18n="checkoutTarifa.subtitol">Introdueix les teves dades de pagament per activar la subscripció</p>
       </div>
 
-      <!-- Formulari de pagament -->
       <div id="checkout-tarifa-form">
 
         <div class="login-required-box" id="login-required-box" style="display:none">
@@ -66,10 +65,8 @@
 
         <div class="checkout-layout" id="checkout-layout">
 
-          <!-- Columna esquerra: formulari -->
           <div>
 
-            <!-- Dades de facturació -->
             <div class="checkout-card">
               <h3 data-i18n="checkoutTarifa.dadesFacturacio">Dades de facturació</h3>
               <div class="checkout-form-grid">
@@ -89,7 +86,6 @@
               </div>
             </div>
 
-            <!-- Dades de pagament -->
             <div class="checkout-card">
               <h3 data-i18n="checkout.dadesPagament">Dades de pagament</h3>
 
@@ -153,12 +149,10 @@
 
           </div>
 
-          <!-- Columna dreta: resum de la subscripció -->
           <div class="order-summary">
             <h3 data-i18n="checkoutTarifa.resum">La teva subscripció</h3>
 
             <div id="tarifa-resum-container">
-              <!-- Omplert per JS -->
             </div>
 
             <div class="summary-totals">
@@ -185,7 +179,6 @@
         </div>
       </div>
 
-      <!-- Pantalla d'èxit -->
       <div id="checkout-tarifa-success" style="display:none">
         <div class="checkout-success">
           <div class="success-icon">&#10003;</div>
@@ -231,9 +224,6 @@
   <script src="js/carrito.js"></script>
 
   <script>
-    // Fragment suggerit per assistent IA - revisar i adaptar
-
-    // Llegim els paràmetres de la URL: ?plaId=2&nom=Quota%20Flex&preu=29.99
     const params   = new URLSearchParams(window.location.search);
     const plaId    = parseInt(params.get("plaId"));
     const plaNom   = decodeURIComponent(params.get("nom") || "");
@@ -293,7 +283,6 @@
       return valid;
     }
 
-        // Fragment suggerit per assistent IA - revisar i adaptar
     async function processarPagamentTarifa() {
       if (!validateFormTarifa()) {
         showToast(I18n.idioma === "ca" ? "Revisa els camps marcats en vermell." : "Please check the fields in red.", "error");
@@ -303,7 +292,6 @@
       const user = Auth.getUser();
       const btn  = document.getElementById("pay-tarifa-btn");
 
-      // Si ja té una tarifa activa, avisem
       if (user.tarifaId && user.tarifaId !== plaId) {
         const dataFiActual = user.tarifaDataFi
           ? new Date(user.tarifaDataFi).toLocaleDateString(I18n.idioma === "ca" ? "ca-ES" : "en-GB")
@@ -327,7 +315,6 @@
         document.getElementById("checkout-tarifa-success").style.display = "block";
         document.getElementById("success-pla-nom").textContent = plaNom;
 
-        // Missatge d'èxit adaptat si era un canvi programat
         if (user.tarifaId && user.tarifaId !== plaId) {
           const exitDesc = document.querySelector("[data-i18n='checkoutTarifa.exitDesc']");
           if (exitDesc) {
@@ -362,7 +349,6 @@
 
       document.getElementById("tarifa-total").textContent = `${plaPreu.toFixed(2)} €/mes`;
 
-      // Propera renovació = d'aquí a 1 mes
       const renovacio = new Date();
       renovacio.setMonth(renovacio.getMonth() + 1);
       document.getElementById("propera-renovacio").textContent =
@@ -373,7 +359,6 @@
       I18n.init();
       SessionManager.init(true);
 
-      // Si no hi ha paràmetres vàlids, redirigim a tarifes
       if (!plaId || !plaNom || isNaN(plaPreu)) {
         window.location.href = "tarifas.html";
         return;
@@ -386,7 +371,6 @@
         return;
       }
 
-      // Preomplim el nom i email de l'usuari
       const nomInput   = document.getElementById("ch-nombre");
       const emailInput = document.getElementById("ch-email");
       if (nomInput   && user.name)  nomInput.value   = user.name;

@@ -30,13 +30,13 @@ services:
       SPRING_DATASOURCE_PASSWORD: 12345678
 
   frontend:
-    build: ./frontend
+    image: nginx:alpine
     container_name: imperium-frontend
     restart: always
     ports:
-      - "8085:8085"
-    depends_on:
-      - backend
+      - "8085:80"
+    volumes:
+      - ./frontend:/usr/share/nginx/html:ro
 
 volumes:
   db_data:

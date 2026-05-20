@@ -1,16 +1,6 @@
-/* =====================================================
-   IMPERIUM FITNESS — checkout.js
-   ===================================================== */
-
-
-/* ── 1. RESUMEN DEL PEDIDO ── */
-
 function renderOrderSummary() {
   renderResumenPedido();
 }
-
-
-/* ── 2. TARJETA DECORATIVA ── */
 
 function updateCardPreview() {
   const titular = document.getElementById("ch-titular");
@@ -48,9 +38,6 @@ function formatExpiry(input) {
   input.value = val;
 }
 
-
-/* ── 3. VALIDACIÓ ── */
-
 function validateField(id, isValid) {
   const group = document.getElementById(id)?.closest(".form-field");
   if (!group) return isValid;
@@ -81,9 +68,6 @@ function validateForm() {
   return valid;
 }
 
-
-/* ── 4. GUARDAR PEDIDO ── */
-
 function saveOrder(userEmail) {
   const carrito  = getCarrito();
   const total    = getCarritoTotalFinal();
@@ -109,13 +93,11 @@ function saveOrder(userEmail) {
   return pedidoId;
 }
 
-/* Registra les vendes a la BD via API */
 async function registrarVendesALaBD(usuariId) {
   const carrito = getCarrito();
   const user    = Auth.getUser();
   if (!user || !usuariId) return;
 
-  // Per cada producte del carrito creem una venda a la BD
   for (const item of carrito) {
     try {
       await apiFetch("/api/vendes", {
@@ -132,9 +114,6 @@ async function registrarVendesALaBD(usuariId) {
   }
 }
 
-
-/* ── 5. PROCÉS DE PAGAMENT ── */
-
 async function processPay() {
   const user = Auth.getUser();
   if (!user) {
@@ -148,23 +127,18 @@ async function processPay() {
     return;
   }
 
-  // Deshabilitem el botó mentre procesem
   const payBtn = document.getElementById("pay-btn");
   if (payBtn) {
     payBtn.disabled = true;
     payBtn.textContent = I18n.idioma === "ca" ? "Processant..." : "Processing...";
   }
 
-  // Guardem a localStorage
   const pedidoId = saveOrder(user.email);
 
-  // Registrem les vendes a la BD
   await registrarVendesALaBD(user.id);
 
-  // Buidem el carrito
   vaciarCarrito();
 
-  // Mostrem confirmació
   document.getElementById("checkout-form-section").style.display = "none";
   document.getElementById("checkout-success").style.display      = "block";
   document.getElementById("success-order-id").textContent = 
@@ -172,9 +146,6 @@ async function processPay() {
 
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
-
-
-/* ── 6. ARRANQUE ── */
 
 document.addEventListener("DOMContentLoaded", function() {
   if (!document.getElementById("pay-btn")) return;
@@ -194,8 +165,6 @@ document.addEventListener("DOMContentLoaded", function() {
   if (nombreInput && user.name) nombreInput.value = user.name;
 
   renderOrderSummary();
-
-  // Connectem el botó de pagament (ara és async)
   document.getElementById("pay-btn").addEventListener("click", processPay);
 
   document.querySelectorAll(".form-field input").forEach(function(input) {

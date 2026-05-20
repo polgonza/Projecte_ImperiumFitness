@@ -1,22 +1,5 @@
-// Fragment suggerit per assistent IA - revisar i adaptar
-/* =====================================================
-   IMPERIUM FITNESS — i18n.js
-   Motor d'internacionalització (català / anglès)
-   -----------------------------------------------------
-   ÚS:
-     t("nav.inici")          → retorna el text en l'idioma actiu
-     I18n.canviaIdioma("en") → canvia a anglès i re-renderitza
-     I18n.idioma             → idioma actiu ("ca" | "en")
-
-   A l'HTML, afegeix data-i18n="clau" a qualsevol element:
-     <a href="index.html" data-i18n="nav.inici">Inici</a>
-   Els placeholders dinàmics usen {0}, {1}...:
-     t("toast.reservaOk", ["Spinning"])  → 'Reserva de "Spinning" confirmada!'
-   ===================================================== */
-
 const I18n = (() => {
 
-  // ── Traduccions ──────────────────────────────────────
   const TRADUCCIONS = {
 
     ca: {
@@ -692,16 +675,13 @@ const I18n = (() => {
     }
   };
 
-  // ── Estat intern ─────────────────────────────────────
   const CLAU_STORAGE = "imperium_idioma";
   let _idioma = localStorage.getItem(CLAU_STORAGE) || "ca";
 
-  // ── API pública ──────────────────────────────────────
   return {
 
     get idioma() { return _idioma; },
 
-    /** Tradueix una clau. Els placeholders {0},{1}... es substitueixen per args[] */
     tradueix(clau, args = []) {
       const text = (TRADUCCIONS[_idioma] || TRADUCCIONS.ca)[clau];
       if (text === undefined) {
@@ -711,41 +691,34 @@ const I18n = (() => {
       return args.reduce((s, v, i) => s.replaceAll(`{${i}}`, v), text);
     },
 
-    /** Canvia l'idioma, guarda la preferència i re-renderitza tots els elements data-i18n */
     canviaIdioma(nouIdioma) {
       if (!TRADUCCIONS[nouIdioma]) return;
       _idioma = nouIdioma;
       localStorage.setItem(CLAU_STORAGE, _idioma);
       this.aplicar();
       this._actualitzaSelector();
-      // Dispara event perquè altres mòduls puguin reaccionar
       document.dispatchEvent(new CustomEvent("idioma:canvi", { detail: { idioma: _idioma } }));
     },
 
-    /** Aplica les traduccions a tots els elements [data-i18n] de la pàgina */
     aplicar() {
       document.querySelectorAll("[data-i18n]").forEach(el => {
         const clau = el.getAttribute("data-i18n");
         const text = this.tradueix(clau);
-        // Si és un input, actualitza el placeholder; si no, el textContent
         if (el.tagName === "INPUT" || el.tagName === "TEXTAREA") {
           el.placeholder = text;
         } else {
           el.textContent = text;
         }
       });
-      // Actualitza el lang del <html>
       document.documentElement.lang = _idioma;
     },
 
-    /** Actualitza l'estat visual del selector de la navbar */
     _actualitzaSelector() {
       document.querySelectorAll(".lang-btn").forEach(btn => {
         btn.classList.toggle("active", btn.dataset.lang === _idioma);
       });
     },
 
-    /** Inicialitza el motor: aplica traduccions i munta el selector */
     init() {
       this.aplicar();
       this._actualitzaSelector();
@@ -753,8 +726,6 @@ const I18n = (() => {
   };
 })();
 
-// Funció global d'accés ràpid
-// Fragment suggerit per assistent IA - revisar i adaptar
 function t(clau, args = []) {
   return I18n.tradueix(clau, args);
 }
