@@ -1,10 +1,3 @@
-/* =====================================================
-   IMPERIUM FITNESS — carrito.js
-   ===================================================== */
-
-// Fragment suggerit per assistent IA - revisar i adaptar
-// Fragment suggerit per assistent IA - revisar i adaptar
-// Fragment suggerit per assistent IA - revisar i adaptar
 const CATEGORY_FALLBACK = {
   "Roba":      "https://images.unsplash.com/photo-1571902943202-507ec2618e8f?w=400&h=300&fit=crop",
   "Suplement": "https://images.unsplash.com/photo-1593095948071-474c5cc2989d?w=400&h=300&fit=crop",
@@ -12,10 +5,9 @@ const CATEGORY_FALLBACK = {
   "default":   "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=400&h=300&fit=crop"
 };
 
-// Assigna una imatge aleatòria consistent per producte (basada en l'ID)
 function getImgProducte(categoria, id) {
   const llista = CATEGORY_IMGS[categoria] || CATEGORY_IMGS["default"];
-  return llista[id % llista.length]; // consistent per ID, variat visualment
+  return llista[id % llista.length];
 }
 
 let PRODUCTS_IMG = [];
@@ -58,8 +50,6 @@ function getCarritoDescuento() {
   const user = typeof Auth !== "undefined" ? Auth.getUser() : null;
   if (!user) return 0;
   const subtotal  = getCarritoTotal();
-    // Fragment suggerit per assistent IA - revisar i adaptar
-  // Aplicar descompte si la tarifa és vigent (activa o cancel·lada però no caducada)
   const ara = new Date();
   const vigent = user.tarifaId && (
     !user.tarifaCancellada ||
@@ -262,13 +252,10 @@ function renderFeaturedProductsConImagenes(containerId) {
   }).join("");
 }
 
-// Fragment suggerit per assistent IA - revisar i adaptar
-// Insereix el botó del carret a la navbar — funció separada perquè
-// renderNavbarUser() sobreescriu nav-user-area en canviar d'idioma
 function insertarBotoCarret() {
   const navUserArea = document.getElementById("nav-user-area");
   if (!navUserArea) return;
-  if (document.getElementById("cart-open-btn")) return; // ja existeix, no dupliquem
+  if (document.getElementById("cart-open-btn")) return; 
   const cartBtn     = document.createElement("a");
   cartBtn.href      = "#";
   cartBtn.className = "cart-icon-btn";
@@ -284,10 +271,8 @@ function insertarBotoCarret() {
   updateCartBadge();
 }
 
-// Quan canvia l'idioma, renderNavbarUser() elimina el botó → el reinsertem
 document.addEventListener("idioma:canvi", function() {
   insertarBotoCarret();
-  // Re-renderitza la botiga si estem a tienda.html
   const page = window.location.pathname.split("/").pop() || "index.html";
   if (page === "tienda.html") renderProductosConImagenes("products-grid", _filtreActiu || "all");
   if (page === "index.html" || page === "") renderFeaturedProductsConImagenes("featured-products");
@@ -297,7 +282,6 @@ let _filtreActiu = "all";
 
 document.addEventListener("DOMContentLoaded", async function() {
 
-  /* --- Carrega productes del backend --- */
   try {
     const productes = await ApiProductes.getAll();
     PRODUCTS_IMG = productes.map(producteBackendToLocal);
@@ -306,12 +290,10 @@ document.addEventListener("DOMContentLoaded", async function() {
     PRODUCTS_IMG = [];
   }
 
-  /* --- Carrega la tarifa de l'usuari per aplicar descompte --- */
   if (typeof ApiUsuari !== "undefined" && Auth.isLoggedIn()) {
     await ApiUsuari.getTarifaActiva();
   }
 
-  /* --- Insereix el botó del carret al navbar --- */
   insertarBotoCarret();
 
   const closeBtn = document.getElementById("cart-close-btn");

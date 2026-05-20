@@ -1,13 +1,3 @@
-/* =====================================================
-   IMPERIUM FITNESS — perfil.js
-   Connectat al backend real via api.js
-   ===================================================== */
-
-
-/* =====================================================
-   1. INICIALITZACIÓ — càrrega de dades reals
-   ===================================================== */
-
 async function initPerfil() {
   if (!Auth.isLoggedIn()) { window.location.href = "login.html"; return; }
   const user = Auth.getUser();
@@ -76,11 +66,6 @@ async function cancelarSubscripcio() {
   }
 }
 
-
-/* =====================================================
-   2. TAB RESERVES — dades reals del backend
-   ===================================================== */
-
 async function renderReservationsInProfile() {
   const lista = document.getElementById("reservations-list");
   if (!lista) return;
@@ -145,11 +130,6 @@ async function renderReservationsInProfile() {
   renderReservasPerfil(reservesAmbNom);
 }
 
-
-/* =====================================================
-   3. TAB PEDIDOS — vendes reals del backend
-   ===================================================== */
-
 async function renderOrderHistory() {
   const container = document.getElementById("orders-list");
   if (!container) return;
@@ -194,11 +174,6 @@ async function renderOrderHistory() {
   renderPedidosPerfil(vendesAmbNom);
 }
 
-
-/* =====================================================
-   4. TAB HISTORIAL — localStorage
-   ===================================================== */
-
 function renderOldPurchases() {
   const lista = document.getElementById("purchases-list");
   if (!lista) return;
@@ -213,14 +188,6 @@ function renderOldPurchases() {
   renderHistorialLocal(misPedidos);
 }
 
-
-/* =====================================================
-   5. SISTEMA DE TABS
-   ===================================================== */
-
-// Fragment suggerit per assistent IA - revisar i adaptar
-// Canvi: el listener és ara async i recarrega renderStats() cada cop
-// que s'obre la pestanya d'estadístiques, garantint dades sempre fresques.
 function initProfileTabs() {
   const tabs     = document.querySelectorAll(".profile-tab");
   const contents = document.querySelectorAll(".tab-content");
@@ -232,17 +199,10 @@ function initProfileTabs() {
       tab.classList.add("active");
       const target = document.getElementById(tab.dataset.tab);
       if (target) target.classList.add("active");
-      // Recarrega les estadístiques cada cop que s'obre la pestanya
-      // Així les reserves actives i totes les dades sempre estan actualitzades
       if (tab.dataset.tab === "tab-stats") await renderStats();
     });
   });
 }
-
-
-/* =====================================================
-   6. CANCEL·LAR RESERVA DES DEL PERFIL
-   ===================================================== */
 
 async function cancelarReservaPerfil(classeId, nomClasse) {
   const confirmat = confirm(
@@ -271,12 +231,6 @@ async function cancelarReservaPerfil(classeId, nomClasse) {
   }
 }
 
-
-/* =====================================================
-   7. ESTADÍSTIQUES (només ADMIN)
-   ===================================================== */
-
-// Fragment suggerit per assistent IA - revisar i adaptar
 async function renderStats() {
   const container = document.getElementById("stats-container");
   if (!container) return;
@@ -441,7 +395,6 @@ async function renderStats() {
   `;
 }
 
-// Fragment suggerit per assistent IA - revisar i adaptar
 function graficBarres(dades, camp, nomMesos) {
   if (!dades || dades.length === 0)
     return `<p style="color:var(--text-muted);text-align:center;padding:1rem">${I18n.idioma==="ca"?"Sense dades":"No data"}</p>`;
@@ -467,7 +420,6 @@ function graficBarres(dades, camp, nomMesos) {
     </div>`;
 }
 
-// Fragment suggerit per assistent IA - revisar i adaptar
 function graficDonut(dades) {
   if (!dades || dades.length === 0)
     return `<p style="color:var(--text-muted);text-align:center;padding:1rem">${I18n.idioma==="ca"?"Sense dades":"No data"}</p>`;
@@ -519,8 +471,6 @@ function statCard(icon, label, value) {
     </div>`;
 }
 
-// Re-renderitza quan canvia l'idioma
-// Fragment suggerit per assistent IA - revisar i adaptar
 document.addEventListener("idioma:canvi", async function () {
   await Promise.all([
     renderReservationsInProfile(),

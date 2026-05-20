@@ -1,22 +1,5 @@
-/* =====================================================
-   ocupacion_data.js — Dataset estadístic simulat
-   IMPERIUM FITNESS
-
-   Dades d'ocupació horària per gimnàs i dia.
-   Cada gimnàs té un perfil de demanda diferent i realista.
-
-   Hores: 06:00 a 22:00 → 17 punts per dia
-   Índex 0 = 06:00 | Índex 16 = 22:00
-   Valors: percentatge d'ocupació (0–100)
-   ===================================================== */
-
-// Fragment suggerit per assistent IA - revisar i adaptar
 const OCUPACION_STATS = {
 
-  /* ── Gym 1 — Imperium Centre ──────────────────────────
-     Zona d'oficines al centre. Molt alta demanda dilluns i dimecres.
-     Divendres baixa perquè la gent marxa aviat.
-     Dissabte fluix — la gent prefereix altres gimnasos.          */
   gym1: {
     horario: {
       lunes:     [52,68,75,62,48,51,57,66,74,83,91,98,99,97,92,81,59],
@@ -28,9 +11,6 @@ const OCUPACION_STATS = {
     }
   },
 
-  /* ── Gym 2 — Imperium Nord ────────────────────────────
-     Barri d'oficines. Pics marcats dimarts i dijous.
-     Dissabte molt baix — treballadors no van el cap de setmana.   */
   gym2: {
     horario: {
       lunes:     [35,48,58,46,33,36,41,49,57,66,74,81,86,84,79,69,48],
@@ -42,9 +22,6 @@ const OCUPACION_STATS = {
     }
   },
 
-  /* ── Gym 3 — Imperium Sud ─────────────────────────────
-     Barri residencial. Dissabte és el dia FORT.
-     Entre setmana demanda moderada i homogènia.                   */
   gym3: {
     horario: {
       lunes:     [30,42,52,41,29,32,37,44,51,60,68,75,80,78,73,63,43],
@@ -56,9 +33,6 @@ const OCUPACION_STATS = {
     }
   },
 
-  /* ── Gym 4 — Imperium Est ─────────────────────────────
-     Zona universitària. Molt homogeni tota la setmana.
-     Pic a primera hora i a última. Baixa a mig matí.              */
   gym4: {
     horario: {
       lunes:     [58,65,55,42,35,38,44,54,63,68,65,71,78,82,79,72,55],
@@ -70,10 +44,6 @@ const OCUPACION_STATS = {
     }
   },
 
-  /* ── Gym 5 — Imperium Oest ────────────────────────────
-     Gimnàs de barri. Dijous i divendres forts (gent es prepara).
-     Dimarts i dimecres més baixos.
-     Dissabte matí fort, tarda buida.                              */
   gym5: {
     horario: {
       lunes:     [22,32,42,33,22,24,28,35,42,50,58,64,68,66,61,52,35],
@@ -86,29 +56,19 @@ const OCUPACION_STATS = {
   }
 };
 
-/* Etiquetes d'hora per a l'eix X de les gràfiques */
 const HORAS_LABELS = [
   "06:00","07:00","08:00","09:00","10:00","11:00","12:00",
   "13:00","14:00","15:00","16:00","17:00","18:00","19:00",
   "20:00","21:00","22:00"
 ];
 
-/* Dies de la setmana — mateix ordre que Date.getDay() */
 const DIAS_SEMANA = ["domingo","lunes","martes","miercoles","jueves","viernes","sabado"];
 
-/*
-  Retorna l'array de 17 valors del dia actual per a un gimnàs.
-  gymKey: "gym1" … "gym5"
-*/
 function getOcupacionHoy(gymKey) {
   const hoy = DIAS_SEMANA[new Date().getDay()];
   return OCUPACION_STATS[gymKey]?.horario[hoy] || new Array(17).fill(0);
 }
 
-/*
-  Retorna el percentatge d'ocupació a l'hora actual.
-  Si és abans de les 06:00 o després de les 22:00 retorna 0.
-*/
 function getOcupacionAhora(gymKey) {
   const h   = new Date().getHours();
   const idx = h - 6;

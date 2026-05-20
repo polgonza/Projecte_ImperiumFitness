@@ -1,22 +1,11 @@
-/* =====================================================
-   IMPERIUM FITNESS — ocupacion.js
-   Lògica de la pàgina d'ocupació en temps real
-   Depèn de: ocupacion_data.js, app.js (GYMS), api.js
-   ===================================================== */
-
-// Fragment suggerit per assistent IA - revisar i adaptar
-
 const GYM_KEYS = ["gym1","gym2","gym3","gym4","gym5"];
 
-// Labels dels dies fora del map per evitar undefined
 const LABELS_DIES = {
   ca: ["Dg","Dl","Dt","Dc","Dj","Dv","Ds"],
   en: ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"]
 };
 
 let filtroActual = "";
-
-/* ── Utilitats ────────────────────────────────────── */
 
 function nivelOcupacion(pct) {
   if (pct < 40) return "low";
@@ -48,8 +37,6 @@ function setTxt(id, txt) {
   if (el) el.textContent = txt;
 }
 
-/* ── Rellotge ─────────────────────────────────────── */
-
 function actualizarReloj() {
   const el = document.getElementById("occ-time-label");
   if (!el) return;
@@ -63,12 +50,9 @@ function actualizarReloj() {
   el.textContent = `${dies[I18n.idioma][now.getDay()]} ${hh}:${mm}`;
 }
 
-/* ── KPIs ─────────────────────────────────────────── */
-
 function actualizarKPIs() {
   const hoy = DIAS_SEMANA[new Date().getDay()];
 
-  // 1. Millor hora avui
   let menorMedia = 999, mejorIdx = 0;
   for (let i = 0; i < 17; i++) {
     const media = GYM_KEYS.reduce((sum, key) => {
@@ -81,7 +65,6 @@ function actualizarKPIs() {
   setTxt("kpi-best-hour", `${String(mejorHora).padStart(2,"0")}:00 - ${String(mejorHora+1).padStart(2,"0")}:00`);
   setTxt("kpi-best-sub",  `${I18n.idioma === "ca" ? "Ocupació estimada" : "Estimated occupancy"}: ${Math.round(menorMedia)}%`);
 
-  // 2. Gimnàs menys ple ara
   let minPct = 999, minIdx = 0;
   GYM_KEYS.forEach((key, i) => {
     const pct = getOcupacionAhora(key);
@@ -90,14 +73,12 @@ function actualizarKPIs() {
   setTxt("kpi-least-busy", GYMS[minIdx]?.name || "—");
   setTxt("kpi-least-sub", `${I18n.idioma === "ca" ? "Només al" : "Only at"} ${minPct}% ${I18n.idioma === "ca" ? "de capacitat" : "capacity"}`);
 
-  // 3. Centres pujant
   const subiendo = GYM_KEYS.filter(k => prediccion(k).subiendo).length;
   setTxt("kpi-prediction", `${subiendo} ${I18n.idioma === "ca"
     ? `centre${subiendo !== 1 ? "s" : ""} pujant`
     : `centre${subiendo !== 1 ? "s" : ""} rising`}`);
 }
 
-/* ── Cards ────────────────────────────────────────── */
 
 function renderCards(filtro) {
   const grid = document.getElementById("occ-cards-grid");
@@ -235,22 +216,16 @@ function toggleCharts(gymKey, btn) {
     : `📊 ${I18n.idioma === "ca" ? "Veure gràfiques ∨" : "View charts ∨"}`;
 }
 
-/* ── Filtre ───────────────────────────────────────── */
-
 function filtrarGimnasios(valor) {
   filtroActual = valor;
   renderCards(valor);
 }
-
-/* ── Refresc automàtic ───────────────────────────── */
 
 function actualizarTodo() {
   actualizarReloj();
   actualizarKPIs();
   renderCards(filtroActual);
 }
-
-/* ── Arrencada ───────────────────────────────────── */
 
 document.addEventListener("DOMContentLoaded", function() {
   if (!document.getElementById("occ-cards-grid")) return;

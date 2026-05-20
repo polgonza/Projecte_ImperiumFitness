@@ -1,12 +1,3 @@
-/* =====================================================
-   IMPERIUM FITNESS — gestio-admin.js
-   Panell d'administració: gestió de productes i classes
-   Depèn de: api.js, app.js (showToast), i18n.js (t)
-   ===================================================== */
-
-// Fragment suggerit per assistent IA - revisar i adaptar
-
-/* ── Estat del mòdul ─────────────────────────────── */
 let _productes    = [];
 let _classes      = [];
 let _editProducte = null;
@@ -21,9 +12,6 @@ const GIMNASOS = [
 const CATEGORIES   = ["Roba", "Suplement", "Accesoris"];
 const TIPUS_CLASSE = ["CrossFit","Yoga","Spinning","HIIT","Pilates","Funcional","Boxeo"];
 
-/* =====================================================
-   RENDER PRINCIPAL
-   ===================================================== */
 
 async function renderGestioAdmin() {
   const container = document.getElementById("gestio-admin-container");
@@ -66,10 +54,6 @@ function canviaSubTab(tab) {
     if (div) div.style.display = actiu ? "block" : "none";
   });
 }
-
-/* =====================================================
-   PRODUCTES
-   ===================================================== */
 
 async function carregaProductes() {
   const container = document.getElementById("admin-subtab-productes");
@@ -192,7 +176,6 @@ function previsuImatgeUrl() {
   preview.innerHTML = url ? `<img src="${url}" style="height:80px;border-radius:6px;object-fit:cover" onerror="this.style.display='none'">` : "";
 }
 
-// Fragment suggerit per assistent IA - revisar i adaptar
 function carregaImatgeLocal(input) {
   const file = input.files[0];
   if (!file) return;
@@ -227,7 +210,6 @@ async function desaProducte() {
 
   if (!nom || isNaN(preu) || isNaN(estoc)) { showToast(t("toast.campsBuits"),"error"); return; }
 
-  // Fragment suggerit per assistent IA - revisar i adaptar
 const imatgeUrl = base64 || urlInput || (_editProducte?.imatgeUrl ?? null);
 const dto = { nom, descripcio, preu, categoria, estoc, imatgeUrl };
   const resultat = _editProducte ? await ApiProductes.actualitzar(_editProducte.id,dto) : await ApiProductes.crear(dto);
@@ -247,10 +229,6 @@ async function eliminaProducte(id, nom) {
   if (ok) { showToast(I18n.idioma==="ca"?`"${nom}" eliminat.`:`"${nom}" deleted.`,"success"); await carregaProductes(); }
   else showToast(I18n.idioma==="ca"?"No s'ha pogut eliminar.":"Could not delete.","error");
 }
-
-/* =====================================================
-   CLASSES
-   ===================================================== */
 
 async function carregaClasses() {
   const container = document.getElementById("admin-subtab-classes");
@@ -304,7 +282,6 @@ function pintaClasses(container) {
     </div>`;
 }
 
-// Fragment suggerit per assistent IA - revisar i adaptar
 function obreFormClasse(id) {
   _editClasse = id ? _classes.find(c => c.id === id) : null;
   const c = _editClasse;
@@ -425,7 +402,6 @@ function obreFormClasse(id) {
     </div>
   `;
 
-  // Listener per mostrar/amagar el camp personalitzat de repeticions
   const selectRep = document.getElementById("fc-repeticions");
   const inputCustom = document.getElementById("fc-repeticions-custom");
   const preview = document.getElementById("fc-repeticions-preview");
@@ -457,7 +433,6 @@ function tancaFormClasse() {
   _editClasse = null;
 }
 
-// Fragment suggerit per assistent IA - revisar i adaptar
 async function desaClasse() {
   const tipus      = document.getElementById("fc-tipus")?.value;
   const nomExtra   = document.getElementById("fc-nom")?.value.trim();
@@ -474,7 +449,6 @@ async function desaClasse() {
 
   const nom = nomExtra ? `${tipus} ${nomExtra}` : tipus;
 
-  // Nombre de repeticions
   let repeticions = 1;
   if (selectRep) {
     repeticions = selectRep.value === "custom"
@@ -483,7 +457,6 @@ async function desaClasse() {
   }
 
   if (_editClasse) {
-    // Edició — sempre 1 sola classe
     const dto = { nom, descripcio, horari: horariRaw, capacitat, gimnasId: 1 };
     const resultat = await ApiClassesAdmin.actualitzar(_editClasse.id, dto);
     if (resultat) {
@@ -496,7 +469,6 @@ async function desaClasse() {
     return;
   }
 
-  // Creació — genera les N classes setmanals
   const dataBase = new Date(horariRaw);
   let errors = 0;
 
@@ -504,7 +476,6 @@ async function desaClasse() {
     const dataIteracio = new Date(dataBase);
     dataIteracio.setDate(dataBase.getDate() + i * 7);
 
-    // Format ISO sense zona horària per evitar desfasaments
     const pad = n => String(n).padStart(2, "0");
     const horariIso = `${dataIteracio.getFullYear()}-${pad(dataIteracio.getMonth()+1)}-${pad(dataIteracio.getDate())}T${pad(dataIteracio.getHours())}:${pad(dataIteracio.getMinutes())}`;
 
@@ -542,7 +513,6 @@ async function eliminaClasse(id, nom) {
   else showToast(I18n.idioma==="ca"?"No s'ha pogut eliminar.":"Could not delete.","error");
 }
 
-/* ── Utilitats ───────────────────────────────────── */
 function _esc(str) {
   return String(str||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
 }

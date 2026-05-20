@@ -1,32 +1,3 @@
-/* =====================================================
-   IMPERIUM FITNESS — render.js
-   Funciones de Renderizado (mostrar datos en pantalla)
-   -------------------------------------------------------
-   ESTE ARCHIVO contiene SOLO lógica de visualización:
-   - Manipulación del DOM
-   - innerHTML de secciones
-   - Pintar datos en pantalla
-
-   NO contiene:
-   - Lógica de negocio
-   - Llamadas al backend
-   - Gestión de estado
-
-   DEPENDE DE: app.js (Auth, PLANS, GYMS, CLASSES,
-               PRODUCTS, FACILITIES)
-   ===================================================== */
-
-
-/* =====================================================
-   1. NAVBAR — estado del usuario
-   ===================================================== */
-
-/*
-  renderNavbarUser() — muestra el nombre del usuario
-  o los botones de login/registro según si hay sesión.
-  Reemplaza a: updateNavbarUser() en app.js
-*/
-// Fragment suggerit per assistent IA - revisar i adaptar
 document.addEventListener("idioma:canvi", function () {
   renderNavbarUser();
 });
@@ -72,21 +43,9 @@ function renderNavbarUser() {
     }
   }
 
-  // Actualitza el selector d'idioma segons la preferència guardada
-  // Fragment suggerit per assistent IA - revisar i adaptar
   I18n._actualitzaSelector();
 }
 
-
-/* =====================================================
-   2. TARIFAS — planes de suscripción
-   ===================================================== */
-
-/*
-  renderPlanes(containerId) — pinta las cards de planes
-  en el elemento con el id indicado.
-  Reemplaza a: renderPlans() en app.js
-*/
 function renderPlanes(containerId) {
   const container = document.getElementById(containerId);
   if (!container) return;
@@ -128,16 +87,6 @@ function renderPlanes(containerId) {
   }).join("");
 }
 
-
-/* =====================================================
-   3. OCUPACIÓN — gimnasios en tiempo real
-   ===================================================== */
-
-/*
-  renderOcupacion(containerId) — pinta las cards de
-  ocupación de cada gimnasio.
-  Reemplaza a: renderGymOccupancy() en app.js
-*/
 function renderOcupacion(containerId) {
   const container = document.getElementById(containerId);
   if (!container) return;
@@ -163,17 +112,6 @@ function renderOcupacion(containerId) {
   }).join("");
 }
 
-
-/* =====================================================
-   4. CLASES — tarjetas con filtro de categoría
-   ===================================================== */
-
-/*
-  renderClases(containerId, filter) — pinta las tarjetas
-  de clases. Si filter es "all" muestra todas; si no,
-  solo las de esa categoría.
-  Reemplaza a: renderClasses() en app.js
-*/
 function renderClases(containerId, filter = "all") {
   const container = document.getElementById(containerId);
   if (!container) return;
@@ -228,16 +166,6 @@ function renderClases(containerId, filter = "all") {
   }).join("");
 }
 
-
-/* =====================================================
-   5. PRODUCTOS — tienda y home
-   ===================================================== */
-
-/*
-  renderProductos(containerId, filter) — pinta las cards
-  de productos con icono (versión sin imágenes reales).
-  Reemplaza a: renderProducts() en app.js
-*/
 function renderProductos(containerId, filter = "all") {
   const container = document.getElementById(containerId);
   if (!container) return;
@@ -272,11 +200,6 @@ function renderProductos(containerId, filter = "all") {
   `).join("");
 }
 
-/*
-  renderProductosDestacados(containerId) — versión reducida
-  para la home: solo los 4 primeros productos.
-  Reemplaza a: renderFeaturedProducts() en app.js
-*/
 function renderProductosDestacados(containerId) {
   const container = document.getElementById(containerId);
   if (!container) return;
@@ -303,16 +226,6 @@ function renderProductosDestacados(containerId) {
   `).join("");
 }
 
-
-/* =====================================================
-   7. INSTALACIONES — zonas del gimnasio
-   ===================================================== */
-
-/*
-  renderInstalaciones(containerId) — pinta las cards
-  de instalaciones.
-  Reemplaza a: renderFacilities() en app.js
-*/
 function renderInstalaciones(containerId) {
   const container = document.getElementById(containerId);
   if (!container) return;
@@ -326,18 +239,6 @@ function renderInstalaciones(containerId) {
   `).join("");
 }
 
-
-/* =====================================================
-   8. CARRITO — panel lateral
-   ===================================================== */
-
-/*
-  renderCarrito() — dibuja los productos del carrito en
-  el panel lateral y actualiza el total.
-  Reemplaza a: renderCarritoPanel() en carrito.js
-  NOTA: sigue llamándose renderCarritoPanel() en carrito.js
-  para no romper nada — esta función es el alias organizado.
-*/
 function renderCarrito() {
   const itemsEl = document.getElementById("cart-items");
   const totalEl = document.getElementById("cart-total");
@@ -371,7 +272,6 @@ function renderCarrito() {
     `).join("");
   }
 
-  // Total con descuento
   if (totalEl) {
     const subtotal   = getCarritoTotal();
     const descuento  = getCarritoDescuento();
@@ -394,16 +294,6 @@ function renderCarrito() {
   }
 }
 
-
-/* =====================================================
-   9. RESUMEN DEL PEDIDO — checkout
-   ===================================================== */
-
-/*
-  renderResumenPedido() — pinta las líneas de productos
-  y los totales en la columna derecha del checkout.
-  Reemplaza a: renderOrderSummary() en checkout.js
-*/
 function renderResumenPedido() {
   const summaryItems       = document.getElementById("summary-items");
   const summarySubtotal    = document.getElementById("summary-subtotal");
@@ -451,16 +341,6 @@ function renderResumenPedido() {
   summaryTotal.textContent = totalFinal.toFixed(2) + " €";
 }
 
-
-/* =====================================================
-   10. PERFIL — datos del usuario
-   ===================================================== */
-
-/*
-  renderDatosUsuario(user) — rellena los campos básicos
-  del perfil: avatar, nombre, email, plan, desde cuándo.
-  Reemplaza al bloque de getElementById/textContent en perfil.js
-*/
 function renderDatosUsuario(inicial, nombre, email, plan, desde) {
   setTextById("profile-initial",   inicial);
   setTextById("profile-name",      nombre);
@@ -470,12 +350,6 @@ function renderDatosUsuario(inicial, nombre, email, plan, desde) {
   setTextById("profile-since",     desde);
 }
 
-/*
-  renderReservasPerfil(reserves) — pinta la lista de
-  reservas en la pestaña del perfil.
-  Reemplaza al bloque innerHTML de renderReservationsInProfile()
-  en perfil.js
-*/
 function renderReservasPerfil(reserves) {
   const lista = document.getElementById("reservations-list");
   if (!lista) return;
@@ -524,12 +398,6 @@ function renderReservasPerfil(reserves) {
   `).join("");
 }
 
-/*
-  renderPedidosPerfil(vendes) — pinta el historial de
-  pedidos del backend en el perfil.
-  Reemplaza al bloque innerHTML de renderOrderHistory()
-  en perfil.js
-*/
 function renderPedidosPerfil(vendes) {
   const container = document.getElementById("orders-list");
   if (!container) return;
@@ -563,12 +431,6 @@ function renderPedidosPerfil(vendes) {
   `).join("");
 }
 
-/*
-  renderHistorialLocal(misPedidos) — pinta los pedidos
-  guardados en localStorage (los del carrito).
-  Reemplaza al bloque innerHTML de renderOldPurchases()
-  en perfil.js
-*/
 function renderHistorialLocal(misPedidos) {
   const lista = document.getElementById("purchases-list");
   if (!lista) return;
@@ -608,16 +470,6 @@ function renderHistorialLocal(misPedidos) {
   }).join("");
 }
 
-
-/* =====================================================
-   11. ALERTA SIN PLAN — aviso modal para reservar
-   ===================================================== */
-
-/*
-  renderAlertaSinPlan() — muestra un aviso flotante cuando
-  el usuario intenta reservar sin tarifa activa.
-  Reemplaza a: showNoPlantAlert() en app.js
-*/
 function renderAlertaSinPlan() {
   if (document.getElementById("no-plan-alert")) return;
 
