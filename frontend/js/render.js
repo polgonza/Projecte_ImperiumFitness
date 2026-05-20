@@ -13,7 +13,7 @@
    - Gestión de estado
 
    DEPENDE DE: app.js (Auth, PLANS, GYMS, CLASSES,
-               PRODUCTS, BLOG_POSTS, FACILITIES)
+               PRODUCTS, FACILITIES)
    ===================================================== */
 
 
@@ -297,35 +297,6 @@ function renderProductosDestacados(containerId) {
           ${p.originalPrice
             ? `<span class="price-old">${p.originalPrice.toFixed(2)}€</span>`
             : ""}
-        </div>
-      </div>
-    </div>
-  `).join("");
-}
-
-
-/* =====================================================
-   6. BLOG — listado de posts
-   ===================================================== */
-
-/*
-  renderBlog(containerId) — pinta las cards del blog.
-  Reemplaza a: renderBlog() en app.js
-*/
-function renderBlog(containerId) {
-  const container = document.getElementById(containerId);
-  if (!container) return;
-
-  container.innerHTML = BLOG_POSTS.map(post => `
-    <div class="blog-card">
-      <div class="blog-img">${post.icon}</div>
-      <div class="blog-body">
-        <div class="blog-category">${post.category}</div>
-        <h3>${post.title}</h3>
-        <p>${post.excerpt}</p>
-        <div class="blog-meta">
-          <span>📅 ${post.date}</span>
-          <span>⏱ ${post.readTime} lectura</span>
         </div>
       </div>
     </div>

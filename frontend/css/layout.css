@@ -1,9 +1,3 @@
-/* =====================================================
-   layout.css — Navbar, Hero, Footer, Secciones generales, Responsive global
-   Se carga en TODAS las páginas.
-   ===================================================== */
-
-/* --- Navbar --- */
 .navbar {
   position: fixed;
   top: 0;
@@ -51,7 +45,6 @@
   text-transform: uppercase;
 }
 
-/* Links de navegación escritorio */
 .nav-links {
   display: flex;
   align-items: center;
@@ -74,13 +67,12 @@
   color: var(--primary);
 }
 
-/* Botones del lado derecho del navbar */
 .nav-actions {
   display: flex;
   align-items: center;
   gap: 0.75rem;
 }
-/* Fragment suggerit per assistent IA - revisar i adaptar */
+
 .lang-selector {
   display: flex;
   align-items: center;
@@ -106,7 +98,6 @@
   font-size: 0.75rem;
 }
 
-/* Botón usuario (con nombre) */
 .btn-user {
   display: flex;
   align-items: center;
@@ -137,7 +128,6 @@
   color: #000;
 }
 
-/* Hamburguesa móvil */
 .nav-toggle {
   display: none;
   flex-direction: column;
@@ -155,7 +145,6 @@
   transition: all 0.3s;
 }
 
-/* Menú móvil */
 .nav-mobile {
   display: none;
   position: fixed;
@@ -199,8 +188,6 @@
   margin: 0.5rem 0;
 }
 
-
-/* --- HERO section --- */
 .hero {
   position: relative;
   height: 100vh;
@@ -269,7 +256,6 @@
   flex-wrap: wrap;
 }
 
-/* Scroll indicator */
 .scroll-indicator {
   position: absolute;
   bottom: 2rem;
@@ -303,7 +289,6 @@
   50% { transform: translateX(-50%) translateY(8px); }
 }
 
-/* --- Secciones generales --- */
 section { padding: 5rem 0; }
 
 .section-header {
@@ -325,8 +310,6 @@ section { padding: 5rem 0; }
   margin: 0 auto;
 }
 
-
-/* --- Footer --- */
 footer {
   background: var(--bg-card);
   border-top: 1px solid var(--border);
@@ -416,7 +399,6 @@ footer {
 }
 .footer-col ul li a:hover { color: var(--text); }
 
-/* Newsletter en footer */
 .newsletter-row {
   display: flex;
   gap: 0.5rem;
@@ -448,7 +430,6 @@ footer {
 }
 .newsletter-row button:hover { opacity: 0.9; }
 
-/* Bottom footer */
 .footer-bottom {
   border-top: 1px solid var(--border);
   padding-top: 1.5rem;
@@ -478,8 +459,6 @@ footer {
   color: var(--text-muted);
 }
 
-
-/* --- Responsive --- */
 @media (max-width: 1024px) {
   .footer-grid { grid-template-columns: 1fr 1fr; }
   .profile-grid { grid-template-columns: 1fr; }

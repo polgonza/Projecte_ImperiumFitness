@@ -1,19 +1,9 @@
-/* =====================================================
-   IMPERIUM FITNESS — api.js
-   Centralitza totes les crides al backend Spring Boot
-   BASE_URL apunta al backend local (canvia en producció)
-   ===================================================== */
-
-/* ── Configuració de l'entorn ───────────────────────────
-   IS_LOCAL_BACKEND = true  → backend al teu ordinador (mvn spring-boot:run)
-   IS_LOCAL_BACKEND = false → backend al servidor (ZeroTier)                */
-const IS_LOCAL_BACKEND = false; // ← canvia segons on treballs
+const IS_LOCAL_BACKEND = false; 
 
 const API_BASE = IS_LOCAL_BACKEND
   ? "http://localhost:8084"
   : "http://10.147.17.250:8086";
 
-/* ── Utilitat: capçaleres amb JWT ─────────────────────── */
 function authHeaders() {
   const token = localStorage.getItem("imperium_token");
   return {
@@ -22,9 +12,6 @@ function authHeaders() {
   };
 }
 
-/* ── Utilitat: gestió d'errors HTTP ─────────────────────
-   Si el servidor retorna 401 (token expirat) redirigim
-   automàticament al login. */
 async function apiFetch(url, options = {}) {
   const res = await fetch(API_BASE + url, {
     ...options,
@@ -38,10 +25,6 @@ async function apiFetch(url, options = {}) {
 
   return res;
 }
-
-/* ══════════════════════════════════════════════════════
-   AUTH
-   ══════════════════════════════════════════════════════ */
 
 const ApiAuth = {
 
@@ -125,10 +108,6 @@ const ApiAuth = {
   }
 };
 
-/* ══════════════════════════════════════════════════════
-   CLASSES
-   ══════════════════════════════════════════════════════ */
-
 const ApiClasses = {
 
   async getAll() {
@@ -187,10 +166,6 @@ const ApiClasses = {
   }
 };
 
-/* ══════════════════════════════════════════════════════
-   PRODUCTES
-   ══════════════════════════════════════════════════════ */
-
 const ApiProductes = {
 
   async getAll() {
@@ -201,7 +176,6 @@ const ApiProductes = {
     } catch (e) { return []; }
   },
 
-  // Fragment suggerit per assistent IA - revisar i adaptar
   async crear(producte) {
     try {
       const res = await apiFetch("/api/productes", {
@@ -232,11 +206,6 @@ const ApiProductes = {
   }
 };
 
-/* ══════════════════════════════════════════════════════
-   CLASSES ADMIN (crear / editar / eliminar)
-   ══════════════════════════════════════════════════════ */
-
-// Fragment suggerit per assistent IA - revisar i adaptar
 const ApiClassesAdmin = {
 
   async crear(classe) {
@@ -269,10 +238,6 @@ const ApiClassesAdmin = {
   }
 };
 
-/* ══════════════════════════════════════════════════════
-   NOTÍCIES
-   ══════════════════════════════════════════════════════ */
-
 const ApiNoticies = {
 
   async getAll() {
@@ -283,10 +248,6 @@ const ApiNoticies = {
     } catch (e) { return []; }
   }
 };
-
-/* ══════════════════════════════════════════════════════
-   CONTACTE
-   ══════════════════════════════════════════════════════ */
 
 const ApiContacte = {
 
@@ -301,10 +262,6 @@ const ApiContacte = {
     } catch (e) { return false; }
   }
 };
-
-/* ══════════════════════════════════════════════════════
-   USUARI — perfil
-   ══════════════════════════════════════════════════════ */
 
 const ApiUsuari = {
 
@@ -367,12 +324,7 @@ const ApiUsuari = {
   }
 };
 
-/* ══════════════════════════════════════════════════════
-   ESTADÍSTIQUES — només ADMIN
-   ══════════════════════════════════════════════════════ */
-
 const ApiStats = {
-    // Fragment suggerit per assistent IA - revisar i adaptar
   async getVendesMensuals() {
     try { const res = await apiFetch("/api/stats/vendes-mensuals"); return res && res.ok ? await res.json() : []; } catch(e) { return []; }
   },
@@ -395,7 +347,6 @@ const ApiStats = {
       return null;
     } catch (e) { return null; }
   },
-    // Fragment suggerit per assistent IA - revisar i adaptar
   async getClasses() {
     try {
       const res = await apiFetch("/api/stats/classes");
@@ -412,10 +363,6 @@ const ApiStats = {
     } catch (e) { return null; }
   }
 };
-
-/* ══════════════════════════════════════════════════════
-   GESTIÓ DE SESSIÓ — expiració del token JWT
-   ══════════════════════════════════════════════════════ */
 
 const SessionManager = {
 
@@ -496,8 +443,6 @@ const SessionManager = {
 
 async renovarSessio() {
   document.getElementById("session-warning")?.remove();
-  // Fragment suggerit per assistent IA - revisar i adaptar
-  // Com no tenim endpoint de refresc, cal fer login de nou
   sessionStorage.setItem("session_msg",
     I18n.idioma === "ca"
       ? "Per seguretat, cal que tornis a iniciar sessió per renovar-la."

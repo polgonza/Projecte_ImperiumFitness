@@ -29,6 +29,14 @@ services:
       SPRING_DATASOURCE_USERNAME: mplf
       SPRING_DATASOURCE_PASSWORD: 12345678
 
-      
+  frontend:
+    build: ./frontend
+    container_name: imperium-frontend
+    restart: always
+    ports:
+      - "8085:8085"
+    depends_on:
+      - backend
+
 volumes:
   db_data:

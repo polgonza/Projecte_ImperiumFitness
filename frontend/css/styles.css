@@ -1,13 +1,3 @@
-/* =====================================================
-   styles.css — Archivo principal de importación
-   IMPERIUM FITNESS
-
-   Este archivo NO contiene estilos propios.
-   Solo importa los archivos CSS en el orden correcto.
-
-   ORDEN IMPORTANTE: base → layout → componentes → resto
-   ===================================================== */
-
 /* 1. Variables, reset, botones, toast — SIEMPRE primero */
 @import url("base.css");
 
