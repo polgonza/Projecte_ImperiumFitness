@@ -61,25 +61,22 @@ public AuthController(AuthService authService,
     @PostMapping("/registre")
 public ResponseEntity<LoginResponse> registre(@RequestBody RegistreRequest req) {
 
-    // Cridem el service que valida, hasheja i guarda
+
     String token = authService.registre(
             req.nom(),
             req.email(),
             req.password()
     );
 
-    // Retornem el token igual que al login
+
     return ResponseEntity.status(201).body(new LoginResponse(token));
 }
-// Simulació de reset de contrasenya
-// Comprova que l'email existeix però no envia res
+
 @PostMapping("/recover")
 public ResponseEntity<Void> recover(@RequestBody Map<String, String> body) {
     String email = body.get("email");
-    
-    // Sempre retornem 200 per seguretat
-    // (no revelem si l'email existeix o no)
-    usuariRepository.findByEmail(email); // comprovem però no fem res
+
+    usuariRepository.findByEmail(email); 
     return ResponseEntity.ok().build();
 }
 }

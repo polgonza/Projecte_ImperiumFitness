@@ -5,11 +5,11 @@ import java.time.LocalDateTime;
 import com.imperiumfitness.model.entity.Tarifa;
 
 @Entity
-@Table(name = "usuari") // nom exacte de la taula SQL
+@Table(name = "usuari")
 public class Usuari {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // AUTO_INCREMENT de MariaDB
+    @GeneratedValue(strategy = GenerationType.IDENTITY) 
     private Long id;
 
     @ManyToOne
@@ -23,13 +23,13 @@ public class Usuari {
     private String email;
 
     @Column(nullable = false)
-    private String contrasenya; // aquí sempre s'emmagatzemarà el hash BCrypt
+    private String contrasenya;
 
-    @Column(name = "data_registre") // nom exacte de la columna SQL
+    @Column(name = "data_registre") 
     private LocalDateTime dataRegistre;
 
     @Column(nullable = false)
-    private String rol; // valors: "USER" o "ADMIN"
+    private String rol;
 
     @Column(name = "tarifa_data_inici")
     private LocalDateTime tarifaDataInici;
@@ -40,10 +40,7 @@ public class Usuari {
     @Column(name = "tarifa_cancellada")
     private Boolean tarifaCancellada = false;
 
-    // ── Constructor buit obligatori per JPA ──────────────────────────────────
     public Usuari() {}
-
-    // ── Getters i Setters ────────────────────────────────────────────────────
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -76,7 +73,6 @@ public class Usuari {
     public Boolean getTarifaCancellada() { return tarifaCancellada; }
     public void setTarifaCancellada(Boolean t) { this.tarifaCancellada = t; }
 
-// Mètode útil: comprova si la subscripció és activa
     public boolean isSubscripcioActiva() {
         if (tarifa == null) return false;
         if (tarifaDataFi == null) return false;

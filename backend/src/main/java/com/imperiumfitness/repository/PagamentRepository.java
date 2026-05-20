@@ -7,6 +7,6 @@ import java.util.List;
 
 @Repository
 public interface PagamentRepository extends JpaRepository<Pagament, Long> {
-    // Tots els pagaments d'un usuari
+
     List<Pagament> findByUsuariId(Long usuariId);
 }

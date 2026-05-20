@@ -65,7 +65,6 @@ public class ClasseService {
         return toDTO(repo.save(c));
     }
 
-    // Elimina la classe i totes les seves reserves (evita FK constraint)
     @Transactional
     public void delete(Long id) {
         if (!repo.existsById(id))

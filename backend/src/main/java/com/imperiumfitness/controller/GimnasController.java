@@ -28,7 +28,7 @@ public class GimnasController {
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN')") // només l'admin pot crear
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<GimnasDTO> create(@RequestBody GimnasDTO dto) {
         return ResponseEntity.status(201).body(service.save(dto));
     }

@@ -10,7 +10,6 @@
 
 <body>
 
-  <!-- ========== NAVBAR ========== -->
   <nav class="navbar" id="navbar">
     <div class="container">
       <a href="index.html" class="navbar-brand">
@@ -47,7 +46,6 @@
     <div id="nav-mobile-user"></div>
   </div>
 
-  <!-- CONTENIDO -->
   <section class="page-section">
     <div class="container">
 
@@ -56,7 +54,6 @@
         <p>Encuentra el plan perfecto para tu estilo de entrenamiento</p>
       </div>
 
-      <!-- Les tarifes es carreguen des de l'API -->
       <div class="plans-grid" id="plans-grid">
         <p style="color:var(--text-muted);text-align:center;padding:3rem;grid-column:1/-1">
           ⏳ Cargando tarifas...
@@ -72,7 +69,6 @@
     </div>
   </section>
 
-  <!-- PANEL CARRITO -->
   <div class="cart-backdrop" id="cart-backdrop"></div>
   <div class="cart-drawer" id="cart-drawer">
     <div class="cart-header">
@@ -142,7 +138,6 @@
     </div>
   </footer>
 
-  <!-- SCRIPTS — ordre correcte, sense duplicats -->
   <script src="js/i18n.js"></script>
   <script src="js/api.js"></script>
   <script src="js/render.js"></script>
@@ -150,7 +145,7 @@
   <script src="js/carrito.js"></script>
 
   <script>
-    // Fragment suggerit per assistent IA - revisar i adaptar
+
     const TARIFA_CONFIG = {
       "Quota Flex": {
         icon: "⚡", popular: true,
@@ -262,18 +257,16 @@
       }).join("");
     }
 
-    // Fragment suggerit per assistent IA - revisar i adaptar
 async function contractarTarifa(tarifaId, tarifaNom, preu) {
   if (!Auth.isLoggedIn()) {
     showToast(t("tarifes.iniciarPerContractar"), "error");
     setTimeout(() => { window.location.href = "login.html"; }, 1500);
     return;
   }
-  // Redirigim al checkout específic de tarifes amb els paràmetres
+
   window.location.href = `checkout-tarifa.html?plaId=${tarifaId}&nom=${encodeURIComponent(tarifaNom)}&preu=${preu}`;
 }
 
-    // Re-renderitza quan canvia l'idioma
     document.addEventListener("idioma:canvi", renderTarifes);
 
     document.addEventListener("DOMContentLoaded", async function () {

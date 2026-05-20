@@ -10,7 +10,6 @@
 
 <body>
 
-  <!-- ========== NAVBAR ========== -->
   <nav class="navbar" id="navbar">
     <div class="container">
       <a href="index.html" class="navbar-brand">
@@ -47,7 +46,6 @@
     <div id="nav-mobile-user"></div>
   </div>
 
-  <!-- CONTENIDO -->
   <section class="page-section">
     <div class="container">
 
@@ -56,19 +54,8 @@
         <p data-i18n="checkout.subtitol">Revisa la teva comanda i introdueix les dades de pagament</p>
       </div>
 
-      <!--
-        #checkout-form-section  → el formulario normal
-        #checkout-success       → la pantalla de confirmación (oculta al inicio)
-        Ambos se controlan desde checkout.js
-      -->
-
-      <!-- ===== FORMULARIO DE PAGO ===== -->
       <div id="checkout-form-section">
 
-        <!--
-          Aviso para usuarios no logueados.
-          Si el usuario SÍ está logueado, checkout.js lo oculta.
-        -->
         <div class="login-required-box" id="login-required-box" style="display:none">
           <p>
             <strong data-i18n="checkout.loginRequerit">Has d'iniciar sessió</strong>
@@ -80,10 +67,8 @@
 
         <div class="checkout-layout" id="checkout-layout">
 
-          <!-- Columna izquierda: formulario -->
           <div>
 
-            <!-- SECCIÓN: Datos de envío -->
             <div class="checkout-card">
              <h3 data-i18n="checkout.dadesEnviament">Dades d'enviament</h3>
               <div class="checkout-form-grid">
@@ -115,14 +100,8 @@
               </div>
             </div>
 
-            <!-- SECCIÓN: Datos de pago (simulado) -->
             <div class="checkout-card">
               <h3 data-i18n="checkout.dadesPagament">Dades de pagament</h3>
-
-              <!--
-                Tarjeta decorativa — se actualiza en tiempo real con lo que
-                escribe el usuario (desde checkout.js)
-              -->
               <div class="credit-card-preview" id="cc-preview">
                 <div class="cc-chip"></div>
                 <div class="cc-number" id="cc-number-display">**** **** **** ****</div>
@@ -169,7 +148,6 @@
               </div>
             </div>
 
-            <!-- Botón de pago -->
             <button class="btn btn-primary" id="pay-btn"
               style="width:100%;justify-content:center;padding:1rem;font-size:0.9rem"
               data-i18n="checkout.pagar">
@@ -178,18 +156,14 @@
 
           </div>
 
-          <!-- Columna derecha: resumen del pedido -->
           <div class="order-summary">
             <h3 data-i18n="checkout.laTevaComanda">La teva comanda</h3>
-            <!-- Líneas de productos (generadas por checkout.js) -->
             <div id="summary-items"></div>
-            <!-- Totales -->
             <div class="summary-totals">
               <div class="summary-row">
                 <span data-i18n="checkout.subtotal">Subtotal</span>
                 <span id="summary-subtotal">0.00 €</span>
               </div>
-              <!-- Fila de descuento: visible solo si el usuario está logueado -->
               <div class="summary-row" id="summary-discount-row" style="color:var(--success)">
                 <span data-i18n="checkout.descompte">Descompte soci (5%)</span>
                 <span id="summary-discount">− 0.00 €</span>
@@ -206,10 +180,9 @@
              <a href="tienda.html" ... data-i18n="checkout.tornarBotiga">← Tornar a la botiga</a>
           </div>
 
-        </div><!-- /checkout-layout -->
-      </div><!-- /checkout-form-section -->
+        </div>
+      </div>
 
-      <!-- ===== PANTALLA DE ÉXITO (oculta hasta confirmar pago) ===== -->
       <div id="checkout-success" style="display:none">
         <div class="checkout-success">
           <div class="success-icon">&#10003;</div>

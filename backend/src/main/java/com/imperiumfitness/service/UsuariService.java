@@ -24,7 +24,6 @@ public class UsuariService {
     this.tarifaRepo = tarifaRepo;
 }
 
-    // ── Obtenir tots els usuaris (sense contrasenya!) ────────────────────────
     public List<UsuariDTO> getAll() {
         return repo.findAll()
                 .stream()
@@ -32,7 +31,6 @@ public class UsuariService {
                 .collect(Collectors.toList());
     }
 
-    // ── Obtenir un usuari per ID ─────────────────────────────────────────────
     public UsuariDTO getById(Long id) {
         Usuari u = repo.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(
@@ -40,15 +38,11 @@ public class UsuariService {
         return toDTO(u);
     }
 
-    // ── Crear un nou usuari ──────────────────────────────────────────────────
-    // IMPORTANT: el hashejat de contrasenya es fa a AuthService en el registre.
-    // Aquest mètode és per creació directa per part de l'ADMIN.
     public UsuariDTO save(UsuariDTO dto) {
         Usuari u = toEntity(dto);
         return toDTO(repo.save(u));
     }
 
-    // ── Eliminar un usuari per ID ────────────────────────────────────────────
     public void delete(Long id) {
         if (!repo.existsById(id)) {
             throw new ResponseStatusException(
@@ -57,7 +51,6 @@ public class UsuariService {
         repo.deleteById(id);
     }
 
-    // ── Conversió Entity → DTO (mai retornem la contrasenya!) ───────────────
    private UsuariDTO toDTO(Usuari u) {
     UsuariDTO dto = new UsuariDTO(
             u.getId(), u.getNom(), u.getEmail(), null,
@@ -72,18 +65,16 @@ public class UsuariService {
     return dto;
 }
 
-    // ── Conversió DTO → Entity ───────────────────────────────────────────────
     private Usuari toEntity(UsuariDTO dto) {
         Usuari u = new Usuari();
         u.setNom(dto.getNom());
         u.setEmail(dto.getEmail());
-        u.setContrasenya(dto.getContrasenya()); // s'ha de passar ja hashejada
+        u.setContrasenya(dto.getContrasenya()); 
         u.setRol(dto.getRol() != null ? dto.getRol() : "USER");
         u.setDataRegistre(LocalDateTime.now());
         return u;
     }
 
-        // Fragment suggerit per assistent IA - revisar i adaptar
     public UsuariDTO assignarTarifa(Long usuariId, Long tarifaId) {
         Usuari u = repo.findById(usuariId)
                 .orElseThrow(() -> new ResponseStatusException(
@@ -103,23 +94,20 @@ public class UsuariService {
 
         LocalDateTime ara = LocalDateTime.now();
 
-        // Si ja té una tarifa activa i vigent (no caducada)
         boolean teActivaVigent = u.getTarifa() != null
                 && u.getTarifaDataFi() != null
                 && u.getTarifaDataFi().isAfter(ara)
                 && !Boolean.TRUE.equals(u.getTarifaCancellada());
 
         if (teActivaVigent) {
-            // Programem el canvi: la nova comença quan acabi l'actual
-            // Per ara simplement cancel·lem l'actual i assignem la nova
-            // des de la data fi de l'anterior (mantenint els dies pagats)
-            LocalDateTime iniciNova = u.getTarifaDataFi(); // comença quan acaba l'actual
+
+            LocalDateTime iniciNova = u.getTarifaDataFi();
             u.setTarifa(novaTarifa);
             u.setTarifaDataInici(iniciNova);
             u.setTarifaDataFi(iniciNova.plusMonths(1));
             u.setTarifaCancellada(false);
         } else {
-            // No té tarifa activa → assignem directament
+
             u.setTarifa(novaTarifa);
             u.setTarifaDataInici(ara);
             u.setTarifaDataFi(ara.plusMonths(1));
@@ -134,12 +122,10 @@ public UsuariDTO cancelarTarifa(Long usuariId) {
             .orElseThrow(() -> new ResponseStatusException(
                     HttpStatus.NOT_FOUND, "Usuari no trobat"));
 
-    // Marquem com a cancel·lada PERÒ mantenim data_fi
-    // L'usuari seguirà tenint accés fins a data_fi
     u.setTarifaCancellada(true);
     return toDTO(repo.save(u));
 }
-// Fragment suggerit per assistent IA - revisar i adaptar
+
     public UsuariDTO canviarRol(Long id, String nouRol) {
         Usuari usuari = repo.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(

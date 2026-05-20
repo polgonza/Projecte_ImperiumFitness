@@ -7,6 +7,6 @@ import java.util.List;
 
 @Repository
 public interface NoticiaRepository extends JpaRepository<Noticia, Long> {
-    // Notícies ordenades de més nova a més antiga
+
     List<Noticia> findAllByOrderByDataPublicacioDesc();
 }

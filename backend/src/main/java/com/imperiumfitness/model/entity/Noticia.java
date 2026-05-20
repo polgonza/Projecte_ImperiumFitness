@@ -17,7 +17,6 @@ public class Noticia {
     @Column(name = "data_publicacio")
     private LocalDateTime dataPublicacio;
 
-    // @ManyToOne: moltes notícies tenen un autor (Usuari)
     @ManyToOne
     @JoinColumn(name = "autor_id")
     private Usuari autor;

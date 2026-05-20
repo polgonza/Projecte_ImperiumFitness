@@ -41,7 +41,7 @@ public class VendaService {
 
     @Transactional
     public VendaDTO save(VendaDTO dto) {
-        // Regla de negoci: comprovem que hi ha estoc suficient
+  
         Producte p = producteRepo.findById(dto.getProducteId())
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND, "Producte no trobat"));
@@ -51,7 +51,7 @@ public class VendaService {
                     HttpStatus.CONFLICT, "Estoc insuficient");
         }
 
-        // Descomptem l'estoc
+
         p.setEstoc(p.getEstoc() - dto.getQuantitat());
         producteRepo.save(p);
 

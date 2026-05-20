@@ -9,7 +9,7 @@ import java.util.List;
 
 @Repository
 public interface ClasseRepository extends JpaRepository<Classe, Long> {
-    // Troba totes les classes d'un gimnas concret
+
     List<Classe> findByGimnasId(Long gimnasId);
     List<Classe> findByHorariAfterOrderByHorariAsc(LocalDateTime horari);
 }

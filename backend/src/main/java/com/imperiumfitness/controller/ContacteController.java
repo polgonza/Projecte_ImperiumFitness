@@ -23,7 +23,7 @@ public class ContacteController {
         return ResponseEntity.ok(service.getAll());
     }
 
-    @PostMapping // públic: qualsevol pot enviar un missatge de contacte
+    @PostMapping 
     public ResponseEntity<ContacteDTO> create(@RequestBody ContacteDTO dto) {
         return ResponseEntity.status(201).body(service.save(dto));
     }

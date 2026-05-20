@@ -10,7 +10,6 @@
 
 <body>
 
-  <!-- ========== NAVBAR ========== -->
   <nav class="navbar scrolled" id="navbar">
     <div class="container">
       <a href="index.html" class="navbar-brand">
@@ -57,7 +56,6 @@
 
       <div class="profile-grid">
 
-        <!-- Sidebar esquerre: dades de l'usuari -->
         <div class="profile-sidebar">
           <div class="profile-avatar" id="profile-initial">?</div>
           <div class="profile-name" id="profile-name" data-i18n="perfil.carregant">Carregant...</div>
@@ -104,7 +102,6 @@
           </div>
         </div>
 
-        <!-- Columna dreta: tabs -->
         <div>
           <div class="profile-tabs">
             <button class="profile-tab active" data-tab="tab-reservations"
@@ -134,17 +131,14 @@
             </button>
           </div>
 
-          <!-- Tab: Reserves de classes -->
           <div class="tab-content active" id="tab-reservations">
             <div class="reservations-list" id="reservations-list"></div>
           </div>
 
-          <!-- Tab: Pedidos de la botiga -->
           <div class="tab-content" id="tab-orders">
             <div id="orders-list"></div>
           </div>
 
-          <!-- Tab: Estadístiques (només ADMIN) -->
           <div class="tab-content" id="tab-stats">
             <div id="stats-container">
               <p style="color:var(--text-muted);text-align:center;padding:2rem"
@@ -152,12 +146,10 @@
             </div>
           </div>
 
-          <!-- Tab: Historial de compres -->
           <div class="tab-content" id="tab-purchases">
             <div class="purchases-list" id="purchases-list"></div>
           </div>
 
-          <!-- Tab: Gestió d'usuaris (només ADMIN) -->
           <div class="tab-content" id="tab-gestio-usuaris">
             <div id="gestio-usuaris-container"></div>
           </div>
@@ -171,7 +163,6 @@
     </div>
   </section>
 
-  <!-- PANEL CARRITO -->
   <div class="cart-backdrop" id="cart-backdrop"></div>
   <div class="cart-drawer" id="cart-drawer">
     <div class="cart-header">
@@ -266,13 +257,12 @@ if (tabAdmin) tabAdmin.style.display = "block";
         renderOrderHistory(),
         renderStats(),
         renderGestioUsuaris(),
-        renderGestioAdmin()   // ← nou
+        renderGestioAdmin() 
       ]);
 
       renderOldPurchases();
       initProfileTabs();
 
-      // Re-aplica traduccions quan canvia idioma (textos generats per JS)
       document.addEventListener("idioma:canvi", function () {
         I18n.aplicar();
       });

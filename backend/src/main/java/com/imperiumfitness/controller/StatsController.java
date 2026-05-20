@@ -34,7 +34,6 @@ public class StatsController {
         this.producteRepo = producteRepo;
     }
 
-    /* ── Resum general ───────────────────────────────── */
     @GetMapping("/resum")
     public ResponseEntity<Map<String, Object>> getResum() {
         Map<String, Object> stats = new HashMap<>();
@@ -45,15 +44,11 @@ public class StatsController {
                 .withDayOfMonth(1).withHour(0).withMinute(0).withSecond(0).withNano(0);
         stats.put("usuarisNousMes", usuariRepo.countByDataRegistreAfter(iniciMes));
 
-        // Fragment suggerit per assistent IA - revisar i adaptar
-        // Compta reserves on la classe és avui o posterior (inclou el dia actual complet)
-        // Usem l'inici del dia actual en lloc de now() per no perdre reserves del mateix dia
         LocalDateTime iniciDia = LocalDateTime.now()
                 .withHour(0).withMinute(0).withSecond(0).withNano(0);
         stats.put("totalReservesActives",
                 reservaRepo.countReservesAmbClasseFutura(iniciDia));
 
-        // Popularitat histórica: sense filtre de data per mostrar totes les reserves
         List<Object[]> classesTop = reservaRepo.findTopClasses();
         if (!classesTop.isEmpty()) {
             Object[] top = classesTop.get(0);
@@ -64,7 +59,6 @@ public class StatsController {
         return ResponseEntity.ok(stats);
     }
 
-    /* ── Estadístiques de productes ──────────────────── */
     @GetMapping("/productes")
     public ResponseEntity<Map<String, Object>> getProductes() {
         Map<String, Object> stats = new HashMap<>();
@@ -95,10 +89,6 @@ public class StatsController {
         return ResponseEntity.ok(stats);
     }
 
-    /* ── Top classes per reserves ─────────────────────── */
-    // Fragment suggerit per assistent IA - revisar i adaptar
-    // Popularitat histórica: % de cada classe sobre el total de reserves (sense filtre de data)
-    // Així una classe amb 1 reserva sobre 1 total surt com 100%, no com 5%
     @GetMapping("/classes")
     public ResponseEntity<List<Map<String, Object>>> getClasses() {
         List<Object[]> top = reservaRepo.findTopClasses();
@@ -124,7 +114,6 @@ public class StatsController {
         return ResponseEntity.ok(resultat);
     }
 
-    /* ── Vendes mensuals (últims 6 mesos) ────────────── */
     @GetMapping("/vendes-mensuals")
     public ResponseEntity<List<Map<String, Object>>> getVendesMensuals() {
         LocalDateTime des = LocalDateTime.now().minusMonths(6)
@@ -154,7 +143,6 @@ public class StatsController {
         return ResponseEntity.ok(resultat);
     }
 
-    /* ── Nous usuaris per mes (últims 6 mesos) ───────── */
     @GetMapping("/usuaris-mensuals")
     public ResponseEntity<List<Map<String, Object>>> getUsuarisMensuals() {
         LocalDateTime des = LocalDateTime.now().minusMonths(6)
@@ -182,7 +170,6 @@ public class StatsController {
         return ResponseEntity.ok(resultat);
     }
 
-    /* ── Distribució de tarifes ──────────────────────── */
     @GetMapping("/distribucio-tarifes")
     public ResponseEntity<List<Map<String, Object>>> getDistribucioTarifes() {
         List<Object[]> dades = usuariRepo.findDistribucioTarifes();
@@ -198,7 +185,6 @@ public class StatsController {
         return ResponseEntity.ok(resultat);
     }
 
-    /* ── Estoc baix (≤ 5 unitats) ────────────────────── */
     @GetMapping("/estoc-baix")
     public ResponseEntity<List<Map<String, Object>>> getEstocBaix() {
         var productes = producteRepo.findByEstocLessThanEqualOrderByEstocAsc(5);
@@ -216,7 +202,6 @@ public class StatsController {
         return ResponseEntity.ok(resultat);
     }
 
-    /* ── Activitat recent ────────────────────────────── */
     @GetMapping("/activitat-recent")
     public ResponseEntity<Map<String, Object>> getActivitatRecent() {
         Map<String, Object> resultat = new HashMap<>();

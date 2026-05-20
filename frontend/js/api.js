@@ -1,4 +1,4 @@
-const IS_LOCAL_BACKEND = false; 
+const IS_LOCAL_BACKEND = true; 
 
 const API_BASE = IS_LOCAL_BACKEND
   ? "http://localhost:8084"

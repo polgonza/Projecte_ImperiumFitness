@@ -30,7 +30,6 @@ public class ReservaController {
         return ResponseEntity.ok(service.getAll());
     }
 
-    // Un usuari pot veure les seves pròpies reserves
     @GetMapping("/usuari/{usuariId}")
     public ResponseEntity<List<ReservaDTO>> getByUsuari(@PathVariable Long usuariId) {
         return ResponseEntity.ok(service.getByUsuari(usuariId));
@@ -46,7 +45,6 @@ public class ReservaController {
         return ResponseEntity.status(201).body(service.save(dto));
     }
 
-    // Fragment suggerit per assistent IA - revisar i adaptar
     @DeleteMapping("/usuari/{usuariId}/classe/{classeId}")
     public ResponseEntity<Void> cancelar(
             @PathVariable Long usuariId,
@@ -64,8 +62,7 @@ public class ReservaController {
         service.cancelarReserva(usuariId, classeId);
         return ResponseEntity.noContent().build();
     }
-    // Fragment suggerit per assistent IA - revisar i adaptar
-    // Retorna el nombre de reserves d'una classe (per calcular places disponibles)
+
     @GetMapping("/classe/{classeId}/count")
     public ResponseEntity<Long> countByClasse(@PathVariable Long classeId) {
         return ResponseEntity.ok((long) service.getByClasse(classeId).size());
