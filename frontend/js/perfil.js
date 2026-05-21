@@ -90,12 +90,7 @@ async function renderReservationsInProfile() {
   const ara = new Date();
   ara.setHours(0, 0, 0, 0);
 
-  const reservesFutures = reserves.filter(r => {
-    if (!r.dataReserva) return true;
-    const d = new Date(r.dataReserva);
-    d.setHours(0, 0, 0, 0);
-    return d >= ara;
-  });
+  const reservesFutures = reserves;
 
   if (reservesFutures.length === 0) {
     lista.innerHTML = `<p style="color:var(--text-muted);text-align:center;padding:2rem">
